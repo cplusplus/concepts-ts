@@ -362,7 +362,7 @@
 
     <bnf-rule>nested-requirement</bnf-rule>
       <bnf-alt>requires-clause</bnf-alt>
-    </bnf-gramamr>
+    </bnf-grammar>
 
     <p>
     A <cxx-grammarterm>requires-expression</cxx-grammarterm> has type 
@@ -653,196 +653,248 @@ template&lt;typename T&gt;
   <cxx-section id="dcl.spec">
     <h1>Specifiers</h1>
 
-<!-- \nb{Modify the grammar of \grammarterm{decl-specifier}.}
+    <p>
+    Extend the <cxx-grammarterm>decl-sepcifier</cxx-grammarterm> production
+    to include the <code>concept</code> specifier.
+    <bnf-grammar>
+      <bnf-rule>decl-specifier</bnf-rule>
+        <ins><bnf-alt><bnf-terminal>concept</bnf-terminal></bnf-alt></ins>
+    </bnf-grammar>
+    </p>
 
-\pnum
-The specifiers that can be used in a declaration are
-
-\begin{bnf}
-\nontermdef{decl-specifier}\br
-    \ldots\br
-    \terminal{concept}
-\end{bnf}
- -->
 
     <cxx-section id="dcl.type.simple">
       <h1>Simple type specifiers</h1>
+      <p>Extend the <cxx-grammarterm>type-name</cxx-grammarterm> production 
+      to include the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
+      production and its sub-rules.
+      <bnf-grammar>
+        <bnf-rule>type-name</bnf-rule>
+          <bnf-alt>constrained-type-name</bnf-alt>
+
+        <bnf-rule>constrained-type-name</bnf-rule>
+          <bnf-alt>concept-name</bnf-alt>
+          <bnf-alt>partial-concept-id</bnf-alt>
+
+        <bnf-rule>concept-name</bnf-rule>
+          <bnf-alt>identifier</bnf-alt>
+
+        <bnf-rule>partial-concept-id</bnf-rule>
+          <bnf-alt>
+            concept-name 
+            <bnf-terminal>&lt;</bnf-terminal> 
+            template-argument-list
+            <bnf-terminal>&gt;</bnf-terminal>
+          </bnf-alt>
+      </bnf-grammar>
+      </p>
     </cxx-section>
 
-<!-- \nb{Modify the grammar of \grammarterm{type-name}.}
-
-\pnum
-The simple type specifiers are
-
-\begin{bnf}
-\nontermdef{simple-type-specifier}\br
-    \ldots\br
-    type-name\br
-
-\nontermdef{type-name}\br
-    \ldots \br
-    constrained-type-name\br
-
-\nontermdef{constrained-type-name}\br
-    concept-name\br
-    partial-concept-id\br
-
-\nontermdef{concept-name}\br
-    identifier\br
-
-\nontermdef{partial-concept-id}\br
-    concept-name \terminal{<} template-argument-list \terminal{>}
-\end{bnf}
- -->
 
     <cxx-section id="dcl.spec.auto">
       <h1><code>auto</code> specifier</h1>
-    </cxx-section>
 
-<!-- \nb{Insert a new paragraph after 3}
-\setcounter{Paras}{2}
-\pnum
-If the \tcode{auto} \grammarterm{type-specifier} appears as one of the
-\grammarterm{decl-specifiers} in the \grammarterm{decl-specifier-seq} of
-a \grammarterm{parameter-declaration} of a function declarator, then the function
-is a generic function (\ref{dcl.fct}).
- -->
+      <p> If the <code>auto</code> 
+      <cxx-grammarterm>type-specifier</cxx-grammarterm> appears as one 
+      of the <cxx-grammarterm>decl-specifiers</cxx-grammarterm> in the 
+      <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of
+      <cxx-grammarterm>parameter-declaration</cxx-grammarterm> of a 
+      function declarator, then the function is a generic function 
+      <cxx-ref to="dcl.fct"></cxx-ref>
+      </p>
+    </cxx-section>
 
     <cxx-section id="dcl.spec.constr">
       <h1>Constrained type specifiers</h1>
 
-<!-- \pnum
-When an identifier is a \grammarterm{concept-name}, it refers to a function
-concept or variable concept (\ref{dcl.concept}).
+      <p>When an identifier is a 
+      <cxx-grammarterm>concept-name</cxx-grammarterm>, it refers to a 
+      function concept or variable concept <cxx-ref to="dcl.concept"></cxx-ref>.
+      </p>
 
-\pnum
-A \grammarterm{constrained-type-name} introduces constraints for a \grammarterm
-{template-parameter} or placeholder type depending on the context in which it
-appears. A \grammarterm{constrained-type-name} can be used in the \grammarterm
-{type-specifier} of template parameters, a \grammarterm{result-type-requirement}
-in a \grammarterm{compound-requirement}, or wherever the \tcode{auto} specifier
-is used, except
-\begin{itemize}
-\item as part of the type of a variable declaration,
-\item as part of a function's result type or \grammarterm{trailing-result-type},
-\item in the place of \tcode{auto} within \tcode{decltype(auto)}, or
-\item as part of a \grammarterm{conversion-function-id}.
-\end{itemize}
+      <p>A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> is a
+      <cxx-grammarterm>concept-id</cxx-grammarterm> followed by a sequence
+      of template arguments.
+      A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> does not refer
+      to template specialization; an additional template argument must be
+      supplied (before the first template argument) before the name
+      refers to a template specialization.
+      <cxx-example>
+      For example:
+      <cxx-codeblock>
+template&lt;typename T, typename U&gt;
+  concept bool C = ...;
 
-\pnum
-A \grammarterm{constrained-type-name} that refers to a non-type concept
-shall not be used as part of a \grammarterm{type-specifier} that introduces
-a placeholder type. \enternote Non-type concepts can be used as type specifiers
-of non-type template parameters and template template parameters. \exitnote
-\enterexample
-\begin{codeblock}
-template<int N>
+C&lt;int&gt;       // A partial-concept-id
+C&lt;char, int&gt; // A template-id
+      </cxx-codeblock>
+      The first name is a <cxx-grammarterm>partial-concept-id</cxx-grammarterm>
+      and can be used as part of constrained type name as part the type 
+      specifier of a parameter declaration or a template parameter. The 
+      second name is a <cxx-grammarterm>template-id</cxx-grammarterm> and
+      determines whether the concept is satisfied for the given arguments.
+      </cxx-example>
+      </p>
+
+      <p>A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> shall not
+      have an empty list of template arguments.
+      <cxx-example>
+      <cxx-codeblock>
+C<>; // Error: partial-concept-id with empty arguments
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+      <p>A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> introduces
+      constraints for a <cxx-grammarterm>template-parameter</cxx-grammarterm> 
+      or placeholder type depending on the context in which it appears. A
+      <cxx-grammarterm>constrained-type-name</cxx-grammarterm> can be used 
+      in the <cxx-grammarterm>type-specifier</cxx-grammarterm> of template 
+      parameters, a <cxx-grammarterm>result-type-requirement</cxx-grammarterm> 
+      in a <cxx-grammarterm>compound-requirement</cxx-grammarterm>, or wherever 
+      the <code>auto</code> specifier is used, except
+      <ul>
+        <li>as part of the type of a variable declaration,</li>
+        
+        <li>as part of a function's result type or 
+        <cxx-grammarterm>trailing-result-type</cxx-grammarterm>, </li>
+        
+        <li>in the place of <code>auto</code> within 
+        <code>decltype(auto)</code>, or</li>
+        
+        <li>as part of a <cxx-grammarterm>conversion-function-id</cxx-grammarterm>.</li>
+      </ul>
+      </p>
+
+      <p>A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> that 
+      refers to a non-type concept shall not be used as part of a
+      <cxx-grammarterm>type-specifier</cxx-grammarterm> that introduces
+      a placeholder type.
+      <cxx-note>
+      Non-type concepts can be used as type specifiers of non-type template 
+      parameters and template template parameters.
+      </cxx-note>
+      <cxx-example>
+      <cxx-codeblock>
+template&lt;int N&gt;
   concept bool Prime() { ... }
 
 void f(Prime n)   // Error
 
-template<Prime P> // Ok
+template&lt;Prime P&gt; // Ok
   void g();
-\end{codeblock}
-\exitexample -->
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
 
       <cxx-section id="dcl.constr.form">
         <h1>Constraint formation</h1>
-      </cxx-section>
+        
+        <p> When a <cxx-grammarterm>template-parameter</cxx-grammarterm> 
+        or parameter-declaration is declared using a 
+        <cxx-grammarterm>constrained-type-name</cxx-grammarterm> in its 
+        <cxx-grammarterm>type-specifier</cxx-grammarterm>, a new constraint 
+        expression is synthesized and associated with the template declaration. 
+        The rules for forming that constraint depend on whether the type 
+        specifier is a <cxx-grammarterm>concept-name</cxx-grammarterm> or 
+        <cxx-grammarterm>partial-concept-id</cxx-grammarterm>. 
+        Both cases require the synthesis of a 
+        <cxx-grammarterm>template-id</cxx-grammarterm> referring that refers
+        to a specialization of the named concept. The template argument list is
+        formed using the following rules. 
+        </p>
 
-<!-- \pnum
-When a \grammarterm{template-parameter} or parameter-declaration is declared using a
-constrained-type-name in its type-specifier, a new constraint expression is 
-synthesized and associated with the template declaration. The rules for forming 
-that constraint depend on whether the type specifier is a 
-\grammarterm{concept-name} or \grammarterm{partial-concept-id}. Both cases
-require the synthesis of a \grammarterm{template-id} referring that refers
-to a specialization of the named concept. The template argument list is
-formed using the following rules. 
+        <p>
+        Letting \tcode{X} be the declared 
+        <cxx-grammarterm>template-parameter</cxx-grammarterm> or the invented type of a 
+        <cxx-grammarterm>parameter-declaration</cxx-grammarterm> in a generic 
+        function or generic lambda:
+        <ul>
+          <li> If the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
+          is a <cxx-grammarterm>concept-name</cxx-grammarterm>, the synthesized 
+          template argument list contains only \tcode{X}.</li>
 
-\pnum
-Letting \tcode{X} be the declared 
-\grammarterm{template-parameter} or the invented type of a 
-\grammarterm{parameter-declaration} in a generic function or generic lambda:
-\begin{itemize}
-\item If the \grammarterm{constrained-type-name} is a \grammarterm{concept-name},
-the synthesized template argument list contains only \tcode{X}.
+          <li> If the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
+          is a <cxx-grammarterm>partial-concept-id</cxx-grammarterm> whose 
+          template argument list contains the arguments <code>Y1</code>, 
+          <code>Y2</code>, ..., <code>Yn</code>, then the synthesized template 
+          argument list contains the sequence <code>X</code>, <code>Y1</code>, 
+          <code>Y2</code>, ..., <code>Yn</code>.</li>
+        </ul>
+        </p>
 
-\item If the \grammarterm{constrained-type-name} is a 
-\grammarterm{partial-concept-id} whose template argument list contains the
-arguments \tcode{Y1}, \tcode{Y2}, ..., \tcode{Yn}, the synthesized template
-argument  list contains the sequence \tcode{X}, \tcode{Y1}, \tcode{Y2}, ..., 
-\tcode{Yn}.
-\end{itemize}
+        <p>
+        If the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> refers 
+        to a function concept, then the synthesized constraint is a call 
+        expression with no function arguments.
+        <p>
 
-\pnum
-If the \grammarterm{constrained-type-name} refers to a function concept, then
-the synthesized constraint is a call expression with no function arguments.
-
-\pnum
-\enterexample
-The following unary and binary concepts are defined as variables and
-functions.
-\begin{codeblock}
-template<typename T>
+        <p>
+        <cxx-example>
+        The following unary and binary concepts are defined as variables and
+        functions.
+        <cxx-codeblock>
+template&lt;typename T&gt;
   concept bool V1 = ...;
 
-template<typename T, typename U>
+template&lt;typename T, typename U&gt;
   concept bool V2 = ...;
 
-template<typename T>
+template&lt;typename T&gt;
   concept bool F1() { return ...; }
 
-template<typename T, typename T2>
+template&lt;typename T, typename T2&gt;
   concept bool F2() { return ...; }
-\end{codeblock}
-Suppose \tcode{X} is a template parameter being declared, either explicitly
-or as an invented template parameter of a \grammarterm{parameter-declaration}
-in a generic function or generic lambda. The synthesized constraints 
-corresponding to each declaration are:
-\begin{codeblock}
-V1 X    // becomes V1<T>
-V2<Y> X // becomes V2<X, Y>
-F1 X    // becomes F1<X>()
-F2<Y> X // becomes F2<X, Y>()
-\end{codeblock}
-\exitexample
- -->
+        </cxx-codeblock>
+        Suppose <code>X</code> is a template parameter being declared, either 
+        explicitly or as an invented template parameter of a 
+        <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
+        in a generic function or generic lambda. The synthesized constraints 
+        corresponding to each declaration are:
+        <cxx-codeblock>
+V1 X    // becomes V1&lt;T&gt;
+V2&lt;Y&gt; X // becomes V2&lt;X, Y&gt;
+F1 X    // becomes F1&lt;X&gt;()
+F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
+        </cxx-codeblock>
+        </cxx-example>
+        </p>
+      </cxx-section> <!-- decl.constr.form -->
 
       <cxx-section id="dcl.constr.meaning">
         <h1>Constraint formation</h1>
-      </cxx-section>
+        <p> The meaning of a constrained type specifier depends on the 
+        context in which it is used. The different meanings of constrained 
+        type specifiers are enumerated in this clause.
+        <ul>
+          <li> If a <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
+          is used as the <cxx-grammarterm>type-specifier</cxx-grammarterm> 
+          of a <cxx-grammarterm>template-parameter</cxx-grammarterm>, the
+          constraint is formed by applying the declared parameter to the 
+          <cxx-grammarterm>constrained-type-name</cxx-grammarterm>.</li>
 
-<!-- \pnum
-The meaning of a constrained type specifier depends on the context in which
-it is used. The different meanings of constrained type specifiers are 
-enumerated in this clause.
-\begin{itemize}
-\item
-If a \grammarterm{constrained-type-name} is used as the
-\grammarterm{type-specifier} of a \grammarterm{template-parameter}, the
-constraint is formed by applying the declared parameter to the 
-\grammarterm{constrained-type-name}.
+          <li> When a <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
+          is used as part of the 
+          <cxx-grammarterm>type-specifier</cxx-grammarterm> of a 
+          <cxx-grammarterm>parameter-declaration</cxx-grammarterm>, the
+          parameter's type is formed by replacing the 
+          <cxx-grammarterm>constrained-type-name</cxx-grammarterm> with
+          <code>auto</code>, creating a generic function or generic lambda. 
+          The introduced constraint is formed by applying the declared 
+          parameter to the invented template parameter to the 
+          <cxx-grammarterm>constrained-type-name</cxx-grammarterm>.</li>
 
-\item
-When a \grammarterm{constrained-type-name} is used as part of the 
-\grammarterm{type-specifier} 
-of a \grammarterm{parameter-declaration}, the  parameter's type
-is formed by replacing the \grammarterm{constrained-type-name} with
-\tcode{auto}, creating a generic function or generic lambda. The
-introduced constraint is formed by applying the declared parameter
-to the invented template parameter to the \grammarterm{constrained-type-name}.
+          <li> When a <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
+          is used as part of a <cxx-grammarterm>type-specifier</cxx-grammarterm> 
+          in a <cxx-grammarterm>result-type-requirement</cxx-grammarterm>, the
+          constraint is introduced as a \grammarterm{nested-requirement} that 
+          applies the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
+          to the result type of the required expression.</li>
+        </ul>
+        </p>
+      </cxx-section> <!-- dcl.constr.meaning -->
 
-\item
-When a \grammarterm{constrained-type-name} is used as part of a
-\grammarterm{type-specifier} in a \grammarterm{result-type-requirement}, the
-constraint is introduced as a \grammarterm{nested-requirement} that applies the
-\grammarterm{constrained-type-name} to the result type of the required
-expression.
-\end{itemize}
- -->
-    </cxx-section>
-
+    </cxx-section> <!-- dcl.spec.constr -->
 
     <cxx-section id="dcl.concept">
       <h1><code>concept</code> specifier</h1>
@@ -979,9 +1031,9 @@ variable or type is ill-formed. -->
 
 \pnum
 A \emph{generic function} is a function template whose
-\grammarterm{template-parameter-list} has a \grammarterm{parameter-declaration}
-whose \grammarterm{type-specifier} is either \tcode{auto} or a 
-\grammarterm{constrained-type-name}.
+\grammarterm{template-parameter-list} has a <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
+whose <cxx-grammarterm>type-specifier</cxx-grammarterm> is either <code>auto</code> or a 
+<cxx-grammarterm>constrained-type-name</cxx-grammarterm>.
 \enterexample
 \begin{codeblock}
 auto f(auto x); // Ok
@@ -994,14 +1046,14 @@ The declaration of a generic function has a
 \grammarterm{template-parameter-list} 
 that consists of one invented type \emph{template-parameter} for each 
 occurrence of 
-\tcode{auto} or each unique occurence of a \grammarterm{constrained-type-name} 
+<code>auto</code> or each unique occurence of a <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
 in the function's
 \grammarterm{parameter-declaration-clause}, in order of appearance. 
-The invented type of \grammarterm{template-parameter} is a parameter pack if the 
-corresponding \grammarterm{parameter-declaration} declares a function parameter 
+The invented type of <cxx-grammarterm>template-parameter</cxx-grammarterm> is a parameter pack if the 
+corresponding <cxx-grammarterm>parameter-declaration</cxx-grammarterm> declares a function parameter 
 pack (\CxxStd~8.3.5).
 The associated constraints of the generic function are the conjunction of
-constraints introduced by the use of \grammarterm{constrained-type-name}s
+constraints introduced by the use of <cxx-grammarterm>constrained-type-name</cxx-grammarterm>s
 in the \grammarterm{parameter-declaration-clause}.
 
 \enterexample
@@ -1018,7 +1070,7 @@ template<typename T1, typename T2>
 \exitexample
 
 \pnum
-All placeholder types introduced using the same \grammarterm{concept-name} 
+All placeholder types introduced using the same <cxx-grammarterm>concept-name</cxx-grammarterm> 
 have the same invented template parameter.
 \enterexample
 The generic function declared below
@@ -1116,7 +1168,7 @@ the associated constraints of template parameter. No diagnostic is required.
   </cxx-section>
 
 <!-- \pnum
-The syntax for \grammarterm{template-parameter}{s} is:
+The syntax for <cxx-grammarterm>template-parameter</cxx-grammarterm>{s} is:
 
 \begin{bnf}
 \nontermdef{template-parameter}\br
@@ -1170,9 +1222,9 @@ the introduced parameter is a \grammarterm{template-declaration}
 having the same number of kinds of template parameters. 
 
 \item
-If the prototype parameter is a \grammarterm{parameter-declaration}, then
-the introduced parameter is a \grammarterm{parameter-declaration} with
-the same \grammarterm{type-specifier}.
+If the prototype parameter is a <cxx-grammarterm>parameter-declaration</cxx-grammarterm>, then
+the introduced parameter is a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> with
+the same <cxx-grammarterm>type-specifier</cxx-grammarterm>.
 
 % FIXME: What about variable template parameters?
 \end{itemize}
@@ -1197,9 +1249,9 @@ synthesized according to the rules defined in \ref{dcl.constr.form}.
 
 
 % The associated constraints introduced by the \grammarterm{constraint-id}
-% are formed by applying the \grammarterm{concept-name} to 
+% are formed by applying the <cxx-grammarterm>concept-name</cxx-grammarterm> to 
 % that parameter. If the \grammarterm{constraint-id} is a 
-% \grammarterm{partial-concept-id}, then the supplied 
+% <cxx-grammarterm>partial-concept-id</cxx-grammarterm>, then the supplied 
 % \grammarterm{template-arguments} follow the declared parameter in the 
 % application.
 % \enterexample
@@ -1256,7 +1308,7 @@ during name lookup, not when the partial specialization is declared.
 \setcounter{Paras}{2}
 \pnum
 A \grammarterm{template-argument} matches a template 
-\grammarterm{template-parameter} (call it \tcode{P}) when each of the template 
+<cxx-grammarterm>template-parameter</cxx-grammarterm> (call it \tcode{P}) when each of the template 
 parameters in the \grammarterm{template-parameter-list} of the 
 \grammarterm{template-argument}'s corresponding class template
 or alias template (call it \tcode{A}) matches the corresponding template

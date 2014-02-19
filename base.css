@@ -67,10 +67,22 @@ aside { float: right; max-width: 40%;
 del {text-decoration: line-through; color: #8B0040;}
 ins {text-decoration: underline; color: #005100;}
 
+/* Shorten margins on pre sections so that they space
+   just like paragraphs. */
 pre { 
     margin-left: 1em; 
     margin-top: .5em;
     margin-bottom: .5em;
+}
+
+/* Use an mdash for the list bullet. */
+ul {
+    list-style:none;
+    margin-left:0;
+}
+ul li:before {
+    content: "\2014";
+    padding-right: .5em;
 }
 
 /* This is here rather than inside elements/toc.html because browsers
