@@ -519,18 +519,16 @@ template&lt;typename T&gt;
       is implicitly convertible to <code>T::r</code> after substitution.
       </cxx-example>
       </p>
-    </cxx-section>
 
-
-    <p>
-    If the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> is a 
-    <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
-    then that concept is applied to the <code>decltype((e))</code> where 
-    <code>e</code> is the substituted expression. The requirement is 
-    <code>true</code> if and only if the result of that application is 
-    <code>true</code>.
-    <cxx-example>
-    <cxx-codeblock>
+      <p>
+      If the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> is a 
+      <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
+      then that concept is applied to the <code>decltype((e))</code> where 
+      <code>e</code> is the substituted expression. The requirement is 
+      <code>true</code> if and only if the result of that application is 
+      <code>true</code>.
+      <cxx-example>
+      <cxx-codeblock>
 template&lt;typename I&gt;
   concept bool Iterator() { ... }
 
@@ -540,108 +538,113 @@ template&lt;typename T&gt;
       {begin(x)} -> Iterator; // Iterator 
     };
   }
-    </cxx-codeblock>
-    The concept is to <code>true</code> if and only if the expression 
-    <code>begin(x)</code> is a valid expression, and 
-    <code>Iterator<decltype((begin(x)))>()</code> is <code>true</code>.
-    </cxx-example>
-    </p>
-<!-- 
-\pnum
-If the \tcode{constexpr} specifier is present in the 
-\grammarterm{compound-requirement}, the requirement is true if and only
-if the substituted expression is a constant expression.
-\enterexample
-\begin{codeblock}
-template<typename Trait>
+      </cxx-codeblock>
+      The concept is to <code>true</code> if and only if the expression 
+      <code>begin(x)</code> is a valid expression, and 
+      <code>Iterator<decltype((begin(x)))>()</code> is <code>true</code>.
+      </cxx-example>
+      </p>
+
+      <p>
+      If the <cxx-grammarterm>constexpr</cxx-grammarterm> specifier is present 
+      in the <cxx-grammarterm>compound-requirement</cxx-grammarterm>, the 
+      requirement is true if and only if the substituted expression is a 
+      constant expression.
+      <cxx-example>
+      <cxx-codeblock>
+template&lt;typename Trait&gt;
   concept bool Boolean_metaprogram() {
     return requires (Trait t) {
       constexpr {Trait::value} -> bool;
       constexpr {t()} -> bool;
     };
   }
-\end{codeblock}
-When substituted into, the concept is \tcode{true} only when the nested \tcode{value} 
-member and function call operator must be constant expressions. Otherwise, 
-the concept is \tcode{false}.
-\exitexample
+      </cxx-codeblock>
+      When substituted into, the concept is <code>true</code> only when the 
+      nested <code>value</code>; member and function call operator must be 
+      constant expressions. Otherwise, the concept is <code>false</code>.
+      </cxx-example>
+      </p>
 
-\pnum
-If the \tcode{noexcept} specifier is present, in the
-\grammarterm{compound-requirement} the requirement is \tcode{true} when
-\tcode{noexcept(e))} is \tcode{true}, where \tcode{e} is the substituted
-expression.
-\enterexample
-\begin{codeblock}
-template<typename T>
+      <p>
+      If the <code>noexcept</code> specifier is present, in the
+      <cxx-grammarterm>compound-requirement</cxx-grammarterm> the requirement 
+      is <code>true</code> when <code>noexcept(e))</code> is <code>true</code>, 
+      where <code>e</code> is the substituted expression.
+      <cxx-example>
+      <cxx-codeblock>
+template&lt;typename T&gt;
   concept bool Nothrow_movable() {
     return requires (T x) {
       {T(std::move(x))} noexcept;
       {x = std::move(x)} noexcept -> T&;
     };
   }
-\end{codeblock}
-When template arguments are substituted into the requirement, the move 
-constructor and move assignment operator selected by overload resolution must 
-not propagate exceptions. 
-If either of the instantiated expressions does propagate exceptions, the concept 
-is not satisfied.
-\exitexample 
- -->
+      </cxx-codeblock>
+      When template arguments are substituted into the requirement, the move 
+      constructor and move assignment operator selected by overload resolution 
+      must not propagate exceptions. If either of the instantiated expressions 
+      does propagate exceptions, the concept is not satisfied.
+      </cxx-example>
+      </p>
+    </cxx-section>
+ 
     <cxx-section id="expr.req.type">
       <h1>Type requirements</h1>
-    </cxx-section>
-
-<!-- 
-\rSec3[expr.req.type]{Type requirements}
-
-\pnum
-A \grammarterm{type-requirement} introduces a requirement that an associated 
-\grammarterm{type-id} can be formed when template arguments are substituted
-into the type. The requirement is \tcode{true} if and only if 
-substitution does not result in a substitution failure.
-\enternote The \tcode{typename} may be part of a \grammarterm{typename-specifier}.
-\exitnote
-\begin{codeblock}
-template<typename T>
+      <p>
+      A <cxx-grammarterm>type-requirement</cxx-grammarterm> introduces a 
+      requirement that an associated <cxx-grammarterm>type-id</cxx-grammarterm> 
+      can be formed when template arguments are substituted into the type. The 
+      requirement is <code>true</code> if and only if substitution does not 
+      result in a substitution failure.
+      <cxx-note>
+      The <code>typename</code> may be part of a 
+      <cxx-grammarterm>typename-specifier</cxx-grammarterm>.
+      </cxx-note>
+      <cxx-example>
+      <cxx-codeblock>
+template&lt;typename T&gt;
   concept bool Input_range() {
     return requires(T range) {
       typename T::value_type;    // Required typename-specifier
-      typename Iterator_type<T>; // Required alias template
+      typename Iterator_type&lt;T&gt;; // Required alias template
     };
   }
-\end{codeblock}
-\exitexample
- -->
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+    </cxx-section>
 
     <cxx-section id="expr.req.nested">
       <h1>Nested requirements</h1>
-    </cxx-section>
-
-<!-- \rSec3[expr.req.nested]{Nested requirements}
-
-\pnum
-A \grammarterm{nested-requirement} introduces additional constraints to be 
-evaluated as part of the \grammarterm{requires-expression}. The requirement
-is \tcode{true} if and only if the required expression evaluates to 
-\tcode{true}.
-\enterexample Nested requirements
-are generally used to provide additional constraints on associated types
-within a \grammarterm{requires-expression}.
-\begin{codeblock}
-template<typename T>
+      <p>
+      A <cxx-grammarterm>nested-requirement</cxx-grammarterm> introduces 
+      additional constraints to be evaluated as part of the
+      <cxx-grammarterm>requires-expression</cxx-grammarterm>. The 
+      requirement is <code>true</code> if and only if the required expression 
+      evaluates to <code>true</code>.
+      <cxx-example> 
+      Nested requirements are generally used to provide additional constraints on 
+      associated types
+      within a <cxx-grammarterm>requires-expression</cxx-grammarterm>.
+      <cxx-codeblock>
+template&lt;typename T&gt;
   concept bool Input_range() {
     return requires(T range) {
-      typename Iterator_type<T>;
-      requires Input_iterator<Iterator_type<T>>();
+      typename Iterator_type&lt;T&gt;;
+      requires Input_iterator&lt;Iterator_type&lt;T&gt;&gt;();
     };
   }
-\end{codeblock}
-\exitexample
- -->
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+    </cxx-section> <!-- expr.re.nested -->
+  
+  </cxx-section> <!-- expr.req -->
 
-  </cxx-section>
-</cxx-clause>
+</cxx-clause> <!-- expr -->
+
+
 
 <cxx-clause id="dcl.dcl">
   <h1>Declarations</h1>
@@ -1660,7 +1663,7 @@ the constraint is \emph{unsatisfied}. -->
 
 
   <cxx-section id="con.intro">
-    <h1>Concept intructions</h1>
+    <h1>Concept introductions</h1>
   </cxx-section>
 <!-- 
 \nb{Add this section as 14.9.}
