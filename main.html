@@ -649,12 +649,10 @@ template&lt;typename T&gt;
 <cxx-clause id="dcl.dcl">
   <h1>Declarations</h1>
 
-
   <cxx-section id="dcl.spec">
     <h1>Specifiers</h1>
 
-    <p>
-    Extend the <cxx-grammarterm>decl-sepcifier</cxx-grammarterm> production
+    <p> Extend the <cxx-grammarterm>decl-sepcifier</cxx-grammarterm> production
     to include the <code>concept</code> specifier.
     <bnf-grammar>
       <bnf-rule>decl-specifier</bnf-rule>
@@ -665,7 +663,7 @@ template&lt;typename T&gt;
 
     <cxx-section id="dcl.type.simple">
       <h1>Simple type specifiers</h1>
-      <p>Extend the <cxx-grammarterm>type-name</cxx-grammarterm> production 
+      <p> Extend the <cxx-grammarterm>type-name</cxx-grammarterm> production 
       to include the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
       production and its sub-rules.
       <bnf-grammar>
@@ -712,7 +710,7 @@ template&lt;typename T&gt;
       function concept or variable concept <cxx-ref to="dcl.concept"></cxx-ref>.
       </p>
 
-      <p>A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> is a
+      <p> A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> is a
       <cxx-grammarterm>concept-id</cxx-grammarterm> followed by a sequence
       of template arguments.
       A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> does not refer
@@ -736,7 +734,7 @@ C&lt;char, int&gt; // A template-id
       </cxx-example>
       </p>
 
-      <p>A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> shall not
+      <p> A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> shall not
       have an empty list of template arguments.
       <cxx-example>
       <cxx-codeblock>
@@ -745,7 +743,7 @@ C<>; // Error: partial-concept-id with empty arguments
       </cxx-example>
       </p>
 
-      <p>A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> introduces
+      <p> A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> introduces
       constraints for a <cxx-grammarterm>template-parameter</cxx-grammarterm> 
       or placeholder type depending on the context in which it appears. A
       <cxx-grammarterm>constrained-type-name</cxx-grammarterm> can be used 
@@ -800,19 +798,17 @@ template&lt;Prime P&gt; // Ok
         <cxx-grammarterm>partial-concept-id</cxx-grammarterm>. 
         Both cases require the synthesis of a 
         <cxx-grammarterm>template-id</cxx-grammarterm> referring that refers
-        to a specialization of the named concept. The template argument list is
-        formed using the following rules. 
-        </p>
+        to a specialization of the named concept. The template argument list 
+        is formed using the following rules. </p>
 
-        <p>
-        Letting \tcode{X} be the declared 
+        <p> Letting <code>X</code> be the declared
         <cxx-grammarterm>template-parameter</cxx-grammarterm> or the invented type of a 
         <cxx-grammarterm>parameter-declaration</cxx-grammarterm> in a generic 
-        function or generic lambda:
+        function or generic lambda: </p>
         <ul>
           <li> If the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
           is a <cxx-grammarterm>concept-name</cxx-grammarterm>, the synthesized 
-          template argument list contains only \tcode{X}.</li>
+          template argument list contains only <code>X</code>.</li>
 
           <li> If the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
           is a <cxx-grammarterm>partial-concept-id</cxx-grammarterm> whose 
@@ -821,13 +817,10 @@ template&lt;Prime P&gt; // Ok
           argument list contains the sequence <code>X</code>, <code>Y1</code>, 
           <code>Y2</code>, ..., <code>Yn</code>.</li>
         </ul>
-        </p>
 
-        <p>
-        If the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> refers 
-        to a function concept, then the synthesized constraint is a call 
-        expression with no function arguments.
-        <p>
+        <p> If the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
+        refers to a function concept, then the synthesized constraint is a 
+        call expression with no function arguments. </p>
 
         <p>
         <cxx-example>
@@ -861,11 +854,11 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
         </p>
       </cxx-section> <!-- decl.constr.form -->
 
-      <cxx-section id="dcl.constr.meaning">
+      <cxx-section id="dcl.constr.form">
         <h1>Constraint formation</h1>
         <p> The meaning of a constrained type specifier depends on the 
         context in which it is used. The different meanings of constrained 
-        type specifiers are enumerated in this clause.
+        type specifiers are enumerated in this clause. </p>
         <ul>
           <li> If a <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
           is used as the <cxx-grammarterm>type-specifier</cxx-grammarterm> 
@@ -887,115 +880,120 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
           <li> When a <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
           is used as part of a <cxx-grammarterm>type-specifier</cxx-grammarterm> 
           in a <cxx-grammarterm>result-type-requirement</cxx-grammarterm>, the
-          constraint is introduced as a \grammarterm{nested-requirement} that 
+          constraint is introduced as a 
+          <cxx-grammarterm>nested-requirement</cxx-grammarterm> that 
           applies the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
           to the result type of the required expression.</li>
         </ul>
-        </p>
       </cxx-section> <!-- dcl.constr.meaning -->
 
     </cxx-section> <!-- dcl.spec.constr -->
 
     <cxx-section id="dcl.concept">
       <h1><code>concept</code> specifier</h1>
-    </cxx-section>
 
-<!-- \pnum
-The \tcode{concept} specifier shall be applied to only the definition of a
-function template or variable template. 
-A function template definition having the \tcode{concept}
-specifier is called a \grammarterm{function concept}. A variable template
-definition having the \tcode{concept} specifier is called a 
-\grammarterm{variable concept}.
+      <p> The <code>concept</code> specifier shall be applied to only the 
+      definition of a function template or variable template.
+      A function template definition having the <code>concept</code>
+      specifier is called a function concept. A variable template
+      definition having the <code>concept</code> specifier is called a 
+      variable concept. </p>
 
-\pnum
-Every concept definition is also a \tcode{constexpr} declaration 
-(\CxxStd 7.1.5).
+      <p> Every concept definition is also a <code>constexpr</code> declaration
+      <cxx-ref in="cxx" to="dcl.constexpr"></cxx-ref>.
+      </p>
 
-\pnum
-A function concept has the following restrictions:
-\begin{itemize}
-\item The template must be unconstrained.
-\item The result type must be \tcode{bool}.
-\item The declaration shall have a \grammarterm{parameter-declaration-clause}
-equivalent to \tcode{()}.
-\item The declaration shall be a definition.
-\item The function shall not be recursive.
-\item The function body shall consist of a single \tcode{return} statement
-      whose expression is a \grammarterm{constraint-expr}.
-\end{itemize}
-\enterexample
-\begin{codeblock}
-template<typename T>
-  concept bool C1() { return true; } // OK
+      <p> A function concept has the following restrictions: </p>
+      <ul>
+        <li> The template must be unconstrained.</li>
+        <li> The result type must be <code>bool</code>. </li>
+        <li> The declaration shall have a 
+        <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
+        equivalent to <code>()</code>. </li>
+        <li> The declaration shall be a definition. </li>
+        <li> The function shall not be recursive. </li>
+        <li> The function body shall consist of a single <code>return</code> 
+        statement whose expression shall be a
+        <cxx-grammarterm>constraint-expr</cxx-grammarterm>. </li>
+      </ul>
+      <cxx-example>
+      <cxx-codeblock>
+      template&lt;typename T&gt;
+        concept bool C1() { return true; } // OK
 
-template<typename T>
-  concept int c2() { return 0; }  // error: must return bool
+      template&lt;typename T&gt;
+        concept int c2() { return 0; }  // error: must return bool
 
-template<typename T>
-  concept bool C3(T) { return true; } // error: must have no parameters
+      template&lt;typename T&gt;
+        concept bool C3(T) { return true; } // error: must have no parameters
 
-concept bool p = 0; // error: not a template
-\end{codeblock}
-\exitexample
+      concept bool p = 0; // error: not a template
+      </cxx-codeblock>
+      </cxx-example>
 
-\pnum
-A variable template has the following restrictions:
-\begin{itemize}
-\item The template must be unconstrained.
-\item The declared type must be \tcode{bool}.
-\item The declaration must have an initializer.
-\item The initializer shall be a \grammarterm{constraint-expr}.
-\end{itemize}
-\enterexample
-\begin{codeblock}
-template<typename T>
-  concept bool Integral = is_integral<T>::value; // OK
+      <p> A variable template has the following restrictions:
+      <ul>
+        <li> The template must be unconstrained. </li>
+        <li> The declared type must be <code>bool</code>. </li>
+        <li> The declaration must have an initializer. </li>
+        <li> The initializer shall be a 
+        <cxx-grammarterm>constraint-expr</cxx-grammarterm>. </li>
+      </ul>
+      <cxx-example>
+      <cxx-codeblock>
+      template&lt;typename T&gt;
+        concept bool Integral = is_integral&lt;T&gt;::value; // OK
 
-template<typename T>
-  concept bool C = 3 + 4; // Error: initializer is not a constraint
+      template&lt;typename T&gt;
+        concept bool C = 3 + 4; // Error: initializer is not a constraint
 
-template<Integral T>
-  concept bool D = is_unsigned<T>::value; // Error: constrained concept definition
-\end{codeblock}
-\exitexample
+      template&lt;Integral T&gt;
+        concept bool D = is_unsigned&lt;T&gt;::value; // Error: constrained concept definition
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
 
-\pnum
-If a program declares a non-concept overload of a concept definition with the
-same template parameters and no function parameters, the program is ill-formed.
-\enterexample
-\begin{codeblock}
-template<typename T>
-  concept bool Totally_ordered() { ... }
+      <p> If a program declares a non-concept overload of a concept 
+      definition with the same template parameters and no function 
+      parameters, the program is ill-formed.
+      <cxx-example>
+      <cxx-codeblock>
+      template&lt;typename T&gt;
+        concept bool Totally_ordered() { ... }
 
-template<Graph G>
-  constexpr bool Totally_ordered() // error: subverts concept definition
-  { return true; }
-\end{codeblock}
-\exitexample
+      template&lt;Graph G&gt;
+        constexpr bool Totally_ordered() // error: subverts concept definition
+        { return true; }
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
 
-\pnum
-A program that declares an explicit or partial specialization of a concept
-definition is ill-formed.
-\enterexample
-\begin{codeblock}
-template<typename T>
-  concept bool C = is_iterator<T>::value;
+      <p> A program that declares an explicit or partial specialization of a concept
+      definition is ill-formed.
+      <cxx-example>
+      <cxx-codeblock>
+      template&lt;typename T&gt;
+        concept bool C = is_iterator&lt;T&gt;::value;
 
-template<typename T>
-  concept bool C<T*> = true; // Error: partial specialization of a concept
-\end{codeblock}
-\exitexample
+      template&lt;typename T&gt;
+        concept bool C&lt;T*&gt; = true; // Error: partial specialization of a concept
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
 
-\pnum
-\enternote
-The prohibitions against overloading and specialization prevent
-users from subverting the constraint system by providing a meaning for a concept
-that differs from the one computed by evaluating its constraints.
-\exitnote -->
+      <p>
+      <cxx-note>
+      The prohibitions against overloading and specialization prevent
+      users from subverting the constraint system by providing a meaning 
+      for a concept that differs from the one computed by evaluating its 
+      constraints.
+      </cxx-note>
+      </p>
 
-  </cxx-section>
-</cxx-clause>
+    </cxx-section> <!-- dcl.concept -->
+
+  </cxx-section> <!-- dcl.spec -->
+</cxx-clause> <!-- dcl.dcl -->
 
 <cxx-clause id="dcl.decl">
   <h1>Declarators</h1>
@@ -1048,13 +1046,13 @@ that consists of one invented type \emph{template-parameter} for each
 occurrence of 
 <code>auto</code> or each unique occurence of a <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
 in the function's
-\grammarterm{parameter-declaration-clause}, in order of appearance. 
+<cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, in order of appearance. 
 The invented type of <cxx-grammarterm>template-parameter</cxx-grammarterm> is a parameter pack if the 
 corresponding <cxx-grammarterm>parameter-declaration</cxx-grammarterm> declares a function parameter 
 pack (\CxxStd~8.3.5).
 The associated constraints of the generic function are the conjunction of
 constraints introduced by the use of <cxx-grammarterm>constrained-type-name</cxx-grammarterm>s
-in the \grammarterm{parameter-declaration-clause}.
+in the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>.
 
 \enterexample
 The generic function declared below
@@ -1210,24 +1208,24 @@ first template parameter, called the \emph{prototype parameter}, of the
 concept referred to by the \grammarterm{constraint-id}.
 \enternote
 The rules for declaring the parameter are:
-\begin{itemize}
-\item
+<ul>
+<li>
 If the prototype parameter is a \grammarterm{type-parameter} that is a
 \tcode{class} or \tcode{typename}, then then introduced template parameter
 is a \tcode{class} or \tcode{typename} parameter.
 
-\item
+<li>
 If the prototype parameter is a \grammarterm{template-declaration}, then
 the introduced parameter is a \grammarterm{template-declaration}
 having the same number of kinds of template parameters. 
 
-\item
+<li>
 If the prototype parameter is a <cxx-grammarterm>parameter-declaration</cxx-grammarterm>, then
 the introduced parameter is a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> with
 the same <cxx-grammarterm>type-specifier</cxx-grammarterm>.
 
 % FIXME: What about variable template parameters?
-\end{itemize}
+</ul>
 \exitnote
 
 \pnum
@@ -1388,7 +1386,7 @@ satisfied (\ref{temp.constr}) before it is considered viable. Constraints are
 checked by substituting the template arguments of member function's corresponding
 class template specialization into the associated constraints of the constrained
 member function template and evaluating the substituted expression. If the
-result of that evaluation is \tcode{bool}, then member function is a viable
+result of that evaluation is <code>bool</code>, then member function is a viable
 candidate. -->
 
     </cxx-section>
@@ -1480,17 +1478,17 @@ For two class template partial specializations, the first is at least as
 specialized as the second if, given the following rewrite to two function
 templates, the first function template is at least as specialized as the second
 according to the ordering rules for function templates (\CxxStd~14.5.6.2):
-\begin{itemize}
-\item the first function template has the same template parameters \added{and constraints} 
+<ul>
+<li> the first function template has the same template parameters \added{and constraints} 
 as the first partial specialization and has a single function parameter whose 
 type is a class template specialization with the template arguments of the first 
 partial specialization, and
 
-\item the second function template has the same template parameters \added{and constraints}
+<li> the second function template has the same template parameters \added{and constraints}
 as the second partial specialization and has a single function parameter whose 
 type is a class template specialization with the template arguments of the second
 partial specialization.
-\end{itemize}
+</ul>
 
 \nb{New text.}
 \enterexample
@@ -1531,28 +1529,28 @@ function type as described below; otherwise type deduction fails.
 Specifically, the following steps are performed when evaluating an explicitly
 specified template argument list with respect to a given function template:
 
-\begin{itemize}
-\item
+<ul>
+<li>
 The specified template arguments must match the template parameters in kind
 (i.e., type, non-type, template). There must not be more arguments than there
 are parameters unless at least one parameter is a template parameter pack, and
 there shall be an argument for each non-pack parameter. Otherwise, type
 deduction fails.
 
-\item
+<li>
 Non-type arguments must match the types of the corresponding non-type template
 parameters, or must be convertible to the types of the corresponding non-type
 parameters as specified in 14.3.2, otherwise type deduction fails.
 
-\item 
+<li> 
 \added{
 If the function template is constrained, the specified template arguments
 are substituted into the associated constraints and evaluated. If the
 result of the evaluation is \tcode{false}, type deduction fails.}
 
-\item
+<li>
 The specified template argument values are substituted for the corresponding template parameters as specified below.
-\end{itemize} -->
+</ul> -->
 
 
       <cxx-section id="temp.over.link">
@@ -1625,10 +1623,10 @@ called \emph{constraint expression}{}s or simply \emph{constraint}{}s.
 
 \pnum
 A \grammarterm{logical-or-expression} is a \grammarterm{constraint-expression}  
-if it is a \grammarterm{constant-expression} of type \tcode{bool} whose 
+if it is a \grammarterm{constant-expression} of type <code>bool</code> whose 
 operands to logical operators in its sub-expressions, when substituted
-have type \tcode{bool}.
-\enternote The required contextual conversion to \tcode{bool} in a
+have type <code>bool</code>.
+\enternote The required contextual conversion to <code>bool</code> in a
 \grammarterm{constraint-expression} prevents user-defined overloads of logical
 operators from being selected during overload resolution.
 \exitnote
