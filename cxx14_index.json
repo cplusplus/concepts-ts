@@ -1,0 +1,28 @@
+{
+  "intro.compliance"  : "1.4",
+  "lex.key"           : "2.12",
+  
+  "expr"              : "5",
+  "expr.prim"         : "5.1",
+  "expr.prim.general" : "5.1.1",
+
+  "dcl.decl"          : "8",
+  "dcl.name"          : "8.1",
+  "dcl.ambig.res"     : "8.2",
+  "dcl.meaning"       : "8.3",
+  "dcl.fct"           : "8.3.5",
+
+  "over"              : "13",
+  "over.load"         : "13.1",
+  "over.dcl"          : "13.2",
+  "over.match"        : "13.3",
+  "over.over"         : "13.4",
+  "over.oper"         : "13.5",
+  "over.call"         : "13.5.4",
+  "over.built"        : "13.6",
+
+  "temp"              : "14",
+  "temp.dcls"         : "14.5",
+  "temp.class"        : "14.5.1",
+  "temp.mem"          : "14.5.2"
+}

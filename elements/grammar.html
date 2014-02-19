@@ -1,0 +1,91 @@
+
+<!-- BNF Grammar block
+  Use this tag to declare a fragment of a grammar specification.
+  This sets block within an indented region of text and changes
+  the default font-style to use italic.
+
+  TODO: We should really have a CSS class for these blocks.
+-->
+<polymer-element name="bnf-grammar">
+  <template>
+    <div style="font-style:italic;margin-left:.25in">
+      <content></content>
+    </div>
+  </template>
+  <script>
+    Polymer('bnf-grammar', {
+      applyAuthorStyles: true,
+    });
+  </script>
+</polymer-element>
+
+<!-- BNF rule
+  Defines a BNF production.
+-->
+<polymer-element name="bnf-rule">
+  <template>
+    <content></content>:<br/>
+  </template>
+  <script>
+    Polymer('bnf-rule', {
+      applyAuthorStyles: true,
+    });
+  </script>
+</polymer-element>
+
+
+<!-- BNF rule alternative. 
+  Indents the alternative beneath the rule name and applies 
+  a line break.
+-->
+<polymer-element name="bnf-alt">
+  <template>
+    <span style="margin-left:.25in"><content></content></span><br/>
+  </template>
+  <script>
+    Polymer('bnf-alt', {
+      applyAuthorStyles: true,
+    });
+  </script>
+</polymer-element>
+
+<!-- BNF terminal
+  A terminal element in a BNF specification.
+-->
+<polymer-element name="bnf-terminal">
+  <template>
+    <code style="font-style:normal"><content></content></code>
+  </template>
+  <script>
+    Polymer('bnf-terminal', {
+      applyAuthorStyles: true,
+    });
+  </script>
+</polymer-element>
+
+<!-- BNF optional element -->
+<polymer-element name="bnf-opt">
+  <template>
+    <sub>opt</sub>
+  </template>
+  <script>
+    Polymer('bnf-opt', {
+      applyAuthorStyles: true,
+    });
+  </script>
+</polymer-element>
+
+<!-- Grammar terms
+  A grammar term refers to a BNF production in the grammar.
+
+  TODO: Link grammar terms to their definitions? This would require that
+  we give explicit ids to each new term.
+ -->
+<polymer-element name="cxx-grammarterm">
+  <template><i><content></content></i></template>
+  <script>
+    Polymer('cxx-grammarterm', {
+      applyAuthorStyles: true,
+    });
+  </script>
+</polymer-element>

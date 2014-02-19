@@ -1,0 +1,37 @@
+<!-- Draws a table of contents based on the <cxx-clause> and <cxx-section> elements. -->
+
+<polymer-element name="cxx-toc">
+  <template>
+    <style>
+      :host { display: block; }
+      nav > ol { font-weight: bold; }
+      ol { font-weight: normal; padding-left: 0; margin-left: 0; }
+
+      /* Browsers don't support ::marker or display:marker, so emulate it. */
+      li { list-style-type: none; }
+      .marker { display: inline-block; }
+
+      li .marker { width: 2em; text-align: left; }
+      ol ol { margin-left: 2em; }
+      li li .marker { width: 3em; }
+      ol ol ol { margin-left: 3em; }
+      li li li .marker { width: 3.5em; }
+      ol ol ol ol { margin-left: 3.5em; }
+      li li li li .marker { width: 4.5em; }
+    </style>
+    <nav>
+      <h1>Contents</h1>
+      <template bind="" id="hierarchy">
+        <template if="{{sections.length > 0}}">
+          <ol>
+            <template repeat="{{sections}}">
+              <li><span class="marker">{{elem.sec_num}}</span><a href="#{{elem.id}}">{{title.textContent}}</a><template bind="" ref="hierarchy"
+              ></template></li>
+            </template>
+          </ol>
+        </template>
+      </template>
+    </nav>
+  </template>
+  <script src="toc.js"></script>
+</polymer-element>
