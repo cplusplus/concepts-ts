@@ -10,11 +10,17 @@
 
   TODO: If somebody was clever, this could shell out to a code highlighter
   and actually return C++ code wrapped with html tags for formatting
-  things like comments, etc.
+  things like comments, etc. I wonder if that could be extended to 
+  auto-escape the text so we could just write examples plainly.
+
+  TODO: The codeblock should take a link argument so we can import
+  codeblocks directly from C++ files. That would make it possible for
+  an implementer to create a test suite on top of examples written
+  in the standard.
 -->
 <polymer-element name="cxx-codeblock">
   <template>
-  <pre><code><content></content></code></pre>
+    <pre><code><content></content></code></pre>
   </template>
   <script>
     Polymer('cxx-codeblock', {

@@ -6,6 +6,8 @@
   "basic.def.odr"     : "3.2",
   "basic.fundamental" : "3.9.1",
   "basic.compound"    : "3.9.2",
+
+  "conv"              : "4",
   
   "expr"              : "5",
   "expr.prim"         : "5.1",

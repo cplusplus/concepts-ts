@@ -22,6 +22,8 @@
   <link rel="import" href="elements/grammar.html"/>
   <link rel="import" href="elements/codeblock.html"/>
   <link rel="import" href="elements/publish.html"/>
+  <script language="javascript">
+  </script>
 </head>
 <body>
 <cxx-titlepage stage="draft">
@@ -378,42 +380,46 @@
     <cxx-grammarterm>requires-expression</cxx-grammarterm>s is to define
     syntactic requirements in concepts <cxx-ref to="decl.constr"></cxx-ref> 
     such as the one below:
-    <pre><code>template&lt;typename T&gt;
+    <cxx-codeblock>
+template&lt;typename T&gt;
   concept bool R() {
     return requires (T i) {
       typename A&lt;T&gt;;
       {*i} -> const A&lt;T&gt;&amp;;
     };
-  }</code></pre>
+  }
+    </cxx-codeblock>
     The concept is defined in terms of the syntactic and type requirements 
     within the <cxx-grammarterm>requires-expression</cxx-grammarterm>.
     
     A <cxx-grammarterm>requires-expression</cxx-grammarterm> can also be
     used in non-concept templates as a way of writing ad hoc constraints
     on template arguments such as the one below:
-    <pre><code>template&lt;typename T&gt;
+    <cxx-codeblock>
+template&lt;typename T&gt;
   requires requires (T x) { x + x; }
     T add(T a, T b) { return a + b; }
-  }</code></pre>
+  }
+    </cxx-codeblock>
     Any use outside of a concept or 
     <cxx-grammarterm>requires-clause</cxx-grammarterm> 
     <cxx-ref to="temp.constr"></cxx-ref> will almost certainly make the
     program ill-formed. For example:
-    <pre><code>template&lt;typename T&gt;
-    constexpr bool f(T a, T b) { 
-      return requires() { a + b };
-    }
+    <cxx-codeblock>
+template&lt;typename T&gt;
+  constexpr bool f(T a, T b) { 
+    return requires() { a + b };
   }
 
-  template&lt;typename T&gt;
+template&lt;typename T&gt;
   T g(T x, T y) {
-    if (has_plus(x, y)) {
+    if (has_plus(x, y))
       return x + y;
-    }
   }
 
-  struct X { } p, q;
-  g(p, q); // <em style="font-family:times">Error: no matching operator+</em></code></pre>
+struct X { } p, q;
+g(p, q); // <em style="font-family:times">Error: no matching operator+</em>
+    </cxx-codeblock>
     </cxx-example>
     </p>
 
@@ -461,7 +467,7 @@
       For example, the following is requirement evaluates to 
       <code>true</code> for all arithmetic types 
       <cxx-ref in"cxx" to="basic.fundamental"></cxx-ref>, 
-      and false for pointer types 
+      and <code>false</code> for pointer types 
       <cxx-ref in="cxx" to="basic.compound"></cxx-ref>.
       <cxx-codeblock>
 requires (T a, T b) {
@@ -491,56 +497,56 @@ requires (T a, T b) {
       </p>
 
       <p>
-      The presence of a <cxx-grammarterm>trailing-return-type</cxx-grammarterm> denotes a result type
-      requirement. The result type requirement is \tcode{true} if and only if the
-      substitution of template arguments  into the specified type, and
-      \tcode{decltype((e))} is convertible to \tcode{T}, where \tcode{e} is the
-      substituted expression and \tcode{T} is the substituted type (\CxxStd~4).
-      \enterexample
-      \begin{codeblock}
-      template<typename T>
-        concept bool Deref() {
-          return requires(T p) {
-            {*p} -> typename T::reference;
-          };
-        }
-      \end{codeblock}
-      The concept is \tcode{true} when the expression \tcode{*p} and
-      the type name \tcode{T::reference} do not result in substitution failures when
-      template arguments are substituted, and \tcode{decltype((*p))} is convertible to 
-      \tcode{T::reference} after substitution.
-      \exitexample 
+      The presence of a <cxx-grammarterm>trailing-return-type</cxx-grammarterm> 
+      denotes a result type requirement. The result type requirement is 
+      <code>true</code> if and only if the substitution of template arguments  
+      into the specified type, and <code>decltype((e))</code> is implicitly 
+      convertible to <code>T</code>, where <code>e</code> is the substituted 
+      expression and <code>T</code> is the substituted type
+      <cxx-ref in="cxx" to="conv"></cxx-ref>.
+      <cxx-example>
+      <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool D() {
+    return requires(T p) {
+      {*p} -> typename T::r;
+    };
+  }
+      </cxx-codeblock>
+      The concept is <code>true</code> when the expression <code>*p</code> and
+      the type name <code>T::r</code> do not result in substitution failures 
+      when template arguments are substituted, and <code>decltype((*p))</code>
+      is implicitly convertible to <code>T::r</code> after substitution.
+      </cxx-example>
       </p>
-    
     </cxx-section>
 
-<!-- 
 
-
-
-\pnum
-If the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> is a 
-\grammarterm{constrained-type-name}, 
-then that concept is applied to the \tcode{decltype((e))} where \tcode{e} is
-the substituted expression. The requirement is \tcode{true} if and only if the 
-result of that application is \tcode{true}.
-\enterexample
-\begin{codeblock}
-template<typename I>
+    <p>
+    If the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> is a 
+    <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
+    then that concept is applied to the <code>decltype((e))</code> where 
+    <code>e</code> is the substituted expression. The requirement is 
+    <code>true</code> if and only if the result of that application is 
+    <code>true</code>.
+    <cxx-example>
+    <cxx-codeblock>
+template&lt;typename I&gt;
   concept bool Iterator() { ... }
 
-template<typename T>
+template&lt;typename T&gt;
   concept bool Range() {
     return requires(T x) {
       {begin(x)} -> Iterator; // Iterator 
     };
   }
-\end{codeblock}
-The concept is to \tcode{true} iff the expression \tcode{begin(x)}
-is a valid expression, and \tcode{Iterator<decltype((begin(x)))>()} 
-is \tcode{true}.
-\exitexample
-
+    </cxx-codeblock>
+    The concept is to <code>true</code> if and only if the expression 
+    <code>begin(x)</code> is a valid expression, and 
+    <code>Iterator<decltype((begin(x)))>()</code> is <code>true</code>.
+    </cxx-example>
+    </p>
+<!-- 
 \pnum
 If the \tcode{constexpr} specifier is present in the 
 \grammarterm{compound-requirement}, the requirement is true if and only
@@ -580,8 +586,8 @@ constructor and move assignment operator selected by overload resolution must
 not propagate exceptions. 
 If either of the instantiated expressions does propagate exceptions, the concept 
 is not satisfied.
-\exitexample -->
-
+\exitexample 
+ -->
     <cxx-section id="expr.req.type">
       <h1>Type requirements</h1>
     </cxx-section>

@@ -29,7 +29,7 @@ cxx-titlepage { page: title; page-break-after: always; }
 /* Needed to make the <cxx-titlepage>'s vertical spacing work. */
 html, body {
     height: 100%;
-    text-align: justify;;
+    text-align: justify;
 }
 
 cxx-docnum { string-set: docnum content(); }
@@ -67,7 +67,11 @@ aside { float: right; max-width: 40%;
 del {text-decoration: line-through; color: #8B0040;}
 ins {text-decoration: underline; color: #005100;}
 
-pre { margin-left: 1em; }
+pre { 
+    margin-left: 1em; 
+    margin-top: .5em;
+    margin-bottom: .5em;
+}
 
 /* This is here rather than inside elements/toc.html because browsers
    don't understand leader() or target-counter(), so they drop them
