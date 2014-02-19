@@ -4,11 +4,16 @@
   This sets block within an indented region of text and changes
   the default font-style to use italic.
 
-  TODO: We should really have a CSS class for these blocks.
+  Note that the spacing for the grammar is taken from the LaTeX
+  version of the draft standard (or as well as I can interpret
+  the spacing in LaTeX - a .9\textwidth minipage with tabs every
+  .6 inches).
+
+  FIXME: We should really have a CSS class for these blocks.
 -->
 <polymer-element name="bnf-grammar">
   <template>
-    <div style="font-style:italic;margin-left:.25in">
+    <div style="font-style:italic;margin-left:.35in;">
       <content></content>
     </div>
   </template>
@@ -24,7 +29,7 @@
 -->
 <polymer-element name="bnf-rule">
   <template>
-    <content></content>:<br/>
+    <span style="margin-left:.6in"><content></content>:<br/></span>
   </template>
   <script>
     Polymer('bnf-rule', {
@@ -40,7 +45,7 @@
 -->
 <polymer-element name="bnf-alt">
   <template>
-    <span style="margin-left:.25in"><content></content></span><br/>
+    <span style="margin-left:1.2in"><content></content></span><br/>
   </template>
   <script>
     Polymer('bnf-alt', {

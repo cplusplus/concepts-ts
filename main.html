@@ -20,6 +20,7 @@
   <link rel="import" href="elements/note.html"/>
   <link rel="import" href="elements/example.html"/>
   <link rel="import" href="elements/grammar.html"/>
+  <link rel="import" href="elements/codeblock.html"/>
   <link rel="import" href="elements/publish.html"/>
 </head>
 <body>
@@ -119,7 +120,7 @@
   whatever its final document number may be.</cxx-note>
   </p>
 
-<!-- Move text from intro into scope. -->
+<!-- TOOD: Move text from intro into scope. -->
 <!--   <cxx-section id="general.scope">
     <h1>Scope</h1>
   </cxx-section>
@@ -418,22 +419,20 @@
 
     <p>
     The <cxx-grammarterm>requires-expression</cxx-grammarterm> may introduce 
-    local arguments via a 
-    <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>. These 
-    parameters have no linkage, storage, or lifetime. 
-
+    local arguments via a <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>. 
+    These parameters have no linkage, storage, or lifetime.
     They are used only to write constraints within the
     <cxx-grammarterm>requirement-body</cxx-grammarterm> and are not visible
     outside the closing <code>}</code> of the 
     <cxx-grammarterm>requirement-body</cxx-grammarterm>. 
-
     The <cxx-grammarterm>requirement-body</cxx-grammarterm>is a list of 
     requirements written as statements. These statements may refer to local 
     arguments, template parameters, and any other declarations visible from the 
     enclosing context.
     </p>
 
-    <p>The <cxx-grammarterm>requirement-parameter-list</cxx-grammarterm> shall 
+    <p>
+    The <cxx-grammarterm>requirement-parameter-list</cxx-grammarterm> shall 
     not include an ellipsis.
     </p>
 
@@ -441,76 +440,86 @@
     A <cxx-grammarterm>requires-expression</cxx-grammarterm> evaluates to 
     <code>true</code> if and only if every 
     <cxx-grammarterm>requirement</cxx-grammarterm> in the 
-    <<cxx-grammarterm>requirement-list<cxx-grammarterm> evaluates
+    <cxx-grammarterm>requirement-list</cxx-grammarterm> evaluates
     to <code>true</code>. The semantics of each kind of requirement are 
     described in the following sections.
     </p>
 
-<!-- TODO: It might be worthwhile to give examples where substitution fails
-and where it doesn't. Right now I'm just regurgitating the text of the
-specification.
- -->
+    <cxx-section id="expr.req.simple">
+      <h1>Simple requirements</h1>
+
+      <p>
+      A <cxx-grammarterm>simple-requirement</cxx-grammarterm> introduces a 
+      requirement that the substitution of template arguments into the 
+      expression will not result in a substitution failure.
+
+      A <cxx-grammarterm>simple-requirement</cxx-grammarterm> has the value 
+      <code>true</code> if and only if substitution succeeds. The expression is 
+      an unevaluated operand <cxx-ref in="cxx" to="basic.def.odr"></cxx-ref>.
+      
+      <cxx-example>
+      For example, the following is requirement evaluates to 
+      <code>true</code> for all arithmetic types 
+      <cxx-ref in"cxx" to="basic.fundamental"></cxx-ref>, 
+      and false for pointer types 
+      <cxx-ref in="cxx" to="basic.compound"></cxx-ref>.
+      <cxx-codeblock>
+requires (T a, T b) {
+  a + b;  // <em style="font-family:times">A simple requirement</em>.
+}
+</cxx-codeblock>
+      </cxx-example>
+      </p>
+    </cxx-section>
+
 
     <cxx-section id="expr.req.compound">
       <h1>Compound requirements</h1>
+    
+      <p>
+      A <cxx-grammarterm>compound-requirement</cxx-grammarterm> introduces a 
+      set of constraints pertaining to a single 
+      <cxx-grammarterm>expression</cxx-grammarterm>. 
+      A <cxx-grammarterm>compound-requirement</cxx-grammarterm> is 
+      <code>true</code> if and only if the substitution of template arguments 
+      into the expression does not result in a substitution failure and all 
+      other associated requirements are <code>true</code>.
 
-<!-- 
-\pnum
-A \grammarterm{simple-requirement} introduces a requirement that the substitution
-of template arguments into the expression will not result in a substitution
-failure. A \grammarterm{simple-requirement} has the value \tcode{true} if and 
-only if substitution succeeds. The expression is an unevaluated operand 
-(\CxxStd~3.2). 
-\enterexample
-\begin{codeblock}
-requires (T a, T b) {
-  a + b;  // A simple requirement.
-}
-\end{codeblock}
-\exitexample
- -->
+      The expression is an unevaluated operand except in the case when the 
+      <code>constexpr</code> specifier is present.
+      These other requirements are described in the following sections.
+      </p>
 
+      <p>
+      The presence of a <cxx-grammarterm>trailing-return-type</cxx-grammarterm> denotes a result type
+      requirement. The result type requirement is \tcode{true} if and only if the
+      substitution of template arguments  into the specified type, and
+      \tcode{decltype((e))} is convertible to \tcode{T}, where \tcode{e} is the
+      substituted expression and \tcode{T} is the substituted type (\CxxStd~4).
+      \enterexample
+      \begin{codeblock}
+      template<typename T>
+        concept bool Deref() {
+          return requires(T p) {
+            {*p} -> typename T::reference;
+          };
+        }
+      \end{codeblock}
+      The concept is \tcode{true} when the expression \tcode{*p} and
+      the type name \tcode{T::reference} do not result in substitution failures when
+      template arguments are substituted, and \tcode{decltype((*p))} is convertible to 
+      \tcode{T::reference} after substitution.
+      \exitexample 
+      </p>
+    
     </cxx-section>
 
-    <cxx-section id="expr.req.simple">
-      <h1>Simple requirements</h1>
-    </cxx-section>
-
 <!-- 
-\rSec3[expr.req.compound]{Compound requirements}
+
+
 
 \pnum
-A \grammarterm{compound-requirement} introduces a set of constraints pertaining
-to a single \grammarterm{expression}. A \grammarterm{compound-requirement} is
-\tcode{true} if and only if the substitution of template arguments into the
-expression does not result in a substitution failure and all other associated 
-requirements are \tcode{true}. The expression is an unevaluated operand
-except in the case when the \tcode{constexpr} specifier is present.
-These other requirements are described in the following sections.
-
-\pnum
-The presence of a \grammarterm{trailing-return-type} denotes a result type
-requirement. The result type requirement is \tcode{true} if and only if the
-substitution of template arguments  into the specified type, and
-\tcode{decltype((e))} is convertible to \tcode{T}, where \tcode{e} is the
-substituted expression and \tcode{T} is the substituted type (\CxxStd~4).
-\enterexample
-\begin{codeblock}
-template<typename T>
-  concept bool Deref() {
-    return requires(T p) {
-      {*p} -> typename T::reference;
-    };
-  }
-\end{codeblock}
-The concept is \tcode{true} when the expression \tcode{*p} and
-the type name \tcode{T::reference} do not result in substitution failures when
-template arguments are substituted, and \tcode{decltype((*p))} is convertible to 
-\tcode{T::reference} after substitution.
-\exitexample 
-
-\pnum
-If the \grammarterm{trailing-return-type} is a 
+If the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> is a 
 \grammarterm{constrained-type-name}, 
 then that concept is applied to the \tcode{decltype((e))} where \tcode{e} is
 the substituted expression. The requirement is \tcode{true} if and only if the 
