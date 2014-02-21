@@ -1145,7 +1145,7 @@ template&lt;Integral T&gt;
   </cxx-note>
 
   <!-- FIXME: This could probably be written more explicitly. -->
-  <p>The associated constraints of a \grammarterm{concept-introduction}
+  <p>The associated constraints of a <cxx-grammarterm>concept-introduction</cxx-grammarterm>
   are those required by the referenced concept definition. 
   <cxx-example>
   <cxx-codeblock>
@@ -1156,8 +1156,8 @@ template&lt;Integral T&gt;
   requires Unsigned&lt;T&gt;()
     T binary_gcd(T a, T b);
 </cxx-codeblock>
-  The associated constraints of \tcode{binary_gcd} are denoted by the
-  conjunction <code>Integral&lt;T&gt;() \&amp;\&amp; Unsigned&lt;T&gt;()</code>.
+  The associated constraints of <code>binary_gcd</code> are denoted by the
+  conjunction <code>Integral&lt;T&gt;() &amp;&amp; Unsigned&lt;T&gt;()</code>.
   </cxx-example>
   </p>
 
@@ -1284,7 +1284,7 @@ template&lt;Integral T&gt;
 template&lt;Object T, int N&gt; // T must be an object type
   class array;
 
-array&lt;int&amp;, 3&gt;* p; // error: \texttt{int&amp;} is not an object type
+array&lt;int&amp;, 3&gt;* p; // error: int&amp; is not an object type
     </cxx-codeblock>
     </cxx-example>
     <cxx-note>
@@ -1331,7 +1331,6 @@ template&lt;Object T&gt; class list2;
 
 stack&lt;list1&gt; s1; // error: Regular is more strict than Copyable
 stack&lt;list2&gt; s2; // Ok: Object is not more strict than Copyable
-\end{codeblock}
       </cxx-codeblock>
       </cxx-example>
       </p>
@@ -1758,7 +1757,7 @@ void g();
     The expression 
     <code>x == y &amp;&amp; is_integral&lt;T&gt;::value</code> 
     has two atoms:
-    <code>x == y</code> and \tcode{is_integral&lt;T&gt;::value}.
+    <code>x == y</code> and <code>is_integral&lt;T&gt;::value</code>.
     </cxx-example>
 
 
@@ -1797,7 +1796,7 @@ void g();
 \nb{Add this section as 14.9.}
 
 \pnum
-A \grammarterm{concept-introduction} allows the declaration of template and
+A <cxx-grammarterm>concept-introduction</cxx-grammarterm> allows the declaration of template and
 its associated constraints in a concise way.
 \begin{bnf}
 \nontermdef{template-declaration}\br
@@ -1815,7 +1814,7 @@ its associated constraints in a concise way.
 \end{bnf}
 
 \pnum
-The \grammarterm{concept-introduction} names a concept and a list of identifiers
+The <cxx-grammarterm>concept-introduction</cxx-grammarterm> names a concept and a list of identifiers
 to be used as template parameters, called the \emph{introduced parameters} in 
 the declaration. The number of \grammarterm{identifier}{}s in the 
 \grammarterm{introduction-list} must match the number of template parameters 
@@ -1858,7 +1857,7 @@ If a constrained declaration is introduced by a concept introduction, then all
 its declarations must have the same form.
 
 \pnum
-The sequence of introduced parameters in a \grammarterm{concept-introduction} 
+The sequence of introduced parameters in a <cxx-grammarterm>concept-introduction</cxx-grammarterm> 
 shall have the same number of template parameters as the referenced concept.
 \enterexample
 \begin{codeblock}
@@ -1870,7 +1869,7 @@ Ineffable{X, Y, Z} void g(); // Ok
 \end{codeblock}
 \exitexample
 \enternote
-Allowing default arguments to be deduced in a \grammarterm{concept-introduction}
+Allowing default arguments to be deduced in a <cxx-grammarterm>concept-introduction</cxx-grammarterm>
 would cause the introduction of an unnamed, unusable template parameter in
 the template declaration.
 \exitnote
