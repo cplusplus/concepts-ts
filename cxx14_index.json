@@ -28,8 +28,19 @@
   "over.call"         : "13.5.4",
   "over.built"        : "13.6",
 
-  "temp"              : "14",
-  "temp.dcls"         : "14.5",
-  "temp.class"        : "14.5.1",
-  "temp.mem"          : "14.5.2"
+  "temp"                  : "14",
+  "temp.arg"              : "14.3",
+  "temp.arg.type"         : "14.3.1",
+  "temp.arg.nontype"      : "14.3.2",
+  "temp.dcls"             : "14.5",
+  "temp.class"            : "14.5.1",
+  "temp.mem"              : "14.5.2",
+  "temp.class.spec.match" : "14.5.5.1",
+  "temp.class.order"      : "14.5.5.2",
+  "temp.class.spec.mfunc" : "14.5.5.3",
+  "temp.fct"              : "14.5.6",
+  "temp.over.link"        : "14.5.6.1",
+  "temp.func.order"       : "14.5.6.2",
+
+  "temp.deduct"           : "14.8.2"
 }
