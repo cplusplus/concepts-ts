@@ -52,19 +52,24 @@
     However, these templates are unconstrained, allowing any type or value 
     to be substituted for a template argument, often resulting in compiler 
     errors. 
+    
     What is lacking is a specification of an interface for a template, 
     separate from its implementation, so that a use of a template can be 
     selected among alternative templates and checked in isolation.</p>
 
     <p>A concept is a predicate that defines the syntactic and semantic 
     requirements on template arguments. 
-    A type that satisfies these requirements is said to be a <emph>model</emph>
-    of that concept, or that the type <emph>models</emph> the concept. 
+    A template argument that satisfies these requirements is said to be a 
+    <emph>model</emph> of that concept, or that the argument 
+    <emph>models</emph> the concept.
+    
     Syntactic requirements specify the set of valid expressions that can 
     be used with conforming types and the types associated with those 
     expressions. 
+    
     Semantic requirements describe the required behavior of those syntactic 
     requirements and also provide complexity guarantees. 
+    
     Concepts are the basis of generic programming in C++ and support the 
     ability to reason about generic algorithms and data structures 
     independently of their instantiation by concrete template arguments.</p>
@@ -110,16 +115,15 @@
     implementations of an extension to the C++ programming language 
     concerning the application of constraints to template arguments, 
     the use of constraints in function overloading and class template 
-    specialization, and the definition of those constraints. </p>
+    specialization, and the definition of those constraints.</p>
 
-  <p>International Standard, ISO/IEC 14882, provides important context
-  and specification for this Technical Specification. This document as 
-  written as a set of changes against that specification. Notes in 
-  this Technical Specification indicate how and where new text should 
-  be added to or removed from the International Standard. 
-  <cxx-note>The proposal is written against the C++14 specification,
-  whatever its final document number may be.</cxx-note>
-  </p>
+    <p>International Standard, ISO/IEC 14882, provides important context
+    and specification for this Technical Specification. This document as 
+    written as a set of changes against that specification. Notes in 
+    this Technical Specification indicate how and where new text should 
+    be added to or removed from the International Standard. 
+    <cxx-note>The proposal is written against the C++14 specification,
+    whatever its final document number may be.</cxx-note></p>
 
 <!-- TOOD: Move text from intro into scope. -->
 <!--   <cxx-section id="general.scope">
@@ -146,7 +150,7 @@
     </ul>
 
     <p>ISO/IEC XXXX:2011 is herein after called the <dfn>C++ Standard</dfn>.
-    References to clauses within the C++ Standard are written as "C++11
+    References to clauses within the C++ Standard are written as "C++14
     &#xa7;3.2".</p>
   </cxx-section>
 
@@ -311,7 +315,7 @@
     <h1>Requires expressions</h1>
 
     <p>A <cxx-grammarterm>requires-expression</cxx-grammarterm> provides a 
-    concise way to express syntactic requirements on template constraints.
+    concise way to express syntactic requirements on template arguments.
     <bnf-grammar>
       <bnf-rule>requires-expression</bnf-rule>
         <bnf-alt><bnf-terminal>requires</bnf-terminal> 
@@ -332,7 +336,7 @@
       </bnf-alt>
 
     <bnf-rule>requirement-list</bnf-rule>
-      <bnf-alt>requirement <bnf-terminal>;</bnf-terminal></bnf-alt>
+      <bnf-alt>requirement</bnf-alt>
       <bnf-alt>requirement-list requirement</bnf-alt>
 
     <bnf-rule>requirement</bnf-rule>
@@ -342,7 +346,7 @@
       <bnf-alt>nested-requirement</bnf-alt>
 
     <bnf-rule>simple-requirement</bnf-rule>
-      <bnf-alt>expression</bnf-alt>
+      <bnf-alt>expression <bnf-terminal>;</bnf-terminal></bnf-alt>
 
     <bnf-rule>compound-requirement</bnf-rule>
       <bnf-alt>
@@ -350,14 +354,16 @@
         <bnf-terminal>{</bnf-terminal> expression <bnf-terminal>}</bnf-terminal>
         <bnf-terminal>noexcept</bnf-terminal><bnf-opt></bnf-opt>
         trailing-return-type<bnf-opt></bnf-opt>
+        <bnf-terminal>;</bnf-terminal>
       </bnf-alt>
 
     <bnf-rule>type-requirement</bnf-rule>
-      <bnf-alt><bnf-terminal>typename</bnf-terminal> type-id</bnf-alt>
-      <bnf-alt>typename-specifier</bnf-alt>
+      <bnf-alt>
+        <bnf-terminal>typename</bnf-terminal>type-id<bnf-terminal>;</bnf-terminal>
+      </bnf-alt>
 
     <bnf-rule>nested-requirement</bnf-rule>
-      <bnf-alt>requires-clause</bnf-alt>
+      <bnf-alt>requires-clause <bnf-terminal>;</bnf-terminal></bnf-alt>
     </bnf-grammar>
     </p>
 
@@ -462,7 +468,18 @@ requires (T a, T b) {
 </cxx-codeblock>
       </cxx-example>
       </p>
-    </cxx-section>
+
+      <p>If the required valid expression would always result in a
+      substitution failure, the program is ill-formed.
+      <cxx-example>
+      <cxx-codeblock>
+requires () {
+  new T[-1];  // error: the valid expression well never be well-formed.
+}
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+    </cxx-section> <!-- expr.req.simple -->
 
 
     <cxx-section id="expr.req.compound">
@@ -480,6 +497,8 @@ requires (T a, T b) {
       <code>constexpr</code> specifier is present.
       These other requirements are described in the following sections.</p>
 
+      <!-- TODO: This does not document the fact that a trailing type
+           specifier adds an implied type requirement. -->
       <p>The presence of a <cxx-grammarterm>trailing-return-type</cxx-grammarterm>
       denotes a result type requirement. The result type requirement is 
       <code>true</code> if and only if the substitution of template arguments  
@@ -503,9 +522,14 @@ template&lt;typename T&gt;
       </cxx-example>
       </p>
 
+      <p>As with <cxx-grammarterm>simple-requirement</cxx-grammarterm>s, if
+      the required valid expression will always result in a substitution
+      failure, the program is ill-formed 
+      <cxx-ref to="expr.req.simple"></cxx-ref>.</p>
+
       <p>If the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> is a
       <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
-      then that concept is applied to the <code>decltype((e))</code> where 
+      then that concept is applied to <code>decltype((e))</code> where 
       <code>e</code> is the substituted expression. The requirement is 
       <code>true</code> if and only if the result of that application is 
       <code>true</code>.
@@ -530,7 +554,7 @@ template&lt;typename T&gt;
       <p>If the <cxx-grammarterm>constexpr</cxx-grammarterm> specifier is 
       present in the <cxx-grammarterm>compound-requirement</cxx-grammarterm>, 
       the requirement is true if and only if the substituted expression is a
-      constant expression <cxx-ref in.
+      constant expression <cxx-ref in="cxx" to="expr.const"></cxx-ref>.
       <cxx-example>
       <cxx-codeblock>
 template&lt;typename Trait&gt;
@@ -592,7 +616,20 @@ template&lt;typename T&gt;
       </cxx-codeblock>
       </cxx-example>
       </p>
-    </cxx-section>
+
+      <p>If the required type will always results in a substitution failure,
+      then the program is ill-formed.
+      <cxx-example>
+      <cxx-codeblock>
+requires () {
+  typename int::X;  // error: int does not have class type
+  typename T[-1];   // error: array types cannot have negative extent
+}
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+    </cxx-section> <!-- expr.req.type -->
 
     <cxx-section id="expr.req.nested">
       <h1>Nested requirements</h1>
@@ -1186,7 +1223,7 @@ template&lt;Integral T&gt;
   <cxx-section id="temp.param">
     <h1>Template parameters</h1>
 
-    <p> Modify the <cxx-grammarterm>template-parameter</cxx-grammarterm>
+    <p>Modify the <cxx-grammarterm>template-parameter</cxx-grammarterm>
     grammar in <cxx-ref in="cxx" to="temp.param"></cxx-ref> to include
     <cxx-grammarterm>constrained-parameter</cxx-grammarterm>, and add
     the following productions.
@@ -1243,6 +1280,28 @@ template&lt;Integral T&gt;
       the same <cxx-grammarterm>type-specifier</cxx-grammarterm>.</li>
     </ul>
     </cxx-note>
+    <cxx-example>
+    Given the following concept definitions:
+    <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool Type = true;
+template&lt;int N&gt;
+  concept bool Int = true;
+template&lt;template&lt;typename&gt; class X&gt;
+  concept bool Template = true;
+    </cxx-codeblock>
+    The the following classes are declared with the stated
+    template paramters:
+    <cxx-codeblock>
+template&lt;Type T&gt; // T is a type template parameter
+  struct X1;
+template&lt;Int N&gt; // N is an integer template parameter
+  struct X2;
+template&lt;Template T&gt; // T is a template template parameter
+  struct X3;
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
 
     <p>
     If prototype parameter is a parameter pack, then the constrained 
@@ -1653,6 +1712,9 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
   <cxx-section id="temp.constr">
     <h1>Template constraints</h1>
 
+    <p>Add this as a new section under 
+    <cxx-ref in="cxx" to="temp">"</cxx-ref>.</p>
+
     <p>
     Certain contexts require expressions that satisfy additional 
     requirements as detailed in this sub-clause. Expressions that 
@@ -1788,40 +1850,43 @@ void g();
   </cxx-section> <!-- temp.constr -->
 
 
-<!-- TODO: Bring this back into the TS. -->
-<!--
-  <cxx-section id="con.intro">
+  <cxx-section id="concept.intro">
     <h1>Concept introductions</h1>
-  </cxx-section>
-\nb{Add this section as 14.9.}
 
-\pnum
-A <cxx-grammarterm>concept-introduction</cxx-grammarterm> allows the declaration of template and
-its associated constraints in a concise way.
-\begin{bnf}
-\nontermdef{template-declaration}\br
-    \terminal{template} \terminal{<} template-parameter-list \terminal{>} 
-      \added{requires-clause\opt} 
-        declaration\br
-    \added{concept-introduction declaration}
+    <p>Add this as a new section under 
+    <cxx-ref in="cxx" to="temp">"</cxx-ref>.</p>
 
-\nontermdef{concept-introduction}\br
-    concept-name \terminal{\{} introduction-list \terminal{\}}
+    <p> A <cxx-grammarterm>concept-introduction</cxx-grammarterm> allows 
+    the declaration of template and its associated constraints in a 
+    concise way.
+    <bnf-grammar>
+      <bnf-rule>concept-introduction</bnf-rule>
+        <bnf-alt>
+          concept-name
+          <bnf-terminal>{</bnf-terminal>
+          introduction-list
+          <bnf-terminal>}</bnf-terminal>
+          declaration
+        </bnf-alt>
+      <bnf-rule>introduction-list</bnf-rule>
+        <bnf-alt>identifier</bnf-alt>
+        <bnf-alt>
+          introduction-list <bnf-terminal>,</bnf-terminal> identifier
+        </bnf-alt>
+    </bnf-grammar>
+    </p>
 
-\nontermdef{introduction-list}\br
-    identifier\br
-    introduction-list \terminal{,} identifier
-\end{bnf}
-
-\pnum
-The <cxx-grammarterm>concept-introduction</cxx-grammarterm> names a concept and a list of identifiers
-to be used as template parameters, called the \emph{introduced parameters} in 
-the declaration. The number of \grammarterm{identifier}{}s in the 
-\grammarterm{introduction-list} must match the number of template parameters 
-in the named concept.
-\enterexample
-\begin{codeblock}
-template<typename I1, typename I2, typename O>
+    <!-- TODO: This does not explain that an appropriate concept can
+         if they are overloaded. -->
+    <p>The <cxx-grammarterm>concept-introduction</cxx-grammarterm> names 
+    a concept and a list of identifiers to be used as template parameters, 
+    called the <defn>introduced parameters</defn> in the declaration. The 
+    number of <cxx-grammarterm>identifier</cxx-grammarterm>s in the 
+    <cxx-grammarterm>introduction-list</cxx-grammarterm> shall match the 
+    number of template parameters in the named concept.
+    <cxx-example>
+    <cxx-codeblock>
+template&lt;typename I1, typename I2, typename O&gt;
   concept bool Mergeable() { ... };
 
 Mergeable{First, Second, Out} // OK
@@ -1829,53 +1894,56 @@ Mergeable{First, Second, Out} // OK
 
 Mergeable{X, Y} // Error: not enough parameters
   void f(X, Y);
-\end{codeblock}
-\exitexample
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
 
-\pnum
-The \emph{introduced parameters} are the template parameters of the declaration,
-and they match the template parameters in the declaration of the named
-concept. The associated constraints
-of the declaration are formed by applying the introduced parameters as
-arguments to the named concept \ref{dcl.constr.form}.
-\enterexample
-The following declaration
-\begin{codeblock}
+    <p>The introduced parameters are the template parameters of the declaration,
+    and they match the template parameters in the declaration of the named
+    concept. The associated constraints
+    of the declaration are formed by applying the introduced parameters as
+    arguments to the named concept \ref{dcl.constr.form}.
+    <cxx-example>
+    The following declaration
+    <cxx-codeblock>
 Mergeable{X, Y, Z}
   Z merge(X, X, Y, Y, Z);
-\end{codeblock}
-is equivalent to the declaration below.
-\begin{codeblock}
-template<typename X, typename Y, typename Z>
-  requires Mergeable<X, Y, Z>()
+    </cxx-codeblock>
+    is equivalent to the declaration below.
+    <cxx-codeblock>
+template&lt;typename X, typename Y, typename Z&gt;
+  requires Mergeable&lt;X, Y, Z&gt;()
     Z merge(X, X, Y, Y, Z);
-\end{codeblock}
-\exitexample
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
 
-\pnum  
-If a constrained declaration is introduced by a concept introduction, then all
-its declarations must have the same form.
+    <p>If a constrained declaration is introduced by a concept 
+    introduction, then all its declarations must have the same 
+    form.</p>
 
-\pnum
-The sequence of introduced parameters in a <cxx-grammarterm>concept-introduction</cxx-grammarterm> 
-shall have the same number of template parameters as the referenced concept.
-\enterexample
-\begin{codeblock}
-template<typename T1, typename T2, typename T3 = T2>
+    <p>The sequence of introduced parameters in a 
+    <cxx-grammarterm>concept-introduction</cxx-grammarterm>
+    shall have the same number of template parameters as the referenced 
+    concept.
+    <cxx-example>
+    <cxx-codeblock>
+template&lt;typename T1, typename T2, typename T3 = T2&gt;
   concept bool Ineffable() { ... };
 
 Ineffable{X, Y} void f();    // Error: does not introduce all parameters
 Ineffable{X, Y, Z} void g(); // Ok
-\end{codeblock}
-\exitexample
-\enternote
-Allowing default arguments to be deduced in a <cxx-grammarterm>concept-introduction</cxx-grammarterm>
-would cause the introduction of an unnamed, unusable template parameter in
-the template declaration.
-\exitnote
+    </cxx-codeblock>
+    </cxx-example>
+    <cxx-note>
+    Allowing default arguments to be deduced in a 
+    <cxx-grammarterm>concept-introduction</cxx-grammarterm> would cause 
+    the introduction of an unnamed and unusable template parameter in the 
+    template declaration.
+    </cxx-note>
+  </cxx-section> <!-- concept.intro -->
 
-</cxx-clause>
--->
+</cxx-clause> <!-- temp -->
 
 <!-- <cxx-publish-button source="https://github.com/cplusplus/fundamentals-ts"></cxx-publish-button>
  -->
