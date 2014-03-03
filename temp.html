@@ -33,9 +33,9 @@
   <p>Add the following paragraphs after 
   <cxx-ref in="cxx" to="temp"></cxx-ref>p6.</p>
 
-  <p>A <defn>constrained template declaration</defn> is a
+  <p>A <dfn>constrained template declaration</dfn> is a
   <cxx-grammarterm>template-declaration</cxx-grammarterm> with 
-  associated constraints. The <defn>associated constraint</defn>s of a 
+  associated constraints. The <dfn>associated constraint</dfn>s of a 
   constrained template declaration are the conjunction of the associated 
   constraints of all </p>
   <ul>
@@ -129,7 +129,7 @@ template&lt;Integral T&gt;
     <p>A <cxx-grammarterm>constrained-parameter</cxx-grammarterm> defines 
     its identifier to be a template parameter. The declared template 
     parameter whose kind matches that of the first template parameter, 
-    called the <defn>prototype parameter</defn>, of the concept referred 
+    called the <dfn>prototype parameter</dfn>, of the concept referred 
     to by the <cxx-grammarterm>constrained-type-name</cxx-grammarterm>.
     <cxx-note>
     The rules for declaring the parameter are:
@@ -282,9 +282,10 @@ stack&lt;list2&gt; s2; // Ok: Object is not more strict than Copyable
         <p>Add the following paragraphs after
         <cxx-ref in="cxx" to="temp.mem.func"></cxx-ref>.
 
-        <p>A member function of a class template can be constrained by 
-        writing a <cxx-grammarterm>requires-clause</cxx-grammarterm> 
-        after the member declarator.
+        
+        <p>A member function of a class template whose declarator contains a
+        <cxx-grammarterm>requires-clause</cxx-grammarterm> is a
+        <dfn>constrained member function</dfn>.
         <cxx-example class="inline">
         <cxx-codeblock>
 template&lt;typename T&gt;
@@ -293,25 +294,21 @@ template&lt;typename T&gt;
   };
         </cxx-codeblock>
         </cxx-example>
-        The <cxx-grammarterm>requires-clause</cxx-grammarterm> introduces 
-        the following <cxx-grammarterm>expression</cxx-grammarterm>
-        as an associated constraint of the member function. A member 
-        function of a class template with an associated constraint is a 
-        <defn>constrained member function</defn>.
         </p>
 
         <p>
-        Constraints on member functions are instantiated as needed 
-        during overload resolution 
-        <cxx-ref in="cxx" to="temp.inst"></cxx-ref>.
+        Constraints on member functions are instantiated as needed
+        during overload resolution, not when the class template is
+        instantiated
+        (<cxx-ref in="cxx" to="temp.inst"></cxx-ref>).
         <cxx-note>
         Constraints on member functions do not affect the declared 
         interface of a class. That is, a constrained copy constructor 
         is still a copy constructor, even if it will not be viable for 
-        all possible specializations of the class.
+        a specialization of the class template.
         </cxx-note>
         </p>
-      
+
       </cxx-section> <!-- temp.mem.func -->
     </cxx-section> <!-- temp.class -->
 
@@ -322,7 +319,7 @@ template&lt;typename T&gt;
       <cxx-ref in="cxx" to="temp.friend"></cxx-ref>p9.
 
       <p> 
-      A <defn>constrained friend</defn> is a friend of a class 
+      A <dfn>constrained friend</dfn> is a friend of a class 
       template with associated constraints.
 
       A constrained friend can be a constrained class template, 
@@ -542,7 +539,7 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
         <p>Modify <cxx-ref in="cxx" to="temp.over.link">p6.</cxx-ref>
 
         <p>
-        Two function templates are <defn>equivalent</defn> if they are 
+        Two function templates are <dfn>equivalent</dfn> if they are 
         declared in the same scope, have the same name, have identical 
         template parameter lists, <del>and</del> have return types<ins>,</ins> 
         <del>and</del> parameter lists, <ins>and constraints 
@@ -582,6 +579,48 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
     </cxx-section> <!-- temp.fct -->
   </cxx-section> <!-- temp.decls -->
 
+  <cxx-section id="temp.spec">
+    <h1>Template instantiation and specialization</h1>
+
+    <cxx-section id="temp.inst">
+      <h1>Implicit instantiation</h1>
+
+      <p>Insert the following pargraph after 
+      <cxx-ref in="cxx" to="temp.inst"></cxx-ref>/1.</p>
+
+      <p>The implicit instantiation of a class template does not cause
+      the instantiation of the associated constraints of constrained member 
+      functions.</p>
+    </cxx-section> <!-- temp.inst -->
+
+    <cxx-section id="temp.explicit">
+      <h1>Explicit instantiation</h1>
+
+      <p>Insert the following paragraph under 
+      <cxx-ref in="cxx" to="temp.explicit"></cxx-ref>.</p>
+
+      <p>An explicit instantiation of constrained template declaration
+      (<cxx-ref to="temp"></cxx-ref>)
+      or constrained member function declaration 
+      (<cxx-ref to="temp.mem.func"></cxx-ref>)
+      shall satsify the associated constraints of that declaration
+      (<cxx-ref to="temp.constr"></cxx-ref>).
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template<typname T>
+  concept bool C = requires(T t) { t.c(); }s
+
+template<typenane T>
+  requires C<T>
+    struct X { }
+
+template struct X<int>; // Error: int does not satisfy C.
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+    </cxx-section> <!-- temp.explicit -->
+  </cxx-section> <!-- temp.spec -->
+
   <cxx-section id="temp.constr">
     <h1>Template constraints</h1>
 
@@ -592,8 +631,8 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
     Certain contexts require expressions that satisfy additional 
     requirements as detailed in this sub-clause. Expressions that 
     satisfy these requirements are called 
-    <defn>constraint expression</defn>s or simply 
-    <defn>constraint</defn>s.
+    <dfn>constraint expression</dfn>s or simply 
+    <dfn>constraint</dfn>s.
     <bnf-grammar>
       <bnf-rule>constraint-expression</bnf-rule>
         <bnf-alt>logical-or-expression</bnf-alt>
@@ -638,9 +677,9 @@ void g(T x);
     </p>
 
     <p>
-    A constraint is <defn>satisfied</defn> if it evaluates to 
+    A constraint is <dfn>satisfied</dfn> if it evaluates to 
     <code>true</code>. Otherwise, the constraint is 
-    <defn>unsatisfied</defn>.
+    <dfn>unsatisfied</dfn>.
     </p>
 
 
@@ -648,7 +687,7 @@ void g(T x);
     A subexpression of a 
     <cxx-grammarterm>constraint-expression</cxx-grammarterm> that 
     calls a function concept or refers to a variable concept 
-    <cxx-ref to="dcl.concept"></cxx-ref> is a <defn>concept check</defn>. 
+    <cxx-ref to="dcl.concept"></cxx-ref> is a <dfn>concept check</dfn>. 
 
     When processing a constraint containing a concept check, that 
     concept check is replaced by the concept's definition, forming 
@@ -685,7 +724,7 @@ void g();
     <p>
     Certain subexpressions of a 
     <cxx-grammarterm>constraint-expression</cxx-grammarterm> are 
-    considered <defn>atomic constraint</defn>s. A constraint is atomic 
+    considered <dfn>atomic constraint</dfn>s. A constraint is atomic 
     if it is not a <cxx-grammarterm>logical-and-expression</cxx-grammarterm> 
     or a <cxx-grammarterm>logical-or-expression</cxx-grammarterm>.
     <cxx-example class="inline">
@@ -700,7 +739,7 @@ void g();
     <p>
     Given two constraints <code>P</code> and <code>Q</code> depending 
     on template parameters <code>T1</code>, ..., <code>Tn</code>, 
-    <code>P</code> is said to <defn>subsume</defn> <code>Q</code> if
+    <code>P</code> is said to <dfn>subsume</dfn> <code>Q</code> if
     for any template arguments substituted for 
     <code>T1</code>, ..., <code>Tn</code>, the constraint <code>Q</code> 
     is true, then <code>P</code> is also true.
@@ -753,7 +792,7 @@ void g();
          if they are overloaded. -->
     <p>The <cxx-grammarterm>concept-introduction</cxx-grammarterm> names 
     a concept and a list of identifiers to be used as template parameters, 
-    called the <defn>introduced parameters</defn> in the declaration. The 
+    called the <dfn>introduced parameters</dfn> in the declaration. The 
     number of <cxx-grammarterm>identifier</cxx-grammarterm>s in the 
     <cxx-grammarterm>introduction-list</cxx-grammarterm> shall match the 
     number of template parameters in the named concept.
