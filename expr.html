@@ -1,0 +1,414 @@
+<cxx-clause id="expr">
+  <h1>Expressions</h1>
+
+  <cxx-section id="expr.prim">
+    <h1>Primary expressions</h1>
+
+    <p><cxx-note>In <cxx-ref in="cxx" to="expr.prim.general"></cxx-ref>, add
+    <cxx-grammarterm>requires-expression</cxx-grammarterm> to the
+    rule, <cxx-grammarterm>primary-expression</cxx-grammarterm>.</cxx-note></p>
+    
+    <!-- TODO:  Don't list existing elements -->
+    <bnf-grammar>
+      <bnf-rule>primary-expression</bnf-rule>
+        <ins><bnf-alt>requires-expression</bnf-alt></ins>
+    </bnf-grammar>
+
+    <cxx-section id="expr.prim.lambda">
+    <h1>Lambda expressions</h1>
+
+    <p><cxx-note>Modify 
+    <cxx-ref in="cxx" to="expr.prim.lambda"></cxx-ref>/5.</cxx-note></p>
+
+    <p>The closure type for a non-generic
+    <cxx-grammarterm>lambda-expression</cxx-grammarterm> has a public
+    <code>inline</code> function call operator 
+    <cxx-ref in="cxx" to="over.over"></cxx-ref>) whose parameters 
+    and return type 
+    are described by the <cxx-grammarterm>lambda-expression</cxx-grammarterm>'s 
+    <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> and 
+    <cxx-grammarterm>trailing-return-type</cxx-grammarterm>
+    respectively. 
+    
+    For a generic lambda, the closure type has a public inline function call 
+    operator member template <cxx-ref in="cxx" to="temp.mem"></cxx-ref> 
+    whose <cxx-grammarterm>template-parameter-list</cxx-grammarterm> 
+    consists of one invented type 
+    <cxx-grammarterm>template-parameter</cxx-grammarterm> for each 
+    occurrence of <code>auto</code> <ins>or each unique occurrence of a 
+    <cxx-grammarterm>constrained-type-name</cxx-grammarterm></ins>
+    in the lambda's 
+    <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, 
+    in order of appearance. 
+
+    The invented type template-parameter is a parameter 
+    pack if the corresponding 
+    <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
+    declares a function parameter pack 
+    <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>. 
+    <ins>The associated constraints of the generic lambda are the 
+    conjunction of constraints introduced by the use of 
+    <cxx-grammarterm>constrained-type-name</cxx-grammarterm>s in the
+    <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>.</ins>
+    
+    The return type and function parameters of the function call operator 
+    template are derived from the 
+    <cxx-grammarterm>lambda-expression</cxx-grammarterm>'s 
+    <cxx-grammarterm>trailing-return-type</cxx-grammarterm> and 
+    <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
+    by replacing each occurrence of <code>auto</code> in the 
+    <cxx-grammarterm>decl-specifiers</cxx-grammarterm> of the
+    <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> with the 
+    name of the corresponding invented 
+    <cxx-grammarterm>template-parameter</cxx-grammarterm>. </p>
+
+    <p>All placeholder types introduced using the same 
+    <cxx-grammarterm>concept-name</cxx-grammarterm> have the same invented
+    template parameter.</p>
+    </cxx-section>
+
+
+  <cxx-section id="expr.req">
+    <h1>Requires expressions</h1>
+
+    <p>A <cxx-grammarterm>requires-expression</cxx-grammarterm> provides a 
+    concise way to express syntactic requirements on template arguments.
+    <bnf-grammar>
+      <bnf-rule>requires-expression</bnf-rule>
+        <bnf-alt><bnf-terminal>requires</bnf-terminal> 
+          requirement-parameter-list requirement-body</bnf-alt>
+
+    <bnf-rule>requirement-parameter-list</bnf-rule>
+      <bnf-alt>
+        <bnf-terminal>(</bnf-terminal> 
+        parameter-declaration-clause<bnf-opt></bnf-opt>
+        <bnf-terminal>)</bnf-terminal>
+      </bnf-alt>
+
+    <bnf-rule>requirement-body</bnf-rule>
+      <bnf-alt>
+        <bnf-terminal>{</bnf-terminal> 
+        requirement-list 
+        <bnf-terminal>}</bnf-terminal> 
+      </bnf-alt>
+
+    <bnf-rule>requirement-list</bnf-rule>
+      <bnf-alt>requirement</bnf-alt>
+      <bnf-alt>requirement-list requirement</bnf-alt>
+
+    <bnf-rule>requirement</bnf-rule>
+      <bnf-alt>simple-requirement</bnf-alt>
+      <bnf-alt>compound-requirement</bnf-alt>
+      <bnf-alt>type-requirement</bnf-alt>
+      <bnf-alt>nested-requirement</bnf-alt>
+
+    <bnf-rule>simple-requirement</bnf-rule>
+      <bnf-alt>expression <bnf-terminal>;</bnf-terminal></bnf-alt>
+
+    <bnf-rule>compound-requirement</bnf-rule>
+      <bnf-alt>
+        <bnf-terminal>constexpr</bnf-terminal><bnf-opt></bnf-opt>
+        <bnf-terminal>{</bnf-terminal> expression <bnf-terminal>}</bnf-terminal>
+        <bnf-terminal>noexcept</bnf-terminal><bnf-opt></bnf-opt>
+        trailing-return-type<bnf-opt></bnf-opt>
+        <bnf-terminal>;</bnf-terminal>
+      </bnf-alt>
+
+    <bnf-rule>type-requirement</bnf-rule>
+      <bnf-alt>
+        <bnf-terminal>typename</bnf-terminal>type-id<bnf-terminal>;</bnf-terminal>
+      </bnf-alt>
+
+    <bnf-rule>nested-requirement</bnf-rule>
+      <bnf-alt>requires-clause <bnf-terminal>;</bnf-terminal></bnf-alt>
+    </bnf-grammar>
+    </p>
+
+    <p>A <cxx-grammarterm>requires-expression</cxx-grammarterm> has type
+    <code>bool</code>. </p>
+
+    <p>A <cxx-grammarterm>requires-expression</cxx-grammarterm> shall not appear
+    outside a template declaration. </p>
+
+    <p>
+    <cxx-example>
+    The most common use of 
+    <cxx-grammarterm>requires-expression</cxx-grammarterm>s is to define
+    syntactic requirements in concepts <cxx-ref to="decl.constr"></cxx-ref> 
+    such as the one below:
+    <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool R() {
+    return requires (T i) {
+      typename A&lt;T&gt;;
+      {*i} -> const A&lt;T&gt;&amp;;
+    };
+  }
+    </cxx-codeblock>
+    The concept is defined in terms of the syntactic and type requirements 
+    within the <cxx-grammarterm>requires-expression</cxx-grammarterm>.
+    
+    A <cxx-grammarterm>requires-expression</cxx-grammarterm> can also be
+    used in non-concept templates as a way of writing ad hoc constraints
+    on template arguments such as the one below:
+    <cxx-codeblock>
+template&lt;typename T&gt;
+  requires requires (T x) { x + x; }
+    T add(T a, T b) { return a + b; }
+  }
+    </cxx-codeblock>
+    Any use outside of a concept or 
+    <cxx-grammarterm>requires-clause</cxx-grammarterm> 
+    <cxx-ref to="temp.constr"></cxx-ref> will almost certainly make the
+    program ill-formed. For example:
+    <cxx-codeblock>
+template&lt;typename T&gt;
+  constexpr bool f(T a, T b) { 
+    return requires() { a + b };
+  }
+
+template&lt;typename T&gt;
+  T g(T x, T y) {
+    if (has_plus(x, y))
+      return x + y;
+  }
+
+struct X { } p, q;
+g(p, q); // Error: no matching operator+
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
+    <p>The <cxx-grammarterm>requires-expression</cxx-grammarterm> may introduce
+    local arguments via a <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>. 
+    These parameters have no linkage, storage, or lifetime.
+    They are used only to write constraints within the
+    <cxx-grammarterm>requirement-body</cxx-grammarterm> and are not visible
+    outside the closing <code>}</code> of the 
+    <cxx-grammarterm>requirement-body</cxx-grammarterm>. 
+    The <cxx-grammarterm>requirement-body</cxx-grammarterm>is a list of 
+    requirements written as statements. These statements may refer to local 
+    arguments, template parameters, and any other declarations visible from the 
+    enclosing context.</p>
+
+    <p>The <cxx-grammarterm>requirement-parameter-list</cxx-grammarterm> shall
+    not include an ellipsis.</p>
+
+    <p>A <cxx-grammarterm>requires-expression</cxx-grammarterm> evaluates to
+    <code>true</code> if and only if every 
+    <cxx-grammarterm>requirement</cxx-grammarterm> in the 
+    <cxx-grammarterm>requirement-list</cxx-grammarterm> evaluates
+    to <code>true</code>. The semantics of each kind of requirement are 
+    described in the following sections.</p>
+
+    <cxx-section id="expr.req.simple">
+      <h1>Simple requirements</h1>
+
+      <p>A <cxx-grammarterm>simple-requirement</cxx-grammarterm> introduces a
+      requirement that the substitution of template arguments into the 
+      expression will not result in a substitution failure.
+
+      A <cxx-grammarterm>simple-requirement</cxx-grammarterm> has the value 
+      <code>true</code> if and only if substitution succeeds. The expression is 
+      an unevaluated operand <cxx-ref in="cxx" to="basic.def.odr"></cxx-ref>.
+      
+      <cxx-example class="inline">
+      The following is requirement evaluates to <code>true</code> for all 
+      arithmetic types <cxx-ref in"cxx" to="basic.fundamental"></cxx-ref>,
+      and <code>false</code> for pointer types 
+      <cxx-ref in="cxx" to="basic.compound"></cxx-ref>.
+      <cxx-codeblock>
+requires (T a, T b) {
+  a + b;  // A simple requirement;
+}
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+      <p>If the required valid expression would always result in a
+      substitution failure, the program is ill-formed.
+      <cxx-example class="inline">
+      <cxx-codeblock>
+requires () {
+  new T[-1];  // error: the valid expression well never be well-formed.
+}
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+    </cxx-section> <!-- expr.req.simple -->
+
+
+    <cxx-section id="expr.req.compound">
+      <h1>Compound requirements</h1>
+    
+      <p>A <cxx-grammarterm>compound-requirement</cxx-grammarterm> introduces a
+      set of constraints pertaining to a single 
+      <cxx-grammarterm>expression</cxx-grammarterm>. 
+      A <cxx-grammarterm>compound-requirement</cxx-grammarterm> is 
+      <code>true</code> if and only if the substitution of template arguments 
+      into the expression does not result in a substitution failure and all 
+      other associated requirements are <code>true</code>.
+
+      The expression is an unevaluated operand except in the case when the 
+      <code>constexpr</code> specifier is present.
+      These other requirements are described in the following sections.</p>
+
+      <!-- TODO: This does not document the fact that a trailing type
+           specifier adds an implied type requirement. -->
+      <p>The presence of a <cxx-grammarterm>trailing-return-type</cxx-grammarterm>
+      denotes a result type requirement. The result type requirement is 
+      <code>true</code> if and only if the substitution of template arguments  
+      into the specified type, and <code>decltype((e))</code> is implicitly 
+      convertible to <code>T</code>, where <code>e</code> is the substituted 
+      expression and <code>T</code> is the substituted type
+      <cxx-ref in="cxx" to="conv"></cxx-ref>.
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool D() {
+    return requires(T p) {
+      {*p} -> typename T::r;
+    };
+  }
+      </cxx-codeblock>
+      The concept is <code>true</code> when the expression <code>*p</code> and
+      the type name <code>T::r</code> do not result in substitution failures 
+      when template arguments are substituted, and <code>decltype((*p))</code>
+      is implicitly convertible to <code>T::r</code> after substitution.
+      </cxx-example>
+      </p>
+
+      <p>As with <cxx-grammarterm>simple-requirement</cxx-grammarterm>s, if
+      the required valid expression will always result in a substitution
+      failure, the program is ill-formed 
+      <cxx-ref to="expr.req.simple"></cxx-ref>.</p>
+
+      <p>If the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> is a
+      <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
+      then that concept is applied to <code>decltype((e))</code> where 
+      <code>e</code> is the substituted expression. The requirement is 
+      <code>true</code> if and only if the result of that application is 
+      <code>true</code>.
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename I&gt;
+  concept bool Iterator() { ... }
+
+template&lt;typename T&gt;
+  concept bool Range() {
+    return requires(T x) {
+      {begin(x)} -> Iterator; // Iterator 
+    };
+  }
+      </cxx-codeblock>
+      The concept is to <code>true</code> if and only if the expression 
+      <code>begin(x)</code> is a valid expression, and 
+      <code>Iterator<decltype((begin(x)))>()</code> is <code>true</code>.
+      </cxx-example>
+      </p>
+
+      <p>If the <cxx-grammarterm>constexpr</cxx-grammarterm> specifier is 
+      present in the <cxx-grammarterm>compound-requirement</cxx-grammarterm>, 
+      the requirement is true if and only if the substituted expression is a
+      constant expression <cxx-ref in="cxx" to="expr.const"></cxx-ref>.
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename Trait&gt;
+  concept bool Boolean_metaprogram() {
+    return requires (Trait t) {
+      constexpr {Trait::value} -> bool;
+      constexpr {t()} -> bool;
+    };
+  }
+      </cxx-codeblock>
+      When substituted into, the concept is <code>true</code> only when the 
+      nested <code>value</code>; member and function call operator must be 
+      constant expressions. Otherwise, the concept is <code>false</code>.
+      </cxx-example>
+      </p>
+
+      <p>If the <code>noexcept</code> specifier is present, in the
+      <cxx-grammarterm>compound-requirement</cxx-grammarterm> the requirement 
+      is <code>true</code> when <code>noexcept(e))</code> is <code>true</code>, 
+      where <code>e</code> is the substituted expression.
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool Nothrow_movable() {
+    return requires (T x) {
+      {T(std::move(x))} noexcept;
+      {x = std::move(x)} noexcept -> T&;
+    };
+  }
+      </cxx-codeblock>
+      When template arguments are substituted into the requirement, the move 
+      constructor and move assignment operator selected by overload resolution 
+      must not propagate exceptions. If either of the instantiated expressions 
+      does propagate exceptions, the concept is not satisfied.
+      </cxx-example>
+      </p>
+    </cxx-section>
+ 
+    <cxx-section id="expr.req.type">
+      <h1>Type requirements</h1>
+      <p>A <cxx-grammarterm>type-requirement</cxx-grammarterm> introduces a
+      requirement that an associated <cxx-grammarterm>type-id</cxx-grammarterm> 
+      can be formed when template arguments are substituted into the type. The 
+      requirement is <code>true</code> if and only if substitution does not 
+      result in a substitution failure.
+      <cxx-note>
+      The <code>typename</code> may be part of a 
+      <cxx-grammarterm>typename-specifier</cxx-grammarterm>.
+      </cxx-note>
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool Input_range() {
+    return requires(T range) {
+      typename T::value_type;    // Required typename-specifier
+      typename Iterator_type&lt;T&gt;; // Required alias template
+    };
+  }
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+      <p>If the required type will always results in a substitution failure,
+      then the program is ill-formed.
+      <cxx-example class="inline">
+      <cxx-codeblock>
+requires () {
+  typename int::X;  // error: int does not have class type
+  typename T[-1];   // error: array types cannot have negative extent
+}
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+    </cxx-section> <!-- expr.req.type -->
+
+    <cxx-section id="expr.req.nested">
+      <h1>Nested requirements</h1>
+      <p>A <cxx-grammarterm>nested-requirement</cxx-grammarterm> introduces
+      additional constraints to be evaluated as part of the
+      <cxx-grammarterm>requires-expression</cxx-grammarterm>. The 
+      requirement is <code>true</code> if and only if the required expression 
+      evaluates to <code>true</code>.
+      <cxx-example class="inline"> 
+      Nested requirements are generally used to provide additional constraints on 
+      associated types
+      within a <cxx-grammarterm>requires-expression</cxx-grammarterm>.
+      <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool Input_range() {
+    return requires(T range) {
+      typename Iterator_type&lt;T&gt;;
+      requires Input_iterator&lt;Iterator_type&lt;T&gt;&gt;();
+    };
+  }
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+    </cxx-section> <!-- expr.re.nested -->
+  </cxx-section> <!-- expr.req -->
+</cxx-clause> <!-- expr -->

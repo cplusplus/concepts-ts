@@ -12,6 +12,7 @@
   "expr"              : "5",
   "expr.prim"         : "5.1",
   "expr.prim.general" : "5.1.1",
+  "expr.prim.lambda"  : "5.1.2",
 
   "dcl.decl"          : "8",
   "dcl.name"          : "8.1",
@@ -32,6 +33,7 @@
   "temp.arg"              : "14.3",
   "temp.arg.type"         : "14.3.1",
   "temp.arg.nontype"      : "14.3.2",
+  "temp.arg.template"     : "14.3.3",
   "temp.dcls"             : "14.5",
   "temp.class"            : "14.5.1",
   "temp.mem"              : "14.5.2",

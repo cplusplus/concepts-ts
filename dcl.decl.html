@@ -1,0 +1,116 @@
+
+<cxx-clause id="dcl.decl">
+  <h1>Declarators</h1>
+
+  <p>Modify <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>p1 as follows:</p>
+
+  <p>A declarator declares a single variable, function, or type, within a 
+  declaration. The <cxx-grammarterm>init-declarator-list</cxx-grammarterm>
+  appearing in a declaration is a comma-separated sequence of declarators, 
+  each of which can 
+  <del>have an initializer</del>
+  <ins>have constraints or an initializer</ins>.
+  <bnf-grammar>
+    <bnf-rule>init-declarator</bnf-rule>
+      <bnf-alt>
+        declarator
+        requires-clause<bnf-opt></bnf-opt>
+        initializer<bnf-opt></bnf-opt>
+      </bnf-alt>
+  </bnf-grammar>
+  </p>
+
+  <p>Insert the following paragraph after 
+  <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>p1</p>
+
+  <p>A <cxx-grammarterm>declarator</cxx-grammarterm> followed by a 
+  <cxx-grammarterm>requires-clause</cxx-grammarterm> declares a 
+  <defn>constrained declaration</defn>. 
+
+  The <cxx-grammarterm>requires-clause</cxx-grammarterm> associates
+  a constraint with the declaration <cxx-ref to="temp.constr"></cxx-ref>. 
+
+  A declarator that declares a constrained variable or type is 
+  ill-formed.</p>
+
+  <cxx-section id="dcl.meaning">
+    <h1>Meaning of declarators</h1>
+
+    <cxx-section id="dcl.fct">
+      <h1>Functions</h1>
+
+      <p>Add the following paragraphs after
+      <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>p14.</p>
+
+      <p>A <defn>generic function</defn> is a function template whose
+      <cxx-grammarterm>template-parameter-list</cxx-grammarterm> has a 
+      <cxx-grammarterm>parameter-declaration</cxx-grammarterm> whose 
+      <cxx-grammarterm>type-specifier</cxx-grammarterm> is either 
+      <code>auto</code> or a 
+      <cxx-grammarterm>constrained-type-name</cxx-grammarterm>.
+      <cxx-example class="inline">
+      <cxx-codeblock>
+auto f(auto x); // Ok
+void sort(Sortable& c); // Ok (assuming Sortable names a concept)
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+      <p>The declaration of a generic function has a 
+      <cxx-grammarterm>template-parameter-list</cxx-grammarterm> that 
+      consists of one invented type 
+      <cxx-grammarterm>template-parameter</cxx-grammarterm> for each
+      occurrence of <code>auto</code> or each unique occurence of a 
+      <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
+      in the function's
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, 
+      in order of appearance. 
+      
+      The invented type of 
+      <cxx-grammarterm>template-parameter</cxx-grammarterm> is a parameter 
+      pack if the corresponding 
+      <cxx-grammarterm>parameter-declaration</cxx-grammarterm> declares 
+      a function parameter pack <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>.
+      
+      <!-- TODO: I believe this duplicates a requirement elsewhere -->
+      The associated constraints of the generic function are 
+      the conjunction of constraints introduced by the use of 
+      <cxx-grammarterm>constrained-type-name</cxx-grammarterm>s in the 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>.</p>
+
+
+      <p>All placeholder types introduced using the same 
+      <cxx-grammarterm>constrained-type-name</cxx-grammarterm> have the 
+      same invented template parameter.</p>
+
+      <!-- TODO: Improve these examples -->
+      <p>
+      <cxx-example class="inline">
+      The generic function declared below
+      <cxx-codeblock>
+auto f(auto x, const Regular&amp; y);
+      </cxx-codeblock>
+      Is equivalent to the following declaration
+      <cxx-codeblock>
+template&lt;typename T1, typename T2>
+  requires Regular&lt;T2>()
+    auto f(T1 x, const T2&amp; y);
+      </cxx-codeblock>
+      The generic function declared below
+      <cxx-codeblock>
+auto gcd(Integral a, Integral b);
+      </cxx-codeblock>
+      Is equivalent to the following declaration:
+      <cxx-codeblock>
+template&lt;Integral T&gt;
+  auto gcd(T a, T b);
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+      <p>If an entity is declared by an abbreviated template declaration, 
+      then all its declarations must have the same form.</p>
+    
+    </cxx-section> <!-- dcl.fct -->
+  </cxx-section> <!-- dcl.meaning -->
+</cxx-clause> <!-- dcl.decl -->

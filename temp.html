@@ -1,0 +1,819 @@
+
+<!-- FIXME: Consider moving the requires clause into the constraints
+     section, so we can refer to it from from dcl.decl and
+     from here. That unifies the application of constraints
+     for templats and generics. -->
+<cxx-clause id="temp">
+  <h1>Templates</h1>
+
+  <p>Modify the <cxx-grammarterm>template-declaration</cxx-grammarterm>
+  grammar in <cxx-ref in="cxx=" to="temp"></cxx-ref>.</p>
+
+  <p>
+  <bnf-grammar>
+    <bnf-rule>template-declaration</bnf-rule>
+      <bnf-alt>
+        <bnf-terminal>template</bnf-terminal>
+        <bnf-terminal>&lt;</bnf-terminal>
+        template-parameter-list
+        <bnf-terminal>&gt;</bnf-terminal>
+        <ins>requires-clause<bnf-opt></bnf-opt></ins>
+        declaration
+      </bnf-alt>
+      <bnf-alt>
+      <ins>concept-introduction declaration</ins>
+      </bnf-alt>
+
+    <ins>
+    <bnf-rule>requires-clause</bnf-rule>
+      <bnf-alt>constraint-expression</bnf-alt>
+    </ins>
+  </bnf-grammar>
+
+  <p>Add the following paragraphs after 
+  <cxx-ref in="cxx" to="temp"></cxx-ref>p6.</p>
+
+  <p>A <defn>constrained template declaration</defn> is a
+  <cxx-grammarterm>template-declaration</cxx-grammarterm> with 
+  associated constraints. The <defn>associated constraint</defn>s of a 
+  constrained template declaration are the conjunction of the associated 
+  constraints of all </p>
+  <ul>
+    <li><cxx-grammarterm>constrained-parameter</cxx-grammarterm>s
+    in template's <cxx-grammarterm>template-parameter-list</cxx-grammarterm> 
+    <cxx-ref to="temp.param"></cxx-ref>.</li>
+    <li> and all <cxx-grammarterm>constraint-expression</cxx-grammarterm>s 
+    introduced by <cxx-grammarterm>requires-clause</cxx-grammarterm>
+    in the <cxx-grammarterm>template-declaration</cxx-grammarterm>.</li>
+  </ul>
+  
+  <cxx-note>
+  A function or member function may have a 
+  <cxx-grammarterm>requires-clause</cxx-grammarterm> in its
+  declarator. These constraints are also part of the associated 
+  constraints of the template declaration.
+  </cxx-note>
+
+  <!-- FIXME: This could probably be written more explicitly. -->
+  <p>The associated constraints of a <cxx-grammarterm>concept-introduction</cxx-grammarterm>
+  are those required by the referenced concept definition. 
+  <cxx-example class="inline">
+  <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool Integral() { return is_integral&lt;T&gt;::value; }
+
+template&lt;Integral T&gt;
+  requires Unsigned&lt;T&gt;()
+    T binary_gcd(T a, T b);
+</cxx-codeblock>
+  The associated constraints of <code>binary_gcd</code> are denoted by the
+  conjunction <code>Integral&lt;T&gt;() &amp;&amp; Unsigned&lt;T&gt;()</code>.
+  </cxx-example>
+  </p>
+
+  <p>A constrained template declaration's associated constraints must 
+  be satisfied <cxx-ref to="temp.constr"></cxx-ref> to allow instantiation 
+  of the constrained template. 
+
+  The associated constraints are satisfied by substituting template 
+  arguments into the constraints and evaluating substituted expression. 
+
+  Constraints are satisfied when the result of that evaluation is 
+  <code>true</code>.
+
+  Class template, alias template, and variable template constraints 
+  are checked during name lookup <cxx-ref id="temp.names"></cxx-ref>; 
+  function template constraints and class template partial specialization 
+  constraints are checked during template argument deduction
+  <cxx-ref to="temp.deduct"></cxx-ref>.</p>
+
+  <p>Any usage of a constrained template in a template declaration 
+  is ill-formed unless the associated constraints of the constrained 
+  template are subsumed by the associated constraints of template 
+  parameter. No diagnostic is required.
+  </p>
+
+  <cxx-section id="temp.param">
+    <h1>Template parameters</h1>
+
+    <p>Modify the <cxx-grammarterm>template-parameter</cxx-grammarterm>
+    grammar in <cxx-ref in="cxx" to="temp.param"></cxx-ref> to include
+    <cxx-grammarterm>constrained-parameter</cxx-grammarterm>, and add
+    the following productions.
+
+    <bnf-grammar>
+      <bnf-rule>template-parameter</bnf-rule>
+        <ins><bnf-alt>constrained-parameter</bnf-alt></ins>
+
+      <ins>
+      <bnf-rule>constrained-parameter</bnf-rule>
+        <bnf-alt>
+        constrained-type-name
+        <bnf-terminal>...</bnf-terminal><bnf-opt></bnf-opt>
+        identifier
+        </bnf-alt>
+
+        <bnf-alt>
+        constrained-type-name
+        <bnf-terminal>...</bnf-terminal><bnf-opt></bnf-opt>
+        identifier
+        <bnf-terminal>=</bnf-terminal>
+        constrained-default-argument
+        </bnf-alt>
+      </ins>
+    </bnf-grammar>
+
+    <p>Add the following paragraphs after
+    <cxx-ref in="cxx" to="temp.param"></cxx-ref>p15.
+
+    <p>A <cxx-grammarterm>constrained-parameter</cxx-grammarterm> defines 
+    its identifier to be a template parameter. The declared template 
+    parameter whose kind matches that of the first template parameter, 
+    called the <defn>prototype parameter</defn>, of the concept referred 
+    to by the <cxx-grammarterm>constrained-type-name</cxx-grammarterm>.
+    <cxx-note>
+    The rules for declaring the parameter are:
+    <ul>
+      <li>If the prototype parameter is a 
+      <cxx-grammarterm>type-parameter</cxx-grammarterm> that is a
+      <code>class</code> or <code>typename</code>, then then introduced 
+      template parameter is a <code>class</code> or <code>typename</code> 
+      parameter.</li>
+
+      <li>If the prototype parameter is a 
+      <cxx-grammarterm>template-declaration</cxx-grammarterm>, then
+      the introduced parameter is a 
+      <cxx-grammarterm>template-declaration</cxx-grammarterm> having the 
+      same number of kinds of template parameters.</li>
+
+      <li>If the prototype parameter is a 
+      <cxx-grammarterm>parameter-declaration</cxx-grammarterm>, then
+      the introduced parameter is a 
+      <cxx-grammarterm>parameter-declaration</cxx-grammarterm> with
+      the same <cxx-grammarterm>type-specifier</cxx-grammarterm>.</li>
+    </ul>
+    </cxx-note>
+    <cxx-example class="inline">
+    Given the following concept definitions:
+    <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool Type = true;
+template&lt;int N&gt;
+  concept bool Int = true;
+template&lt;template&lt;typename&gt; class X&gt;
+  concept bool Template = true;
+    </cxx-codeblock>
+    The the following classes are declared with the stated
+    template paramters:
+    <cxx-codeblock>
+template&lt;Type T&gt; // T is a type template parameter
+  struct X1;
+template&lt;Int N&gt; // N is an integer template parameter
+  struct X2;
+template&lt;Template T&gt; // T is a template template parameter
+  struct X3;
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
+    <p>
+    If prototype parameter is a parameter pack, then the constrained 
+    parameter shall also be declared as a parameter pack.
+    <cxx-example class="inline">
+    <cxx-codeblock>
+    template&lt;typename... Ts&gt;
+      concept bool Same_types() { ... }
+
+    template&lt;Same_types Args&gt; // error: Must be Same_types...
+      void f(Args... args);
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
+    <p>The associated constraints of the constrained template 
+    parameter are synthesized according to the rules defined in
+    <cxx-ref to="dec.constr.form"></cxx-ref>.</p>
+
+    <p>The kind of the
+    <cxx-grammarterm>constrained-default-argument</cxx-grammarterm> 
+    shall match that of the declared 
+    <cxx-grammarterm>constrained-parameter</cxx-grammarterm>.</p>
+  </cxx-section> <!-- temp.param -->
+
+  <cxx-section id="temp.names">
+    <h1>Template names</h1>
+
+    <p>Modify <cxx-ref in="cxx" to="temp.names"></cxx-ref>p5.
+
+    <p>A <cxx-grammarterm>simple-template-id</cxx-grammarterm> that 
+    names a class template specialization is a 
+    <cxx-grammarterm>class-name</cxx-grammarterm>. 
+
+    <ins>The template-arguments shall satisfy the associated constraints 
+    of the primary template, if any.</ins>
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;Object T, int N&gt; // T must be an object type
+  class array;
+
+array&lt;int&amp;, 3&gt;* p; // error: int&amp; is not an object type
+    </cxx-codeblock>
+    </cxx-example>
+    <cxx-note>
+    This guarantees that a partial specialization cannot be less 
+    specialized than a primary template. This requirement is enforced
+    during name lookup, not when the partial specialization is declared.
+    </cxx-note>
+    </p>
+  </cxx-section> <!-- temp.names -->
+
+  <cxx-section id="temp.arg">
+    <h1>Template arguments</h1>
+
+    <cxx-section id="temp.arg.template">
+      <h1>Template template arguments</h1>
+
+      <p>Modify <cxx-ref in="cxx" to="temp.arg.template"></cxx-ref>.
+
+      <p>A <cxx-grammarterm>template-argument</cxx-grammarterm> matches 
+      a template <cxx-grammarterm>template-parameter</cxx-grammarterm> 
+      (call it <code>P</code>) when each of the template parameters in 
+      the <cxx-grammarterm>template-parameter-list</cxx-grammarterm> of 
+      the <cxx-grammarterm>template-argument</cxx-grammarterm>'s 
+      corresponding class template or alias template (call it 
+      <code>A</code>) matches the corresponding template parameter in 
+      the <cxx-grammarterm>template-parameter-list</cxx-grammarterm> of 
+      <code>P</code><ins>, and the associated constraints of <code>P</code> 
+      shall subsume the associated constraints of <code>A</code>
+      <cxx-ref to="temp.constr"?></cxx-ref></ins>.
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool Object = is_object&lt;T&gt;::value;
+template&lt;typename T&gt;
+  concept bool Copyable = is_copyable&lt;T&gt;::value;
+template&lt;typename T&gt;
+  concept bool Regular = Copyable&lt;T&gt; &amp;&amp; ...;
+
+template&lt;template&lt;Copyable&gt; class C&gt;
+  class stack { ... };
+
+template&lt;Regular T&gt; class list1;
+template&lt;Object T&gt; class list2;
+
+stack&lt;list1&gt; s1; // error: Regular is more strict than Copyable
+stack&lt;list2&gt; s2; // Ok: Object is not more strict than Copyable
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+    </cxx-section> <!-- temp.arg.template -->
+  </cxx-section> <!-- tmep.arg -->
+
+  <cxx-section id="temp.decls">
+    <h1>Template declarations</h1>
+
+    <cxx-section id="temp.class">
+      <h1>Class templates</h1>
+
+      <cxx-section id="temp.mem.func">
+        <h1>Member functions of class templates</h1>
+
+        <p>Add the following paragraphs after
+        <cxx-ref in="cxx" to="temp.mem.func"></cxx-ref>.
+
+        <p>A member function of a class template can be constrained by 
+        writing a <cxx-grammarterm>requires-clause</cxx-grammarterm> 
+        after the member declarator.
+        <cxx-example class="inline">
+        <cxx-codeblock>
+template&lt;typename T&gt;
+  class S {
+    void f() requires Integral&lt;T&gt;();
+  };
+        </cxx-codeblock>
+        </cxx-example>
+        The <cxx-grammarterm>requires-clause</cxx-grammarterm> introduces 
+        the following <cxx-grammarterm>expression</cxx-grammarterm>
+        as an associated constraint of the member function. A member 
+        function of a class template with an associated constraint is a 
+        <defn>constrained member function</defn>.
+        </p>
+
+        <p>
+        Constraints on member functions are instantiated as needed 
+        during overload resolution 
+        <cxx-ref in="cxx" to="temp.inst"></cxx-ref>.
+        <cxx-note>
+        Constraints on member functions do not affect the declared 
+        interface of a class. That is, a constrained copy constructor 
+        is still a copy constructor, even if it will not be viable for 
+        all possible specializations of the class.
+        </cxx-note>
+        </p>
+      
+      </cxx-section> <!-- temp.mem.func -->
+    </cxx-section> <!-- temp.class -->
+
+    <cxx-section id="temp.friend">
+      <h1>Friends</h1>
+
+      <p>Add the following paragraphs after
+      <cxx-ref in="cxx" to="temp.friend"></cxx-ref>p9.
+
+      <p> 
+      A <defn>constrained friend</defn> is a friend of a class 
+      template with associated constraints.
+
+      A constrained friend can be a constrained class template, 
+      constrained function template, or an ordinary (non-template) 
+      function.
+      
+      <!-- TODO: What is shorthand? -->
+      Constraints on template friends are written using shorthand, 
+      introductions, or a requires clause following the 
+      <cxx-grammarterm>template-parameter-list</cxx-grammarterm>.
+
+      Constraints on non-template friend functions are written 
+      after the result type.
+      <cxx-example class="inline">
+      All of the following are valid constrained friend declarations:
+      <cxx-codeblock>
+template&lt;typename T&gt;
+  struct X {
+    template&lt;Integral U&gt;
+      friend void f(X x, U u) { }
+
+    template&lt;Object W&gt;
+      friend struct Z { };
+
+    friend bool operator==(X a, X b) requires Equality_comparable&lt;T&gt;()
+    {
+      return true;
+    }
+  };
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+      <p>
+      A non-template friend function shall not be constrained unless 
+      the function's parameter or result type depends on a template 
+      parameter.
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt;
+  struct S {
+    friend void f(int n) requires C&lt;T&gt;(); // Error: cannot be constrained
+  };
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+      <p>
+      A constrained non-template friend function shall not declare 
+      a specialization.
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt;
+  struct S {
+    friend void f&lt;&gt;(T x) requires C&lt;T&gt;(); // Error: declares a specialization
+
+    friend void g(T x) requires C&lt;T&gt;() { } // OK: does not declare a specialization
+  };
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+      <p>
+      As with constrained member functions, constraints on non-template friend
+      functions are not instantiated during class template instantiation.
+      </p>
+
+    </cxx-section> <!-- temp.firend -->
+
+    <cxx-section id="temp.class.spec">
+      <h1>Class template partial specialization</h1>
+
+      <cxx-section id="temp.class.spec.match">
+        <h1>Matching of class template partial specializations</h1>
+
+        <p>Modify 
+        <cxx-ref to="cxx" in="temp.class.spec.match"></cxx-ref>p2.</p>
+
+        <p> A partial specialization matches a given actual template 
+        argument list if the template arguments of the partial 
+        specialization can be deduced from the actual template argument 
+        list <cxx-ref in="cxx" to="temp.deduct"></cxx-ref>
+        <ins>, and the deduced template arguments satisfy the constraints 
+        of the partial specialization, if any 
+        <cxx-ref to="temp.constr"></cxx-ref></ins>.</p>
+
+      </cxx-section> <!-- temp.class.spec.match -->
+
+      <cxx-section id="temp.class.order">
+        <h1>Partial ordering of class template specializations</h1>
+
+        <p>Modify 
+        <cxx-ref in="cxx" to="temp.class.order"></cxx-ref>p1.</p>
+
+        <p>
+        For two class template partial specializations, the first is 
+        at least as specialized as the second if, given the following 
+        rewrite to two function templates, the first function template 
+        is at least as specialized as the second according to the ordering 
+        rules for function templates 
+        <cxx-ref in="cxx" to="temp.func.order"></cxx-ref>:
+        </p>
+        <ul>
+          <li> the first function template has the same template 
+          parameters <ins>and constraints</ins> as the first partial 
+          specialization and has a single function parameter whose
+          type is a class template specialization with the template 
+          arguments of the first partial specialization, and</li>
+
+          <li> the second function template has the same template 
+          parameters <ins>and constraints</ins> as the second partial 
+          specialization and has a single function parameter whose
+          type is a class template specialization with the template 
+          arguments of the second partial specialization.</li>
+        </ul>
+        <cxx-example class="inline">
+        <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool Integer = is_integral&lt;T&gt;::value;
+template&lt;typename T&gt;
+  concept bool Unsigned_integer = Integer&lt;T&gt; &amp;&amp; is_unsigned&lt;T&gt;::value;
+
+template&lt;typename T&gt; class S { };
+template&lt;Integer T&gt; class S&lt;T&gt; { };          // #1
+template&lt;Unsigned_integer T&gt; class S&lt;T&gt; { }; // #2
+
+template&lt;Integer T&gt; void f(S&lt;T&gt;);          // A
+template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
+        </cxx-codeblock>
+        The partial specialization #2 will be more specialized than 
+        #1 for template arguments that satisfy both constraints because 
+        <code>B</code> will be more specialized than <code>A</code>.
+        </cxx-example>
+
+      </cxx-section> <!-- temp.class.order -->
+    </cxx-section> <!-- temp.class.spec -->
+
+    <cxx-section id="temp.fct">
+      <h1>Function templates</h1>
+
+      <cxx-section id="temp.deduct">
+        <h1>Template argument deduction</h1>
+
+        <p>Modify
+        <cxx-ref in="cxx" to="temp.deduct"></cxx-ref>p2.
+
+        <p>When an explicit template argument list is specified, the 
+        template arguments must be compatible with the template parameter 
+        list and must result in a valid function type as described below; 
+        otherwise type deduction fails. Specifically, the following steps 
+        are performed when evaluating an explicitly specified template 
+        argument list with respect to a given function template:
+        </p>
+
+        <ul>
+          <li>The specified template arguments must match the template 
+          parameters in kind (i.e., type, non-type, template). There must 
+          not be more arguments than there are parameters unless at least 
+          one parameter is a template parameter pack, and there shall be 
+          an argument for each non-pack parameter. Otherwise, type
+          deduction fails.</li>
+
+          <li>
+          Non-type arguments must match the types of the corresponding 
+          non-type template parameters, or must be convertible to the 
+          types of the corresponding non-type parameters as specified in 
+          <cxx-ref in="cxx" to="temp.arg.nontype"></cxx-ref> otherwise 
+          type deduction fails.</li>
+
+          <li><ins>If the function template is constrained, the specified 
+          template arguments are substituted into the associated 
+          constraints and evaluated. If the result of the evaluation is 
+          <code>false</code>, type deduction fails.</ins></li>
+
+          <li>The specified template argument values are substituted for 
+          the corresponding template parameters as specified below.
+        </ul>
+
+      </cxx-section> <!-- temp.deduct -->
+
+      <cxx-section id="temp.over.link">
+        <h1>Function template overloading</h1>
+
+        <p>Modify <cxx-ref in="cxx" to="temp.over.link"></cxx-ref>.</p>
+
+        <p>
+        A function template can be overloaded either by (non-template) 
+        functions of its name or by (other) function templates of the 
+        same name. When a call to that name is written (explicitly, or 
+        implicitly using the operator notation), template argument deduction 
+        <cxx-ref to="temp.deduct"></cxx-ref><ins>,</ins> <del>and</del> 
+        checking of any explicit template arguments 
+        <cxx-ref in="cxx" to"temp.arg"></cxx-ref> <ins>, and checking of 
+        associated constraints <cxx-ref to="temp.constr"></cxx-ref></ins>
+        are performed for each function template to find the template 
+        argument values (if any) that can be used with that function 
+        template to instantiate a function template specialization that 
+        can be invoked with the call arguments. 
+
+        For each function template, if the argument deduction and 
+        checking succeeds, the template-arguments (deduced and/or 
+        explicit) are used to synthesize the declaration of a single 
+        function template specialization which is added to the 
+        candidate functions set to be used in overload resolution. If, 
+        for a given function template, argument deduction fails, no 
+        such function is added to the set of candidate functions for 
+        that template.
+
+        The complete set of candidate functions includes all the 
+        synthesized declarations and all of the non-template overloaded 
+        functions of the same name. The synthesized declarations are 
+        treated like any other functions in the remainder of overload 
+        resolution, except as explicitly noted in 
+        <cxx-ref in="cxx" to"over.match"></cxx-ref>.
+        </p>
+
+        <p>Modify <cxx-ref in="cxx" to="temp.over.link">p6.</cxx-ref>
+
+        <p>
+        Two function templates are <defn>equivalent</defn> if they are 
+        declared in the same scope, have the same name, have identical 
+        template parameter lists, <del>and</del> have return types<ins>,</ins> 
+        <del>and</del> parameter lists, <ins>and constraints 
+        <cxx-ref to="temp.constr"></cxx-ref></ins> that are equivalent 
+        using the rules described above to compare expressions involving 
+        template parameters.
+        </p>
+
+      </cxx-section> <!-- temp.over.link -->
+
+      <cxx-section id="temp.func.order">
+        <h1>Partial ordering of function templates</h1>
+
+        <p>Modify <cxx-ref in="cxx" to="temp.func.order"></cxx-ref>p2.</p>
+
+        <p>
+        Partial ordering selects which of two function templates is 
+        more specialized than the other by transforming each template 
+        in turn (see next paragraph) and performing template argument 
+        deduction using the function type. The deduction process 
+        determines whether one of the templates is more specialized 
+        than the other.
+
+        If so, the more specialized template is the one chosen by the 
+        partial ordering process. <ins>If the two templates have 
+        identical template parameter lists and equivalent return types 
+        and parameter lists, then partial ordering selects the template 
+        whose associated constraints subsume but are not equivalent to 
+        the associated constraints of the other 
+        <cxx-ref to="temp.constr"></cxx-ref>. 
+
+        A constrained template is always selected over an unconstrained 
+        template.</ins>
+        </p>
+
+      </cxx-section> <!-- temp.func.order -->
+    </cxx-section> <!-- temp.fct -->
+  </cxx-section> <!-- temp.decls -->
+
+  <cxx-section id="temp.constr">
+    <h1>Template constraints</h1>
+
+    <p>Add this as a new section under 
+    <cxx-ref in="cxx" to="temp">"</cxx-ref>.</p>
+
+    <p>
+    Certain contexts require expressions that satisfy additional 
+    requirements as detailed in this sub-clause. Expressions that 
+    satisfy these requirements are called 
+    <defn>constraint expression</defn>s or simply 
+    <defn>constraint</defn>s.
+    <bnf-grammar>
+      <bnf-rule>constraint-expression</bnf-rule>
+        <bnf-alt>logical-or-expression</bnf-alt>
+    </bnf-grammar>
+    </p>
+
+    <p>
+    A <cxx-grammarterm>logical-or-expression</cxx-grammarterm> is 
+    a <cxx-grammarterm>constraint-expression</cxx-grammarterm> if 
+    it is a <cxx-grammarterm>constant-expression</cxx-grammarterm> 
+    of type <code>bool</code> whose operands to logical operators in 
+    its sub-expressions, when substituted have type <code>bool</code>.
+    <cxx-note>
+    A <cxx-grammarterm>constraint-expression</cxx-grammarterm> 
+    defines a subset of constant expressions over which certain 
+    logical implications can be proven during translation.
+
+    <!-- TODO: This will move when I rewrite the bool rule. -->
+    The required contextual conversion to <code>bool</code> in a
+    <cxx-grammarterm>constraint-expression</cxx-grammarterm> prevents 
+    user-defined overloads of logical operators from being selected 
+    during overload resolution.
+    </cxx-note>
+    </p>
+
+    <p>
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;typename T&gt;
+  requires is_integral&lt;T&gt;::value &amp;&amp; is_signed&lt;T&gt;::value
+void f(T x);
+    </cxx-codeblock>
+
+    <cxx-codeblock>
+constexpr int Fn() { return 1; }
+
+template&lt;typename T&gt;
+  requires Fn() // Error: Fn() is not a valid constraint
+void g(T x);
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
+    <p>
+    A constraint is <defn>satisfied</defn> if it evaluates to 
+    <code>true</code>. Otherwise, the constraint is 
+    <defn>unsatisfied</defn>.
+    </p>
+
+
+    <p>
+    A subexpression of a 
+    <cxx-grammarterm>constraint-expression</cxx-grammarterm> that 
+    calls a function concept or refers to a variable concept 
+    <cxx-ref to="dcl.concept"></cxx-ref> is a <defn>concept check</defn>. 
+
+    When processing a constraint containing a concept check, that 
+    concept check is replaced by the concept's definition, forming 
+    a new expression.
+
+    For checks against function concepts, the replacement is done
+    by substituting the explicit template arguments into the return 
+    expression. For checks against variable concepts, the definition 
+    is formed by substituting the template arguments into the 
+    variable's initializer.
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool C() { return sizeof(T) &gt;= 4; }
+
+template&lt;typename T&gt;
+  concept bool D = C&lt;T&gt;();
+
+template&lt;typename X&gt;
+  requires C&lt;X&gt;() // Processed as sizeof(X) &gt;= 4
+void f();
+
+template&lt;typename Q&gt;
+  requires D&lt;Q&gt;   // Processed as sizeof(Q) >= 4
+void g();
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
+    <!-- TODO: This does not explain how requires clauses are actually
+         defined. A requires clause is a conjunction of atomic constraints
+         comprised of each valid expression, constexpr, noexcept, type,
+         and nested requirements. -->
+    <p>
+    Certain subexpressions of a 
+    <cxx-grammarterm>constraint-expression</cxx-grammarterm> are 
+    considered <defn>atomic constraint</defn>s. A constraint is atomic 
+    if it is not a <cxx-grammarterm>logical-and-expression</cxx-grammarterm> 
+    or a <cxx-grammarterm>logical-or-expression</cxx-grammarterm>.
+    <cxx-example class="inline">
+    The expression 
+    <code>x == y &amp;&amp; is_integral&lt;T&gt;::value</code> 
+    has two atoms:
+    <code>x == y</code> and <code>is_integral&lt;T&gt;::value</code>.
+    </cxx-example>
+
+
+    <!-- Give examples of refinement, disjointness, and overlap -->
+    <p>
+    Given two constraints <code>P</code> and <code>Q</code> depending 
+    on template parameters <code>T1</code>, ..., <code>Tn</code>, 
+    <code>P</code> is said to <defn>subsume</defn> <code>Q</code> if
+    for any template arguments substituted for 
+    <code>T1</code>, ..., <code>Tn</code>, the constraint <code>Q</code> 
+    is true, then <code>P</code> is also true.
+    <cxx-example class="inline">
+    Let <code>P</code> be the constraint 
+    <code>is_integral&lt;T&gt;::value &amp;&amp; sizeof(T) == 4</code>, 
+    and let <code>Q</code> be the constraint <code>sizeof(T) == 4</code>.
+    Then <code>P</code> subsumes <code>Q</code>, but <code>Q</code> 
+    does not subsume <code>P</code>.
+    </cxx-example>
+    </p>
+
+    <p>
+    Two <cxx-grammarterm>constraint-expressions</cxx-grammarterm> 
+    <code>P</code> and <code>Q</code> are equivalent if and only if 
+    <code>P</code> subsumes <code>Q</code> and 
+    <code>Q</code> subsumes <code>P</code>.
+    </p>
+
+  </cxx-section> <!-- temp.constr -->
+
+
+  <cxx-section id="concept.intro">
+    <h1>Concept introductions</h1>
+
+    <p>Add this as a new section under 
+    <cxx-ref in="cxx" to="temp">"</cxx-ref>.</p>
+
+    <p> A <cxx-grammarterm>concept-introduction</cxx-grammarterm> allows 
+    the declaration of template and its associated constraints in a 
+    concise way.
+    <bnf-grammar>
+      <bnf-rule>concept-introduction</bnf-rule>
+        <bnf-alt>
+          concept-name
+          <bnf-terminal>{</bnf-terminal>
+          introduction-list
+          <bnf-terminal>}</bnf-terminal>
+          declaration
+        </bnf-alt>
+      <bnf-rule>introduction-list</bnf-rule>
+        <bnf-alt>identifier</bnf-alt>
+        <bnf-alt>
+          introduction-list <bnf-terminal>,</bnf-terminal> identifier
+        </bnf-alt>
+    </bnf-grammar>
+    </p>
+
+    <!-- TODO: This does not explain that an appropriate concept can
+         if they are overloaded. -->
+    <p>The <cxx-grammarterm>concept-introduction</cxx-grammarterm> names 
+    a concept and a list of identifiers to be used as template parameters, 
+    called the <defn>introduced parameters</defn> in the declaration. The 
+    number of <cxx-grammarterm>identifier</cxx-grammarterm>s in the 
+    <cxx-grammarterm>introduction-list</cxx-grammarterm> shall match the 
+    number of template parameters in the named concept.
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;typename I1, typename I2, typename O&gt;
+  concept bool Mergeable() { ... };
+
+Mergeable{First, Second, Out} // OK
+  Out merge(First, First, Second, Second, Out); 
+
+Mergeable{X, Y} // Error: not enough parameters
+  void f(X, Y);
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
+    <p>The introduced parameters are the template parameters of the declaration,
+    and they match the template parameters in the declaration of the named
+    concept. The associated constraints
+    of the declaration are formed by applying the introduced parameters as
+    arguments to the named concept \ref{dcl.constr.form}.
+    <cxx-example class="inline">
+    The following declaration
+    <cxx-codeblock>
+Mergeable{X, Y, Z}
+  Z merge(X, X, Y, Y, Z);
+    </cxx-codeblock>
+    is equivalent to the declaration below.
+    <cxx-codeblock>
+template&lt;typename X, typename Y, typename Z&gt;
+  requires Mergeable&lt;X, Y, Z&gt;()
+    Z merge(X, X, Y, Y, Z);
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
+    <p>If a constrained declaration is introduced by a concept 
+    introduction, then all its declarations must have the same 
+    form.</p>
+
+    <p>The sequence of introduced parameters in a 
+    <cxx-grammarterm>concept-introduction</cxx-grammarterm>
+    shall have the same number of template parameters as the referenced 
+    concept.
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;typename T1, typename T2, typename T3 = T2&gt;
+  concept bool Ineffable() { ... };
+
+Ineffable{X, Y} void f();    // Error: does not introduce all parameters
+Ineffable{X, Y, Z} void g(); // Ok
+    </cxx-codeblock>
+    </cxx-example>
+    <cxx-note>
+    Allowing default arguments to be deduced in a 
+    <cxx-grammarterm>concept-introduction</cxx-grammarterm> would cause 
+    the introduction of an unnamed and unusable template parameter in the 
+    template declaration.
+    </cxx-note>
+  </cxx-section> <!-- concept.intro -->
+
+</cxx-clause> <!-- temp -->
