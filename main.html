@@ -1,29 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <link rel="stylesheet" href="base.css"/>
-  <script src="promise-0.1.1.min.js"></script>
   <script src="bower_components/platform/platform.js"></script>
-  <link rel="import" href="bower_components/polymer/polymer.html"/>
-  <link rel="import" href="elements/section.html"/>
-  <link rel="import" href="elements/clause.html"/>
-  <link rel="import" href="elements/table.html"/>
-  <link rel="import" href="elements/definition-section.html"/>
-  <link rel="import" href="elements/toc.html"/>
-  <link rel="import" href="elements/ref.html"/>
-  <link rel="import" href="elements/foreign-index.html"/>
-  <link rel="import" href="elements/function.html"/>
-  <link rel="import" href="elements/titlepage.html"/>
-  <link rel="import" href="elements/email.html"/>
-  <link rel="import" href="elements/ednote.html"/>
-  <link rel="import" href="elements/note.html"/>
-  <link rel="import" href="elements/example.html"/>
-  <link rel="import" href="elements/grammar.html"/>
-  <link rel="import" href="elements/codeblock.html"/>
-  <link rel="import" href="elements/publish.html"/>
-  <script language="javascript">
-  </script>
+  <link rel="import"href="bower_components/cxx-html-doc-framework/framework.html"/>
 </head>
 <body>
 <cxx-titlepage stage="draft">
@@ -35,8 +14,8 @@
     University of Akron<br/>
     <cxx-email>asutton@uakron.edu</cxx-email>
   </cxx-editor>
-  <h1>Information technology – Programming languages, their environments and 
-  system software interfaces – C++ Extensions for Concepts</h1>
+  <h1>Information technology - Programming languages, their environments and 
+  system software interfaces - C++ Extensions for Concepts</h1>
 </cxx-titlepage>
 
 <cxx-toc></cxx-toc>
@@ -49,6 +28,7 @@
     
     <p>C++ has long provided language support for generic programming in 
     the form of templates. 
+    
     However, these templates are unconstrained, allowing any type or value 
     to be substituted for a template argument, often resulting in compiler 
     errors. 
@@ -145,7 +125,7 @@
     edition cited applies. For undated references, the latest edition
     of the referenced document (including any amendments) applies.</p>
     <ul>
-      <li>ISO/IEC XXXX:2014, <cite>Programming Languages — C++</cite>
+      <li>ISO/IEC XXXX:2014, <cite>Programming Languages - C++</cite>
       <cxx-foreign-index id="cxx" src="cxx14_index.json" name="C++14"></cxx-foreign-index></li>
     </ul>
 
@@ -417,7 +397,7 @@ template&lt;typename T&gt;
   }
 
 struct X { } p, q;
-g(p, q); // <em style="font-family:times">Error: no matching operator+</em>
+g(p, q); // Error: no matching operator+
     </cxx-codeblock>
     </cxx-example>
     </p>
@@ -455,23 +435,22 @@ g(p, q); // <em style="font-family:times">Error: no matching operator+</em>
       <code>true</code> if and only if substitution succeeds. The expression is 
       an unevaluated operand <cxx-ref in="cxx" to="basic.def.odr"></cxx-ref>.
       
-      <cxx-example>
-      For example, the following is requirement evaluates to 
-      <code>true</code> for all arithmetic types 
-      <cxx-ref in"cxx" to="basic.fundamental"></cxx-ref>, 
+      <cxx-example class="inline">
+      The following is requirement evaluates to <code>true</code> for all 
+      arithmetic types <cxx-ref in"cxx" to="basic.fundamental"></cxx-ref>,
       and <code>false</code> for pointer types 
       <cxx-ref in="cxx" to="basic.compound"></cxx-ref>.
       <cxx-codeblock>
 requires (T a, T b) {
-  a + b;  // <em style="font-family:times">A simple requirement</em>.
+  a + b;  // A simple requirement;
 }
-</cxx-codeblock>
+      </cxx-codeblock>
       </cxx-example>
       </p>
 
       <p>If the required valid expression would always result in a
       substitution failure, the program is ill-formed.
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 requires () {
   new T[-1];  // error: the valid expression well never be well-formed.
@@ -506,7 +485,7 @@ requires () {
       convertible to <code>T</code>, where <code>e</code> is the substituted 
       expression and <code>T</code> is the substituted type
       <cxx-ref in="cxx" to="conv"></cxx-ref>.
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt;
   concept bool D() {
@@ -533,7 +512,7 @@ template&lt;typename T&gt;
       <code>e</code> is the substituted expression. The requirement is 
       <code>true</code> if and only if the result of that application is 
       <code>true</code>.
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename I&gt;
   concept bool Iterator() { ... }
@@ -555,7 +534,7 @@ template&lt;typename T&gt;
       present in the <cxx-grammarterm>compound-requirement</cxx-grammarterm>, 
       the requirement is true if and only if the substituted expression is a
       constant expression <cxx-ref in="cxx" to="expr.const"></cxx-ref>.
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename Trait&gt;
   concept bool Boolean_metaprogram() {
@@ -575,7 +554,7 @@ template&lt;typename Trait&gt;
       <cxx-grammarterm>compound-requirement</cxx-grammarterm> the requirement 
       is <code>true</code> when <code>noexcept(e))</code> is <code>true</code>, 
       where <code>e</code> is the substituted expression.
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt;
   concept bool Nothrow_movable() {
@@ -604,7 +583,7 @@ template&lt;typename T&gt;
       The <code>typename</code> may be part of a 
       <cxx-grammarterm>typename-specifier</cxx-grammarterm>.
       </cxx-note>
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt;
   concept bool Input_range() {
@@ -619,7 +598,7 @@ template&lt;typename T&gt;
 
       <p>If the required type will always results in a substitution failure,
       then the program is ill-formed.
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 requires () {
   typename int::X;  // error: int does not have class type
@@ -638,7 +617,7 @@ requires () {
       <cxx-grammarterm>requires-expression</cxx-grammarterm>. The 
       requirement is <code>true</code> if and only if the required expression 
       evaluates to <code>true</code>.
-      <cxx-example> 
+      <cxx-example class="inline"> 
       Nested requirements are generally used to provide additional constraints on 
       associated types
       within a <cxx-grammarterm>requires-expression</cxx-grammarterm>.
@@ -731,7 +710,7 @@ template&lt;typename T&gt;
       to template specialization; an additional template argument must be
       supplied (before the first template argument) before the name
       refers to a template specialization.
-      <cxx-example>
+      <cxx-example class="inline">
       For example:
       <cxx-codeblock>
 template&lt;typename T, typename U&gt;
@@ -750,7 +729,7 @@ C&lt;char, int&gt; // A template-id
 
       <p>A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> shall not
       have an empty list of template arguments.
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 C<>; // Error: partial-concept-id with empty arguments
       </cxx-codeblock>
@@ -787,7 +766,7 @@ C<>; // Error: partial-concept-id with empty arguments
       Non-type concepts can be used as type specifiers of non-type template 
       parameters and template template parameters.
       </cxx-note>
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;int N&gt;
   concept bool Prime() { ... }
@@ -838,7 +817,7 @@ template&lt;Prime P&gt; // Ok
         call expression with no function arguments. </p>
 
         <p>
-        <cxx-example>
+        <cxx-example class="inline">
         The following unary and binary concepts are defined as variables and
         functions.
         <cxx-codeblock>
@@ -931,7 +910,7 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
         statement whose expression shall be a
         <cxx-grammarterm>constraint-expr</cxx-grammarterm>. </li>
       </ul>
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
       template&lt;typename T&gt;
         concept bool C1() { return true; } // OK
@@ -954,7 +933,7 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
         <li> The initializer shall be a 
         <cxx-grammarterm>constraint-expr</cxx-grammarterm>. </li>
       </ul>
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
       template&lt;typename T&gt;
         concept bool Integral = is_integral&lt;T&gt;::value; // OK
@@ -971,7 +950,7 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
       <p>If a program declares a non-concept overload of a concept 
       definition with the same template parameters and no function 
       parameters, the program is ill-formed.
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
       template&lt;typename T&gt;
         concept bool Totally_ordered() { ... }
@@ -985,7 +964,7 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
 
       <p>A program that declares an explicit or partial specialization of a concept
       definition is ill-formed.
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
       template&lt;typename T&gt;
         concept bool C = is_iterator&lt;T&gt;::value;
@@ -1059,7 +1038,7 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
       <cxx-grammarterm>type-specifier</cxx-grammarterm> is either 
       <code>auto</code> or a 
       <cxx-grammarterm>constrained-type-name</cxx-grammarterm>.
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 auto f(auto x); // Ok
 void sort(Sortable& c); // Ok (assuming Sortable names a concept)
@@ -1096,7 +1075,7 @@ void sort(Sortable& c); // Ok (assuming Sortable names a concept)
 
       <!-- TODO: Improve these examples -->
       <p>
-      <cxx-example>
+      <cxx-example class="inline">
       The generic function declared below
       <cxx-codeblock>
 auto f(auto x, const Regular&amp; y);
@@ -1184,7 +1163,7 @@ template&lt;Integral T&gt;
   <!-- FIXME: This could probably be written more explicitly. -->
   <p>The associated constraints of a <cxx-grammarterm>concept-introduction</cxx-grammarterm>
   are those required by the referenced concept definition. 
-  <cxx-example>
+  <cxx-example class="inline">
   <cxx-codeblock>
 template&lt;typename T&gt;
   concept bool Integral() { return is_integral&lt;T&gt;::value; }
@@ -1280,7 +1259,7 @@ template&lt;Integral T&gt;
       the same <cxx-grammarterm>type-specifier</cxx-grammarterm>.</li>
     </ul>
     </cxx-note>
-    <cxx-example>
+    <cxx-example class="inline">
     Given the following concept definitions:
     <cxx-codeblock>
 template&lt;typename T&gt;
@@ -1306,7 +1285,7 @@ template&lt;Template T&gt; // T is a template template parameter
     <p>
     If prototype parameter is a parameter pack, then the constrained 
     parameter shall also be declared as a parameter pack.
-    <cxx-example>
+    <cxx-example class="inline">
     <cxx-codeblock>
     template&lt;typename... Ts&gt;
       concept bool Same_types() { ... }
@@ -1338,7 +1317,7 @@ template&lt;Template T&gt; // T is a template template parameter
 
     <ins>The template-arguments shall satisfy the associated constraints 
     of the primary template, if any.</ins>
-    <cxx-example>
+    <cxx-example class="inline">
     <cxx-codeblock>
 template&lt;Object T, int N&gt; // T must be an object type
   class array;
@@ -1373,7 +1352,7 @@ array&lt;int&amp;, 3&gt;* p; // error: int&amp; is not an object type
       <code>P</code><ins>, and the associated constraints of <code>P</code> 
       shall subsume the associated constraints of <code>A</code>
       <cxx-ref to="temp.constr"?></cxx-ref></ins>.
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt;
   concept bool Object = is_object&lt;T&gt;::value;
@@ -1412,7 +1391,7 @@ stack&lt;list2&gt; s2; // Ok: Object is not more strict than Copyable
         <p>A member function of a class template can be constrained by 
         writing a <cxx-grammarterm>requires-clause</cxx-grammarterm> 
         after the member declarator.
-        <cxx-example>
+        <cxx-example class="inline">
         <cxx-codeblock>
 template&lt;typename T&gt;
   class S {
@@ -1463,7 +1442,7 @@ template&lt;typename T&gt;
 
       Constraints on non-template friend functions are written 
       after the result type.
-      <cxx-example>
+      <cxx-example class="inline">
       All of the following are valid constrained friend declarations:
       <cxx-codeblock>
 template&lt;typename T&gt;
@@ -1487,7 +1466,7 @@ template&lt;typename T&gt;
       A non-template friend function shall not be constrained unless 
       the function's parameter or result type depends on a template 
       parameter.
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt;
   struct S {
@@ -1500,7 +1479,7 @@ template&lt;typename T&gt;
       <p>
       A constrained non-template friend function shall not declare 
       a specialization.
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt;
   struct S {
@@ -1565,7 +1544,7 @@ template&lt;typename T&gt;
           type is a class template specialization with the template 
           arguments of the second partial specialization.</li>
         </ul>
-        <cxx-example>
+        <cxx-example class="inline">
         <cxx-codeblock>
 template&lt;typename T&gt;
   concept bool Integer = is_integral&lt;T&gt;::value;
@@ -1747,7 +1726,7 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
     </p>
 
     <p>
-    <cxx-example>
+    <cxx-example class="inline">
     <cxx-codeblock>
 template&lt;typename T&gt;
   requires is_integral&lt;T&gt;::value &amp;&amp; is_signed&lt;T&gt;::value
@@ -1786,7 +1765,7 @@ void g(T x);
     expression. For checks against variable concepts, the definition 
     is formed by substituting the template arguments into the 
     variable's initializer.
-    <cxx-example>
+    <cxx-example class="inline">
     <cxx-codeblock>
 template&lt;typename T&gt;
   concept bool C() { return sizeof(T) &gt;= 4; }
@@ -1815,7 +1794,7 @@ void g();
     considered <defn>atomic constraint</defn>s. A constraint is atomic 
     if it is not a <cxx-grammarterm>logical-and-expression</cxx-grammarterm> 
     or a <cxx-grammarterm>logical-or-expression</cxx-grammarterm>.
-    <cxx-example>
+    <cxx-example class="inline">
     The expression 
     <code>x == y &amp;&amp; is_integral&lt;T&gt;::value</code> 
     has two atoms:
@@ -1831,7 +1810,7 @@ void g();
     for any template arguments substituted for 
     <code>T1</code>, ..., <code>Tn</code>, the constraint <code>Q</code> 
     is true, then <code>P</code> is also true.
-    <cxx-example>
+    <cxx-example class="inline">
     Let <code>P</code> be the constraint 
     <code>is_integral&lt;T&gt;::value &amp;&amp; sizeof(T) == 4</code>, 
     and let <code>Q</code> be the constraint <code>sizeof(T) == 4</code>.
@@ -1884,7 +1863,7 @@ void g();
     number of <cxx-grammarterm>identifier</cxx-grammarterm>s in the 
     <cxx-grammarterm>introduction-list</cxx-grammarterm> shall match the 
     number of template parameters in the named concept.
-    <cxx-example>
+    <cxx-example class="inline">
     <cxx-codeblock>
 template&lt;typename I1, typename I2, typename O&gt;
   concept bool Mergeable() { ... };
@@ -1903,7 +1882,7 @@ Mergeable{X, Y} // Error: not enough parameters
     concept. The associated constraints
     of the declaration are formed by applying the introduced parameters as
     arguments to the named concept \ref{dcl.constr.form}.
-    <cxx-example>
+    <cxx-example class="inline">
     The following declaration
     <cxx-codeblock>
 Mergeable{X, Y, Z}
@@ -1926,7 +1905,7 @@ template&lt;typename X, typename Y, typename Z&gt;
     <cxx-grammarterm>concept-introduction</cxx-grammarterm>
     shall have the same number of template parameters as the referenced 
     concept.
-    <cxx-example>
+    <cxx-example class="inline">
     <cxx-codeblock>
 template&lt;typename T1, typename T2, typename T3 = T2&gt;
   concept bool Ineffable() { ... };
