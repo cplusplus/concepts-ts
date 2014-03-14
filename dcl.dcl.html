@@ -141,6 +141,17 @@ template&lt;Prime P&gt; // Ok
 
       <cxx-section id="dcl.constr.form">
         <h1>Constraint formation</h1>
+
+        <!-- FIXME: Add trailing-return type for concepts -->
+
+        <!-- FIXME: These rules can be simplified by identifying the
+        source of the template argument in the constraint. It is either
+        a declared template parameter, an invented template parameter,
+        or decltype of a required valid expression.
+
+        Note that the latter extends nicely when describing the source
+        types for constrained variables and constrained trailing
+        result types in function declarations -->
         
         <p>When a <cxx-grammarterm>template-parameter</cxx-grammarterm> 
         or parameter-declaration is declared using a 
@@ -206,10 +217,10 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
         </cxx-codeblock>
         </cxx-example>
         </p>
-      </cxx-section> <!-- decl.constr.form -->
+      </cxx-section> <!-- dcl.constr.form -->
 
-      <cxx-section id="dcl.constr.form">
-        <h1>Constraint formation</h1>
+      <cxx-section id="dcl.constr.meaning">
+        <h1>Meaning of constrained type specifiers</h1>
         <p>The meaning of a constrained type specifier depends on the 
         context in which it is used. The different meanings of constrained 
         type specifiers are enumerated in this clause. </p>
@@ -247,11 +258,13 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
       <h1><code>concept</code> specifier</h1>
 
       <p>The <code>concept</code> specifier shall be applied to only the 
-      definition of a function template or variable template.
+      definition of a function template or variable template. 
       A function template definition having the <code>concept</code>
-      specifier is called a function concept. A variable template
-      definition having the <code>concept</code> specifier is called a 
-      variable concept. </p>
+      specifier is called a <dfn>function concept</dfn>. A variable 
+      template definition having the <code>concept</code> specifier is called a 
+      <dfn>variable concept</dfn>. A <dfn>concept definition</dfn> refers
+      to either a function concept and its corresponding definition or 
+      a variable concept and its corresponding initializer.</p>
 
       <p>Every concept definition is also a <code>constexpr</code> declaration
       (<cxx-ref in="cxx" to="dcl.constexpr"></cxx-ref>).
