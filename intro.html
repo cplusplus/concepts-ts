@@ -2,6 +2,26 @@
 <cxx-clause id="intro">
   <h1>General</h1>
 
+
+  <cxx-section id="general.scope">
+    <h1>Scope</h1>
+    <p>This technical specification describes extensions to the C++ 
+    Programming language (<cxx-ref to="intro.refs"></cxx-ref>) that
+    enable the specification and checking of constraints on template 
+    arguments, and the ability to overload functions and specialize
+    templates based on those constraints. These extensions include 
+    new syntactic forms and modifications to existing language semantics.</p>
+
+    <p>International Standard, ISO/IEC 14882, provides important context
+    and specification for this Technical Specification. This document as 
+    written as a set of changes against that specification. Instructions
+    to modify or add paragraphs are written as explicit instructions. 
+    Modifications made directly to existing text from the International
+    Standard use <ins>underlining</ins> to represent added text and
+    <del>strikethrough</del> to represent deleted text.</p>
+  </cxx-section>
+
+  <!--
   <cxx-section id="intro.intro">
     <h1>Introduction</h2>
     
@@ -69,6 +89,37 @@
     definitions separately from their instantiation, nor does it provide 
     facilities for specifying or checking semantic requirements.</p>
 
+    <p>
+    <cxx-example>
+    The following program demonstrates a number of the C++ extensions
+    introduced by this specification.
+    <cxx-codeblock>
+template<typename T>
+  concept bool Input_iterator() {
+    return requires (T i) {
+      {++i} -> T&;
+      {*i} -> Value_type<T>;
+    };
+  }
+
+template<typename P, typename... Args>
+  concept bool Predicate() {
+    return requires(P pred, Args... args) {
+      {pred(args...)} -> bool;
+    };
+  }
+
+template<Input_iterator I, Predicate<Value_type<I>> P>
+  I find_if(I first, I last, P pred);
+    </cxx-codeblock>
+    Concepts are are defined as function or variable templates, declared
+    with the <code>concept</code> specifier. 
+    The syntactic requirements of each concept are enumerated with a
+    <cxx-grammarterm>requires-expression</cxx-grammarterm>.
+    These concepts are used to constrain the template parameters of the
+    <code>find_if</code> algorithm.
+    </cxx-example>
+    </p>
 
     <p>This Technical Specification specifies requirements for 
     implementations of an extension to the C++ programming language 
@@ -76,19 +127,7 @@
     the use of constraints in function overloading and class template 
     specialization, and the definition of those constraints.</p>
 
-    <p>International Standard, ISO/IEC 14882, provides important context
-    and specification for this Technical Specification. This document as 
-    written as a set of changes against that specification. Notes in 
-    this Technical Specification indicate how and where new text should 
-    be added to or removed from the International Standard. 
-    <cxx-note>The proposal is written against the C++14 specification,
-    whatever its final document number may be.</cxx-note></p>
-
-<!-- TOOD: Move text from intro into scope. -->
-<!--   <cxx-section id="general.scope">
-    <h1>Scope</h1>
-  </cxx-section>
- -->
+-->
   
   <cxx-section id="intro.refs">
     <h1>Normative references</h1>

@@ -23,7 +23,7 @@
     <p>The closure type for a non-generic
     <cxx-grammarterm>lambda-expression</cxx-grammarterm> has a public
     <code>inline</code> function call operator 
-    <cxx-ref in="cxx" to="over.over"></cxx-ref>) whose parameters 
+    (<cxx-ref in="cxx" to="over.over"></cxx-ref>) whose parameters 
     and return type 
     are described by the <cxx-grammarterm>lambda-expression</cxx-grammarterm>'s 
     <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> and 
@@ -31,7 +31,7 @@
     respectively. 
     
     For a generic lambda, the closure type has a public inline function call 
-    operator member template <cxx-ref in="cxx" to="temp.mem"></cxx-ref> 
+    operator member template (<cxx-ref in="cxx" to="temp.mem"></cxx-ref>) 
     whose <cxx-grammarterm>template-parameter-list</cxx-grammarterm> 
     consists of one invented type 
     <cxx-grammarterm>template-parameter</cxx-grammarterm> for each 
@@ -45,7 +45,7 @@
     pack if the corresponding 
     <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
     declares a function parameter pack 
-    <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>. 
+    (<cxx-ref in="cxx" to="dcl.fct"></cxx-ref>). 
     <ins>The associated constraints of the generic lambda are the 
     conjunction of constraints introduced by the use of 
     <cxx-grammarterm>constrained-type-name</cxx-grammarterm>s in the
@@ -134,7 +134,7 @@
     <cxx-example>
     The most common use of 
     <cxx-grammarterm>requires-expression</cxx-grammarterm>s is to define
-    syntactic requirements in concepts <cxx-ref to="decl.constr"></cxx-ref> 
+    syntactic requirements in concepts (<cxx-ref to="decl.constr"></cxx-ref>) 
     such as the one below:
     <cxx-codeblock>
 template&lt;typename T&gt;
@@ -159,7 +159,7 @@ template&lt;typename T&gt;
     </cxx-codeblock>
     Any use outside of a concept or 
     <cxx-grammarterm>requires-clause</cxx-grammarterm> 
-    <cxx-ref to="temp.constr"></cxx-ref> will almost certainly make the
+    (<cxx-ref to="temp.constr"></cxx-ref>) will almost certainly make the
     program ill-formed. For example:
     <cxx-codeblock>
 template&lt;typename T&gt;
@@ -210,13 +210,13 @@ g(p, q); // Error: no matching operator+
 
       A <cxx-grammarterm>simple-requirement</cxx-grammarterm> has the value 
       <code>true</code> if and only if substitution succeeds. The expression is 
-      an unevaluated operand <cxx-ref in="cxx" to="basic.def.odr"></cxx-ref>.
+      an unevaluated operand (<cxx-ref in="cxx" to="basic.def.odr"></cxx-ref>).
       
       <cxx-example class="inline">
       The following is requirement evaluates to <code>true</code> for all 
-      arithmetic types <cxx-ref in"cxx" to="basic.fundamental"></cxx-ref>,
+      arithmetic types (<cxx-ref in"cxx" to="basic.fundamental"></cxx-ref>),
       and <code>false</code> for pointer types 
-      <cxx-ref in="cxx" to="basic.compound"></cxx-ref>.
+      (<cxx-ref in="cxx" to="basic.compound"></cxx-ref>).
       <cxx-codeblock>
 requires (T a, T b) {
   a + b;  // A simple requirement;
@@ -261,7 +261,7 @@ requires () {
       into the specified type, and <code>decltype((e))</code> is implicitly 
       convertible to <code>T</code>, where <code>e</code> is the substituted 
       expression and <code>T</code> is the substituted type
-      <cxx-ref in="cxx" to="conv"></cxx-ref>.
+      (<cxx-ref in="cxx" to="conv"></cxx-ref>).
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt;
@@ -281,7 +281,7 @@ template&lt;typename T&gt;
       <p>As with <cxx-grammarterm>simple-requirement</cxx-grammarterm>s, if
       the required valid expression will always result in a substitution
       failure, the program is ill-formed 
-      <cxx-ref to="expr.req.simple"></cxx-ref>.</p>
+      (<cxx-ref to="expr.req.simple"></cxx-ref>).</p>
 
       <p>If the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> is a
       <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
@@ -310,7 +310,7 @@ template&lt;typename T&gt;
       <p>If the <cxx-grammarterm>constexpr</cxx-grammarterm> specifier is 
       present in the <cxx-grammarterm>compound-requirement</cxx-grammarterm>, 
       the requirement is true if and only if the substituted expression is a
-      constant expression <cxx-ref in="cxx" to="expr.const"></cxx-ref>.
+      constant expression (<cxx-ref in="cxx" to="expr.const"></cxx-ref>).
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename Trait&gt;

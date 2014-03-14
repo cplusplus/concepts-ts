@@ -31,7 +31,7 @@
   </bnf-grammar>
 
   <p>Add the following paragraphs after 
-  <cxx-ref in="cxx" to="temp"></cxx-ref>p6.</p>
+  <cxx-ref in="cxx" to="temp"></cxx-ref>/6.</p>
 
   <p>A <dfn>constrained template declaration</dfn> is a
   <cxx-grammarterm>template-declaration</cxx-grammarterm> with 
@@ -41,7 +41,7 @@
   <ul>
     <li><cxx-grammarterm>constrained-parameter</cxx-grammarterm>s
     in template's <cxx-grammarterm>template-parameter-list</cxx-grammarterm> 
-    <cxx-ref to="temp.param"></cxx-ref>.</li>
+    (<cxx-ref to="temp.param"></cxx-ref>).</li>
     <li> and all <cxx-grammarterm>constraint-expression</cxx-grammarterm>s 
     introduced by <cxx-grammarterm>requires-clause</cxx-grammarterm>
     in the <cxx-grammarterm>template-declaration</cxx-grammarterm>.</li>
@@ -72,7 +72,7 @@ template&lt;Integral T&gt;
   </p>
 
   <p>A constrained template declaration's associated constraints must 
-  be satisfied <cxx-ref to="temp.constr"></cxx-ref> to allow instantiation 
+  be satisfied (<cxx-ref to="temp.constr"></cxx-ref>) to allow instantiation 
   of the constrained template. 
 
   The associated constraints are satisfied by substituting template 
@@ -82,10 +82,10 @@ template&lt;Integral T&gt;
   <code>true</code>.
 
   Class template, alias template, and variable template constraints 
-  are checked during name lookup <cxx-ref id="temp.names"></cxx-ref>; 
+  are checked during name lookup (<cxx-ref id="temp.names"></cxx-ref>); 
   function template constraints and class template partial specialization 
   constraints are checked during template argument deduction
-  <cxx-ref to="temp.deduct"></cxx-ref>.</p>
+  (<cxx-ref to="temp.deduct"></cxx-ref>).</p>
 
   <p>Any usage of a constrained template in a template declaration 
   is ill-formed unless the associated constraints of the constrained 
@@ -97,7 +97,7 @@ template&lt;Integral T&gt;
     <h1>Template parameters</h1>
 
     <p>Modify the <cxx-grammarterm>template-parameter</cxx-grammarterm>
-    grammar in <cxx-ref in="cxx" to="temp.param"></cxx-ref> to include
+    grammar in (<cxx-ref in="cxx" to="temp.param"></cxx-ref>) to include
     <cxx-grammarterm>constrained-parameter</cxx-grammarterm>, and add
     the following productions.
 
@@ -124,7 +124,7 @@ template&lt;Integral T&gt;
     </bnf-grammar>
 
     <p>Add the following paragraphs after
-    <cxx-ref in="cxx" to="temp.param"></cxx-ref>p15.
+    <cxx-ref in="cxx" to="temp.param"></cxx-ref>/15.
 
     <p>A <cxx-grammarterm>constrained-parameter</cxx-grammarterm> defines 
     its identifier to be a template parameter. The declared template 
@@ -203,7 +203,7 @@ template&lt;Template T&gt; // T is a template template parameter
   <cxx-section id="temp.names">
     <h1>Template names</h1>
 
-    <p>Modify <cxx-ref in="cxx" to="temp.names"></cxx-ref>p5.
+    <p>Modify <cxx-ref in="cxx" to="temp.names"></cxx-ref>/.
 
     <p>A <cxx-grammarterm>simple-template-id</cxx-grammarterm> that 
     names a class template specialization is a 
@@ -245,7 +245,7 @@ array&lt;int&amp;, 3&gt;* p; // error: int&amp; is not an object type
       the <cxx-grammarterm>template-parameter-list</cxx-grammarterm> of 
       <code>P</code><ins>, and the associated constraints of <code>P</code> 
       shall subsume the associated constraints of <code>A</code>
-      <cxx-ref to="temp.constr"?></cxx-ref></ins>.
+      (<cxx-ref to="temp.constr"></cxx-ref>)</ins>.
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt;
@@ -316,7 +316,7 @@ template&lt;typename T&gt;
       <h1>Friends</h1>
 
       <p>Add the following paragraphs after
-      <cxx-ref in="cxx" to="temp.friend"></cxx-ref>p9.
+      <cxx-ref in="cxx" to="temp.friend"></cxx-ref>/9.
 
       <p> 
       A <dfn>constrained friend</dfn> is a friend of a class 
@@ -396,15 +396,15 @@ template&lt;typename T&gt;
         <h1>Matching of class template partial specializations</h1>
 
         <p>Modify 
-        <cxx-ref to="cxx" in="temp.class.spec.match"></cxx-ref>p2.</p>
+        <cxx-ref to="cxx" in="temp.class.spec.match"></cxx-ref>/2.</p>
 
         <p> A partial specialization matches a given actual template 
         argument list if the template arguments of the partial 
         specialization can be deduced from the actual template argument 
-        list <cxx-ref in="cxx" to="temp.deduct"></cxx-ref>
+        list (<cxx-ref in="cxx" to="temp.deduct"></cxx-ref>)
         <ins>, and the deduced template arguments satisfy the constraints 
         of the partial specialization, if any 
-        <cxx-ref to="temp.constr"></cxx-ref></ins>.</p>
+        (<cxx-ref to="temp.constr"></cxx-ref>)</ins>.</p>
 
       </cxx-section> <!-- temp.class.spec.match -->
 
@@ -412,7 +412,7 @@ template&lt;typename T&gt;
         <h1>Partial ordering of class template specializations</h1>
 
         <p>Modify 
-        <cxx-ref in="cxx" to="temp.class.order"></cxx-ref>p1.</p>
+        <cxx-ref in="cxx" to="temp.class.order"></cxx-ref>/1.</p>
 
         <p>
         For two class template partial specializations, the first is 
@@ -420,7 +420,7 @@ template&lt;typename T&gt;
         rewrite to two function templates, the first function template 
         is at least as specialized as the second according to the ordering 
         rules for function templates 
-        <cxx-ref in="cxx" to="temp.func.order"></cxx-ref>:
+        (<cxx-ref in="cxx" to="temp.func.order"></cxx-ref>):
         </p>
         <ul>
           <li> the first function template has the same template 
@@ -464,7 +464,7 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
         <h1>Template argument deduction</h1>
 
         <p>Modify
-        <cxx-ref in="cxx" to="temp.deduct"></cxx-ref>p2.
+        <cxx-ref in="cxx" to="temp.deduct"></cxx-ref>/2.
 
         <p>When an explicit template argument list is specified, the 
         template arguments must be compatible with the template parameter 
@@ -536,7 +536,7 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
         <cxx-ref in="cxx" to"over.match"></cxx-ref>.
         </p>
 
-        <p>Modify <cxx-ref in="cxx" to="temp.over.link">p6.</cxx-ref>
+        <p>Modify <cxx-ref in="cxx" to="temp.over.link">/6.</cxx-ref>
 
         <p>
         Two function templates are <dfn>equivalent</dfn> if they are 
@@ -553,7 +553,7 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
       <cxx-section id="temp.func.order">
         <h1>Partial ordering of function templates</h1>
 
-        <p>Modify <cxx-ref in="cxx" to="temp.func.order"></cxx-ref>p2.</p>
+        <p>Modify <cxx-ref in="cxx" to="temp.func.order"></cxx-ref>/2.</p>
 
         <p>
         Partial ordering selects which of two function templates is 

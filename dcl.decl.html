@@ -2,7 +2,7 @@
 <cxx-clause id="dcl.decl">
   <h1>Declarators</h1>
 
-  <p>Modify <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>p1 as follows:</p>
+  <p>Modify <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>/1 as follows:</p>
 
   <p>A declarator declares a single variable, function, or type, within a 
   declaration. The <cxx-grammarterm>init-declarator-list</cxx-grammarterm>
@@ -21,14 +21,14 @@
   </p>
 
   <p>Insert the following paragraph after 
-  <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>p1</p>
+  <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>/1</p>
 
   <p>A <cxx-grammarterm>declarator</cxx-grammarterm> followed by a 
   <cxx-grammarterm>requires-clause</cxx-grammarterm> declares a 
   <defn>constrained declaration</defn>. 
 
   The <cxx-grammarterm>requires-clause</cxx-grammarterm> associates
-  a constraint with the declaration <cxx-ref to="temp.constr"></cxx-ref>. 
+  a constraint with the declaration (<cxx-ref to="temp.constr"></cxx-ref>). 
 
   A declarator that declares a constrained variable, type, or 
   non-template member function of a non-template class is ill-formed.
@@ -46,7 +46,7 @@
       <h1>Functions</h1>
 
       <p>Add the following paragraphs after
-      <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>p14.</p>
+      <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>/14.</p>
 
       <p>A <defn>generic function</defn> is a function template whose
       <cxx-grammarterm>template-parameter-list</cxx-grammarterm> has a 
@@ -76,7 +76,7 @@ void sort(Sortable& c); // Ok (assuming Sortable names a concept)
       <cxx-grammarterm>template-parameter</cxx-grammarterm> is a parameter 
       pack if the corresponding 
       <cxx-grammarterm>parameter-declaration</cxx-grammarterm> declares 
-      a function parameter pack <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>.
+      a function parameter pack (<cxx-ref in="cxx" to="dcl.fct"></cxx-ref>).
       
       <!-- TODO: I believe this duplicates a requirement elsewhere -->
       The associated constraints of the generic function are 
