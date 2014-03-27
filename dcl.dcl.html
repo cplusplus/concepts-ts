@@ -58,10 +58,23 @@
     <cxx-section id="dcl.spec.constr">
       <h1>Constrained type specifiers</h1>
 
-      <!-- NOTE: Constrained type specifiers apply only to the declaration
-      of parameters and result-type constraints in requires expressions.
-      Constrained template parameters extend this notion for constrained
-      type and template parameters as well. -->
+      <p>A type specifier containing a 
+      <cxx-grammarterm>constrained-type-name</cxx-grammarterm> is
+      a <dfn>constrained type specifier</dfn>. The type designated
+      by the <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
+      depends on the context in which the specifier is used.</p>
+
+      <!-- NOTE: It is the intent of the proposal to support constrained
+           typenames everywhere auto can be used. -->
+      <p>A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> can appear
+      only in 
+      the <cxx-grammarterm>type-specifier</cxx-grammarterm> of a
+      <cxx-grammarterm>parameter-declaration</cxx-grammarterm> or in
+      the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> of a
+      <cxx-grammarterm>compound-requirement</cxx-grammarterm>.
+      If a <cxx-grammarterm>constrained-type-name</cxx-grammarterm> is
+      used in any other context, the program is ill-formed.</p>
+
 
       <p>When an identifier is a 
       <cxx-grammarterm>concept-name</cxx-grammarterm>, it refers to a 
@@ -72,9 +85,10 @@
       <cxx-grammarterm>concept-id</cxx-grammarterm> followed by a sequence
       of template arguments.
       A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> does not refer
-      to template specialization; an additional template argument must be
-      supplied (before the first template argument) before the name
-      refers to a template specialization.
+      to template specialization; the template argument list must be
+      adjusted by adding a template argument before the first of the
+      original template arguments before the name refers to a template
+      specialization.
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T, typename U&gt;
@@ -91,138 +105,108 @@ C&lt;char, int&gt; // A template-id
       </cxx-example>
       </p>
 
-      <p>A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> shall not
-      have an empty list of template arguments.</p>
-
-      <p>A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> introduces
-      constraints for a <cxx-grammarterm>template-parameter</cxx-grammarterm>,
-      placeholder type, or <cxx-grammarterm>decltype-specifier</cxx-grammarterm>,
-      depending on the context in which it appears. 
-
-      A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> can be used 
-      in the <cxx-grammarterm>type-specifier</cxx-grammarterm> of a
-      <cxx-grammarterm>parameter-declaration</cxx-grammarterm> or in the
-      <cxx-grammarterm>trailing-return-type</cxx-grammarterm> of a
-      <cxx-grammarterm>compound-requirement</cxx-grammarterm>.
-      </p>
-
       <p>A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
       shall not refer to a non-type concept.</p>
 
 
-      <cxx-section id="dcl.constr.form">
-        <h1>Constraint formation</h1>
+      <p>The type designated by the specifier is called the
+      <dfn>constrained type</dfn>. The designated type depends on the context 
+      in which the <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
+      appears. 
+      <ul>
+      <li>In the type specifier of a function parameter, the constrained
+      type of the parameter is an invented template parameter of a generic
+      function (<cxx-ref to="dcl.fct"></cxx-ref>).</li>
+      <li>In the type specifier of a non-type template parameter, the
+      constrained type is the same as that of the parameter declaration's
+      prototype parameter (<cxx-ref to="temp.param"></cxx-ref>).</li>
+      <li>In the type specifier of a
+      <cxx-grammarterm>trailing-return-type</cxx-grammarterm> of a
+      <cxx-grammarterm>compound-requirement</cxx-grammarterm> requiring
+      a valid expression <code>E</code>, the constrained type is
+      <code>decltype((E))</code>.</li>
+      </ul>
+      </p>
 
-        <!-- FIXME: Add trailing-return type for concepts -->
+      <p>A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> shall not
+      have an empty list of template arguments.</p>
 
-        <!-- FIXME: These rules can be simplified by identifying the
-        source of the template argument in the constraint. It is either
-        a declared template parameter, an invented template parameter,
-        or decltype of a required valid expression.
 
-        Note that the latter extends nicely when describing the source
-        types for constrained variables and constrained trailing
-        result types in function declarations -->
-        
-        <p>When a <cxx-grammarterm>template-parameter</cxx-grammarterm> 
-        or parameter-declaration is declared using a 
-        <cxx-grammarterm>constrained-type-name</cxx-grammarterm> in its 
-        <cxx-grammarterm>type-specifier</cxx-grammarterm>, a new constraint 
-        expression is synthesized and associated with the template declaration. 
-        The rules for forming that constraint depend on whether the type 
-        specifier is a <cxx-grammarterm>concept-name</cxx-grammarterm> or 
-        <cxx-grammarterm>partial-concept-id</cxx-grammarterm>. 
-        Both cases require the synthesis of a 
-        <cxx-grammarterm>template-id</cxx-grammarterm> referring that refers
-        to a specialization of the named concept. The template argument list 
-        is formed using the following rules. </p>
+      <p>A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> introduces
+      a constraint. The form of that expression depends whether the
+      <cxx-grammarterm>constrained-type-name</cxx-grammarterm> is a
+      <cxx-grammarterm>concept-name</cxx-grammarterm> or a
+      <cxx-grammarterm>partial-concept-id</cxx-grammarterm>, and
+      also on the concept referred to by the
+      <cxx-grammarterm>concept-name</cxx-grammarterm>.
+      </p>
 
-        <p>Letting <code>X</code> be the declared
-        <cxx-grammarterm>template-parameter</cxx-grammarterm> or the invented type of a 
-        <cxx-grammarterm>parameter-declaration</cxx-grammarterm> in a generic 
-        function or generic lambda: </p>
-        <ul>
-          <li> If the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
-          is a <cxx-grammarterm>concept-name</cxx-grammarterm>, the synthesized 
-          template argument list contains only <code>X</code>.</li>
+      <p>Let <code>C</code> be the concept referred to by the
+      <cxx-grammarterm>concept-name</cxx-grammarterm> in the
+      <cxx-grammarterm>constrained-type-name</cxx-grammarterm>,
+      <code>X</code> be the constrained type designated by the
+      specifier, and 
+      <code>Args</code> be a sequence of template
+      arguments. 
 
-          <li> If the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
-          is a <cxx-grammarterm>partial-concept-id</cxx-grammarterm> whose 
-          template argument list contains the arguments <code>Y1</code>, 
-          <code>Y2</code>, ..., <code>Yn</code>, then the synthesized template 
-          argument list contains the sequence <code>X</code>, <code>Y1</code>, 
-          <code>Y2</code>, ..., <code>Yn</code>.</li>
-        </ul>
+      If the specifier is a
+      <cxx-grammarterm>partial-concept-id</cxx-grammarterm>, then
+      <code>Args</code> is its 
+      <cxx-grammarterm>template-argument-list</cxx-grammarterm>, otherwise
+      <code>Args</code> is the empty sequence.
 
-        <p>If the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
-        refers to a function concept, then the synthesized constraint is a 
-        call expression with no function arguments. </p>
+      If <code>C</code> is a variable concept,
+      <cxx-grammarterm>template-id</cxx-grammarterm> of the form
+      <code>C&lt;T, Args&gt;</code>.
 
-        <p>
-        <cxx-example class="inline">
-        The following unary and binary concepts are defined as variables and
-        functions.
-        <cxx-codeblock>
+      If <code>C</code> is a function concept, then the
+      resulting constraint is a function call of the form
+      <code>C&lt;T, Args&gt;()</code>. </p>
+
+      <p>
+      <cxx-example>
+      The following unary and binary concepts are defined as variables and
+      functions.
+      <cxx-codeblock>
 template&lt;typename T&gt;
-  concept bool V1 = ...;
+concept bool V1 = ...;
 
 template&lt;typename T, typename U&gt;
-  concept bool V2 = ...;
+concept bool V2 = ...;
 
 template&lt;typename T&gt;
-  concept bool F1() { return ...; }
+concept bool F1() { return ...; }
 
 template&lt;typename T, typename T2&gt;
-  concept bool F2() { return ...; }
-        </cxx-codeblock>
-        Suppose <code>X</code> is a template parameter being declared, either 
-        explicitly or as an invented template parameter of a 
-        <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
-        in a generic function or generic lambda. The synthesized constraints 
-        corresponding to each declaration are:
-        <cxx-codeblock>
+concept bool F2() { return ...; }
+      </cxx-codeblock>
+      Suppose <code>X</code> is a template parameter being declared, either 
+      explicitly or as an invented template parameter of a 
+      <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
+      in a generic function or generic lambda. The synthesized constraints 
+      corresponding to each declaration are:
+      <cxx-codeblock>
 V1 X    // becomes V1&lt;T&gt;
 V2&lt;Y&gt; X // becomes V2&lt;X, Y&gt;
 F1 X    // becomes F1&lt;X&gt;()
 F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
-        </cxx-codeblock>
-        </cxx-example>
-        </p>
-      </cxx-section> <!-- dcl.constr.form -->
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
 
-      <cxx-section id="dcl.constr.meaning">
-        <h1>Meaning of constrained type specifiers</h1>
-        <p>The meaning of a constrained type specifier depends on the 
-        context in which it is used. The different meanings of constrained 
-        type specifiers are enumerated in this clause. </p>
-        <ul>
-          <li> If a <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
-          is used as the <cxx-grammarterm>type-specifier</cxx-grammarterm> 
-          of a <cxx-grammarterm>template-parameter</cxx-grammarterm>, the
-          constraint is formed by applying the declared parameter to the 
-          <cxx-grammarterm>constrained-type-name</cxx-grammarterm>.</li>
-
-          <li> When a <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
-          is used as part of the 
-          <cxx-grammarterm>type-specifier</cxx-grammarterm> of a 
-          <cxx-grammarterm>parameter-declaration</cxx-grammarterm>, the
-          parameter's type is formed by replacing the 
-          <cxx-grammarterm>constrained-type-name</cxx-grammarterm> with
-          <code>auto</code>, creating a generic function or generic lambda. 
-          The introduced constraint is formed by applying the declared 
-          parameter to the invented template parameter to the 
-          <cxx-grammarterm>constrained-type-name</cxx-grammarterm>.</li>
-
-          <li> When a <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
-          is used as part of a <cxx-grammarterm>type-specifier</cxx-grammarterm> 
-          in a <cxx-grammarterm>result-type-requirement</cxx-grammarterm>, the
-          constraint is introduced as a 
-          <cxx-grammarterm>nested-requirement</cxx-grammarterm> that 
-          applies the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
-          to the result type of the required expression.</li>
-        </ul>
-      </cxx-section> <!-- dcl.constr.meaning -->
-
+      <p>The meaning of the constraint depends on the context. If
+      the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> is
+      part of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm>,
+      the constraint is part of the associated constraints of the
+      declaring template (<cxx-ref to="temp.param"></cxx-ref>)
+      or generic function (<cxx-ref to="dcl.fct"></cxx-ref>). If it
+      is part of the <cxx-grammarterm>trailing-return-type</cxx-grammarterm>
+      of a <cxx-grammarterm>compound-requirement</cxx-grammarterm>,
+      the constraint is included as part of the
+      <cxx-grammarterm>requires-expression</cxx-grammarterm>
+      (<cxx-ref to="expr.req"></cxx-ref>).
+      </p>
+    
     </cxx-section> <!-- dcl.spec.constr -->
 
     <cxx-section id="dcl.concept">
