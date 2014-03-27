@@ -734,8 +734,27 @@ void g();
     <code>x == y</code> and <code>is_integral&lt;T&gt;::value</code>.
     </cxx-example>
 
+    <p>
+    For a mapping <i>M</i> from a set <i>X</i> of atomic 
+    constraints to boolean values, let <i>G(M)</i> be the mapping 
+    from constraints to boolean values such that <i>G(M)(C)</i> is 
+    the result of substituting each atomic constraint A within 
+    <i>C</i> for <i>M(A)</i>.
+
+    For two constraints <code>P</code> and <code>Q</code>, let 
+    <i>X</i> be the set of all atomic constraints that
+    appear in <code>P</code> and <code>Q</code>.
+
+    <code>P</code> is said to <dfn>subsume</dfn> <code>Q</code> if, for 
+    every mapping <i>M</i> from members of <i>X</i> to boolean 
+    values for which <i>M(A) = M(B)</i> whenever <i>A</i> and <i>B</i> 
+    are equivalent, either <i>G(M)(P)</i> is false or <i>G(M)(Q)</i> is 
+    true (or both).
+    </p>
+
 
     <!-- Give examples of refinement, disjointness, and overlap -->
+    <!--
     <p>
     Given two constraints <code>P</code> and <code>Q</code> depending 
     on template parameters <code>T1</code>, ..., <code>Tn</code>, 
@@ -751,6 +770,7 @@ void g();
     does not subsume <code>P</code>.
     </cxx-example>
     </p>
+    -->
 
     <p>
     Two <cxx-grammarterm>constraint-expressions</cxx-grammarterm> 
