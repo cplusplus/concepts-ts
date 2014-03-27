@@ -637,67 +637,125 @@ template struct X<int>; // Error: int does not satisfy C.
       <bnf-rule>constraint-expression</bnf-rule>
         <bnf-alt>logical-or-expression</bnf-alt>
     </bnf-grammar>
-    </p>
+    Constraint expressions are required after a 
+    <cxx-grammarterm>requires-clause</cxx-grammarterm> and in the body or
+    initializer of a concept definition.</p>
 
     <p>
-    A <cxx-grammarterm>logical-or-expression</cxx-grammarterm> is 
-    a <cxx-grammarterm>constraint-expression</cxx-grammarterm> if 
-    it is a <cxx-grammarterm>constant-expression</cxx-grammarterm> 
-    of type <code>bool</code> whose operands to logical operators in 
-    its sub-expressions, when substituted have type <code>bool</code>.
+    A <cxx-grammarterm>logical-or-expression</cxx-grammarterm> is a
+    <cxx-grammarterm>constraint-expression</cxx-grammarterm> if, after 
+    substituting template arguments, the resulting expression
+    <ul>
+    <li>is a constant expression,</li>
+    <li>has type <code>bool</code>, and</li>
+    <li>the operands to every subexpression that is either a
+    <cxx-grammarterm>logical-or-expression</cxx-grammarterm> of the
+    form <code>P || Q</code> or a
+    <cxx-grammarterm>logical-and-expression</cxx-grammarterm> of the
+    form <code>P && Q</code> has type <code>bool</code>.</li>
+    </ul>
     <cxx-note>
     A <cxx-grammarterm>constraint-expression</cxx-grammarterm> 
     defines a subset of constant expressions over which certain 
     logical implications can be proven during translation.
-
-    <!-- TODO: This will move when I rewrite the bool rule. -->
-    The required contextual conversion to <code>bool</code> in a
-    <cxx-grammarterm>constraint-expression</cxx-grammarterm> prevents 
-    user-defined overloads of logical operators from being selected 
-    during overload resolution.
+    The requirement that operands to logical operators have type
+    <code>bool</code> prevents constraint expressions from finding
+    user-defined overloads of those operators and possibly subverting the
+    logical processing required by constraints.
     </cxx-note>
-    </p>
+    <!-- </p> -->
+
+    <p>A program that includes an expression not satisfying these requirements
+    in a context where a <cxx-grammarterm>constraint-expression</cxx-grammarterm>
+    is required is ill-formed.</p>
 
     <p>
-    <cxx-example class="inline">
+    <cxx-example>
+    Let <code>T</code> be a dependent type, <code>C</code> be a unary function 
+    concept, <code>P</code>, <code>Q</code>, and <code>R</code> be 
+    value-dependent expressions whose type is <code>bool</code>, and 
+    <code>M</code> and  <code>N</code> be integral expressions. All of the 
+    following expressions can be used as constraints:
     <cxx-codeblock>
-template&lt;typename T&gt;
-  requires is_integral&lt;T&gt;::value &amp;&amp; is_signed&lt;T&gt;::value
-void f(T x);
+C&lt;T&gt;()
+has_trait&lt;T&gt;::value // if value is a bool member
+P && Q
+P || (Q && R)
+M == N              // if the result type is bool
+M < N               // if the result type is bool
+M + N >= 0
+P || !(M < N)
+true
+false
     </cxx-codeblock>
-
-    <cxx-codeblock>
-constexpr int Fn() { return 1; }
-
-template&lt;typename T&gt;
-  requires Fn() // Error: Fn() is not a valid constraint
-void g(T x);
-    </cxx-codeblock>
+An expression of the form <code>M + N</code> is not a valid constraint when
+the arguments have type <code>int</code> since the expression's type is not
+<code>bool</code>. Using this expression as a constraint would make the
+program ill-formed.
     </cxx-example>
     </p>
 
-    <p>
-    A constraint is <dfn>satisfied</dfn> if it evaluates to 
-    <code>true</code>. Otherwise, the constraint is 
-    <dfn>unsatisfied</dfn>.
-    </p>
-
-
-    <p>
-    A subexpression of a 
+    <p>A subexpression of a
     <cxx-grammarterm>constraint-expression</cxx-grammarterm> that 
     calls a function concept or refers to a variable concept 
-    <cxx-ref to="dcl.concept"></cxx-ref> is a <dfn>concept check</dfn>. 
+    <cxx-ref to="dcl.concept"></cxx-ref> is a <dfn>concept check</dfn>.</p>
 
-    When processing a constraint containing a concept check, that 
-    concept check is replaced by the concept's definition, forming 
-    a new expression.
+    <p>Certain subexpressions of a
+    <cxx-grammarterm>constraint-expression</cxx-grammarterm> are 
+    considered <dfn>atomic constraint</dfn>s. A constraint is atomic 
+    if it is not:
+    <ul>
+    <li>a <cxx-grammarterm>logical-or-expression</cxx-grammarterm> of the form
+        <code>P || Q</code>,</li>
+    <li>a <cxx-grammarterm>logical-and-expression</cxx-grammarterm> of the form
+        <code>P && Q</code>,</li>
+    <li>a concept check,</li>
+    <li>a <cxx-grammarterm>requires-expression</cxx-grammarterm>, or</li>
+    <li>a subexpression of an atomic constraint.</li>
+    </ul>
 
-    For checks against function concepts, the replacement is done
-    by substituting the explicit template arguments into the return 
-    expression. For checks against variable concepts, the definition 
-    is formed by substituting the template arguments into the 
+    <p>Constraints are <dfn>simplified</dfn> by reducing them into 
+    expressions containing only logical operators and atomic constraints.
+    Concept checks and <cxx-grammarterm>requires-expression</cxx-grammarterm>s 
+    are replaced by simplified expressions.
+    <cxx-note>
+    An implementation is not required to normalize the constraint by rewriting
+    it in e.g., disjunctive normal form.
+    </cxx-note>
+    </p>
+
+    <p>A concept check that calls a concept function is simplified by
+    substituting the explicit template arguments into the named function
+    body's return expression. If the check names a variable concepts, the 
+    replacement is made by substituting the template arguments into the 
     variable's initializer.
+    </p>
+
+    <p>A <cxx-grammarterm>requires-expression</cxx-grammarterm> is simplified
+    by replacing it with the conjunction of constraints introduced by
+    the <cxx-grammarterm>requirement</cxx-grammarterm>s its 
+    <cxx-grammarterm>requirement-list</cxx-grammarterm>.
+    <cxx-note>
+    The atomic constraints introduced by a 
+    <cxx-grammarterm>requirement</cxx-grammarterm> have no explicit syntactic 
+    representation in the C++.
+    </cxx-note>
+    </p>
+ 
+ <!-- 
+    FIXME: Write a bunch of examples.
+
+
+    <cxx-example class="inline"> 
+    The expression 
+    <code>x==y &amp;&amp; has_trait&lt;T&gt;::value</code> 
+    has two atoms:
+    <code>x == y</code> and <code>is_integral&lt;T&gt;::value</code>.
+    The expression
+    <code>requires(T a, T b) { {a==b} -> bool; }</code> has two atomic
+    constraints. <code>a==b</code> must be a valid expression, and
+    <code>decltype((a==b)) must be implicitly convertible to <code>bool</code>.
+    </cxx-example>
     <cxx-example class="inline">
     <cxx-codeblock>
 template&lt;typename T&gt;
@@ -716,23 +774,12 @@ void g();
     </cxx-codeblock>
     </cxx-example>
     </p>
+ -->
 
-    <!-- TODO: This does not explain how requires clauses are actually
-         defined. A requires clause is a conjunction of atomic constraints
-         comprised of each valid expression, constexpr, noexcept, type,
-         and nested requirements. -->
-    <p>
-    Certain subexpressions of a 
-    <cxx-grammarterm>constraint-expression</cxx-grammarterm> are 
-    considered <dfn>atomic constraint</dfn>s. A constraint is atomic 
-    if it is not a <cxx-grammarterm>logical-and-expression</cxx-grammarterm> 
-    or a <cxx-grammarterm>logical-or-expression</cxx-grammarterm>.
-    <cxx-example class="inline">
-    The expression 
-    <code>x == y &amp;&amp; is_integral&lt;T&gt;::value</code> 
-    has two atoms:
-    <code>x == y</code> and <code>is_integral&lt;T&gt;::value</code>.
-    </cxx-example>
+
+    <p>A constraint is <dfn>satisfied</dfn> if, after substituting template
+    arguments, it evaluates to <code>true</code>. Otherwise, the constraint is 
+    <dfn>unsatisfied</dfn>.</p>
 
     <p>
     For a mapping <i>M</i> from a set <i>X</i> of atomic 
@@ -753,8 +800,8 @@ void g();
     </p>
 
 
-    <!-- Give examples of refinement, disjointness, and overlap -->
     <!--
+    FIXME: Write meaningful examples:
     <p>
     Given two constraints <code>P</code> and <code>Q</code> depending 
     on template parameters <code>T1</code>, ..., <code>Tn</code>, 
@@ -772,12 +819,10 @@ void g();
     </p>
     -->
 
-    <p>
-    Two <cxx-grammarterm>constraint-expressions</cxx-grammarterm> 
-    <code>P</code> and <code>Q</code> are equivalent if and only if 
-    <code>P</code> subsumes <code>Q</code> and 
-    <code>Q</code> subsumes <code>P</code>.
-    </p>
+    <p>Two <cxx-grammarterm>constraint-expressions</cxx-grammarterm>
+    <code>P</code> and <code>Q</code> are <dfn>logically equivalent</dfn> 
+    if and only if <code>P</code> subsumes <code>Q</code> and 
+    <code>Q</code> subsumes <code>P</code>. </p>
 
   </cxx-section> <!-- temp.constr -->
 
