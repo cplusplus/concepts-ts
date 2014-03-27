@@ -192,7 +192,7 @@ template&lt;Template T&gt; // T is a template template parameter
 
     <p>The associated constraints of the constrained template 
     parameter are synthesized according to the rules defined in
-    <cxx-ref to="dec.constr.form"></cxx-ref>.</p>
+    <cxx-ref to="dcl.constr"></cxx-ref>.</p>
 
     <p>The kind of the
     <cxx-grammarterm>constrained-default-argument</cxx-grammarterm> 
@@ -396,7 +396,7 @@ template&lt;typename T&gt;
         <h1>Matching of class template partial specializations</h1>
 
         <p>Modify 
-        <cxx-ref to="cxx" in="temp.class.spec.match"></cxx-ref>/2.</p>
+        <cxx-ref in="cxx" to="temp.class.spec.match"></cxx-ref>/2.</p>
 
         <p> A partial specialization matches a given actual template 
         argument list if the template arguments of the partial 
@@ -879,7 +879,7 @@ Mergeable{X, Y} // Error: not enough parameters
     and they match the template parameters in the declaration of the named
     concept. The associated constraints
     of the declaration are formed by applying the introduced parameters as
-    arguments to the named concept \ref{dcl.constr.form}.
+    arguments to the named concept (<cxx-ref to="dcl.constr"></cxx-ref>).
     <cxx-example class="inline">
     The following declaration
     <cxx-codeblock>
