@@ -54,14 +54,19 @@
       </p>
     </cxx-section>
 
+
     <cxx-section id="dcl.spec.constr">
       <h1>Constrained type specifiers</h1>
+
+      <!-- NOTE: Constrained type specifiers apply only to the declaration
+      of parameters and result-type constraints in requires expressions.
+      Constrained template parameters extend this notion for constrained
+      type and template parameters as well. -->
 
       <p>When an identifier is a 
       <cxx-grammarterm>concept-name</cxx-grammarterm>, it refers to a 
       function concept or variable concept 
-      (<cxx-ref to="dcl.concept"></cxx-ref>).
-      </p>
+      (<cxx-ref to="dcl.concept"></cxx-ref>).</p>
 
       <p>A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> is a
       <cxx-grammarterm>concept-id</cxx-grammarterm> followed by a sequence
@@ -71,7 +76,6 @@
       supplied (before the first template argument) before the name
       refers to a template specialization.
       <cxx-example class="inline">
-      For example:
       <cxx-codeblock>
 template&lt;typename T, typename U&gt;
   concept bool C = ...;
@@ -88,56 +92,23 @@ C&lt;char, int&gt; // A template-id
       </p>
 
       <p>A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> shall not
-      have an empty list of template arguments.
-      <cxx-example class="inline">
-      <cxx-codeblock>
-C<>; // Error: partial-concept-id with empty arguments
-      </cxx-codeblock>
-      </cxx-example>
-      </p>
+      have an empty list of template arguments.</p>
 
       <p>A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> introduces
-      constraints for a <cxx-grammarterm>template-parameter</cxx-grammarterm> 
-      or placeholder type depending on the context in which it appears. A
-      <cxx-grammarterm>constrained-type-name</cxx-grammarterm> can be used 
-      in the <cxx-grammarterm>type-specifier</cxx-grammarterm> of template 
-      parameters, a <cxx-grammarterm>result-type-requirement</cxx-grammarterm> 
-      in a <cxx-grammarterm>compound-requirement</cxx-grammarterm>, or wherever 
-      the <code>auto</code> specifier is used, except
-      <ul>
-        <li>as part of the type of a variable declaration,</li>
-        
-        <li>as part of a function's result type or 
-        <cxx-grammarterm>trailing-result-type</cxx-grammarterm>, </li>
-        
-        <li>in the place of <code>auto</code> within 
-        <code>decltype(auto)</code>, or</li>
-        
-        <li>as part of a 
-        <cxx-grammarterm>conversion-function-id</cxx-grammarterm>.</li>
-      </ul>
+      constraints for a <cxx-grammarterm>template-parameter</cxx-grammarterm>,
+      placeholder type, or <cxx-grammarterm>decltype-specifier</cxx-grammarterm>,
+      depending on the context in which it appears. 
+
+      A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> can be used 
+      in the <cxx-grammarterm>type-specifier</cxx-grammarterm> of a
+      <cxx-grammarterm>parameter-declaration</cxx-grammarterm> or in the
+      <cxx-grammarterm>trailing-return-type</cxx-grammarterm> of a
+      <cxx-grammarterm>compound-requirement</cxx-grammarterm>.
       </p>
 
-      <p>A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> that 
-      refers to a non-type concept shall not be used as part of a
-      <cxx-grammarterm>type-specifier</cxx-grammarterm> that introduces
-      a placeholder type.
-      <cxx-note>
-      Non-type concepts can be used as type specifiers of non-type template 
-      parameters and template template parameters.
-      </cxx-note>
-      <cxx-example class="inline">
-      <cxx-codeblock>
-template&lt;int N&gt;
-  concept bool Prime() { ... }
+      <p>A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
+      shall not refer to a non-type concept.</p>
 
-void f(Prime n)   // Error
-
-template&lt;Prime P&gt; // Ok
-  void g();
-      </cxx-codeblock>
-      </cxx-example>
-      </p>
 
       <cxx-section id="dcl.constr.form">
         <h1>Constraint formation</h1>
