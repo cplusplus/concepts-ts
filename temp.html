@@ -112,14 +112,6 @@ template&lt;Integral T&gt;
         <bnf-terminal>...</bnf-terminal><bnf-opt></bnf-opt>
         identifier
         </bnf-alt>
-
-        <bnf-alt>
-        constrained-type-name
-        <bnf-terminal>...</bnf-terminal><bnf-opt></bnf-opt>
-        identifier
-        <bnf-terminal>=</bnf-terminal>
-        constrained-default-argument
-        </bnf-alt>
       </ins>
     </bnf-grammar>
 
@@ -127,10 +119,61 @@ template&lt;Integral T&gt;
     <cxx-ref in="cxx" to="temp.param"></cxx-ref>/15.
 
     <p>A <cxx-grammarterm>constrained-parameter</cxx-grammarterm> defines 
-    its identifier to be a template parameter. The declared template 
-    parameter whose kind matches that of the first template parameter, 
-    called the <dfn>prototype parameter</dfn>, of the concept referred 
-    to by the <cxx-grammarterm>constrained-type-name</cxx-grammarterm>.
+    its identifier to be a template parameter. 
+
+    The concept definition identified by the 
+    <cxx-grammarterm>concept-name</cxx-grammarterm> is called the 
+    <dfn>constraining concept</dfn>, and its first template parameters
+    is called the <dfn>prototype parameter</dfn>.
+    
+    The kind of the declared parameter matches that the prototype parameter.
+    
+    If the declared parameter is a non-type template parameter, then 
+    its type is the same as that of the prototype parameter.
+
+    If the declared parameter is a template template parameter, then
+    it has the same number and kind of template parameters as the
+    prototype parameter.
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool C1 = ...;
+template&lt;int N&gt;
+  concept bool C2 = ...;
+template&lt;template&lt;typename&gt; class X&gt;
+  concept bool C3 = ...;
+
+template&lt;C1 T&gt; void f(); // T is a type parameter
+template&lt;C2 N&gt; void g(); // N has type int
+template&lt;C2 X&gt; void h(); // X is a template with one type parameter
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
+    <p>If the prototype parameter declares a parameter pack, then the
+    declared parameter also declares a parameter pack. The declaration
+    of the <cxx-grammarterm>constrained-parameter</cxx-grammarterm> shall
+    include ellipses.
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template<typename... Ts>
+  concept bool X = ...;
+
+template<X... Xs> void f(); // Xs is a parameter pack
+template<X Xs> void f();    // Error: must include ...
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+    
+    <p>A constrained template parameter introduces an associated constraint
+    of the template declaration. The rules for producing this constraint
+    from the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> are
+    described in section <cxx-ref to="dcl.constr"></cxx-ref>. For the
+    purpose of generating constraints, the declared parameter is used as
+    the constrained type.
+    </p>
+
+
     <cxx-note>
     The rules for declaring the parameter are:
     <ul>

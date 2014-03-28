@@ -75,15 +75,23 @@
       If a <cxx-grammarterm>constrained-type-name</cxx-grammarterm> is
       used in any other context, the program is ill-formed.</p>
 
-
       <p>When an identifier is a 
-      <cxx-grammarterm>concept-name</cxx-grammarterm>, it refers to a 
-      function concept or variable concept 
-      (<cxx-ref to="dcl.concept"></cxx-ref>).</p>
+      <cxx-grammarterm>concept-name</cxx-grammarterm>, it refers to one or
+      more function concepts or a variable concept. 
+
+      At least one concept referred
+      to by the <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
+      shall be a type concept (<cxx-ref to="dcl.concept"></cxx-ref>).
+      <cxx-note>
+      Function concepts can be overloaded to accept different numbers and
+      kinds of template arguments.
+      </cxx-note>
+      </p>
 
       <p>A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> is a
       <cxx-grammarterm>concept-id</cxx-grammarterm> followed by a sequence
       of template arguments.
+      
       A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> does not refer
       to template specialization; the template argument list must be
       adjusted by adding a template argument before the first of the
@@ -105,9 +113,8 @@ C&lt;char, int&gt; // A template-id
       </cxx-example>
       </p>
 
-      <p>A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
-      shall not refer to a non-type concept.</p>
-
+      <p>A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> shall not
+      have an empty list of template arguments.</p>
 
       <p>The type designated by the specifier is called the
       <dfn>constrained type</dfn>. The designated type depends on the context 
@@ -128,40 +135,56 @@ C&lt;char, int&gt; // A template-id
       </ul>
       </p>
 
-      <p>A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> shall not
-      have an empty list of template arguments.</p>
-
-
       <p>A <cxx-grammarterm>constrained-type-name</cxx-grammarterm> introduces
       a constraint. The form of that expression depends whether the
       <cxx-grammarterm>constrained-type-name</cxx-grammarterm> is a
       <cxx-grammarterm>concept-name</cxx-grammarterm> or a
       <cxx-grammarterm>partial-concept-id</cxx-grammarterm>, and
-      also on the concept referred to by the
+      also on the concepts referred to by the
       <cxx-grammarterm>concept-name</cxx-grammarterm>.
-      </p>
 
-      <p>Let <code>C</code> be the concept referred to by the
-      <cxx-grammarterm>concept-name</cxx-grammarterm> in the
-      <cxx-grammarterm>constrained-type-name</cxx-grammarterm>,
-      <code>X</code> be the constrained type designated by the
-      specifier, and 
-      <code>Args</code> be a sequence of template
-      arguments. 
+      A <cxx-grammarterm>concept-name</cxx-grammarterm> refers to one
+      or more concepts. The following rules are applied to each concept
+      having the same.</p>
 
-      If the specifier is a
+      <p>Let <code>C</code> be a concept referred to by the
+      <cxx-grammarterm>concept-name</cxx-grammarterm>.
+      <code>T</code> be the constrained type, and 
+      <code>Args</code> be a sequence of template arguments.
+
+      If the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> is a
       <cxx-grammarterm>partial-concept-id</cxx-grammarterm>, then
       <code>Args</code> is its 
       <cxx-grammarterm>template-argument-list</cxx-grammarterm>, otherwise
       <code>Args</code> is the empty sequence.
 
-      If <code>C</code> is a variable concept,
-      <cxx-grammarterm>template-id</cxx-grammarterm> of the form
-      <code>C&lt;T, Args&gt;</code>.
+      The <dfn>candidate constraint</dfn> is a 
+      <cxx-grammarterm>template-id</cxx-grammarterm> having the form
+      <code>C&lt;T, Args&gt;</code>. If <code>C&lt;T, Args&gt;</code> does
+      not refer to a template specialization, the candidate constraint
+      is rejected.
+      <cxx-note>
+      If <code>Args</code> is empty, the resulting 
+      <cxx-grammarterm>template-id</cxx-grammarterm> the form C&lt;T, Args&gt;.
+      </cxx-note>
+      <cxx-note>
+      The expression <code>C&lt;T, Args&gt;</code> may not refer to a valid
+      template specialization if <code>Args</code> contains too many or to 
+      few template arguments for <code>C</code> or if <code>C's</code> first
+      template parameter is a non-type or template template parameter.
+      </cxx-note>
 
-      If <code>C</code> is a function concept, then the
+      <p>If, after constructing candidate constraints for each concept
+      named by the <cxx-grammarterm>concept-name</cxx-grammarterm>, there
+      are no candidates or more than one candidate, the program is 
+      ill-formed.</p>
+
+      <p>The <dfn>introduced constraint</dfn> is constructed from the
+      remaining candidate. If <code>C</code> is a function concept, then the
       resulting constraint is a function call of the form
-      <code>C&lt;T, Args&gt;()</code>. </p>
+      <code>C&lt;T, Args&gt;()</code>. Otherwise, the introduced constraint
+      is the same as the remaining candidate.
+      </p>
 
       <p>
       <cxx-example>
@@ -274,6 +297,14 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
       </cxx-codeblock>
       </cxx-example>
       </p>
+
+      <p>A <dfn>type concept</dfn> is a concept whose first template
+      parameter is a <cxx-grammarterm>type parameter</cxx-grammarterm>, but 
+      not a template template parameter. Otherwise, the concept is
+      a <dfn>non-type concept</dfn>.
+      </p>
+
+      <!-- FIXME: This isn't right -->
 
       <p>If a program declares a non-concept overload of a concept 
       definition with the same template parameters and no function 
