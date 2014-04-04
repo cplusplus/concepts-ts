@@ -1,0 +1,3691 @@
+<!DOCTYPE html>
+<!-- Sources at https://github.com/cplusplus/concepts-ts -->
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><!--[if lte IE 8]><script>document.createElement("nav");document.createElement("section");document.createElement("time");document.createElement("CXX-TITLEPAGE");document.createElement("CXX-DOCNUM");document.createElement("CXX-REVISES");document.createElement("CXX-EDITOR");document.createElement("CXX-EMAIL");document.createElement("CXX-TOC");document.createElement("CXX-CLAUSE");document.createElement("CXX-SECTION");document.createElement("CXX-REF");document.createElement("CXX-EDNOTE");document.createElement("CXX-FOREIGN-INDEX");document.createElement("CXX-GRAMMARTERM");document.createElement("CXX-NOTE");document.createElement("BNF-GRAMMAR");document.createElement("BNF-RULE");document.createElement("BNF-ALT");document.createElement("BNF-TERMINAL");document.createElement("BNF-OPT");document.createElement("CXX-EXAMPLE");document.createElement("CXX-CODEBLOCK");document.createElement("CXX-PUBLISH-BUTTON");</script><![endif]--><style>template {display: none !important;} /* injected by platform.js */</style><style>element {display: none !important;} /* injected by platform.js */</style><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; } 
+</style><style shim-shadowdom-css="">style { display: none !important; }
+cxx-function {
+	display: block;
+}
+
+cxx-function:not(:last-child) {
+	margin-bottom: 3ex;
+}
+
+cxx-function > dl {
+	margin: 0px 0px 0px 2em;
+}
+
+cxx-function > pre {
+	margin: 0px;
+}cxx-signature {
+	padding-left: 2em; display: block; text-indent: -2em;
+}
+
+cxx-signature.formatted {
+	text-indent: 0px;
+}cxx-attribute {
+	display: block; margin-top: 0.5em; margin-bottom: 0.5em;
+}
+
+cxx-attribute dt {
+	float: left; font-style: italic; font-weight: normal; padding-right: 1ex;
+}
+
+cxx-attribute dd {
+	margin-left: 0em;
+}
+
+cxx-attribute dd > ul, cxx-attribute dd > ol {
+	clear: left;
+}cxx-requires {
+	display: block; margin-top: 0.5em; margin-bottom: 0.5em;
+}
+
+cxx-requires dt {
+	float: left; font-style: italic; font-weight: normal; padding-right: 1ex;
+}
+
+cxx-requires dd {
+	margin-left: 0em;
+}
+
+cxx-requires dd > ul, cxx-requires dd > ol {
+	clear: left;
+}cxx-preconditions {
+	display: block; margin-top: 0.5em; margin-bottom: 0.5em;
+}
+
+cxx-preconditions dt {
+	float: left; font-style: italic; font-weight: normal; padding-right: 1ex;
+}
+
+cxx-preconditions dd {
+	margin-left: 0em;
+}
+
+cxx-preconditions dd > ul, cxx-preconditions dd > ol {
+	clear: left;
+}cxx-effects {
+	display: block; margin-top: 0.5em; margin-bottom: 0.5em;
+}
+
+cxx-effects dt {
+	float: left; font-style: italic; font-weight: normal; padding-right: 1ex;
+}
+
+cxx-effects dd {
+	margin-left: 0em;
+}
+
+cxx-effects dd > ul, cxx-effects dd > ol {
+	clear: left;
+}cxx-synchronization {
+	display: block; margin-top: 0.5em; margin-bottom: 0.5em;
+}
+
+cxx-synchronization dt {
+	float: left; font-style: italic; font-weight: normal; padding-right: 1ex;
+}
+
+cxx-synchronization dd {
+	margin-left: 0em;
+}
+
+cxx-synchronization dd > ul, cxx-synchronization dd > ol {
+	clear: left;
+}cxx-postconditions {
+	display: block; margin-top: 0.5em; margin-bottom: 0.5em;
+}
+
+cxx-postconditions dt {
+	float: left; font-style: italic; font-weight: normal; padding-right: 1ex;
+}
+
+cxx-postconditions dd {
+	margin-left: 0em;
+}
+
+cxx-postconditions dd > ul, cxx-postconditions dd > ol {
+	clear: left;
+}cxx-returns {
+	display: block; margin-top: 0.5em; margin-bottom: 0.5em;
+}
+
+cxx-returns dt {
+	float: left; font-style: italic; font-weight: normal; padding-right: 1ex;
+}
+
+cxx-returns dd {
+	margin-left: 0em;
+}
+
+cxx-returns dd > ul, cxx-returns dd > ol {
+	clear: left;
+}cxx-throws {
+	display: block; margin-top: 0.5em; margin-bottom: 0.5em;
+}
+
+cxx-throws dt {
+	float: left; font-style: italic; font-weight: normal; padding-right: 1ex;
+}
+
+cxx-throws dd {
+	margin-left: 0em;
+}
+
+cxx-throws dd > ul, cxx-throws dd > ol {
+	clear: left;
+}cxx-complexity {
+	display: block; margin-top: 0.5em; margin-bottom: 0.5em;
+}
+
+cxx-complexity dt {
+	float: left; font-style: italic; font-weight: normal; padding-right: 1ex;
+}
+
+cxx-complexity dd {
+	margin-left: 0em;
+}
+
+cxx-complexity dd > ul, cxx-complexity dd > ol {
+	clear: left;
+}cxx-exception-safety {
+	display: block; margin-top: 0.5em; margin-bottom: 0.5em;
+}
+
+cxx-exception-safety dt {
+	float: left; font-style: italic; font-weight: normal; padding-right: 1ex;
+}
+
+cxx-exception-safety dd {
+	margin-left: 0em;
+}
+
+cxx-exception-safety dd > ul, cxx-exception-safety dd > ol {
+	clear: left;
+}cxx-remarks {
+	display: block; margin-top: 0.5em; margin-bottom: 0.5em;
+}
+
+cxx-remarks dt {
+	float: left; font-style: italic; font-weight: normal; padding-right: 1ex;
+}
+
+cxx-remarks dd {
+	margin-left: 0em;
+}
+
+cxx-remarks dd > ul, cxx-remarks dd > ol {
+	clear: left;
+}cxx-error-conditions {
+	display: block; margin-top: 0.5em; margin-bottom: 0.5em;
+}
+
+cxx-error-conditions dt {
+	float: left; font-style: italic; font-weight: normal; padding-right: 1ex;
+}
+
+cxx-error-conditions dd {
+	margin-left: 0em;
+}
+
+cxx-error-conditions dd > ul, cxx-error-conditions dd > ol {
+	clear: left;
+}cxx-notes {
+	display: block; margin-top: 0.5em; margin-bottom: 0.5em;
+}
+
+cxx-notes dt {
+	float: left; font-style: italic; font-weight: normal; padding-right: 1ex;
+}
+
+cxx-notes dd {
+	margin-left: 0em;
+}
+
+cxx-notes dd > ul, cxx-notes dd > ol {
+	clear: left;
+}cxx-section {
+	display: block;
+}
+
+cxx-section:target {
+	background-color: inherit;
+}
+
+cxx-section:target > section > h1 {
+	background-color: rgb(255, 238, 221);
+}
+
+cxx-section header > h1 {
+	display: inline; font-size: 100%;
+}
+
+cxx-section header {
+	font-weight: bold; margin-top: 20px; margin-bottom: 20px;
+}
+
+cxx-section header:after {
+	clear: both; display: block; content: " "; height: 0px;
+}cxx-clause {
+	display: block;
+}
+
+cxx-clause:target {
+	background-color: inherit;
+}
+
+cxx-clause:target > section > h1 {
+	background-color: rgb(255, 238, 221);
+}
+
+cxx-clause header > h1 {
+	display: inline; font-size: 100%;
+}
+
+cxx-clause header {
+	font-weight: bold; margin-top: 20px; margin-bottom: 20px;
+}
+
+cxx-clause header:after {
+	clear: both; display: block; content: " "; height: 0px;
+}[is=cxx-table] {
+	margin-left: auto; margin-right: auto; border-collapse: collapse; border: thin solid black;
+}
+
+[is=cxx-table] caption {
+	white-space: nowrap;
+}
+
+[is=cxx-table] caption caption {
+	display: inline;
+}
+
+[is=cxx-table] th, [is=cxx-table] td {
+	border-style: solid none; border-color: black; border-width: thin; padding: 0px 0.25em;
+}
+
+[is=cxx-table].column-rules th, [is=cxx-table].column-rules td {
+	border-left-style: solid; border-right-style: solid;
+}
+
+[is=cxx-table] th {
+	border-bottom: medium double;
+}
+
+[is=cxx-table].center td {
+	text-align: center;
+}
+
+[is=cxx-table].list td {
+	border: medium none;
+}cxx-figure {
+	margin-left: auto; margin-right: auto;
+}
+
+cxx-figure figcaption {
+	white-space: nowrap; text-align: center;
+}
+
+cxx-figure figcaption figcaption {
+	display: inline;
+}[is=cxx-definition-section] dt {
+	font-weight: bold;
+}
+
+[is=cxx-definition-section] dd {
+	margin-left: 0px;
+}cxx-toc {
+	display: block;
+}
+
+cxx-toc nav > ol {
+	font-weight: bold;
+}
+
+cxx-toc ol {
+	font-weight: normal; padding-left: 0px; margin-left: 0px;
+}
+
+cxx-toc li {
+	list-style-type: none;
+}
+
+cxx-toc .marker {
+	display: inline-block;
+}
+
+cxx-toc li .marker {
+	width: 2em; text-align: left;
+}
+
+cxx-toc ol ol {
+	margin-left: 2em;
+}
+
+cxx-toc li li .marker {
+	width: 3em;
+}
+
+cxx-toc ol ol ol {
+	margin-left: 3em;
+}
+
+cxx-toc li li li .marker {
+	width: 3.5em;
+}
+
+cxx-toc ol ol ol ol {
+	margin-left: 3.5em;
+}
+
+cxx-toc li li li li .marker {
+	width: 4.5em;
+}polymer-xhr {
+	display: none;
+}cxx-titlepage {
+	display: block; min-height: 100%;
+}
+
+cxx-titlepage {
+	position: relative;
+}
+
+cxx-titlepage table {
+	position: absolute; right: 0px; top: 0px;
+}
+
+cxx-titlepage h1 {
+	position: absolute; top: 40%;
+}
+
+cxx-titlepage p.warning {
+	position: absolute; bottom: 5%;
+}
+
+cxx-titlepage h1 {
+	text-align: center;
+}
+
+cxx-titlepage th {
+	text-align: left; vertical-align: top;
+}cxx-ednote {
+	display: block;
+}
+
+cxx-ednote aside {
+	float: right; max-width: 40%; margin: 1ex; border: 1px dashed rgb(136, 136, 136); padding: 1ex; background-color: rgb(238, 238, 238);
+}cxx-note .nowrap {
+	white-space: nowrap;
+}cxx-footnote {
+	font-family: serif; white-space: normal; text-indent: initial;
+}
+
+@media screen {
+cxx-footnote aside {
+	float: right; max-width: 30%; margin-left: 1em;
+}
+
+
+}
+
+@media print {
+cxx-footnote sup, cxx-footnote .marker {
+	display: none;
+}
+
+aside {  }
+
+
+}cxx-example {
+	display: block;
+}
+
+cxx-example.inline {
+	display: inline;
+}
+
+cxx-example .nowrap {
+	white-space: nowrap;
+}cxx-publish-button {
+	display: block;
+}</style>
+  <meta charset="utf-8">
+  </head><body><preloader style="display: none;"></preloader><style>[touch-action="none"]{ -ms-touch-action: none; touch-action: none; touch-action-delay: none; }
+body ^^ [touch-action="none"]{ -ms-touch-action: none; touch-action: none; touch-action-delay: none; }
+[touch-action="auto"]{ -ms-touch-action: auto; touch-action: auto; touch-action-delay: none; }
+body ^^ [touch-action="auto"]{ -ms-touch-action: auto; touch-action: auto; touch-action-delay: none; }
+[touch-action="pan-x"]{ -ms-touch-action: pan-x; touch-action: pan-x; touch-action-delay: none; }
+body ^^ [touch-action="pan-x"]{ -ms-touch-action: pan-x; touch-action: pan-x; touch-action-delay: none; }
+[touch-action="pan-y"]{ -ms-touch-action: pan-y; touch-action: pan-y; touch-action-delay: none; }
+body ^^ [touch-action="pan-y"]{ -ms-touch-action: pan-y; touch-action: pan-y; touch-action-delay: none; }
+[touch-action="pan-x pan-y"],[touch-action="pan-y pan-x"]{ -ms-touch-action: pan-x pan-y; touch-action: pan-x pan-y; touch-action-delay: none; }
+body ^^ [touch-action="pan-x pan-y"],body ^^ [touch-action="pan-y pan-x"]{ -ms-touch-action: pan-x pan-y; touch-action: pan-x pan-y; touch-action-delay: none; }
+</style>
+  <link rel="import" href="bower_components/cxx-html-doc-framework/framework.html">
+<style shim-shadowdom-css="">@page {
+    margin: 10%;
+    @top-left { content: "© ISO/IEC"; font-size: 10pt; }
+    @top-right { content: string(docnum); font-weight: bold; font-size: 10pt; }
+    @bottom-left { content: string(current-section, last); font-size: 10pt; }
+    @bottom-right { content: counter(page); font-size: 10pt; }
+}
+cxx-titlepage { page: title; page-break-after: always; }
+@page title {
+    @top-left { content: "© ISO 2014 — All rights reserved"; }
+    @top-right { content: normal; }
+    @bottom-left { content: normal; }
+    @bottom-right { content: normal; }
+}
+
+@media screen {
+    body { max-width: 7in;
+           
+           margin-left: 2em }
+}
+
+@media print {
+    html { font-size: 10pt; }
+    pre,code { font-size: 8pt; }
+    
+    a[href] { text-decoration:none; }
+}
+
+
+html, body {
+    height: 100%;
+    text-align: justify;
+}
+
+cxx-docnum { string-set: docnum content(); }
+
+cxx-clause { page-break-before: always; }
+@media screen {
+    cxx-clause, cxx-toc { margin-top: 3em; }
+}
+
+cxx-clause   header { font-size: 150%; }
+cxx-toc   h1 { font-size: 150%; }
+cxx-clause cxx-section   header { font-size: 117%; }
+cxx-clause cxx-section cxx-section   header { font-size: 100%; }
+
+[data-bookmark-label] { bookmark-label: attr(data-bookmark-label); }
+h1 { bookmark-level: 1; }
+cxx-toc   h1 { bookmark-level: 2; }
+cxx-clause h1 { bookmark-level: 2; }
+cxx-clause cxx-section h1 { bookmark-level: 3; }
+cxx-clause cxx-section cxx-section h1 { bookmark-level: 4; }
+
+*   .section-number { string-set: current-section "§ " content(); }
+
+p {margin-top: .5em; margin-bottom: .5em}
+p:first-child, ul, ol {margin-top: 0}
+
+[para_num]::before { content: attr(para_num); float: left;
+                     font-size: 70%; margin-left: -2.5em; width: 1.5em; text-align: right; }
+
+del {text-decoration: line-through; color: #8B0040;}
+ins {text-decoration: underline; color: #005100;}
+
+pre { 
+    margin-left: 1em; 
+    margin-top: .5em;
+    margin-bottom: .5em;
+}
+pre > code { display: inline-block; }
+
+
+
+ul {
+    list-style:none;
+    margin-left:0;
+}
+ul li:before {
+    content: "\2014";
+    padding-right: .5em;
+}
+
+
+@media print {
+    
+    cxx-toc   a[href]::after { content: leader(" . ") target-counter(attr(href), page); }
+
+    cxx-footnote   aside { float: footnote; footnote-policy: line; }
+}</style><title>Information technology - Programming languages, their environments and 
+  system software interfaces - C++ Extensions for Concepts, Working Draft</title>
+
+<cxx-titlepage stage="draft">
+    
+    <table>
+      
+        <tbody><tr><th>Document Number:</th><td><cxx-docnum>N3929</cxx-docnum></td></tr>
+      
+      
+        <tr><th>Date:</th><td><time pubdate="">2014-02-14</time></td></tr>
+      
+      
+        <tr><th>Revises:</th><td><cxx-revises><a href="http://isocpp.org/files/papers/N3848.html">N3889</a></cxx-revises></td></tr>
+      
+      
+        <tr><th>Editor:</th><td><cxx-editor>
+    Andrew Sutton<br>
+    University of Akron<br>
+    <cxx-email><a href="mailto:asutton@uakron.edu">asutton@uakron.edu</a></cxx-email>
+  </cxx-editor></td></tr>
+      
+    </tbody></table>
+    <h1>Working Draft, Information technology – Programming languages, 
+their environments and system software interfaces – Information 
+technology - Programming languages, their environments and 
+  system software interfaces - C++ Extensions for Concepts</h1>
+    
+      <p class="warning"><strong>Note: this is an early draft. It’s known to be
+      incomplet and incorrekt, and it has lots of b<span style="margin-left: -1.2pt; margin-right: 1pt">a</span>d<span style="width:1.5em"> </span>for<span style="margin-left:-3pt; margin-right:0.6pt">mat</span>ti<span style="position:relative; top:-0.15ex">n</span>g.</strong></p>
+    
+  </cxx-titlepage>
+
+<cxx-toc>
+    
+    <nav>
+      <h1>Contents</h1>
+      
+        
+          <ol>
+            
+              <li><span class="marker">1</span><a href="#intro">General</a>
+        
+          <ol>
+            
+              <li><span class="marker">1.1</span><a href="#general.scope">Scope</a>
+        
+      </li>
+            
+              <li><span class="marker">1.2</span><a href="#intro.refs">Normative references</a>
+        
+      </li>
+            
+              <li><span class="marker">1.3</span><a href="#intro.defns">Terms and definitions</a>
+        
+      </li>
+            
+              <li><span class="marker">1.4</span><a href="#intro.compliance">Implementation compliance</a>
+        
+      </li>
+            
+              <li><span class="marker">1.5</span><a href="#intro.ack">Acknowledgments</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">2</span><a href="#lex">Lexical conventions</a>
+        
+          <ol>
+            
+              <li><span class="marker">2.1</span><a href="#lex.key">Keywords</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">3</span><a href="#expr">Expressions</a>
+        
+          <ol>
+            
+              <li><span class="marker">3.1</span><a href="#expr.prim">Primary expressions</a>
+        
+          <ol>
+            
+              <li><span class="marker">3.1.1</span><a href="#expr.prim.lambda">Lambda expressions</a>
+        
+      </li>
+            
+              <li><span class="marker">3.1.2</span><a href="#expr.req">Requires expressions</a>
+        
+          <ol>
+            
+              <li><span class="marker">3.1.2.1</span><a href="#expr.req.simple">Simple requirements</a>
+        
+      </li>
+            
+              <li><span class="marker">3.1.2.2</span><a href="#expr.req.type">Type requirements</a>
+        
+      </li>
+            
+              <li><span class="marker">3.1.2.3</span><a href="#expr.req.nested">Nested requirements</a>
+        
+      </li>
+            
+              <li><span class="marker">3.1.2.4</span><a href="#expr.req.compound">Compound requirements</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">4</span><a href="#dcl.dcl">Declarations</a>
+        
+          <ol>
+            
+              <li><span class="marker">4.1</span><a href="#dcl.spec">Specifiers</a>
+        
+          <ol>
+            
+              <li><span class="marker">4.1.1</span><a href="#dcl.type.simple">Simple type specifiers</a>
+        
+      </li>
+            
+              <li><span class="marker">4.1.2</span><a href="#dcl.spec.auto">auto specifier</a>
+        
+      </li>
+            
+              <li><span class="marker">4.1.3</span><a href="#dcl.spec.constr">Constrained type specifiers</a>
+        
+      </li>
+            
+              <li><span class="marker">4.1.4</span><a href="#dcl.concept">concept specifier</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">5</span><a href="#dcl.decl">Declarators</a>
+        
+          <ol>
+            
+              <li><span class="marker">5.1</span><a href="#dcl.meaning">Meaning of declarators</a>
+        
+          <ol>
+            
+              <li><span class="marker">5.1.1</span><a href="#dcl.fct">Functions</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">6</span><a href="#temp">Templates</a>
+        
+          <ol>
+            
+              <li><span class="marker">6.1</span><a href="#temp.param">Template parameters</a>
+        
+          <ol>
+            
+              <li><span class="marker">6.1.1</span><a href="#temp.names">Template names</a>
+        
+      </li>
+            
+              <li><span class="marker">6.1.2</span><a href="#temp.arg">Template arguments</a>
+        
+          <ol>
+            
+              <li><span class="marker">6.1.2.1</span><a href="#temp.arg.template">Template template arguments</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">6.1.3</span><a href="#temp.decls">Template declarations</a>
+        
+          <ol>
+            
+              <li><span class="marker">6.1.3.1</span><a href="#temp.class">Class templates</a>
+        
+          <ol>
+            
+              <li><span class="marker">6.1.3.1.1</span><a href="#temp.mem.func">Member functions of class templates</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">6.1.3.2</span><a href="#temp.friend">Friends</a>
+        
+      </li>
+            
+              <li><span class="marker">6.1.3.3</span><a href="#temp.class.spec">Class template partial specialization</a>
+        
+          <ol>
+            
+              <li><span class="marker">6.1.3.3.1</span><a href="#temp.class.spec.match">Matching of class template partial specializations</a>
+        
+      </li>
+            
+              <li><span class="marker">6.1.3.3.2</span><a href="#temp.class.order">Partial ordering of class template specializations</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">6.1.3.4</span><a href="#temp.fct">Function templates</a>
+        
+          <ol>
+            
+              <li><span class="marker">6.1.3.4.1</span><a href="#temp.deduct">Template argument deduction</a>
+        
+      </li>
+            
+              <li><span class="marker">6.1.3.4.2</span><a href="#temp.over.link">Function template overloading</a>
+        
+      </li>
+            
+              <li><span class="marker">6.1.3.4.3</span><a href="#temp.func.order">Partial ordering of function templates</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">6.1.4</span><a href="#temp.spec">Template instantiation and specialization</a>
+        
+          <ol>
+            
+              <li><span class="marker">6.1.4.1</span><a href="#temp.inst">Implicit instantiation</a>
+        
+      </li>
+            
+              <li><span class="marker">6.1.4.2</span><a href="#temp.explicit">Explicit instantiation</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">6.1.5</span><a href="#temp.constr">Template constraints</a>
+        
+      </li>
+            
+              <li><span class="marker">6.1.6</span><a href="#concept.intro">Concept introductions</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+          </ol>
+        
+      
+    </nav>
+  </cxx-toc>
+
+
+<cxx-clause id="intro">
+    
+
+    <section>
+      <header><span class="section-number">1</span> <h1 data-bookmark-label="1 General">General</h1> <span style="float:right"><a href="#intro">[intro]</a></span></header>
+      
+  
+
+
+  <cxx-section id="general.scope">
+    
+
+    <section>
+      <header><span class="section-number">1.1</span> <h1 data-bookmark-label="1.1 Scope">Scope</h1> <span style="float:right"><a href="#general.scope">[general.scope]</a></span></header>
+      
+    
+    <p para_num="1" id="general.scope.1">This technical specification describes extensions to the C++ 
+    Programming language (<cxx-ref in="" to="intro.refs"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="intro.refs" elem="{{toElem}}"></cxx-get-element-by-id><a title="intro.refs" href="#intro.refs">1.2</a></cxx-ref>) that
+    enable the specification and checking of constraints on template 
+    arguments, and the ability to overload functions and specialize
+    templates based on those constraints. These extensions include 
+    new syntactic forms and modifications to existing language semantics.</p>
+
+    <p para_num="2" id="general.scope.2">International Standard, ISO/IEC 14882, provides important context
+    and specification for this Technical Specification. This document as 
+    written as a set of changes against that specification. Instructions
+    to modify or add paragraphs are written as explicit instructions. 
+    Modifications made directly to existing text from the International
+    Standard use <ins>underlining</ins> to represent added text and
+    <del>strikethrough</del> to represent deleted text.</p>
+  
+    </section>
+  </cxx-section>
+
+  <!--
+  <cxx-section id="intro.intro">
+    <h1>Introduction</h2>
+    
+    <p>C++ has long provided language support for generic programming in 
+    the form of templates. 
+    
+    However, these templates are unconstrained, allowing any type or value 
+    to be substituted for a template argument, often resulting in compiler 
+    errors. 
+    
+    What is lacking is a specification of an interface for a template, 
+    separate from its implementation, so that a use of a template can be 
+    selected among alternative templates and checked in isolation.</p>
+
+    <p>A concept is a predicate that defines the syntactic and semantic 
+    requirements on template arguments. 
+    A template argument that satisfies these requirements is said to be a 
+    <emph>model</emph> of that concept, or that the argument 
+    <emph>models</emph> the concept.
+    
+    Syntactic requirements specify the set of valid expressions that can 
+    be used with conforming types and the types associated with those 
+    expressions. 
+    
+    Semantic requirements describe the required behavior of those syntactic 
+    requirements and also provide complexity guarantees. 
+    
+    Concepts are the basis of generic programming in C++ and support the 
+    ability to reason about generic algorithms and data structures 
+    independently of their instantiation by concrete template arguments.</p>
+
+    <p>Concepts are not new to C++ or even to C (where Integral and 
+    Arithmetic are long-established concepts used to specify the language 
+    rules for types); the idea of stating and enforcing type requirements 
+    on template arguments has a long history. For example, several methods are 
+    discussed in <emph>The Design and Evolution of C++</emph> (1994). 
+    Concepts were a part of documentation of the STL and are used to 
+    express requirements in the C++ standard, ISO/IEC 14882. 
+    For example, Table 106 gives the definition of the STL 
+    <code>Iterator</code> concept as a list of valid expressions and their 
+    result types, operational semantics, and pre- and  post-conditions.</p>
+
+    <p>This specification describes a solution to the problem of 
+    constraining template arguments in the form "Concepts Lite." The 
+    goals of "Concepts Lite" are to
+    <ul>
+      <li>allow programmers to directly state the requirements of a set of 
+      template arguments as part of a template's interface,</li>
+
+      <li>support function overloading and class template specialization 
+        based on constraints,</li>
+
+      <li>seamlessly integrates a number of orthogonal features to provide
+      uniform syntax and semantics for generic lambdas, <code>auto</code>
+      declarations, and result type deduction,</li>
+
+      <li>fundamentally improves diagnostics by checking template arguments 
+      in terms of stated intent at the point of use,</li>
+
+      <li>do all of this without any runtime overhead or longer compilation 
+      times, when comparing similar programs using 
+      <code>enable_if</code>.</li>
+    </ul>
+    "Concepts Lite" does not provide facilities for checking template 
+    definitions separately from their instantiation, nor does it provide 
+    facilities for specifying or checking semantic requirements.</p>
+
+    <p>
+    <cxx-example>
+    The following program demonstrates a number of the C++ extensions
+    introduced by this specification.
+    <cxx-codeblock>
+template<typename T>
+  concept bool Input_iterator() {
+    return requires (T i) {
+      {++i} -> T&;
+      {*i} -> Value_type<T>;
+    };
+  }
+
+template<typename P, typename... Args>
+  concept bool Predicate() {
+    return requires(P pred, Args... args) {
+      {pred(args...)} -> bool;
+    };
+  }
+
+template<Input_iterator I, Predicate<Value_type<I>> P>
+  I find_if(I first, I last, P pred);
+    </cxx-codeblock>
+    Concepts are are defined as function or variable templates, declared
+    with the <code>concept</code> specifier. 
+    The syntactic requirements of each concept are enumerated with a
+    <cxx-grammarterm>requires-expression</cxx-grammarterm>.
+    These concepts are used to constrain the template parameters of the
+    <code>find_if</code> algorithm.
+    </cxx-example>
+    </p>
+
+    <p>This Technical Specification specifies requirements for 
+    implementations of an extension to the C++ programming language 
+    concerning the application of constraints to template arguments, 
+    the use of constraints in function overloading and class template 
+    specialization, and the definition of those constraints.</p>
+
+-->
+  
+  <cxx-section id="intro.refs">
+    
+
+    <section>
+      <header><span class="section-number">1.2</span> <h1 data-bookmark-label="1.2 Normative references">Normative references</h1> <span style="float:right"><a href="#intro.refs">[intro.refs]</a></span></header>
+      
+    
+
+    <!-- TODO: Find the current WD number -->
+    <cxx-ednote>
+    
+    <aside><strong>Editor's note:</strong> The TS will formally refer to the ISO/IEC document
+    defining the C++14 programming language. Until that document is
+    published, the paper targets the current working draft
+    NXXX</aside>
+  </cxx-ednote>
+
+    <p para_num="1" id="intro.refs.1">The following referenced document is indispensable for the
+    application of this document. For dated references, only the
+    edition cited applies. For undated references, the latest edition
+    of the referenced document (including any amendments) applies.</p>
+    <ul>
+      <li>ISO/IEC XXXX:2014, <cite>Programming Languages - C++</cite>
+      <cxx-foreign-index id="cxx" src="cxx14_index.json" name="C++14">
+    <polymer-ajax auto="" url="cxx14_index.json" handleas="json" on-polymer-response="{{ attachIndex }}">
+    </polymer-ajax>
+  </cxx-foreign-index></li>
+    </ul>
+
+    <p para_num="2" id="intro.refs.2">ISO/IEC XXXX:2011 is herein after called the <dfn>C++ Standard</dfn>.
+    References to clauses within the C++ Standard are written as "C++14
+    §3.2".</p>
+  
+    </section>
+  </cxx-section>
+
+  <cxx-section id="intro.defns">
+    
+
+    <section>
+      <header><span class="section-number">1.3</span> <h1 data-bookmark-label="1.3 Terms and definitions">Terms and definitions</h1> <span style="float:right"><a href="#intro.defns">[intro.defns]</a></span></header>
+      
+    
+
+    <p para_num="1" id="intro.defns.1">For the purposes of this document, the terms and definitions
+    given in the C++ Standard and the folowing apply.</p>
+
+    <dl is="cxx-definition-section">
+    
+
+    
+      <dt id="atomic.defns.atomic-constraint">
+    1.3.1
+    <span style="float:right"><a href="#atomic.defns.atomic-constraint">[atomic.defns.atomic-constraint]</a></span>
+    <br clear="all">
+    atomic constraint
+  </dt>
+      <dd> A subexpression of a constraint that is not a 
+      <cxx-grammarterm><i>logical-and-expression</i></cxx-grammarterm>,
+      <cxx-grammarterm><i>logical-or-expression</i></cxx-grammarterm>,
+      or a subexpression of an atomic constraint. </dd>
+
+<!-- FIXME: Formatting for multiple definitions is broken. 
+
+      <dt id="atomic.defns.associated-constraint">associated constraint</dt>
+      <dd>A conjunction of all constraints on a constrained template 
+        declaration that includes constraints on template parameters, 
+        constraints on function parameters, and constraints specified 
+        explicitly in a <cxx-grammarterm>requires-clause</cxx-grammarterm>.</dd>
+ 
+      <dt id="atomic.defns.concept">concept</dt>
+      <dd>A template declared with the <code>concept</code> declaration 
+      specifier.</dd>
+
+      <dt id="atomic.defns.concept-check">concept check</dt>
+      <dd>A call to a function concept or a 
+      <cxx-grammarterm>template-id</cxx-grammarterm> that names a variable 
+      concept.</dd>
+
+      <dt id="atomic.defns.constraint">constraint</dt>
+      <dd>A constant expression with type <code>bool</code> that evaluates 
+      properties of template arguments, determining whether or not they 
+      can be substituted into a template.</dd>
+
+      <dt id="atomic.defns.constrained-declaration">constrained-declaration</dt>
+      <dd>A declaration with associated constraints.</dd>
+
+      <dt id="atomic.defns.generic-function">generic function</dt>
+      <dd>A constant expression that evaluates requirements of a template 
+      argument.</dd>
+
+      <dt id="atomic.defns.introdduced-parameters">introduced parameters</dt>
+      <dd>A function declaration having <code>auto</code> or a 
+      <cxx-grammarterm>constrained-type-name<cxx-grammarterm> in the type 
+      specifier any of its parameters.</dd>
+ -->
+    
+  </dl>
+  
+    </section>
+  </cxx-section>
+
+  <cxx-section id="intro.compliance">
+    
+
+    <section>
+      <header><span class="section-number">1.4</span> <h1 data-bookmark-label="1.4 Implementation compliance">Implementation compliance</h1> <span style="float:right"><a href="#intro.compliance">[intro.compliance]</a></span></header>
+      
+    
+    <p para_num="1" id="intro.compliance.1">Conformance requirements for this specification are the same as those 
+    defined in <cxx-ref in="cxx" to="intro.compliance"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="intro.compliance">§1.4</span></cxx-ref>.
+    <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    Conformance is defined in terms of the behavior of
+    programs.
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note></p>
+  
+    </section>
+  </cxx-section>
+
+  <cxx-section id="intro.ack">
+    
+
+    <section>
+      <header><span class="section-number">1.5</span> <h1 data-bookmark-label="1.5 Acknowledgments">Acknowledgments</h1> <span style="float:right"><a href="#intro.ack">[intro.ack]</a></span></header>
+      
+    
+  
+    <p para_num="1" id="intro.ack.1">The design of this specification is based, in part, on a concept 
+    specification of the algorithms part of the C++ standard library, known 
+    as ``The Palo Alto" TR (WG21 N3351), which was developed by a large 
+    group of experts as a test of the expressive power of the idea of 
+    concepts. Despite syntactic differences between the notation of the 
+    Palo Alto TR and this TS, the TR can be seen as a large-scale test of 
+    the expressiveness of this TS.</p>
+
+    <p para_num="2" id="intro.ack.2">This work was funded by NSF grant ACI-1148461.</p>
+  
+    </section>
+  </cxx-section>
+
+    </section>
+  </cxx-clause>
+
+
+<cxx-clause id="lex">
+    
+
+    <section>
+      <header><span class="section-number">2</span> <h1 data-bookmark-label="2 Lexical conventions">Lexical conventions</h1> <span style="float:right"><a href="#lex">[lex]</a></span></header>
+      
+  
+
+  <cxx-section id="lex.key" <="" cxx-section="">
+    
+
+    <section>
+      <header><span class="section-number">2.1</span> <h1 data-bookmark-label="2.1 Keywords">Keywords</h1> <span style="float:right"><a href="#lex.key">[lex.key]</a></span></header>
+      
+    
+
+    <p para_num="1" id="lex.key.1">In <cxx-ref in="cxx" to="lex.key"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="lex.key">§2.12</span></cxx-ref>, Table 4, add 
+    the keywords <code>concept</code> and <code>requires</code>.</p>
+
+  
+    </section>
+  </cxx-section>
+
+    </section>
+  </cxx-clause>
+
+<cxx-clause id="expr">
+    
+
+    <section>
+      <header><span class="section-number">3</span> <h1 data-bookmark-label="3 Expressions">Expressions</h1> <span style="float:right"><a href="#expr">[expr]</a></span></header>
+      
+  
+
+  <cxx-section id="expr.prim">
+    
+
+    <section>
+      <header><span class="section-number">3.1</span> <h1 data-bookmark-label="3.1 Primary expressions">Primary expressions</h1> <span style="float:right"><a href="#expr.prim">[expr.prim]</a></span></header>
+      
+    
+
+    <p para_num="1" id="expr.prim.1">In <cxx-ref in="cxx" to="expr.prim.general"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="expr.prim.general">§5.1.1</span></cxx-ref>, add
+    <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> to the
+    rule, <cxx-grammarterm><i>primary-expression</i></cxx-grammarterm>.</p>
+    
+    <!-- TODO:  Don't list existing elements -->
+    <bnf-grammar>
+    <div style="font-style:italic;margin-left:.35in;">
+      
+      <bnf-rule>
+    <span style="margin-left:.6in">primary-expression:<br></span>
+  </bnf-rule>
+        <ins><bnf-alt>
+    <span style="margin-left:1.2in">requires-expression</span><br>
+  </bnf-alt></ins>
+    
+    </div>
+  </bnf-grammar>
+
+    <cxx-section id="expr.prim.lambda">
+    
+
+    <section>
+      <header><span class="section-number">3.1.1</span> <h1 data-bookmark-label="3.1.1 Lambda expressions">Lambda expressions</h1> <span style="float:right"><a href="#expr.prim.lambda">[expr.prim.lambda]</a></span></header>
+      
+    
+
+    <p para_num="1" id="expr.prim.lambda.1">Modify 
+    <cxx-ref in="cxx" to="expr.prim.lambda"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="expr.prim.lambda">§5.1.2</span></cxx-ref>/5.</p>
+
+    <p para_num="2" id="expr.prim.lambda.2">The closure type for a non-generic
+    <cxx-grammarterm><i>lambda-expression</i></cxx-grammarterm> has a public
+    <code>inline</code> function call operator 
+    (<cxx-ref in="cxx" to="over.over"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="over.over">§13.4</span></cxx-ref>) whose parameters 
+    and return type 
+    are described by the <cxx-grammarterm><i>lambda-expression</i></cxx-grammarterm>'s 
+    <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm> and 
+    <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm>
+    respectively. 
+    
+    For a generic lambda, the closure type has a public inline function call 
+    operator member template (<cxx-ref in="cxx" to="temp.mem"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.mem">§14.5.2</span></cxx-ref>) 
+    whose <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> 
+    consists of one invented type 
+    <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> for each 
+    occurrence of <code>auto</code> <ins>or each unique occurrence of a 
+    <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm></ins>
+    in the lambda's 
+    <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>, 
+    in order of appearance. 
+
+    The invented type template-parameter is a parameter 
+    pack if the corresponding 
+    <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm>
+    declares a function parameter pack 
+    (<cxx-ref in="cxx" to="dcl.fct"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="dcl.fct">§8.3.5</span></cxx-ref>). 
+    <ins>The associated constraints of the generic lambda are the 
+    conjunction of constraints introduced by the use of 
+    <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm>s in the
+    <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>.</ins>
+    
+    The return type and function parameters of the function call operator 
+    template are derived from the 
+    <cxx-grammarterm><i>lambda-expression</i></cxx-grammarterm>'s 
+    <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> and 
+    <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>
+    by replacing each occurrence of <code>auto</code> in the 
+    <cxx-grammarterm><i>decl-specifiers</i></cxx-grammarterm> of the
+    <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm> with the 
+    name of the corresponding invented 
+    <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>. </p>
+
+    <p para_num="3" id="expr.prim.lambda.3">All placeholder types introduced using the same 
+    <cxx-grammarterm><i>concept-name</i></cxx-grammarterm> have the same invented
+    template parameter.</p>
+    
+    </section>
+  </cxx-section>
+
+
+  <cxx-section id="expr.req">
+    
+
+    <section>
+      <header><span class="section-number">3.1.2</span> <h1 data-bookmark-label="3.1.2 Requires expressions">Requires expressions</h1> <span style="float:right"><a href="#expr.req">[expr.req]</a></span></header>
+      
+    
+
+    <p para_num="1" id="expr.req.1">A <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> provides a 
+    concise way to express syntactic requirements on template arguments.
+    <bnf-grammar>
+    </bnf-grammar></p><div style="font-style:italic;margin-left:.35in;">
+      
+      <bnf-rule>
+    <span style="margin-left:.6in">requires-expression:<br></span>
+  </bnf-rule>
+        <bnf-alt>
+    <span style="margin-left:1.2in"><bnf-terminal><code style="font-style:normal">requires</code></bnf-terminal> 
+          requirement-parameter-list requirement-body</span><br>
+  </bnf-alt>
+
+    <bnf-rule>
+    <span style="margin-left:.6in">requirement-parameter-list:<br></span>
+  </bnf-rule>
+      <bnf-alt>
+    <span style="margin-left:1.2in">
+        <bnf-terminal><code style="font-style:normal">(</code></bnf-terminal> 
+        parameter-declaration-clause<bnf-opt><sub>opt</sub></bnf-opt>
+        <bnf-terminal><code style="font-style:normal">)</code></bnf-terminal>
+      </span><br>
+  </bnf-alt>
+
+    <bnf-rule>
+    <span style="margin-left:.6in">requirement-body:<br></span>
+  </bnf-rule>
+      <bnf-alt>
+    <span style="margin-left:1.2in">
+        <bnf-terminal><code style="font-style:normal">{</code></bnf-terminal> 
+        requirement-list 
+        <bnf-terminal><code style="font-style:normal">}</code></bnf-terminal> 
+      </span><br>
+  </bnf-alt>
+
+    <bnf-rule>
+    <span style="margin-left:.6in">requirement-list:<br></span>
+  </bnf-rule>
+      <bnf-alt>
+    <span style="margin-left:1.2in">requirement</span><br>
+  </bnf-alt>
+      <bnf-alt>
+    <span style="margin-left:1.2in">requirement-list requirement</span><br>
+  </bnf-alt>
+
+    <bnf-rule>
+    <span style="margin-left:.6in">requirement:<br></span>
+  </bnf-rule>
+      <bnf-alt>
+    <span style="margin-left:1.2in">simple-requirement</span><br>
+  </bnf-alt>
+      <bnf-alt>
+    <span style="margin-left:1.2in">compound-requirement</span><br>
+  </bnf-alt>
+      <bnf-alt>
+    <span style="margin-left:1.2in">type-requirement</span><br>
+  </bnf-alt>
+      <bnf-alt>
+    <span style="margin-left:1.2in">nested-requirement</span><br>
+  </bnf-alt>
+
+    <bnf-rule>
+    <span style="margin-left:.6in">simple-requirement:<br></span>
+  </bnf-rule>
+      <bnf-alt>
+    <span style="margin-left:1.2in">expression <bnf-terminal><code style="font-style:normal">;</code></bnf-terminal></span><br>
+  </bnf-alt>
+
+    <bnf-rule>
+    <span style="margin-left:.6in">compound-requirement:<br></span>
+  </bnf-rule>
+      <bnf-alt>
+    <span style="margin-left:1.2in">
+        <bnf-terminal><code style="font-style:normal">constexpr</code></bnf-terminal><bnf-opt><sub>opt</sub></bnf-opt>
+        <bnf-terminal><code style="font-style:normal">{</code></bnf-terminal> expression <bnf-terminal><code style="font-style:normal">}</code></bnf-terminal>
+        <bnf-terminal><code style="font-style:normal">noexcept</code></bnf-terminal><bnf-opt><sub>opt</sub></bnf-opt>
+        trailing-return-type<bnf-opt><sub>opt</sub></bnf-opt>
+        <bnf-terminal><code style="font-style:normal">;</code></bnf-terminal>
+      </span><br>
+  </bnf-alt>
+
+    <bnf-rule>
+    <span style="margin-left:.6in">type-requirement:<br></span>
+  </bnf-rule>
+      <bnf-alt>
+    <span style="margin-left:1.2in">
+        typename-specifier <bnf-terminal><code style="font-style:normal">;</code></bnf-terminal>
+      </span><br>
+  </bnf-alt>
+
+    <bnf-rule>
+    <span style="margin-left:.6in">nested-requirement:<br></span>
+  </bnf-rule>
+      <bnf-alt>
+    <span style="margin-left:1.2in">requires-clause <bnf-terminal><code style="font-style:normal">;</code></bnf-terminal></span><br>
+  </bnf-alt>
+    
+    </div>
+  
+    <p></p>
+
+    <p para_num="2" id="expr.req.2">A <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> has type
+    <code>bool</code>. </p>
+
+    <p para_num="3" id="expr.req.3">A <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> shall not appear
+    outside of a concept definition (<cxx-ref in="" to="dcl.concept"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="dcl.concept" elem="{{toElem}}"></cxx-get-element-by-id><a title="dcl.concept" href="#dcl.concept">4.1.4</a></cxx-ref>) or a
+    <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>. </p>
+
+    <p para_num="4" id="expr.req.4">
+    <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    The most common use of 
+    <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>s is to define
+    syntactic requirements in concepts (<cxx-ref in="" to="dcl.concept"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="dcl.concept" elem="{{toElem}}"></cxx-get-element-by-id><a title="dcl.concept" href="#dcl.concept">4.1.4</a></cxx-ref>) 
+    such as the one below:
+    <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt;
+  concept bool R() {
+    return requires (T i) {
+      typename A&lt;T&gt;;
+      {*i} -&gt; const A&lt;T&gt;&amp;;
+    };
+  }</code></pre>
+  
+    The concept is defined in terms of the syntactic and type requirements 
+    within the <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>.
+    
+    A <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> can also be
+    used in a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> templates 
+    as a way of writing ad hoc constraints on template arguments such as 
+    the one below:
+    <cxx-codeblock>
+    <pre><code>template&lt;typename T&gt;
+  requires requires (T x) { x + x; }
+    T add(T a, T b) { return a + b; }
+  }</code></pre>
+  </cxx-codeblock>
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+    <p></p>
+
+    <p para_num="5" id="expr.req.5">The <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> may introduce
+    local arguments via a <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>. 
+    These parameters have no linkage, storage, or lifetime.
+    They are used only to write constraints within the
+    <cxx-grammarterm><i>requirement-body</i></cxx-grammarterm> and are not visible
+    outside the closing <code>}</code> of the 
+    <cxx-grammarterm><i>requirement-body</i></cxx-grammarterm>. 
+    The <cxx-grammarterm><i>requirement-parameter-list</i></cxx-grammarterm> shall
+    not include an ellipsis.</p>
+
+    <p para_num="6" id="expr.req.6">The <cxx-grammarterm><i>requirement-body</i></cxx-grammarterm> is a sequence of
+    <cxx-grammarterm><i>requirement</i></cxx-grammarterm>s separated by semicolons.
+     These <cxx-grammarterm><i>requirement</i></cxx-grammarterm>s may refer to local 
+    arguments, template parameters, and any other declarations visible from the 
+    enclosing context. Each <cxx-grammarterm><i>requirement</i></cxx-grammarterm> 
+    introduces a conjunction of one or more atomic constraints 
+    (<cxx-ref in="" to="temp.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.constr" href="#temp.constr">6.1.5</a></cxx-ref>). The kinds of atomic constraints
+    introduced by a <cxx-grammarterm><i>requirement</i></cxx-grammarterm> are:
+    </p><ul>
+    <li>A <dfn>valid expression constraint</dfn> is a predicate on a dependent 
+    expression. The constraint is satisfied if and only if the substitution of 
+    template arguments into that expression does not result in substitution 
+    failure. The result of successfully substituting template arguments
+    into the dependent expression produces a <dfn>valid expression</dfn>.
+    Valid expressions are the targets of other atomic constraints introduced
+    by <cxx-grammarterm><i>requirement</i></cxx-grammarterm>s.</li>
+
+    <li>A <dfn>valid type constraint</dfn> is a predicate on a dependent type.
+    the constraint is satisfied if and only if the substitution of template
+    arguments into that type does not result in substitution failure. The
+    result of successfully substituting template arguments into the dependent
+    type produces an <dfn>associated type</dfn>. Associated types are the
+    targets of conversion constraints, described below.</li>
+
+    <li>A <dfn>conversion constraint</dfn> is satisfied if and only if a valid 
+    expression is implicitly convertible to a non-dependent or associated type 
+    (<cxx-ref in="cxx" to="conv"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="conv">§4</span></cxx-ref>).</li>
+
+
+    <li>A <dfn>constant expression constraint</dfn> is satisfied if and only
+    if a valid expression is a constant expression 
+    (<cxx-ref in="cxx" to="expr.const"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="expr.const">§5.19</span></cxx-ref>).
+    </li>
+
+    <li>An <dfn>exception constraint</dfn> is satisfied if and only if, for
+    a valid expression <code>E</code>, the expression <code>noexcept(E)</code>
+    evaluates to <code>true</code>
+    (<cxx-ref in="cxx" to="expr.unary.noexcept"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="expr.unary.noexcept">§5.3.7</span></cxx-ref>).
+    </li>
+    </ul>
+    <p para_num="7" id="expr.req.7"></p>
+
+    <p para_num="8" id="expr.req.8">A <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> evaluates to
+    <code>true</code> if and only the atomic constraints introduced by
+    each <cxx-grammarterm><i>requirement</i></cxx-grammarterm> in the 
+    <cxx-grammarterm><i>requirement-list</i></cxx-grammarterm> is satisfied
+    and <code>false</code> otherwise. The semantics of each kind of 
+    requirement are described in the following sections.</p>
+
+    <cxx-section id="expr.req.simple">
+    
+
+    <section>
+      <header><span class="section-number">3.1.2.1</span> <h1 data-bookmark-label="3.1.2.1 Simple requirements">Simple requirements</h1> <span style="float:right"><a href="#expr.req.simple">[expr.req.simple]</a></span></header>
+      
+      
+      <p para_num="1" id="expr.req.simple.1">A <cxx-grammarterm><i>simple-requirement</i></cxx-grammarterm> introduces a
+      valid expression constraint for its 
+      <cxx-grammarterm><i>expression </i></cxx-grammarterm>. The expression is an
+      unevaluated operand (<cxx-ref in="cxx" to="basic.def.odr"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="basic.def.odr">§3.2</span></cxx-ref>).
+
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      The following is requirement evaluates to <code>true</code> for all 
+      arithmetic types (<cxx-ref in="cxx" to="basic.fundamental"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="basic.fundamental">§3.9.1</span></cxx-ref>),
+      and <code>false</code> for pointer types 
+      (<cxx-ref in="cxx" to="basic.compound"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="basic.compound">§3.9.2</span></cxx-ref>).
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>requires (T a, T b) {
+  a + b;  // A simple requirement;
+}</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
+      <p para_num="2" id="expr.req.simple.2">If the expression would always result in a substitution failure, 
+      the program is ill-formed.
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>requires () {
+  new T[-1];  // error: the valid expression well never be well-formed.
+}</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+    
+    </section>
+  </cxx-section> <!-- expr.req.simple -->
+
+
+    <cxx-section id="expr.req.type">
+    
+
+    <section>
+      <header><span class="section-number">3.1.2.2</span> <h1 data-bookmark-label="3.1.2.2 Type requirements">Type requirements</h1> <span style="float:right"><a href="#expr.req.type">[expr.req.type]</a></span></header>
+      
+      
+      <p para_num="1" id="expr.req.type.1">A <cxx-grammarterm><i>type-requirement</i></cxx-grammarterm> introduces 
+      valid type constraint for its 
+      <cxx-grammarterm><i>typename-specifier</i></cxx-grammarterm>.
+      <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    A type requirement requests the validity of an associated
+      type, either as a nested type name, a class template specialization,
+      or an alias template. It is not used to construct requirements for
+      arbitrary <cxx-grammarterm><i>type-specifiers</i></cxx-grammarterm>.
+      
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></cxx-note></p><pre><code>requires() {
+  typename T::inner;         // Required nested type name
+  typename Related&lt;T&gt;; // Required alias
+}</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      
+    <span class="nowrap">— <em>end note</em> ]</span>
+  <p></p>
+
+      <p para_num="2" id="expr.req.type.2">If the required type will always results in a substitution failure,
+      then the program is ill-formed.
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>requires () {
+  typename int::X;  // error: int does not have class type
+  typename T[-1];   // error: array types cannot have negative extent
+}</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+    
+    </section>
+  </cxx-section> <!-- expr.req.type -->
+
+
+    <cxx-section id="expr.req.nested">
+    
+
+    <section>
+      <header><span class="section-number">3.1.2.3</span> <h1 data-bookmark-label="3.1.2.3 Nested requirements">Nested requirements</h1> <span style="float:right"><a href="#expr.req.nested">[expr.req.nested]</a></span></header>
+      
+      
+      <p para_num="1" id="expr.req.nested.1">A <cxx-grammarterm><i>nested-requirement</i></cxx-grammarterm> introduces
+      an additional constraint expression <cxx-ref in="" to="temp.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.constr" href="#temp.constr">6.1.5</a></cxx-ref> 
+      to be evaluated as part of the satisfaction of the 
+      <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>. 
+      The requirement is satisfied if and only if the constraint evaluates to
+      value <code>true</code>.
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+     
+      Nested requirements are generally used to provide additional constraints on 
+      associated types
+      within a <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>.
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>requires(...) {
+  typename X&lt;T&gt;;
+  requires C&lt;X&lt;T&gt;&gt;();
+}</code></pre>
+  
+      These requirements are satisfied only when substitution into 
+      <code>X&lt;T&gt;</code> is successful and when C&lt;X&lt;T&gt;&gt;()
+      evaluates to <code>true</code>.
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+    
+    </section>
+  </cxx-section> <!-- expr.re.nested -->
+
+
+
+    <cxx-section id="expr.req.compound">
+    
+
+    <section>
+      <header><span class="section-number">3.1.2.4</span> <h1 data-bookmark-label="3.1.2.4 Compound requirements">Compound requirements</h1> <span style="float:right"><a href="#expr.req.compound">[expr.req.compound]</a></span></header>
+      
+      
+      <p para_num="1" id="expr.req.compound.1">A <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> introduces 
+      a conjunction of one or more constraints pertaining to its
+      <cxx-grammarterm><i>expression</i></cxx-grammarterm>, depending on the syntax
+      used. This set includes:
+      </p><ul>
+      <li>a valid expression constraint,</li>
+      <li>an optional associated type requirement</li>
+      <li>an optional conversion requirement or nested requirement,</li>
+      <li>an optional constant expression requirement, and </li>
+      <li>an optional an exception requirement.</li>
+      </ul>
+      A <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> is
+      satisfied if and only if every constraint in the set is satisfied.
+      
+      <!-- BUG: There is a core issue on this -->
+      The required valid expression is an unevaluated operand
+      (<cxx-ref in="cxx" to="basic.def.odr"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="basic.def.odr">§3.2</span></cxx-ref>)
+      except in the case when the <code>constexpr</code> specifier is present.
+      These other requirements are described in the following paragraphs.<p para_num="2" id="expr.req.compound.2"></p>
+
+      <p para_num="3" id="expr.req.compound.3">The brace-enclosed <cxx-grammarterm><i>expression</i></cxx-grammarterm> in
+      a <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> introduces
+      a valid expression constraint. Let <code>E</code> be the valid expression
+      resulting from successful substitution.
+
+      </p><p para_num="4" id="expr.req.compound.4">The presence of a
+      <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> introduces 
+      additional requirements. These depend on whether or not the
+      <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> contains
+      a <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm>.
+      </p><ul>
+      <li>If so, a valid type constraint is introduced for the trailing
+      <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm>. Let <code>T</code>
+      be the associated type formed form successful substitution.
+      A conversion constraint requiring that <code>E</code> be
+      implicitly convertible to <code>T</code> is also introduced.</li>
+
+      <li>Otherwise, let <code>C</code> be the 
+      <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm>. A valid
+      type constraint is introduced for the type formed by substituting
+      <code>decltype((E))</code> for <code>C</code> in the trailing
+      <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm>. A new constraint
+      a new constraint expression is formed according to the rules described in 
+      <cxx-ref in="" to="dcl.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="dcl.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="dcl.constr" href="#dcl.constr"></a></cxx-ref> by substituting 
+      <code>decltype((E))</code> as the constraint argument.</li>
+      </ul>
+      <p para_num="5" id="expr.req.compound.5"></p>
+
+      <!-- TODO: I'm not sure we need this... it's mostly an optimization.
+           We can also avoid introducing associated type
+           requirements when the trailing-return-type is a 
+           simple-type-specifier not containing a simple-template-id.
+      
+      <p>If the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> is
+      not a dependent type, then no associated type requirement is
+      introduced.</p>
+       -->
+
+      <p para_num="6" id="expr.req.compound.6">If the <code>constexpr</code> specifier is present then a constant 
+      expression constraint is introduced for the valid expression 
+      <code>E</code>.<cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    The constraint is satisfied only when
+      <code>E</code> is a constant expression.
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note></p>
+
+      <p para_num="7" id="expr.req.compound.7">If the <code>noexcept</code> specifier is present, then an
+      exception constraint is introduced for the valid expression
+      <code>E</code>.<cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    The constraint is satisfied only when
+      <code>noexcept(E)</code> evaluates to <code>true</code>.
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note></p>
+
+      <p para_num="8" id="expr.req.compound.8">
+      <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename I&gt;
+  concept bool Inscrutible() { ... }
+
+requires(T x) {
+  {x++}; #1
+  {*x} -&gt; typename T::r; #2
+  {f(x)} -&gt; const Inscrutible&amp; #3
+  {g(x)} noexcept -&gt; T&amp; #4
+  constexpr {T::value}; #5
+  constexpr {T() + T()} -&gt; T #6;
+}</code></pre>
+  
+      Requirement #1 introduces only a valid expression requirement and
+      is equivalent to a <cxx-grammarterm><i>simple-requirement</i></cxx-grammarterm>
+      containing the same expression.
+      
+      In requirement #2, <code>*p</code> is a required valid expression and 
+      <code>typename T::r</code> is a required associated types. After 
+      substitution, <code>*p</code> must be implicitly convertible to the 
+      type named by <code>typename T::r</code>. 
+
+      In #3, <code>const decltype((f(x)))&amp;</code> is a required associated
+      type, and <code>Inscrutible&lt;decltype((f(x)))&gt;</code> is a nested 
+      requirement.
+
+      Requirement #3 includes an exception requirement, that <code>g(x)</code>
+      does not propagate requirements. It also requires an associated type
+      requirement (<code>T&amp;</code>) and a conversion requirement
+      (<code>g(x)</code> must be implicitly convertible to <code>T&amp;</code>).
+
+      Requirement #5 includes a constant expression requirement, namely
+      that <code>T::value</code> must be a constant expression, but no
+      associated type, conversion, or nested requirements. 
+
+      #6 includes a constant expression requirement (<code>T() + T()</code>),
+      an associated type requirement (<code>T</code>), and a conversion
+      requirement (<code>T() + T()</code> must be implicitly convertible
+      to <code>T</code>).
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+    
+    </section>
+  </cxx-section> <!-- expr.req.compound -->
+ 
+  
+    </section>
+  </cxx-section> <!-- expr.req -->
+
+    </section>
+  </cxx-section>
+    </section>
+  </cxx-clause> <!-- expr -->
+
+<cxx-clause id="dcl.dcl">
+    
+
+    <section>
+      <header><span class="section-number">4</span> <h1 data-bookmark-label="4 Declarations">Declarations</h1> <span style="float:right"><a href="#dcl.dcl">[dcl.dcl]</a></span></header>
+      
+  
+
+  <cxx-section id="dcl.spec">
+    
+
+    <section>
+      <header><span class="section-number">4.1</span> <h1 data-bookmark-label="4.1 Specifiers">Specifiers</h1> <span style="float:right"><a href="#dcl.spec">[dcl.spec]</a></span></header>
+      
+    
+
+    <p para_num="1" id="dcl.spec.1">Extend the <cxx-grammarterm><i>decl-specifier</i></cxx-grammarterm> production
+    to include the <code>concept</code> specifier.
+    <bnf-grammar>
+    </bnf-grammar></p><div style="font-style:italic;margin-left:.35in;">
+      
+      <bnf-rule>
+    <span style="margin-left:.6in">decl-specifier:<br></span>
+  </bnf-rule>
+        <ins><bnf-alt>
+    <span style="margin-left:1.2in"><bnf-terminal><code style="font-style:normal">concept</code></bnf-terminal></span><br>
+  </bnf-alt></ins>
+    
+    </div>
+  
+    <p></p>
+
+
+    <cxx-section id="dcl.type.simple">
+    
+
+    <section>
+      <header><span class="section-number">4.1.1</span> <h1 data-bookmark-label="4.1.1 Simple type specifiers">Simple type specifiers</h1> <span style="float:right"><a href="#dcl.type.simple">[dcl.type.simple]</a></span></header>
+      
+      
+      <p para_num="1" id="dcl.type.simple.1">Extend the <cxx-grammarterm><i>simple-type-spcifier</i></cxx-grammarterm> 
+      to include <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
+      <bnf-grammar>
+    </bnf-grammar></p><div style="font-style:italic;margin-left:.35in;">
+      
+        <bnf-rule>
+    <span style="margin-left:.6in">simple-type-specifier:<br></span>
+  </bnf-rule>
+          <ins><bnf-alt>
+    <span style="margin-left:1.2in">constrained-type-specifier</span><br>
+  </bnf-alt></ins>
+
+        <ins>
+        <bnf-rule>
+    <span style="margin-left:.6in">constrained-type-specifier:<br></span>
+  </bnf-rule>
+          <bnf-alt>
+    <span style="margin-left:1.2in">nested-name-specifier<bnf-opt><sub>opt</sub></bnf-opt> constrained-type-name</span><br>
+  </bnf-alt>
+
+        <bnf-rule>
+    <span style="margin-left:.6in">constrained-type-name:<br></span>
+  </bnf-rule>
+          <bnf-alt>
+    <span style="margin-left:1.2in">concept-name</span><br>
+  </bnf-alt>
+          <bnf-alt>
+    <span style="margin-left:1.2in">partial-concept-id</span><br>
+  </bnf-alt>
+
+        <bnf-rule>
+    <span style="margin-left:.6in">concept-name:<br></span>
+  </bnf-rule>
+          <bnf-alt>
+    <span style="margin-left:1.2in">identifier</span><br>
+  </bnf-alt>
+
+        <bnf-rule>
+    <span style="margin-left:.6in">partial-concept-id:<br></span>
+  </bnf-rule>
+          <bnf-alt>
+    <span style="margin-left:1.2in">
+            concept-name 
+            <bnf-terminal><code style="font-style:normal">&lt;</code></bnf-terminal> 
+            template-argument-list
+            <bnf-terminal><code style="font-style:normal">&gt;</code></bnf-terminal>
+          </span><br>
+  </bnf-alt>
+        </ins>
+      
+    </div>
+  
+      <p></p>
+    
+    </section>
+  </cxx-section>
+
+
+    <cxx-section id="dcl.spec.auto">
+    
+
+    <section>
+      <header><span class="section-number">4.1.2</span> <h1 data-bookmark-label="4.1.2 auto specifier"><code>auto</code> specifier</h1> <span style="float:right"><a href="#dcl.spec.auto">[dcl.spec.auto]</a></span></header>
+      
+      
+
+      <p para_num="1" id="dcl.spec.auto.1">Add the following paragraph after
+      <cxx-ref in="cxx" to="dcl.spec.auto"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="dcl.spec.auto">§7.1.6.4</span></cxx-ref>/3.</p>
+
+      <p para_num="2" id="dcl.spec.auto.2">If the <code>auto</code> 
+      <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm> can appear as one 
+      of the <cxx-grammarterm><i>decl-specifiers</i></cxx-grammarterm> in the 
+      <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm> of
+      <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> of a 
+      function declarator, then the function is a generic function 
+      (<cxx-ref in="" to="dcl.fct"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="dcl.fct" elem="{{toElem}}"></cxx-get-element-by-id><a title="dcl.fct" href="#dcl.fct">5.1.1</a></cxx-ref>).
+      </p>
+
+    
+    </section>
+  </cxx-section>
+
+
+    <cxx-section id="dcl.spec.constr">
+    
+
+    <section>
+      <header><span class="section-number">4.1.3</span> <h1 data-bookmark-label="4.1.3 Constrained type specifiers">Constrained type specifiers</h1> <span style="float:right"><a href="#dcl.spec.constr">[dcl.spec.constr]</a></span></header>
+      
+      
+
+      <p para_num="1" id="dcl.spec.constr.1">A <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+      can appear in the <cxx-grammarterm><i>decl-specifiers</i></cxx-grammarterm>
+      of a <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> or
+      in the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> of
+      a <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm>
+      <cxx-ref in="" to="expr.req"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="expr.req" elem="{{toElem}}"></cxx-get-element-by-id><a title="expr.req" href="#expr.req">3.1.2</a></cxx-ref>.  A program that includes a
+      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> in
+      any other context is ill-formed.</p>
+
+      <p para_num="2" id="dcl.spec.constr.2">If the <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm> 
+      appears as one of the <cxx-grammarterm><i>decl-specifiers</i></cxx-grammarterm> 
+      of a <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> in
+      a <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>, then the
+      declared parameter is a 
+      <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>, and its
+      meaning is defined in section <cxx-ref in="" to="temp.param"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.param" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.param" href="#temp.param">6.1</a></cxx-ref>.
+      Otherwise, the meaning of 
+      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s is
+      defined in this section.
+      <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    A constrained template parameter can introduce type parameters
+      as well as designate the type of a non-type template parameter. The
+      meaning of those declarations are specified separately.
+      
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+      </p>
+
+      <p para_num="3" id="dcl.spec.constr.3">If the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+      appears as one of the <cxx-grammarterm><i>decl-specifiers</i></cxx-grammarterm>
+      of a <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> 
+      in either a <cxx-grammarterm><i>lambda-expression</i></cxx-grammarterm> or
+      function declaration then the lambda is a generic lambda 
+      <cxx-ref in="" to="expr.prim.lambda"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="expr.prim.lambda" elem="{{toElem}}"></cxx-get-element-by-id><a title="expr.prim.lambda" href="#expr.prim.lambda">3.1.1</a></cxx-ref> and the function is
+      a generic function <cxx-ref in="" to="dcl.fct"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="dcl.fct" elem="{{toElem}}"></cxx-get-element-by-id><a title="dcl.fct" href="#dcl.fct">5.1.1</a></cxx-ref>.</p>
+
+      <p para_num="4" id="dcl.spec.constr.4">A <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+      designates a placeholder type that will be replaced later, and it 
+      introduces an associated constraint on deduced type, called
+      the <dfn>constrained type</dfn> within the enclosing declaration or 
+      <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>.</p>
+
+      <p para_num="5" id="dcl.spec.constr.5">If the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+      appears in the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm>
+      of a <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm>, then the
+      constrained type is deduced from the required valid expression.
+      Otherwise, the constrained type is deduced using the rules for
+      deducing <code>auto</code> (<cxx-ref in="" to="dcl.spec.auto"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="dcl.spec.auto" elem="{{toElem}}"></cxx-get-element-by-id><a title="dcl.spec.auto" href="#dcl.spec.auto">4.1.2</a></cxx-ref>).</p>
+      
+      <p para_num="6" id="dcl.spec.constr.6">The <dfn>introduced constraint</dfn> is a constraint expression 
+      (<cxx-ref in="" to="temp.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.constr" href="#temp.constr">6.1.5</a></cxx-ref>) synthesized from the
+      <cxx-grammarterm><i>concept-name</i></cxx-grammarterm> or
+      <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm> in the
+      <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm>.</p>
+
+      <p para_num="7" id="dcl.spec.constr.7">When an identifier is a 
+      <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>, it refers to one or
+      more function concepts or a single variable concept. 
+
+      At least one concept referred
+      to by the <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm>
+      shall be a type concept (<cxx-ref in="" to="dcl.concept"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="dcl.concept" elem="{{toElem}}"></cxx-get-element-by-id><a title="dcl.concept" href="#dcl.concept">4.1.4</a></cxx-ref>).
+      <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      Function concepts can be overloaded to accept different numbers and
+      kinds of template arguments. This is sometimes done to generalize
+      a single concept for different kinds of arguments.
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt;
+  concept bool C() { ... }
+template&lt;typename T, typename U&gt;
+  concept bool C() { ... }</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      The <cxx-grammarterm><i>concept-name</i></cxx-grammarterm> <code>C</code>
+      refers to both concept definitions.
+      <p></p>
+
+      <p para_num="8" id="dcl.spec.constr.8">A <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm> is a
+      <cxx-grammarterm><i>concept-name</i></cxx-grammarterm> followed by a sequence
+      of template arguments.
+      
+      A <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm> does not refer
+      to template specialization; the template argument list must be
+      adjusted by adding a template argument before the first of the
+      initial template arguments before the name refers to a template
+      specialization.
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T, typename U&gt;
+  concept bool C = ...;
+
+C&lt;int&gt;       // A partial-concept-id
+C&lt;char, int&gt; // A template-id</code></pre>
+  
+      The first name is a <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm>
+      and can be used as part of constrained type name as part the type 
+      specifier of a parameter declaration or a template parameter. The 
+      second name is a <cxx-grammarterm><i>template-id</i></cxx-grammarterm> and
+      determines whether the concept is satisfied for the given arguments.
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
+      <p para_num="9" id="dcl.spec.constr.9">A <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm> shall not
+      have an empty list of template arguments.</p>
+
+
+      <p para_num="10" id="dcl.spec.constr.10">An introduced constraint is formed by applying the following
+      rules to each concept referenced by the
+      <cxx-grammarterm><i>concept-name</i></cxx-grammarterm> in the
+      <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm>.
+
+      Let <code>C</code> be a concept referred to by the
+      <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>.
+      <code>T</code> be the constrained type, and 
+      <code>Args</code> be a sequence of template arguments.
+
+      If the <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm> is a
+      <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm>, then
+      <code>Args</code> is its 
+      <cxx-grammarterm><i>template-argument-list</i></cxx-grammarterm>, otherwise
+      <code>Args</code> is an empty sequence.
+
+      The <dfn>candidate constraint</dfn> is a 
+      <cxx-grammarterm><i>template-id</i></cxx-grammarterm> having the form
+      <code>C&lt;T, Args&gt;</code>. 
+      <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+      If <code>Args</code> is empty, the resulting 
+      <cxx-grammarterm><i>template-id</i></cxx-grammarterm> is of the form 
+      <code>C&lt;T&gt;</code>.
+      
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+
+      If <code>C&lt;T, Args&gt;</code> does not refer to a template 
+      specialization, the candidate constraint is rejected.
+      <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+      The expression <code>C&lt;T, Args&gt;</code> may not refer to a valid
+      template specialization if <code>Args</code> contains too many or to 
+      few template arguments for <code>C</code>, or if <code>Args</code>
+      do not match <code>C's</code> template parameters.
+      
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+
+      </p><p para_num="11" id="dcl.spec.constr.11">If, after constructing candidate constraints for each concept
+      named by the <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>, there
+      are no candidates or more than one candidate, the program is 
+      ill-formed.</p>
+
+      <p para_num="12" id="dcl.spec.constr.12">The introduced constraint is constructed from the remaining candidate. 
+      If <code>C</code> is a function concept, then the
+      resulting constraint is a function call of the form
+      <code>C&lt;T, Args&gt;()</code>. Otherwise, the introduced constraint
+      is the same as the remaining candidate.
+      </p>
+
+      <p para_num="13" id="dcl.spec.constr.13">
+      <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      The following unary and binary concepts are defined as variables and
+      functions.
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt;
+concept bool V1 = ...;
+
+template&lt;typename T, typename U&gt;
+concept bool V2 = ...;
+
+template&lt;typename T&gt;
+concept bool F1() { return ...; }
+
+template&lt;typename T, typename T2&gt;
+concept bool F2() { return ...; }</code></pre>
+  
+      Suppose <code>X</code> is a template parameter being declared, either 
+      explicitly or as an invented template parameter of a 
+      <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm>
+      in a generic function or generic lambda. The synthesized constraints 
+      corresponding to each declaration are:
+      <cxx-codeblock>
+    <pre><code>V1 X    // becomes V1&lt;T&gt;
+V2&lt;Y&gt; X // becomes V2&lt;X, Y&gt;
+F1 X    // becomes F1&lt;X&gt;()
+F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()</code></pre>
+  </cxx-codeblock>
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
+      <p para_num="14" id="dcl.spec.constr.14">The meaning of the introduced constraint depends on the context
+      in which the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+      appears. If it appears in the
+      <cxx-grammarterm><i>decl-specifiers</i></cxx-grammarterm> of a
+      <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> of a 
+      generic lambda (<cxx-ref in="" to="expr.prim.lambda"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="expr.prim.lambda" elem="{{toElem}}"></cxx-get-element-by-id><a title="expr.prim.lambda" href="#expr.prim.lambda">3.1.1</a></cxx-ref>) or
+      generic function (<cxx-ref in="" to="dcl.fct"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="dcl.fct" elem="{{toElem}}"></cxx-get-element-by-id><a title="dcl.fct" href="#dcl.fct">5.1.1</a></cxx-ref>),
+      the the introduced constraint
+      is an associated constraint of the corresponding template. If it appears 
+      in <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> of a
+      <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm>, the introduced
+      constraint is evaluated as part of the enclosing
+      <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> 
+      (<cxx-ref in="" to="expr.req"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="expr.req" elem="{{toElem}}"></cxx-get-element-by-id><a title="expr.req" href="#expr.req">3.1.2</a></cxx-ref>).
+      </p>
+    
+    
+    </section>
+  </cxx-section> <!-- dcl.spec.constr -->
+
+    <cxx-section id="dcl.concept">
+    
+
+    <section>
+      <header><span class="section-number">4.1.4</span> <h1 data-bookmark-label="4.1.4 concept specifier"><code>concept</code> specifier</h1> <span style="float:right"><a href="#dcl.concept">[dcl.concept]</a></span></header>
+      
+      
+
+      <p para_num="1" id="dcl.concept.1">The <code>concept</code> specifier shall be applied to only the 
+      definition of a function template or variable template. 
+      A function template definition having the <code>concept</code>
+      specifier is called a <dfn>function concept</dfn>. A variable 
+      template definition having the <code>concept</code> specifier is called a 
+      <dfn>variable concept</dfn>. A <dfn>concept definition</dfn> refers
+      to either a function concept and its definition or 
+      a variable concept and its initializer.</p>
+
+      <p para_num="2" id="dcl.concept.2">A <dfn>type concept</dfn> is a concept whose first template
+      parameter is a <cxx-grammarterm><i>type-parameter</i></cxx-grammarterm>, but 
+      not a template template parameter. 
+
+      Otherwise, the concept is a <dfn>non-type concept</dfn>.
+
+      A <dfn>variadic concept</dfn> is a concept whose first template
+      parameter is a template parameter pack.
+      </p>
+
+      <p para_num="3" id="dcl.concept.3">Every concept definition is also a <code>constexpr</code> declaration
+      (<cxx-ref in="cxx" to="dcl.constexpr"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="dcl.constexpr">§7.1.5</span></cxx-ref>).
+      </p>
+
+      <p para_num="4" id="dcl.concept.4">A function concept has the following restrictions: </p>
+      <ul>
+        <li> The template must be unconstrained.</li>
+        <li> The result type must be <code>bool</code>. </li>
+        <li> The declaration shall have a 
+        <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>
+        equivalent to <code>()</code>. </li>
+        <li> The declaration shall be a definition. </li>
+        <li> The function shall not be recursive. </li>
+        <li> The function body shall consist of a single <code>return</code> 
+        statement whose expression shall be a
+        <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>. </li>
+      </ul>
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    <pre><code>template&lt;typename T&gt;
+        concept bool C1() { return true; } // OK
+
+      template&lt;typename T&gt;
+        concept int c2() { return 0; }  // error: must return bool
+
+      template&lt;typename T&gt;
+        concept bool C3(T) { return true; } // error: must have no parameters
+
+      concept bool p = 0; // error: not a template</code></pre>
+  </cxx-codeblock>
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  </cxx-example>
+
+      <p para_num="5" id="dcl.concept.5">A variable template has the following restrictions:
+      </p><ul>
+        <li> The template must be unconstrained. </li>
+        <li> The declared type must be <code>bool</code>. </li>
+        <li> The declaration must have an initializer. </li>
+        <li> The initializer shall be a 
+        <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>. </li>
+      </ul>
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    <pre><code>template&lt;typename T&gt;
+        concept bool D1 = has_x&lt;T&gt;::value; // OK
+
+      template&lt;typename T&gt;
+        concept bool D2 = 3 + 4; // Error: initializer is not a constraint
+
+      template&lt;Integral T&gt;
+        concept bool D3 = has_x&lt;T&gt;::value; // Error: constrained concept definition</code></pre>
+  </cxx-codeblock>
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  </cxx-example>
+      <p para_num="6" id="dcl.concept.6"></p>
+
+      <p para_num="7" id="dcl.concept.7">A program that declares an explicit or partial specialization of a concept
+      definition is ill-formed.
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt;
+        concept bool C = is_iterator&lt;T&gt;::value;
+
+      template&lt;typename T&gt;
+        concept bool C&lt;T*&gt; = true; // Error: partial specialization of a concept</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
+      <p para_num="8" id="dcl.concept.8">
+      <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+      The prohibitions against overloading and specialization prevent
+      users from subverting the constraint system by providing a meaning 
+      for a concept that differs from the one computed by evaluating its 
+      constraints.
+      
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+      </p>
+
+    
+    </section>
+  </cxx-section> <!-- dcl.concept -->
+
+  
+    </section>
+  </cxx-section> <!-- dcl.spec -->
+
+    </section>
+  </cxx-clause> <!-- dcl.dcl -->
+
+
+<cxx-clause id="dcl.decl">
+    
+
+    <section>
+      <header><span class="section-number">5</span> <h1 data-bookmark-label="5 Declarators">Declarators</h1> <span style="float:right"><a href="#dcl.decl">[dcl.decl]</a></span></header>
+      
+  
+
+  <p para_num="1" id="dcl.decl.1">Modify <cxx-ref in="cxx" to="dcl.decl"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="dcl.decl">§8</span></cxx-ref>/1 as follows:</p>
+
+  <p para_num="2" id="dcl.decl.2">A declarator declares a single variable, function, or type, within a 
+  declaration. The <cxx-grammarterm><i>init-declarator-list</i></cxx-grammarterm>
+  appearing in a declaration is a comma-separated sequence of declarators, 
+  each of which can 
+  <del>have an initializer</del>
+  <ins>have constraints or an initializer</ins>.
+  <bnf-grammar>
+    </bnf-grammar></p><div style="font-style:italic;margin-left:.35in;">
+      
+    <bnf-rule>
+    <span style="margin-left:.6in">init-declarator:<br></span>
+  </bnf-rule>
+      <bnf-alt>
+    <span style="margin-left:1.2in">
+        declarator
+        requires-clause<bnf-opt><sub>opt</sub></bnf-opt>
+        initializer<bnf-opt><sub>opt</sub></bnf-opt>
+      </span><br>
+  </bnf-alt>
+  
+    </div>
+  
+  <p></p>
+
+  <p para_num="3" id="dcl.decl.3">Insert the following paragraph after 
+  <cxx-ref in="cxx" to="dcl.decl"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="dcl.decl">§8</span></cxx-ref>/1</p>
+
+  <p para_num="4" id="dcl.decl.4">A <cxx-grammarterm><i>declarator</i></cxx-grammarterm> followed by a 
+  <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> declares a 
+  <dfn>constrained declaration</dfn>. 
+
+  The constrained declaration shall be a a template declaration
+  or member function declaration of a class template.
+
+  The <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> associates
+  its constraint with the declaration 
+  (<cxx-ref in="" to="temp.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.constr" href="#temp.constr">6.1.5</a></cxx-ref>).</p>
+
+  <p para_num="5" id="dcl.decl.5">A declarator that declares a constrained variable or type is 
+  ill-formed.</p>
+
+  <p para_num="6" id="dcl.decl.6">
+  <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+  Let <code>C</code> be a variable concept constraining a single
+  type parameter:
+  <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt;
+  struct S {
+    void g() requires C&lt;T&gt;; // Ok
+  }
+
+void f1(auto x) requires C&lt;decltyp(x)&gt;; // Ok
+void f2(int x) requires C&lt;int&gt;;         // Error: f2 does not have dependent type
+
+auto n requires C&lt;decltype(n)&gt; = g();   // Error: cannot declare a constrained variable.</code></pre>
+  
+  
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+  <p></p>
+
+
+  <cxx-section id="dcl.meaning">
+    
+
+    <section>
+      <header><span class="section-number">5.1</span> <h1 data-bookmark-label="5.1 Meaning of declarators">Meaning of declarators</h1> <span style="float:right"><a href="#dcl.meaning">[dcl.meaning]</a></span></header>
+      
+    
+
+    <cxx-section id="dcl.fct">
+    
+
+    <section>
+      <header><span class="section-number">5.1.1</span> <h1 data-bookmark-label="5.1.1 Functions">Functions</h1> <span style="float:right"><a href="#dcl.fct">[dcl.fct]</a></span></header>
+      
+      
+
+      <p para_num="1" id="dcl.fct.1">Add the following paragraphs after
+      <cxx-ref in="cxx" to="dcl.fct"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="dcl.fct">§8.3.5</span></cxx-ref>/14.</p>
+
+      <p para_num="2" id="dcl.fct.2">A <defn>generic function</defn> is a function template whose
+      <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> has a 
+      <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> whose 
+      <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm> is either 
+      <code>auto</code> or a 
+      <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm>.
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>auto f(auto x);  // Ok
+void sort(C&amp; c); // Ok (assuming C names a concept)</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
+      <p para_num="3" id="dcl.fct.3">The declaration of a generic function has a 
+      <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> that 
+      consists of one invented type 
+      <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> for each
+      occurrence of <code>auto</code> or each unique occurence of a 
+      <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm>
+      in the function's
+      <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>, 
+      in order of appearance. 
+      
+      The invented type of 
+      <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> is a parameter 
+      pack if the corresponding 
+      <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> declares 
+      a function parameter pack (<cxx-ref in="cxx" to="dcl.fct"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="dcl.fct">§8.3.5</span></cxx-ref>).
+      
+      <!-- TODO: I believe this duplicates a requirement elsewhere -->
+      The associated constraints of the generic function are 
+      the conjunction of constraints introduced by the use of 
+      <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm>s in the 
+      <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>.
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      The following generic function declarations are equivalent:
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>auto f(auto x, const C&amp; y);
+
+template&lt;typename T1, typename T2&gt;
+  requires C&lt;T2&gt;()
+    auto f(T1 x, const T2&amp; y);</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
+      <p para_num="4" id="dcl.fct.4">All placeholder types introduced using the same 
+      <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm> have the 
+      same invented template parameter.
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      The following generic function declarations are equivalent:
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>auto g(C a, C* b);
+
+template&lt;C T&gt;
+  auto g(T a, T* b);</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
+      <p para_num="5" id="dcl.fct.5">If an entity is declared by an abbreviated template declaration, 
+      then all its declarations must have the same form.</p>
+    
+    
+    </section>
+  </cxx-section> <!-- dcl.fct -->
+  
+    </section>
+  </cxx-section> <!-- dcl.meaning -->
+
+    </section>
+  </cxx-clause> <!-- dcl.decl -->
+
+
+<cxx-clause id="temp">
+    
+
+    <section>
+      <header><span class="section-number">6</span> <h1 data-bookmark-label="6 Templates">Templates</h1> <span style="float:right"><a href="#temp">[temp]</a></span></header>
+      
+  
+
+  <p para_num="1" id="temp.1">Modify the <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>
+  grammar in <cxx-ref in="cxx=" to="temp"><cxx-get-element-by-id elemid="cxx=" elem="{{inElem}}"></cxx-get-element-by-id></cxx-ref>.</p>
+
+  <p para_num="2" id="temp.2">
+  <bnf-grammar>
+    </bnf-grammar></p><div style="font-style:italic;margin-left:.35in;">
+      
+    <bnf-rule>
+    <span style="margin-left:.6in">template-declaration:<br></span>
+  </bnf-rule>
+      <bnf-alt>
+    <span style="margin-left:1.2in">
+        <bnf-terminal><code style="font-style:normal">template</code></bnf-terminal>
+        <bnf-terminal><code style="font-style:normal">&lt;</code></bnf-terminal>
+        template-parameter-list
+        <bnf-terminal><code style="font-style:normal">&gt;</code></bnf-terminal>
+        <ins>requires-clause<bnf-opt><sub>opt</sub></bnf-opt></ins>
+        declaration
+      </span><br>
+  </bnf-alt>
+      <bnf-alt>
+    <span style="margin-left:1.2in">
+      <ins>concept-introduction declaration</ins>
+      </span><br>
+  </bnf-alt>
+
+    <ins>
+    <bnf-rule>
+    <span style="margin-left:.6in">requires-clause:<br></span>
+  </bnf-rule>
+      <bnf-alt>
+    <span style="margin-left:1.2in">constraint-expression</span><br>
+  </bnf-alt>
+    </ins>
+  
+    </div>
+  
+
+  <p></p><p para_num="3" id="temp.3">Add the following paragraphs after 
+  <cxx-ref in="cxx" to="temp"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp">§14</span></cxx-ref>/6.</p>
+
+  <p para_num="4" id="temp.4">A <dfn>constrained template declaration</dfn> is a
+  <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> with 
+  associated constraints. The <dfn>associated constraint</dfn>s of a 
+  constrained template declaration are the conjunction of the associated 
+  constraints of all </p>
+  <ul>
+    <li><cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>s
+    in template's <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> 
+    (<cxx-ref in="" to="temp.param"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.param" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.param" href="#temp.param">6.1</a></cxx-ref>).</li>
+    <li> and all <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s 
+    introduced by <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>
+    in the <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>.</li>
+  </ul>
+  
+  <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+  A function or member function may have a 
+  <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> in its
+  declarator. These constraints are also part of the associated 
+  constraints of the template declaration.
+  
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+
+  <!-- FIXME: This could probably be written more explicitly. -->
+  <p para_num="5" id="temp.5">The associated constraints of a <cxx-grammarterm><i>concept-introduction</i></cxx-grammarterm>
+  are those required by the referenced concept definition. 
+  <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+  <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt;
+  concept bool Integral() { return is_integral&lt;T&gt;::value; }
+
+template&lt;Integral T&gt;
+  requires Unsigned&lt;T&gt;()
+    T binary_gcd(T a, T b);</code></pre>
+  
+  The associated constraints of <code>binary_gcd</code> are denoted by the
+  conjunction <code>Integral&lt;T&gt;() &amp;&amp; Unsigned&lt;T&gt;()</code>.
+  
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+  <p></p>
+
+  <p para_num="6" id="temp.6">A constrained template declaration's associated constraints must 
+  be satisfied (<cxx-ref in="" to="temp.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.constr" href="#temp.constr">6.1.5</a></cxx-ref>) to allow instantiation 
+  of the constrained template. 
+
+  The associated constraints are satisfied by substituting template 
+  arguments into the constraints and evaluating substituted expression. 
+
+  Constraints are satisfied when the result of that evaluation is 
+  <code>true</code>.
+
+  Class template, alias template, and variable template constraints 
+  are checked during name lookup (<cxx-ref in="" to="temp.names"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.names" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.names" href="#temp.names">6.1.1</a></cxx-ref>); 
+  function template constraints and class template partial specialization 
+  constraints are checked during template argument deduction
+  (<cxx-ref in="" to="temp.deduct"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.deduct" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.deduct" href="#temp.deduct">6.1.3.4.1</a></cxx-ref>).</p>
+
+  <p para_num="7" id="temp.7">Any usage of a constrained template in a template declaration 
+  is ill-formed unless the associated constraints of the constrained 
+  template are subsumed by the associated constraints of template 
+  parameter. No diagnostic is required.
+  </p>
+
+  <cxx-section id="temp.param">
+    
+
+    <section>
+      <header><span class="section-number">6.1</span> <h1 data-bookmark-label="6.1 Template parameters">Template parameters</h1> <span style="float:right"><a href="#temp.param">[temp.param]</a></span></header>
+      
+    
+
+    <p para_num="1" id="temp.param.1">Modify the <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>
+    grammar in (<cxx-ref in="cxx" to="temp.param"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.param">§14.1</span></cxx-ref>) to include
+    <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>.
+
+    <bnf-grammar>
+    </bnf-grammar></p><div style="font-style:italic;margin-left:.35in;">
+      
+      <bnf-rule>
+    <span style="margin-left:.6in">template-parameter:<br></span>
+  </bnf-rule>
+        <ins><bnf-alt>
+    <span style="margin-left:1.2in">constrained-parameter</span><br>
+  </bnf-alt></ins>
+
+      <ins>
+      <bnf-rule>
+    <span style="margin-left:.6in">constrained-parameter:<br></span>
+  </bnf-rule>
+        <bnf-alt>
+    <span style="margin-left:1.2in">
+          constrained-type-specifier 
+          <bnf-terminal><code style="font-style:normal">...</code></bnf-terminal><bnf-opt><sub>opt</sub></bnf-opt>
+          identifier
+        </span><br>
+  </bnf-alt>
+        <bnf-alt>
+    <span style="margin-left:1.2in">
+          constrained-type-specifier 
+          identifier
+          <bnf-terminal><code style="font-style:normal">=</code></bnf-terminal>
+          constrained-type-initializer
+        </span><br>
+  </bnf-alt>
+
+      <bnf-rule>
+    <span style="margin-left:.6in">constrained-type-initializer:<br></span>
+  </bnf-rule>
+        <bnf-alt>
+    <span style="margin-left:1.2in">type-id</span><br>
+  </bnf-alt>
+        <bnf-alt>
+    <span style="margin-left:1.2in">id-expression</span><br>
+  </bnf-alt>
+
+      </ins>
+    
+    </div>
+  
+
+    <p></p><p para_num="2" id="temp.param.2">Add the following paragraphs after
+    <cxx-ref in="cxx" to="temp.param"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.param">§14.1</span></cxx-ref>/15.</p>
+
+    <p para_num="3" id="temp.param.3">A <dfn>constrained template parameter</dfn> is a
+    <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> or a
+    <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> whose
+    <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm> contains a
+    <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
+
+    A <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> 
+    defines its identifier to be a template parameter, and it introduces
+    an associated constraint of the template declaration.
+
+    In a constrained template parameter, the concept definition referred to 
+    by the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> is 
+    called the  <dfn>constraining concept</dfn>, and its first template 
+    parameter is called the <dfn>prototype parameter</dfn>.
+
+    </p><p para_num="4" id="temp.param.4">
+    The kind of the template parameter declared by a
+    <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> matches that 
+    of the prototype parameter.
+    
+    If the template parameter is a template template parameter, then
+    it has the same number and kind of template parameters as the
+    prototype parameter.
+    <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt;
+  concept bool C1 = ...;
+template&lt;template&lt;typename&gt; class X&gt;
+  concept bool C2() { ... }
+
+template&lt;C1 T&gt; void f(); // T is a type parameter
+template&lt;C2 X&gt; void g(); // X is a template with one type parameter</code></pre>
+  
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+    <p></p>    
+
+    <p para_num="5" id="temp.param.5">If the constrained parameter is a non-type template parameter, then
+    then type of the declared parameter is formed by substituting the
+    type of prototype parameter for the
+    <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
+    <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;int N&gt;
+  concept bool P = ...;
+
+template&lt;P N&gt; void x();        // N has type int
+template&lt;const P* N&gt; void y(); // N has type const int*</code></pre>
+  
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+    <p></p>
+
+    <p para_num="6" id="temp.param.6">If the constraining concept is a variadic concept 
+    (<cxx-ref in="" to="dcl.concept"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="dcl.concept" elem="{{toElem}}"></cxx-get-element-by-id><a title="dcl.concept" href="#dcl.concept">4.1.4</a></cxx-ref>), then the constrained template 
+    parameter is declared as a parameter pack. The declaration of the 
+    constrained template parameter shall include an ellipses.
+    <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename... Ts&gt;
+  concept bool X = ...;
+
+template&lt;X... Xs&gt; void f(); // Xs is a parameter pack
+template&lt;X Xs&gt; void g();    // Error: must X must include ...</code></pre>
+  
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+    <p></p>
+
+    <p para_num="7" id="temp.param.7">The <cxx-grammarterm><i>constrained-type-initializer</i></cxx-grammarterm>
+    shall match the constrained template parameter.
+    <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;C1 T = int&gt; void p(); // Ok
+template&lt;P N = 0&gt; void q();    // Ok
+template&lt;P M = int&gt; void r();  // Error int is not an expression</code></pre>
+  
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+    <p></p>
+
+    <p para_num="8" id="temp.param.8">If the constrained template parameter is not a template parameter
+    pack, then the constraint introduced by the 
+    <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> in a
+    constrained template parameter is formed according to the rules
+    in section <cxx-ref in="" to="dcl.spec.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="dcl.spec.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="dcl.spec.constr" href="#dcl.spec.constr">4.1.3</a></cxx-ref>. When forming the
+    constraint, the declared parameter used as a template argument in
+    place of the constrained type.
+    <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+<cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;C1 T&gt; void f1(); // requires C1&lt;T&gt;
+template&lt;C2 U&gt; void f2(); // requires C2&lt;U&gt;
+template&lt;P N&gt; void f3(); // requires P&lt;N&gt;</code></pre>
+  
+    <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  </cxx-example>
+    <span class="nowrap">— <em>end example</em> ]</span>
+  <p></p><p para_num="9" id="temp.param.9">If the constrained template parameter is a template parameter pack,
+    the formation of the constraint depends on whether the constraining
+    concept is a variadic concept. 
+
+    Let <code>T</code> be the declared parameter, <code>C</code> be the
+    constraining concept, and <code>Args...</code> be a  sequence of template
+    arguments from a <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm>,
+    possibly empty.
+
+    If <code>C</code> is a variadic concept, then the associated constraint
+    is a <cxx-grammarterm><i>template-id</i></cxx-grammarterm> of the form
+    <code>C&lt;T..., Args...&gt;</code>. 
+
+    Otherwise, if <code>C</code> is not a variadic concept, the associated
+    constraint is a conjunction of sub-constraints
+    <code>C&lt;T<i>i</i>, Args...&gt;</code> for each <code>T<i>i</i></code>
+    in the parameter pack <code>T</code>.
+
+    If <code>C</code> is a function concept, each introduced constraint or
+    sub-constraint is adjusted to be a call expression of the form
+    <code>C&lt;X, Args...&gt;()</code> where <code>X</code> is either
+    the template parameter pack <code>T</code> or an element 
+    <code>T<i>i</i></code>.
+    <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;X... Xs&gt; void f4();    // requires X&lt;Xs...&gt;
+template&lt;C1... Args&gt; void f5(); // requires C1&lt;Args0&gt; &amp;&amp; C1&lt;Args1&gt; &amp;&amp; ... &amp;&amp; C1&lt;Argsn&gt;</code></pre>
+  
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+    <p></p>
+
+  <!-- FIXME: Check that this is in an appropriate place. -->
+  <cxx-section id="temp.names">
+    
+
+    <section>
+      <header><span class="section-number">6.1.1</span> <h1 data-bookmark-label="6.1.1 Template names">Template names</h1> <span style="float:right"><a href="#temp.names">[temp.names]</a></span></header>
+      
+    
+
+    <p para_num="1" id="temp.names.1">Modify <cxx-ref in="cxx" to="temp.names"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.names">§14.2</span></cxx-ref>/6.
+
+    </p><p para_num="2" id="temp.names.2">A <cxx-grammarterm><i>simple-template-id</i></cxx-grammarterm> that 
+    names a class template specialization is a 
+    <cxx-grammarterm><i>class-name</i></cxx-grammarterm>. 
+
+    <ins>The template-arguments shall satisfy the associated constraints 
+    of the designated class, if any.</ins>
+    <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;Object T, int N&gt; // T must be an object type
+  class array;
+
+array&lt;int&amp;, 3&gt;* p; // error: int&amp; is not an object type</code></pre>
+  
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+    <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+    This guarantees that a partial specialization cannot be less 
+    specialized than a primary template. This requirement is enforced
+    during name lookup, not when the partial specialization is declared.
+    
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+    <p></p>
+  
+    </section>
+  </cxx-section> <!-- temp.names -->
+
+  <cxx-section id="temp.arg">
+    
+
+    <section>
+      <header><span class="section-number">6.1.2</span> <h1 data-bookmark-label="6.1.2 Template arguments">Template arguments</h1> <span style="float:right"><a href="#temp.arg">[temp.arg]</a></span></header>
+      
+    
+
+    <cxx-section id="temp.arg.template">
+    
+
+    <section>
+      <header><span class="section-number">6.1.2.1</span> <h1 data-bookmark-label="6.1.2.1 Template template arguments">Template template arguments</h1> <span style="float:right"><a href="#temp.arg.template">[temp.arg.template]</a></span></header>
+      
+      
+
+      <p para_num="1" id="temp.arg.template.1">Modify <cxx-ref in="cxx" to="temp.arg.template"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.arg.template">§14.3.3</span></cxx-ref>.
+
+      </p><p para_num="2" id="temp.arg.template.2">A <cxx-grammarterm><i>template-argument</i></cxx-grammarterm> matches 
+      a template <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> 
+      (call it <code>P</code>) when each of the template parameters in 
+      the <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> of 
+      the <cxx-grammarterm><i>template-argument</i></cxx-grammarterm>'s 
+      corresponding class template or alias template (call it 
+      <code>A</code>) matches the corresponding template parameter in 
+      the <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> of 
+      <code>P</code><ins>, and the associated constraints of <code>P</code> 
+      shall subsume the associated constraints of <code>A</code>
+      (<cxx-ref in="" to="temp.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.constr" href="#temp.constr">6.1.5</a></cxx-ref>)</ins>.
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt;
+  concept bool X = has_x&lt;T&gt;::value;
+template&lt;typename T&gt;
+  concept bool Y = X&lt;T&gt; &amp;&amp; has_y&lt;T&gt;::value;
+template&lt;typename T&gt;
+  concept bool Z = Y&lt;T&gt; &amp;&amp; has_z&lt;T&gt;::value;
+
+template&lt;template&lt;Y&gt; class C&gt;
+  class temp { ... };
+
+template&lt;X T&gt; class x;
+template&lt;Z T&gt; class z;
+
+temp&lt;x&gt; s1; // Ok: X is subsumed by Y
+temp&lt;z&gt; s2; // error: Z subsumes Y</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
+    
+    </section>
+  </cxx-section> <!-- temp.arg.template -->
+  
+    </section>
+  </cxx-section> <!-- tmep.arg -->
+
+  <cxx-section id="temp.decls">
+    
+
+    <section>
+      <header><span class="section-number">6.1.3</span> <h1 data-bookmark-label="6.1.3 Template declarations">Template declarations</h1> <span style="float:right"><a href="#temp.decls">[temp.decls]</a></span></header>
+      
+    
+
+    <cxx-section id="temp.class">
+    
+
+    <section>
+      <header><span class="section-number">6.1.3.1</span> <h1 data-bookmark-label="6.1.3.1 Class templates">Class templates</h1> <span style="float:right"><a href="#temp.class">[temp.class]</a></span></header>
+      
+      
+
+      <cxx-section id="temp.mem.func">
+    
+
+    <section>
+      <header><span class="section-number">6.1.3.1.1</span> <h1 data-bookmark-label="6.1.3.1.1 Member functions of class templates">Member functions of class templates</h1> <span style="float:right"><a href="#temp.mem.func">[temp.mem.func]</a></span></header>
+      
+        
+
+        <p para_num="1" id="temp.mem.func.1">Add the following paragraphs after
+        <cxx-ref in="cxx" to="temp.mem.func"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.mem.func">§14.5.1.1</span></cxx-ref>.
+
+        
+        </p><p para_num="2" id="temp.mem.func.2">A member function of a class template whose declarator contains a
+        <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> is a
+        <dfn>constrained member function</dfn>.
+        <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+        <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt;
+  class S {
+    void f() requires C&lt;T&gt;();
+  };</code></pre>
+  
+        
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+        <p></p>
+
+        <p para_num="3" id="temp.mem.func.3">
+        Constraints on member functions are instantiated as needed
+        during overload resolution, not when the class template is
+        instantiated
+        (<cxx-ref in="cxx" to="temp.inst"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.inst">§14.7.1</span></cxx-ref>).
+        <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+        Constraints on member functions do not affect the declared 
+        interface of a class. That is, a constrained copy constructor 
+        is still a copy constructor, even if it will not be viable for 
+        a specialization of the class template.
+        
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+        </p>
+
+      
+    </section>
+  </cxx-section> <!-- temp.mem.func -->
+    
+    </section>
+  </cxx-section> <!-- temp.class -->
+
+    <cxx-section id="temp.friend">
+    
+
+    <section>
+      <header><span class="section-number">6.1.3.2</span> <h1 data-bookmark-label="6.1.3.2 Friends">Friends</h1> <span style="float:right"><a href="#temp.friend">[temp.friend]</a></span></header>
+      
+      
+
+      <p para_num="1" id="temp.friend.1">Add the following paragraphs after
+      <cxx-ref in="cxx" to="temp.friend"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.friend">§14.5.4</span></cxx-ref>/9.
+
+      </p><p para_num="2" id="temp.friend.2"> 
+      A <dfn>constrained friend</dfn> is a friend of a class 
+      template with associated constraints.
+
+      A constrained friend can be a constrained class template, 
+      constrained function template, or an ordinary (non-template) 
+      function.
+      
+      <!-- TODO: What is shorthand? -->
+      Constraints on template friends are written using shorthand, 
+      introductions, or a requires clause following the 
+      <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>.
+
+      Constraints on non-template friend functions are written 
+      after the result type.
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      When <code>C</code> is a type concept, all of the following are valid 
+      constrained friend declarations.
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt;
+  struct X {
+    template&lt;C U&gt;
+      friend void f(X x, U u) { }
+
+    template&lt;C W&gt;
+      friend struct Z { };
+
+    friend bool operator==(X a, X b) requires C&lt;T&gt;() {
+      return true;
+    }
+  };</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
+      <p para_num="3" id="temp.friend.3">
+      A non-template friend function shall not be constrained unless 
+      the function's parameter or result type depends on a template 
+      parameter.
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt;
+  struct S {
+    friend void f(int n) requires C&lt;T&gt;(); // Error: cannot be constrained
+  };</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
+      <p para_num="4" id="temp.friend.4">
+      A constrained non-template friend function shall not declare 
+      a specialization.
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt;
+  struct S {
+    friend void f&lt;&gt;(T x) requires C&lt;T&gt;(); // Error: declares a specialization
+
+    friend void g(T x) requires C&lt;T&gt;() { } // OK: does not declare a specialization
+  };</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
+      <p para_num="5" id="temp.friend.5">
+      As with constrained member functions, constraints on non-template friend
+      functions are not instantiated during class template instantiation.
+      </p>
+
+    
+    </section>
+  </cxx-section> <!-- temp.firend -->
+
+    <cxx-section id="temp.class.spec">
+    
+
+    <section>
+      <header><span class="section-number">6.1.3.3</span> <h1 data-bookmark-label="6.1.3.3 Class template partial specialization">Class template partial specialization</h1> <span style="float:right"><a href="#temp.class.spec">[temp.class.spec]</a></span></header>
+      
+      
+
+      <cxx-section id="temp.class.spec.match">
+    
+
+    <section>
+      <header><span class="section-number">6.1.3.3.1</span> <h1 data-bookmark-label="6.1.3.3.1 Matching of class template partial specializations">Matching of class template partial specializations</h1> <span style="float:right"><a href="#temp.class.spec.match">[temp.class.spec.match]</a></span></header>
+      
+        
+
+        <p para_num="1" id="temp.class.spec.match.1">Modify 
+        <cxx-ref in="cxx" to="temp.class.spec.match"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.class.spec.match">§14.5.5.1</span></cxx-ref>/2.</p>
+
+        <p para_num="2" id="temp.class.spec.match.2"> A partial specialization matches a given actual template 
+        argument list if the template arguments of the partial 
+        specialization can be deduced from the actual template argument 
+        list (<cxx-ref in="cxx" to="temp.deduct"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.deduct">§14.8.2</span></cxx-ref>)
+        <ins>, and the deduced template arguments satisfy the constraints 
+        of the partial specialization, if any 
+        (<cxx-ref in="" to="temp.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.constr" href="#temp.constr">6.1.5</a></cxx-ref>)</ins>.</p>
+
+      
+    </section>
+  </cxx-section> <!-- temp.class.spec.match -->
+
+      <cxx-section id="temp.class.order">
+    
+
+    <section>
+      <header><span class="section-number">6.1.3.3.2</span> <h1 data-bookmark-label="6.1.3.3.2 Partial ordering of class template specializations">Partial ordering of class template specializations</h1> <span style="float:right"><a href="#temp.class.order">[temp.class.order]</a></span></header>
+      
+        
+
+        <p para_num="1" id="temp.class.order.1">Modify 
+        <cxx-ref in="cxx" to="temp.class.order"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.class.order">§14.5.5.2</span></cxx-ref>/1.</p>
+
+        <p para_num="2" id="temp.class.order.2">
+        For two class template partial specializations, the first is 
+        at least as specialized as the second if, given the following 
+        rewrite to two function templates, the first function template 
+        is at least as specialized as the second according to the ordering 
+        rules for function templates 
+        (<cxx-ref in="cxx" to="temp.func.order"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.func.order">§14.5.6.2</span></cxx-ref>):
+        </p>
+        <ul>
+          <li> the first function template has the same template 
+          parameters <ins>and constraints</ins> as the first partial 
+          specialization and has a single function parameter whose
+          type is a class template specialization with the template 
+          arguments of the first partial specialization, and</li>
+
+          <li> the second function template has the same template 
+          parameters <ins>and constraints</ins> as the second partial 
+          specialization and has a single function parameter whose
+          type is a class template specialization with the template 
+          arguments of the second partial specialization.</li>
+        </ul>
+        <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+        <cxx-codeblock>
+    <pre><code>template&lt;typename T&gt;
+  concept bool Integer = is_integral&lt;T&gt;::value;
+template&lt;typename T&gt;
+  concept bool Unsigned_integer = Integer&lt;T&gt; &amp;&amp; is_unsigned&lt;T&gt;::value;
+
+template&lt;typename T&gt; class S { };
+template&lt;Integer T&gt; class S&lt;T&gt; { };          // #1
+template&lt;Unsigned_integer T&gt; class S&lt;T&gt; { }; // #2
+
+template&lt;Integer T&gt; void f(S&lt;T&gt;);          // A
+template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B</code></pre>
+  </cxx-codeblock>
+        The partial specialization #2 will be more specialized than 
+        #1 for template arguments that satisfy both constraints because 
+        <code>B</code> will be more specialized than <code>A</code>.
+        
+    <span class="nowrap">— <em>end example</em> ]</span>
+  </cxx-example>
+
+      
+    </section>
+  </cxx-section> <!-- temp.class.order -->
+    
+    </section>
+  </cxx-section> <!-- temp.class.spec -->
+
+    <cxx-section id="temp.fct">
+    
+
+    <section>
+      <header><span class="section-number">6.1.3.4</span> <h1 data-bookmark-label="6.1.3.4 Function templates">Function templates</h1> <span style="float:right"><a href="#temp.fct">[temp.fct]</a></span></header>
+      
+      
+
+      <cxx-section id="temp.deduct">
+    
+
+    <section>
+      <header><span class="section-number">6.1.3.4.1</span> <h1 data-bookmark-label="6.1.3.4.1 Template argument deduction">Template argument deduction</h1> <span style="float:right"><a href="#temp.deduct">[temp.deduct]</a></span></header>
+      
+        
+
+        <p para_num="1" id="temp.deduct.1">Modify
+        <cxx-ref in="cxx" to="temp.deduct"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.deduct">§14.8.2</span></cxx-ref>/2.
+
+        </p><p para_num="2" id="temp.deduct.2">When an explicit template argument list is specified, the 
+        template arguments must be compatible with the template parameter 
+        list and must result in a valid function type as described below; 
+        otherwise type deduction fails. Specifically, the following steps 
+        are performed when evaluating an explicitly specified template 
+        argument list with respect to a given function template:
+        </p>
+
+        <ul>
+          <li>The specified template arguments must match the template 
+          parameters in kind (i.e., type, non-type, template). There must 
+          not be more arguments than there are parameters unless at least 
+          one parameter is a template parameter pack, and there shall be 
+          an argument for each non-pack parameter. Otherwise, type
+          deduction fails.</li>
+
+          <li>
+          Non-type arguments must match the types of the corresponding 
+          non-type template parameters, or must be convertible to the 
+          types of the corresponding non-type parameters as specified in 
+          <cxx-ref in="cxx" to="temp.arg.nontype"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.arg.nontype">§14.3.2</span></cxx-ref> otherwise 
+          type deduction fails.</li>
+
+          <li><ins>If the function template is constrained, the specified 
+          template arguments are substituted into the associated 
+          constraints and evaluated. If the result of the evaluation is 
+          <code>false</code>, type deduction fails.</ins></li>
+
+          <li>The specified template argument values are substituted for 
+          the corresponding template parameters as specified below.
+        </li></ul>
+
+      
+    </section>
+  </cxx-section> <!-- temp.deduct -->
+
+      <cxx-section id="temp.over.link">
+    
+
+    <section>
+      <header><span class="section-number">6.1.3.4.2</span> <h1 data-bookmark-label="6.1.3.4.2 Function template overloading">Function template overloading</h1> <span style="float:right"><a href="#temp.over.link">[temp.over.link]</a></span></header>
+      
+        
+
+        <p para_num="1" id="temp.over.link.1">Modify <cxx-ref in="cxx" to="temp.over.link"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.over.link">§14.5.6.1</span></cxx-ref>/6.</p>
+
+        <p para_num="2" id="temp.over.link.2">
+        A function template can be overloaded either by (non-template) 
+        functions of its name or by (other) function templates of the 
+        same name. When a call to that name is written (explicitly, or 
+        implicitly using the operator notation), template argument deduction 
+        <cxx-ref in="" to="temp.deduct"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.deduct" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.deduct" href="#temp.deduct">6.1.3.4.1</a></cxx-ref><ins>,</ins> <del>and</del> 
+        checking of any explicit template arguments 
+        <cxx-ref in="cxx" to"temp.arg"=""><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="">§</span></cxx-ref> <ins>, and checking of 
+        associated constraints <cxx-ref in="" to="temp.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.constr" href="#temp.constr">6.1.5</a></cxx-ref></ins>
+        are performed for each function template to find the template 
+        argument values (if any) that can be used with that function 
+        template to instantiate a function template specialization that 
+        can be invoked with the call arguments. 
+
+        For each function template, if the argument deduction and 
+        checking succeeds, the template-arguments (deduced and/or 
+        explicit) are used to synthesize the declaration of a single 
+        function template specialization which is added to the 
+        candidate functions set to be used in overload resolution. If, 
+        for a given function template, argument deduction fails, no 
+        such function is added to the set of candidate functions for 
+        that template.
+
+        The complete set of candidate functions includes all the 
+        synthesized declarations and all of the non-template overloaded 
+        functions of the same name. The synthesized declarations are 
+        treated like any other functions in the remainder of overload 
+        resolution, except as explicitly noted in 
+        <cxx-ref in="cxx" to"over.match"=""><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="">§</span></cxx-ref>.
+        </p>
+
+        <p para_num="3" id="temp.over.link.3">Modify <cxx-ref in="cxx" to="temp.over.link"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.over.link">§14.5.6.1</span></cxx-ref>
+
+        </p><p para_num="4" id="temp.over.link.4">
+        Two function templates are <dfn>equivalent</dfn> if they are 
+        declared in the same scope, have the same name, have identical 
+        template parameter lists, <del>and</del> have return types<ins>,</ins> 
+        <del>and</del> parameter lists, <ins>and constraints 
+        <cxx-ref in="" to="temp.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.constr" href="#temp.constr">6.1.5</a></cxx-ref></ins> that are equivalent 
+        using the rules described above to compare expressions involving 
+        template parameters.
+        </p>
+
+      
+    </section>
+  </cxx-section> <!-- temp.over.link -->
+
+      <cxx-section id="temp.func.order">
+    
+
+    <section>
+      <header><span class="section-number">6.1.3.4.3</span> <h1 data-bookmark-label="6.1.3.4.3 Partial ordering of function templates">Partial ordering of function templates</h1> <span style="float:right"><a href="#temp.func.order">[temp.func.order]</a></span></header>
+      
+        
+
+        <p para_num="1" id="temp.func.order.1">Modify <cxx-ref in="cxx" to="temp.func.order"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.func.order">§14.5.6.2</span></cxx-ref>/2.</p>
+
+        <p para_num="2" id="temp.func.order.2">
+        Partial ordering selects which of two function templates is 
+        more specialized than the other by transforming each template 
+        in turn (see next paragraph) and performing template argument 
+        deduction using the function type. The deduction process 
+        determines whether one of the templates is more specialized 
+        than the other.
+
+        If so, the more specialized template is the one chosen by the 
+        partial ordering process. <ins>If the two templates have 
+        identical template parameter lists and equivalent return types 
+        and parameter lists, then partial ordering selects the template 
+        whose associated constraints subsume but are not equivalent to 
+        the associated constraints of the other 
+        <cxx-ref in="" to="temp.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.constr" href="#temp.constr">6.1.5</a></cxx-ref>. 
+
+        A constrained template is always selected over an unconstrained 
+        template.</ins>
+        </p>
+
+      
+    </section>
+  </cxx-section> <!-- temp.func.order -->
+    
+    </section>
+  </cxx-section> <!-- temp.fct -->
+  
+    </section>
+  </cxx-section> <!-- temp.decls -->
+
+  <cxx-section id="temp.spec">
+    
+
+    <section>
+      <header><span class="section-number">6.1.4</span> <h1 data-bookmark-label="6.1.4 Template instantiation and specialization">Template instantiation and specialization</h1> <span style="float:right"><a href="#temp.spec">[temp.spec]</a></span></header>
+      
+    
+
+    <cxx-section id="temp.inst">
+    
+
+    <section>
+      <header><span class="section-number">6.1.4.1</span> <h1 data-bookmark-label="6.1.4.1 Implicit instantiation">Implicit instantiation</h1> <span style="float:right"><a href="#temp.inst">[temp.inst]</a></span></header>
+      
+      
+
+      <p para_num="1" id="temp.inst.1">Insert the following pargraph after 
+      <cxx-ref in="cxx" to="temp.inst"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.inst">§14.7.1</span></cxx-ref>/1.</p>
+
+      <p para_num="2" id="temp.inst.2">The implicit instantiation of a class template does not cause
+      the instantiation of the associated constraints of constrained member 
+      functions.</p>
+    
+    </section>
+  </cxx-section> <!-- temp.inst -->
+
+    <cxx-section id="temp.explicit">
+    
+
+    <section>
+      <header><span class="section-number">6.1.4.2</span> <h1 data-bookmark-label="6.1.4.2 Explicit instantiation">Explicit instantiation</h1> <span style="float:right"><a href="#temp.explicit">[temp.explicit]</a></span></header>
+      
+      
+
+      <p para_num="1" id="temp.explicit.1">Insert the following paragraph under 
+      <cxx-ref in="cxx" to="temp.explicit"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp.explicit">§14.7.2</span></cxx-ref>.</p>
+
+      <p para_num="2" id="temp.explicit.2">An explicit instantiation of constrained template declaration
+      (<cxx-ref in="" to="temp"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp" href="#temp">6</a></cxx-ref>)
+      or constrained member function declaration 
+      (<cxx-ref in="" to="temp.mem.func"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.mem.func" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.mem.func" href="#temp.mem.func">6.1.3.1.1</a></cxx-ref>)
+      shall satsify the associated constraints of that declaration
+      (<cxx-ref in="" to="temp.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.constr" href="#temp.constr">6.1.5</a></cxx-ref>).
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typname T&gt;
+  concept bool C = requires(T t) { t.c(); }s
+
+template&lt;typenane T&gt;
+  requires C&lt;T&gt;
+    struct X { }
+
+template struct X&lt;int&gt;; // Error: int does not satisfy C.</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+    
+    </section>
+  </cxx-section> <!-- temp.explicit -->
+  
+    </section>
+  </cxx-section> <!-- temp.spec -->
+
+  <cxx-section id="temp.constr">
+    
+
+    <section>
+      <header><span class="section-number">6.1.5</span> <h1 data-bookmark-label="6.1.5 Template constraints">Template constraints</h1> <span style="float:right"><a href="#temp.constr">[temp.constr]</a></span></header>
+      
+    
+
+    <p para_num="1" id="temp.constr.1">Add this as a new section under 
+    <cxx-ref in="cxx" to="temp"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp">§14</span></cxx-ref>.</p>
+
+    <p para_num="2" id="temp.constr.2">
+    Certain contexts require expressions that satisfy additional 
+    requirements as detailed in this sub-clause. Expressions that 
+    satisfy these requirements are called 
+    <dfn>constraint expression</dfn>s or simply 
+    <dfn>constraint</dfn>s.
+    <bnf-grammar>
+    </bnf-grammar></p><div style="font-style:italic;margin-left:.35in;">
+      
+      <bnf-rule>
+    <span style="margin-left:.6in">constraint-expression:<br></span>
+  </bnf-rule>
+        <bnf-alt>
+    <span style="margin-left:1.2in">logical-or-expression</span><br>
+  </bnf-alt>
+    
+    </div>
+  
+    Constraint expressions are required after a 
+    <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> and in the body or
+    initializer of a concept definition.<p></p>
+
+    <p para_num="3" id="temp.constr.3">
+    A <cxx-grammarterm><i>logical-or-expression</i></cxx-grammarterm> is a
+    <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> if, after 
+    substituting template arguments, the resulting expression
+    </p><ul>
+    <li>is a constant expression,</li>
+    <li>has type <code>bool</code>, and</li>
+    <li>the operands to every subexpression that is either a
+    <cxx-grammarterm><i>logical-or-expression</i></cxx-grammarterm> of the
+    form <code>P || Q</code> or a
+    <cxx-grammarterm><i>logical-and-expression</i></cxx-grammarterm> of the
+    form <code>P &amp;&amp; Q</code> has type <code>bool</code>.</li>
+    </ul>
+    <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+    A <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> 
+    defines a subset of constant expressions over which certain 
+    logical implications can be proven during translation.
+    The requirement that operands to logical operators have type
+    <code>bool</code> prevents constraint expressions from finding
+    user-defined overloads of those operators and possibly subverting the
+    logical processing required by constraints.
+    
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+    <!-- </p> -->
+
+    <p para_num="4" id="temp.constr.4">A program that includes an expression not satisfying these requirements
+    in a context where a <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>
+    is required is ill-formed.</p>
+
+    <p para_num="5" id="temp.constr.5">
+    <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    Let <code>T</code> be a dependent type, <code>C</code> be a unary function 
+    concept, <code>P</code>, <code>Q</code>, and <code>R</code> be 
+    value-dependent expressions whose type is <code>bool</code>, and 
+    <code>M</code> and  <code>N</code> be integral expressions. All of the 
+    following expressions can be used as constraints:
+    <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>C&lt;T&gt;()
+has_trait&lt;T&gt;::value // if value is a bool member
+P &amp;&amp; Q
+P || (Q &amp;&amp; R)
+M == N              // if the result type is bool
+M &lt; N               // if the result type is bool
+M + N &gt;= 0
+P || !(M &lt; N)
+true
+false</code></pre>
+  
+An expression of the form <code>M + N</code> is not a valid constraint when
+the arguments have type <code>int</code> since the expression's type is not
+<code>bool</code>. Using this expression as a constraint would make the
+program ill-formed.
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+    <p></p>
+
+    <p para_num="6" id="temp.constr.6">A subexpression of a
+    <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> that 
+    calls a function concept or refers to a variable concept 
+    <cxx-ref in="" to="dcl.concept"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="dcl.concept" elem="{{toElem}}"></cxx-get-element-by-id><a title="dcl.concept" href="#dcl.concept">4.1.4</a></cxx-ref> is a <dfn>concept check</dfn>.</p>
+
+    <p para_num="7" id="temp.constr.7">Certain subexpressions of a
+    <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> are 
+    considered <dfn>atomic constraint</dfn>s. A constraint is atomic 
+    if it is not:
+    </p><ul>
+    <li>a <cxx-grammarterm><i>logical-or-expression</i></cxx-grammarterm> of the form
+        <code>P || Q</code>,</li>
+    <li>a <cxx-grammarterm><i>logical-and-expression</i></cxx-grammarterm> of the form
+        <code>P &amp;&amp; Q</code>,</li>
+    <li>a concept check,</li>
+    <li>a <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>, or</li>
+    <li>a subexpression of an atomic constraint.</li>
+    </ul>
+
+    <p para_num="8" id="temp.constr.8">Constraints are <dfn>simplified</dfn> by reducing them to 
+    expressions containing only logical operators and atomic constraints.
+    Concept checks and <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>s 
+    are replaced by simplified expressions.
+    <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+    An implementation is not required to normalize the constraint by rewriting
+    it in e.g., disjunctive normal form.
+    
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+    </p>
+
+    <p para_num="9" id="temp.constr.9">A concept check that calls a function concept is simplified by
+    substituting the explicit template arguments into the named function
+    body's return expression. If the check refers a variable concepts, the 
+    replacement is made by substituting the template arguments into the 
+    variable's initializer.
+    </p>
+
+    <p para_num="10" id="temp.constr.10">A <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> is simplified
+    by replacing it with the conjunction of constraints introduced by
+    the <cxx-grammarterm><i>requirement</i></cxx-grammarterm>s its 
+    <cxx-grammarterm><i>requirement-list</i></cxx-grammarterm>.
+    <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+    Certain atomic constraints introduced by a 
+    <cxx-grammarterm><i>requirement</i></cxx-grammarterm> have no explicit syntactic 
+    representation in the C++.
+    
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+    </p>
+ 
+ <!-- 
+    FIXME: Write a bunch of examples.
+
+
+    <cxx-example class="inline"> 
+    The expression 
+    <code>x==y &amp;&amp; has_trait&lt;T&gt;::value</code> 
+    has two atoms:
+    <code>x == y</code> and <code>is_integral&lt;T&gt;::value</code>.
+    The expression
+    <code>requires(T a, T b) { {a==b} -> bool; }</code> has two atomic
+    constraints. <code>a==b</code> must be a valid expression, and
+    <code>decltype((a==b)) must be implicitly convertible to <code>bool</code>.
+    </cxx-example>
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool C() { return sizeof(T) &gt;= 4; }
+
+template&lt;typename T&gt;
+  concept bool D = C&lt;T&gt;();
+
+template&lt;typename X&gt;
+  requires C&lt;X&gt;() // Processed as sizeof(X) &gt;= 4
+void f();
+
+template&lt;typename Q&gt;
+  requires D&lt;Q&gt;   // Processed as sizeof(Q) >= 4
+void g();
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+ -->
+
+
+    <p para_num="11" id="temp.constr.11">A constraint is <dfn>satisfied</dfn> if, after substituting template
+    arguments, it evaluates to <code>true</code>. Otherwise, the constraint is 
+    <dfn>unsatisfied</dfn>.</p>
+
+    <p para_num="12" id="temp.constr.12">
+    For a mapping <i>M</i> from a set <i>X</i> of atomic 
+    constraints to boolean values, let <i>G(M)</i> be the mapping 
+    from constraints to boolean values such that <i>G(M)(C)</i> is 
+    the result of substituting each atomic constraint A within 
+    <i>C</i> for <i>M(A)</i>.
+
+    For two constraints <code>P</code> and <code>Q</code>, let 
+    <i>X</i> be the set of all atomic constraints that
+    appear in <code>P</code> and <code>Q</code>.
+
+    <code>P</code> is said to <dfn>subsume</dfn> <code>Q</code> if, for 
+    every mapping <i>M</i> from members of <i>X</i> to boolean 
+    values for which <i>M(A) = M(B)</i> whenever <i>A</i> and <i>B</i> 
+    are equivalent, either <i>G(M)(P)</i> is false or <i>G(M)(Q)</i> is 
+    true (or both).
+    </p>
+
+
+    <!--
+    FIXME: Write meaningful examples:
+    <p>
+    Given two constraints <code>P</code> and <code>Q</code> depending 
+    on template parameters <code>T1</code>, ..., <code>Tn</code>, 
+    <code>P</code> is said to <dfn>subsume</dfn> <code>Q</code> if
+    for any template arguments substituted for 
+    <code>T1</code>, ..., <code>Tn</code>, the constraint <code>Q</code> 
+    is true, then <code>P</code> is also true.
+    <cxx-example class="inline">
+    Let <code>P</code> be the constraint 
+    <code>is_integral&lt;T&gt;::value &amp;&amp; sizeof(T) == 4</code>, 
+    and let <code>Q</code> be the constraint <code>sizeof(T) == 4</code>.
+    Then <code>P</code> subsumes <code>Q</code>, but <code>Q</code> 
+    does not subsume <code>P</code>.
+    </cxx-example>
+    </p>
+    -->
+
+    <p para_num="13" id="temp.constr.13">Two <cxx-grammarterm><i>constraint-expressions</i></cxx-grammarterm>
+    <code>P</code> and <code>Q</code> are <dfn>logically equivalent</dfn> 
+    if and only if <code>P</code> subsumes <code>Q</code> and 
+    <code>Q</code> subsumes <code>P</code>. </p>
+
+  
+    </section>
+  </cxx-section> <!-- temp.constr -->
+
+
+  <cxx-section id="concept.intro">
+    
+
+    <section>
+      <header><span class="section-number">6.1.6</span> <h1 data-bookmark-label="6.1.6 Concept introductions">Concept introductions</h1> <span style="float:right"><a href="#concept.intro">[concept.intro]</a></span></header>
+      
+    
+
+    <p para_num="1" id="concept.intro.1">Add this as a new section under 
+    <cxx-ref in="cxx" to="temp"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="temp">§14</span></cxx-ref>.</p>
+
+    <p para_num="2" id="concept.intro.2"> A <cxx-grammarterm><i>concept-introduction</i></cxx-grammarterm> allows 
+    the declaration of template and its associated constraints in a 
+    concise way.
+    <bnf-grammar>
+    </bnf-grammar></p><div style="font-style:italic;margin-left:.35in;">
+      
+      <bnf-rule>
+    <span style="margin-left:.6in">concept-introduction:<br></span>
+  </bnf-rule>
+        <bnf-alt>
+    <span style="margin-left:1.2in">
+          concept-name
+          <bnf-terminal><code style="font-style:normal">{</code></bnf-terminal>
+          introduction-list
+          <bnf-terminal><code style="font-style:normal">}</code></bnf-terminal>
+          declaration
+        </span><br>
+  </bnf-alt>
+      <bnf-rule>
+    <span style="margin-left:.6in">introduction-list:<br></span>
+  </bnf-rule>
+        <bnf-alt>
+    <span style="margin-left:1.2in">identifier</span><br>
+  </bnf-alt>
+        <bnf-alt>
+    <span style="margin-left:1.2in">
+          introduction-list <bnf-terminal><code style="font-style:normal">,</code></bnf-terminal> identifier
+        </span><br>
+  </bnf-alt>
+    
+    </div>
+  
+    <p></p>
+
+    <!-- TODO: This does not explain that an appropriate concept can
+         if they are overloaded. -->
+    <p para_num="3" id="concept.intro.3">The <cxx-grammarterm><i>concept-introduction</i></cxx-grammarterm> names 
+    a concept and a list of identifiers to be used as template parameters, 
+    called the <dfn>introduced parameters</dfn> in the declaration. The 
+    number of <cxx-grammarterm><i>identifier</i></cxx-grammarterm>s in the 
+    <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm> shall match the 
+    number of template parameters in the named concept.
+    <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename I1, typename I2, typename O&gt;
+  concept bool Mergeable() { ... };
+
+Mergeable{First, Second, Out} // OK
+  Out merge(First, First, Second, Second, Out); 
+
+Mergeable{X, Y} // Error: not enough parameters
+  void f(X, Y);</code></pre>
+  
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+    <p></p>
+
+    <p para_num="4" id="concept.intro.4">The introduced parameters are the template parameters of the declaration,
+    and they match the template parameters in the declaration of the named
+    concept. The associated constraints
+    of the declaration are formed by applying the introduced parameters as
+    arguments to the named concept (<cxx-ref in="" to="dcl.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="dcl.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="dcl.constr" href="#dcl.constr"></a></cxx-ref>).
+    <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    The following declaration
+    <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>Mergeable{X, Y, Z}
+  Z merge(X, X, Y, Y, Z);</code></pre>
+  
+    is equivalent to the declaration below.
+    <cxx-codeblock>
+    <pre><code>template&lt;typename X, typename Y, typename Z&gt;
+  requires Mergeable&lt;X, Y, Z&gt;()
+    Z merge(X, X, Y, Y, Z);</code></pre>
+  </cxx-codeblock>
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+    <p></p>
+
+    <p para_num="5" id="concept.intro.5">If a constrained declaration is introduced by a concept 
+    introduction, then all its declarations must have the same 
+    form.</p>
+
+    <p para_num="6" id="concept.intro.6">The sequence of introduced parameters in a 
+    <cxx-grammarterm><i>concept-introduction</i></cxx-grammarterm>
+    shall have the same number of template parameters as the referenced 
+    concept.
+    <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    <cxx-codeblock>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T1, typename T2, typename T3 = T2&gt;
+  concept bool Ineffable() { ... };
+
+Ineffable{X, Y} void f();    // Error: does not introduce all parameters
+Ineffable{X, Y, Z} void g(); // Ok</code></pre>
+  
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+    <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+    Allowing default arguments to be deduced in a 
+    <cxx-grammarterm><i>concept-introduction</i></cxx-grammarterm> would cause 
+    the introduction of an unnamed and unusable template parameter in the 
+    template declaration.
+    
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+   <!-- concept.intro -->
+
+ <!-- temp -->
+<p></p>
+    </section>
+  </cxx-section>
+    </section>
+  </cxx-section>
+    </section>
+  </cxx-clause>
+
+
+
+
+
+</body></html>
