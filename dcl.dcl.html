@@ -187,14 +187,15 @@ C&lt;char, int&gt; // A template-id
 
       The <dfn>candidate constraint</dfn> is a 
       <cxx-grammarterm>template-id</cxx-grammarterm> having the form
-      <code>C&lt;T, Args&gt;</code>. If <code>C&lt;T, Args&gt;</code> does
-      not refer to a template specialization, the candidate constraint
-      is rejected.
+      <code>C&lt;T, Args&gt;</code>. 
       <cxx-note>
       If <code>Args</code> is empty, the resulting 
       <cxx-grammarterm>template-id</cxx-grammarterm> is of the form 
-      <code>C&lt;T, Args&gt;</code>.
+      <code>C&lt;T&gt;</code>.
       </cxx-note>
+
+      If <code>C&lt;T, Args&gt;</code> does not refer to a template 
+      specialization, the candidate constraint is rejected.
       <cxx-note>
       The expression <code>C&lt;T, Args&gt;</code> may not refer to a valid
       template specialization if <code>Args</code> contains too many or to 
@@ -328,30 +329,13 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
       <cxx-example class="inline">
       <cxx-codeblock>
       template&lt;typename T&gt;
-        concept bool Integral = is_integral&lt;T&gt;::value; // OK
+        concept bool D1 = has_x&lt;T&gt;::value; // OK
 
       template&lt;typename T&gt;
-        concept bool C = 3 + 4; // Error: initializer is not a constraint
+        concept bool D2 = 3 + 4; // Error: initializer is not a constraint
 
       template&lt;Integral T&gt;
-        concept bool D = is_unsigned&lt;T&gt;::value; // Error: constrained concept definition
-      </cxx-codeblock>
-      </cxx-example>
-      </p>
-
-      <!-- FIXME: This isn't right -->
-
-      <p>If a program declares a non-concept overload of a concept 
-      definition with the same template parameters and no function 
-      parameters, the program is ill-formed.
-      <cxx-example class="inline">
-      <cxx-codeblock>
-      template&lt;typename T&gt;
-        concept bool Totally_ordered() { ... }
-
-      template&lt;Graph G&gt;
-        constexpr bool Totally_ordered() // error: subverts concept definition
-        { return true; }
+        concept bool D3 = has_x&lt;T&gt;::value; // Error: constrained concept definition
       </cxx-codeblock>
       </cxx-example>
       </p>

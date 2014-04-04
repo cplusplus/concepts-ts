@@ -25,7 +25,13 @@
 
   "expr.const"          : "5.19",
 
+  "dcl.spec"          : "7.1",
   "dcl.constexpr"     : "7.1.5",
+  "dcl.type"          : "7.1.6",
+  "dcl.type.cv"       : "7.1.6.1",
+  "dcl.type.simple"   : "7.1.6.2",
+  "dcl.type.elab"     : "7.1.6.3",
+  "dcl.spec.auto"     : "7.1.6.4",
 
   "dcl.decl"          : "8",
   "dcl.name"          : "8.1",

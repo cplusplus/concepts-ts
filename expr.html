@@ -178,39 +178,40 @@ template&lt;typename T&gt;
     arguments, template parameters, and any other declarations visible from the 
     enclosing context. Each <cxx-grammarterm>requirement</cxx-grammarterm> 
     introduces a conjunction of one or more atomic constraints 
-    (<cxx-ref to="temp.constr"></cxx-ref>), depending on its kind.
-    The kinds of atomic constraints introduced by a requirement are
-    described in the following paragraphs.</p>
-    
-    <p>A <dfn>valid expression constraint</dfn> is a predicate on a dependent 
+    (<cxx-ref to="temp.constr"></cxx-ref>). The kinds of atomic constraints
+    introduced by a <cxx-grammarterm>requirement</cxx-grammarterm> are:
+    <ul>
+    <li>A <dfn>valid expression constraint</dfn> is a predicate on a dependent 
     expression. The constraint is satisfied if and only if the substitution of 
     template arguments into that expression does not result in substitution 
     failure. The result of successfully substituting template arguments
     into the dependent expression produces a <dfn>valid expression</dfn>.
     Valid expressions are the targets of other atomic constraints introduced
-    by <cxx-grammarterm>requirement</cxx-grammarterm>s.</p>
+    by <cxx-grammarterm>requirement</cxx-grammarterm>s.</li>
 
-    <p>A <dfn>valid type constraint</dfn> is a predicate on a dependent type.
+    <li>A <dfn>valid type constraint</dfn> is a predicate on a dependent type.
     the constraint is satisfied if and only if the substitution of template
     arguments into that type does not result in substitution failure. The
     result of successfully substituting template arguments into the dependent
     type produces an <dfn>associated type</dfn>. Associated types are the
-    targets of conversion constraints, described below.</p>
+    targets of conversion constraints, described below.</li>
 
-    <p>A <dfn>conversion constraint</dfn> is satisfied if and only if a valid 
+    <li>A <dfn>conversion constraint</dfn> is satisfied if and only if a valid 
     expression is implicitly convertible to a non-dependent or associated type 
-    (<cxx-ref in="cxx" to="conv"></cxx-ref>).</p>
+    (<cxx-ref in="cxx" to="conv"></cxx-ref>).</li>
 
 
-    <p>A <dfn>constant expression constraint</dfn> is satisfied if and only
+    <li>A <dfn>constant expression constraint</dfn> is satisfied if and only
     if a valid expression is a constant expression 
     (<cxx-ref in="cxx" to="expr.const"></cxx-ref>).
-    </p>
+    </li>
 
-    <p>An <dfn>exception constraint</dfn> is satisfied if and only if, for
+    <li>An <dfn>exception constraint</dfn> is satisfied if and only if, for
     a valid expression <code>E</code>, the expression <code>noexcept(E)</code>
     evaluates to <code>true</code>
     (<cxx-ref in="cxx" to="expr.unary.noexcept"></cxx-ref>).
+    </li>
+    </ul>
     </p>
 
     <p>A <cxx-grammarterm>requires-expression</cxx-grammarterm> evaluates to

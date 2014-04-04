@@ -25,17 +25,34 @@
 
   <p>A <cxx-grammarterm>declarator</cxx-grammarterm> followed by a 
   <cxx-grammarterm>requires-clause</cxx-grammarterm> declares a 
-  <defn>constrained declaration</defn>. 
+  <dfn>constrained declaration</dfn>. 
+
+  The constrained declaration shall be a a template declaration
+  or member function declaration of a class template.
 
   The <cxx-grammarterm>requires-clause</cxx-grammarterm> associates
-  a constraint with the declaration (<cxx-ref to="temp.constr"></cxx-ref>). 
+  its constraint with the declaration 
+  (<cxx-ref to="temp.constr"></cxx-ref>).</p>
 
-  A declarator that declares a constrained variable, type, or 
-  non-template member function of a non-template class is ill-formed.
+  <p>A declarator that declares a constrained variable or type is 
+  ill-formed.</p>
 
+  <p>
   <cxx-example>
-  </cxx-example>
+  Let <code>C</code> be a variable concept constraining a single
+  type parameter:
+  <cxx-codeblock>
+template&lt;typename T&gt;
+  struct S {
+    void g() requires C&lt;T&gt;; // Ok
+  }
 
+void f1(auto x) requires C&lt;decltyp(x)&gt;; // Ok
+void f2(int x) requires C&lt;int&gt;;         // Error: f2 does not have dependent type
+
+auto n requires C&lt;decltype(n)&gt; = g();   // Error: cannot declare a constrained variable.
+  </cxx-codeblock>
+  </cxx-example>
   </p>
 
 
@@ -56,8 +73,8 @@
       <cxx-grammarterm>constrained-type-name</cxx-grammarterm>.
       <cxx-example class="inline">
       <cxx-codeblock>
-auto f(auto x); // Ok
-void sort(Sortable& c); // Ok (assuming Sortable names a concept)
+auto f(auto x);  // Ok
+void sort(C& c); // Ok (assuming C names a concept)
       </cxx-codeblock>
       </cxx-example>
       </p>
@@ -82,34 +99,29 @@ void sort(Sortable& c); // Ok (assuming Sortable names a concept)
       The associated constraints of the generic function are 
       the conjunction of constraints introduced by the use of 
       <cxx-grammarterm>constrained-type-name</cxx-grammarterm>s in the 
-      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>.</p>
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>.
+      <cxx-example class="inline">
+      The following generic function declarations are equivalent:
+      <cxx-codeblock>
+auto f(auto x, const C&amp; y);
 
+template&lt;typename T1, typename T2>
+  requires C&lt;T2>()
+    auto f(T1 x, const T2&amp; y);
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
 
       <p>All placeholder types introduced using the same 
       <cxx-grammarterm>constrained-type-name</cxx-grammarterm> have the 
-      same invented template parameter.</p>
-
-      <!-- TODO: Improve these examples -->
-      <p>
+      same invented template parameter.
       <cxx-example class="inline">
-      The generic function declared below
+      The following generic function declarations are equivalent:
       <cxx-codeblock>
-auto f(auto x, const Regular&amp; y);
-      </cxx-codeblock>
-      Is equivalent to the following declaration
-      <cxx-codeblock>
-template&lt;typename T1, typename T2>
-  requires Regular&lt;T2>()
-    auto f(T1 x, const T2&amp; y);
-      </cxx-codeblock>
-      The generic function declared below
-      <cxx-codeblock>
-auto gcd(Integral a, Integral b);
-      </cxx-codeblock>
-      Is equivalent to the following declaration:
-      <cxx-codeblock>
-template&lt;Integral T&gt;
-  auto gcd(T a, T b);
+auto g(C a, C* b);
+
+template&lt;C T&gt;
+  auto g(T a, T* b);
       </cxx-codeblock>
       </cxx-example>
       </p>
