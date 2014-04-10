@@ -1400,7 +1400,7 @@ template<Input_iterator I, Predicate<Value_type<I>> P>
     by <cxx-grammarterm><i>requirement</i></cxx-grammarterm>s.</li>
 
     <li>A <dfn>valid type constraint</dfn> is a predicate on a dependent type.
-    the constraint is satisfied if and only if the substitution of template
+    The constraint is satisfied if and only if the substitution of template
     arguments into that type does not result in substitution failure. The
     result of successfully substituting template arguments into the dependent
     type produces an <dfn>associated type</dfn>. Associated types are the
@@ -1514,8 +1514,8 @@ template<Input_iterator I, Predicate<Value_type<I>> P>
     <span class="nowrap">— <em>end note</em> ]</span>
   <p></p>
 
-      <p para_num="2" id="expr.req.type.2">If the required type will always results in a substitution failure,
-      then the program is ill-formed.
+      <p para_num="2" id="expr.req.type.2">If the required type always results in a substitution failure,
+      the program is ill-formed.
       <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
@@ -1590,7 +1590,7 @@ template<Input_iterator I, Predicate<Value_type<I>> P>
       <li>an optional associated type requirement</li>
       <li>an optional conversion requirement or nested requirement,</li>
       <li>an optional constant expression requirement, and </li>
-      <li>an optional an exception requirement.</li>
+      <li>an optional exception requirement.</li>
       </ul>
       A <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> is
       satisfied if and only if every constraint in the set is satisfied.
@@ -1623,7 +1623,7 @@ template<Input_iterator I, Predicate<Value_type<I>> P>
       type constraint is introduced for the type formed by substituting
       <code>decltype((E))</code> for <code>C</code> in the trailing
       <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm>. A new constraint
-      a new constraint expression is formed according to the rules described in 
+      expression is formed according to the rules described in 
       <cxx-ref in="" to="dcl.constr"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="dcl.constr" elem="{{toElem}}"></cxx-get-element-by-id><a title="dcl.constr" href="#dcl.constr"></a></cxx-ref> by substituting 
       <code>decltype((E))</code> as the constraint argument.</li>
       </ul>
@@ -1639,7 +1639,7 @@ template<Input_iterator I, Predicate<Value_type<I>> P>
       introduced.</p>
        -->
 
-      <p para_num="6" id="expr.req.compound.6">If the <code>constexpr</code> specifier is present then a constant 
+      <p para_num="6" id="expr.req.compound.6">If the <code>constexpr</code> specifier is present, a constant 
       expression constraint is introduced for the valid expression 
       <code>E</code>.<cxx-note><span class="nowrap">[ <em>Note:</em></span>
     The constraint is satisfied only when
@@ -1647,7 +1647,7 @@ template<Input_iterator I, Predicate<Value_type<I>> P>
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note></p>
 
-      <p para_num="7" id="expr.req.compound.7">If the <code>noexcept</code> specifier is present, then an
+      <p para_num="7" id="expr.req.compound.7">If the <code>noexcept</code> specifier is present, an
       exception constraint is introduced for the valid expression
       <code>E</code>.<cxx-note><span class="nowrap">[ <em>Note:</em></span>
     The constraint is satisfied only when
@@ -1666,7 +1666,7 @@ template<Input_iterator I, Predicate<Value_type<I>> P>
 
 requires(T x) {
   {x++}; #1
-  {*x} -&gt; typename T::r; #2
+  {*p} -&gt; typename T::r; #2
   {f(x)} -&gt; const Inscrutible&amp; #3
   {g(x)} noexcept -&gt; T&amp; #4
   constexpr {T::value}; #5
@@ -1686,7 +1686,7 @@ requires(T x) {
       type, and <code>Inscrutible&lt;decltype((f(x)))&gt;</code> is a nested 
       requirement.
 
-      Requirement #3 includes an exception requirement, that <code>g(x)</code>
+      Requirement #4 includes an exception requirement, that <code>g(x)</code>
       does not propagate requirements. It also requires an associated type
       requirement (<code>T&amp;</code>) and a conversion requirement
       (<code>g(x)</code> must be implicitly convertible to <code>T&amp;</code>).
@@ -1826,11 +1826,11 @@ requires(T x) {
       <cxx-ref in="cxx" to="dcl.spec.auto"><cxx-get-element-by-id elemid="cxx" elem="{{inElem}}"></cxx-get-element-by-id>C++14 <span title="dcl.spec.auto">§7.1.6.4</span></cxx-ref>/3.</p>
 
       <p para_num="2" id="dcl.spec.auto.2">If the <code>auto</code> 
-      <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm> can appear as one 
+      <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm> appears as one 
       of the <cxx-grammarterm><i>decl-specifiers</i></cxx-grammarterm> in the 
       <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm> of
       <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> of a 
-      function declarator, then the function is a generic function 
+      function declarator, the function is a generic function 
       (<cxx-ref in="" to="dcl.fct"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="dcl.fct" elem="{{toElem}}"></cxx-get-element-by-id><a title="dcl.fct" href="#dcl.fct">5.1.1</a></cxx-ref>).
       </p>
 
@@ -1859,7 +1859,7 @@ requires(T x) {
       <p para_num="2" id="dcl.spec.constr.2">If the <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm> 
       appears as one of the <cxx-grammarterm><i>decl-specifiers</i></cxx-grammarterm> 
       of a <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> in
-      a <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>, then the
+      a <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>, the
       declared parameter is a 
       <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>, and its
       meaning is defined in section <cxx-ref in="" to="temp.param"><cxx-get-element-by-id elemid="" elem="{{inElem}}"></cxx-get-element-by-id><cxx-get-element-by-id elemid="temp.param" elem="{{toElem}}"></cxx-get-element-by-id><a title="temp.param" href="#temp.param">6.1</a></cxx-ref>.
