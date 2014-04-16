@@ -99,7 +99,9 @@ void sort(C& c); // Ok (assuming C names a concept)
       The associated constraints of the generic function are 
       the conjunction of constraints introduced by the use of 
       <cxx-grammarterm>constrained-type-name</cxx-grammarterm>s in the 
-      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>.
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
+      and the <cxx-grammarterm>requires-clause</cxx-grammarterm> in
+      the function's declarator, if present.
       <cxx-example class="inline">
       The following generic function declarations are equivalent:
       <cxx-codeblock>
