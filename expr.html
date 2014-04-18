@@ -346,24 +346,27 @@ requires () {
       <cxx-grammarterm>trailing-return-type</cxx-grammarterm> introduces 
       additional requirements. These depend on whether or not the
       <cxx-grammarterm>trailing-return-type</cxx-grammarterm> contains
-      a <cxx-grammarterm>constrained-type-name</cxx-grammarterm>.
+      a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
       <ul>
-      <li>If so, a valid type constraint is introduced for the trailing
+      
+      <li>If so, two new constraints are introduced. Let <code>C</code> be the 
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>. 
+
+      A valid type constraint is introduced for the type formed by substituting
+      <code>decltype((E))</code> for <code>C</code> in the
+      <cxx-grammarterm>trailing-return-type</cxx-grammarterm>. 
+
+      A new constraint is formed also according to the rules described in
+      <cxx-ref to="dcl.constr"></cxx-ref> by substituting 
+      <code>decltype((E))</code> as the constraint argument.</li>
+
+      <li>Otherwise, a valid type constraint is introduced for the trailing
       <cxx-grammarterm>type-specifier</cxx-grammarterm>. Let <code>T</code>
       be the associated type formed form successful substitution.
       A conversion constraint requiring that <code>E</code> be
       implicitly convertible to <code>T</code> is also introduced.</li>
 
-      <li>Otherwise, let <code>C</code> be the 
-      <cxx-grammarterm>constrained-type-name</cxx-grammarterm>. A valid
-      type constraint is introduced for the type formed by substituting
-      <code>decltype((E))</code> for <code>C</code> in the trailing
-      <cxx-grammarterm>type-specifier</cxx-grammarterm>. A new constraint
-      a new constraint expression is formed according to the rules described in 
-      <cxx-ref to="dcl.constr"></cxx-ref> by substituting 
-      <code>decltype((E))</code> as the constraint argument.</li>
-      </ul>
-      </p>
+      </ul> <!-- </p> -->
 
       <!-- TODO: I'm not sure we need this... it's mostly an optimization.
            We can also avoid introducing associated type
