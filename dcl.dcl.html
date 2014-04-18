@@ -48,32 +48,41 @@
     <cxx-section id="dcl.spec.auto">
       <h1><code>auto</code> specifier</h1>
 
-      <p>Add the following paragraph after
-      <cxx-ref in="cxx" to="dcl.spec.auto"></cxx-ref>/3.</p>
+      <p>Modify
+      <cxx-ref in="cxx" to="dcl.spec.auto"></cxx-ref>/1 so that the
+      last sentence reads:</p>
 
-      <p>If the <code>auto</code> 
-      <cxx-grammarterm>type-specifier</cxx-grammarterm> can appear as one 
-      of the <cxx-grammarterm>decl-specifiers</cxx-grammarterm> in the 
-      <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of
-      <cxx-grammarterm>parameter-declaration</cxx-grammarterm> of a 
-      function declarator, then the function is a generic function 
-      (<cxx-ref to="dcl.fct"></cxx-ref>).
-      </p>
-
-    </cxx-section>
+      <p>The <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
+      is also used to signify that a lambda is a generic lambda <ins>or that
+      a function is a generic function</ins>.</p>
+    </cxx-section> <!-- dcl.spec.auto -->
 
 
+      <!-- TODO: Relax the requirements in /1-2 to allow 
+           constrained-type-specifiers in more contexts. -->
     <cxx-section id="dcl.spec.constr">
       <h1>Constrained type specifiers</h1>
 
       <p>A <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
-      can appear in the <cxx-grammarterm>decl-specifiers</cxx-grammarterm>
-      of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> or
-      in the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> of
-      a <cxx-grammarterm>compound-requirement</cxx-grammarterm>
-      <cxx-ref to="expr.req"></cxx-ref>.  A program that includes a
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> in
-      any other context is ill-formed.</p>
+      designates a placeholder type that will be replaced later by
+      deduction from a required valid expression in a
+      <cxx-grammarterm>compound-requirement</cxx-grammarterm>. A
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> is also 
+      used to signify that a lambda is a generic lambda or that a function 
+      is a generic function. </p>
+
+      <p>A <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+      can appear in the <cxx-grammarterm>trailing-return-type</cxx-grammarterm>
+      of a <cxx-grammarterm>compound-requirement</cxx-grammarterm> or in
+      any context in which the <code>auto</code>
+      <cxx-grammarterm>type-specifier</cxx-grammarterm> appears, except:
+      <ul>
+        <li>in the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of
+        a variable declaration,</li>
+        <li>in the return type of a function declaration,</li>
+        <li>in the <code>decltype(auto))</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>, or</li>
+        <li>a <cxx-grammarterm>conversion-function-id</cxx-grammarterm>.</li>
+      </ul> <!-- </p> -->
 
       <p>If the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> 
       appears as one of the <cxx-grammarterm>decl-specifiers</cxx-grammarterm> 
