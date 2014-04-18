@@ -15,57 +15,57 @@
     </bnf-grammar>
 
     <cxx-section id="expr.prim.lambda">
-    <h1>Lambda expressions</h1>
+      <h1>Lambda expressions</h1>
 
-    <p>Modify 
-    <cxx-ref in="cxx" to="expr.prim.lambda"></cxx-ref>/5.</p>
+      <p>Modify 
+      <cxx-ref in="cxx" to="expr.prim.lambda"></cxx-ref>/5.</p>
 
-    <p>The closure type for a non-generic
-    <cxx-grammarterm>lambda-expression</cxx-grammarterm> has a public
-    <code>inline</code> function call operator 
-    (<cxx-ref in="cxx" to="over.over"></cxx-ref>) whose parameters 
-    and return type 
-    are described by the <cxx-grammarterm>lambda-expression</cxx-grammarterm>'s 
-    <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> and 
-    <cxx-grammarterm>trailing-return-type</cxx-grammarterm>
-    respectively. 
-    
-    For a generic lambda, the closure type has a public inline function call 
-    operator member template (<cxx-ref in="cxx" to="temp.mem"></cxx-ref>) 
-    whose <cxx-grammarterm>template-parameter-list</cxx-grammarterm> 
-    consists of one invented type 
-    <cxx-grammarterm>template-parameter</cxx-grammarterm> for each 
-    occurrence of <code>auto</code> <ins>or each unique occurrence of a 
-    <cxx-grammarterm>constrained-type-name</cxx-grammarterm></ins>
-    in the lambda's 
-    <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, 
-    in order of appearance. 
+      <p>The closure type for a non-generic
+      <cxx-grammarterm>lambda-expression</cxx-grammarterm> has a public
+      <code>inline</code> function call operator 
+      (<cxx-ref in="cxx" to="over.over"></cxx-ref>) whose parameters 
+      and return type 
+      are described by the <cxx-grammarterm>lambda-expression</cxx-grammarterm>'s 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> and 
+      <cxx-grammarterm>trailing-return-type</cxx-grammarterm>
+      respectively. 
+      
+      For a generic lambda, the closure type has a public inline function call 
+      operator member template (<cxx-ref in="cxx" to="temp.mem"></cxx-ref>) 
+      whose <cxx-grammarterm>template-parameter-list</cxx-grammarterm> 
+      consists of one invented type 
+      <cxx-grammarterm>template-parameter</cxx-grammarterm> for each 
+      occurrence of <code>auto</code> <ins>or each unique occurrence of a 
+      <cxx-grammarterm>constrained-type-name</cxx-grammarterm></ins>
+      in the lambda's 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, 
+      in order of appearance. 
 
-    The invented type template-parameter is a parameter 
-    pack if the corresponding 
-    <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
-    declares a function parameter pack 
-    (<cxx-ref in="cxx" to="dcl.fct"></cxx-ref>). 
-    <ins>The associated constraints of the generic lambda are the 
-    conjunction of constraints introduced by the use of 
-    <cxx-grammarterm>constrained-type-name</cxx-grammarterm>s in the
-    <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>.</ins>
-    
-    The return type and function parameters of the function call operator 
-    template are derived from the 
-    <cxx-grammarterm>lambda-expression</cxx-grammarterm>'s 
-    <cxx-grammarterm>trailing-return-type</cxx-grammarterm> and 
-    <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
-    by replacing each occurrence of <code>auto</code> in the 
-    <cxx-grammarterm>decl-specifiers</cxx-grammarterm> of the
-    <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> with the 
-    name of the corresponding invented 
-    <cxx-grammarterm>template-parameter</cxx-grammarterm>. </p>
+      The invented type template-parameter is a parameter 
+      pack if the corresponding 
+      <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
+      declares a function parameter pack 
+      (<cxx-ref in="cxx" to="dcl.fct"></cxx-ref>). 
+      <ins>The associated constraints of the generic lambda are the 
+      conjunction of constraints introduced by the use of 
+      <cxx-grammarterm>constrained-type-name</cxx-grammarterm>s in the
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>.</ins>
+      
+      The return type and function parameters of the function call operator 
+      template are derived from the 
+      <cxx-grammarterm>lambda-expression</cxx-grammarterm>'s 
+      <cxx-grammarterm>trailing-return-type</cxx-grammarterm> and 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
+      by replacing each occurrence of <code>auto</code> in the 
+      <cxx-grammarterm>decl-specifiers</cxx-grammarterm> of the
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> with the 
+      name of the corresponding invented 
+      <cxx-grammarterm>template-parameter</cxx-grammarterm>. </p>
 
-    <p>All placeholder types introduced using the same 
-    <cxx-grammarterm>concept-name</cxx-grammarterm> have the same invented
-    template parameter.</p>
-    </cxx-section>
+      <p>All placeholder types introduced using the same 
+      <cxx-grammarterm>concept-name</cxx-grammarterm> have the same invented
+      template parameter.</p>
+    </cxx-section> <!-- expr.prim.lambda -->
 
 
   <cxx-section id="expr.req">
@@ -301,14 +301,14 @@ requires () {
       associated types
       within a <cxx-grammarterm>requires-expression</cxx-grammarterm>.
       <cxx-codeblock>
-requires(...) {
-  typename X&lt;T&gt;;
+requires () {
+  typename X<T>;
   requires C&lt;X&lt;T&gt;&gt;();
 }
       </cxx-codeblock>
       These requirements are satisfied only when substitution into 
-      <code>X&lt;T&gt;</code> is successful and when C&lt;X&lt;T&gt;&gt;()
-      evaluates to <code>true</code>.
+      <code>X&lt;T&gt;</code> is successful and when 
+      <code>C&lt;X&lt;T&gt;&gt;()</code> evaluates to <code>true</code>.
       </cxx-example>
       </p>
     </cxx-section> <!-- expr.re.nested -->
