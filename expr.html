@@ -181,28 +181,38 @@ template&lt;typename T&gt;
     (<cxx-ref to="temp.constr"></cxx-ref>). The kinds of atomic constraints
     introduced by a <cxx-grammarterm>requirement</cxx-grammarterm> are:
     <ul>
-    <li>A <dfn>valid expression constraint</dfn> is a predicate on a dependent 
+    <li>A <dfn>valid expression constraint</dfn> is a predicate on an
     expression. The constraint is satisfied if and only if the substitution of 
     template arguments into that expression does not result in substitution 
     failure. The result of successfully substituting template arguments
-    into the dependent expression produces a <dfn>valid expression</dfn>.
-    Valid expressions are the targets of other atomic constraints introduced
-    by <cxx-grammarterm>requirement</cxx-grammarterm>s.</li>
+    into the dependent expression produces a <dfn>valid expression</dfn>.</li>
 
-    <li>A <dfn>valid type constraint</dfn> is a predicate on a dependent type.
+    <li>A <dfn>valid type constraint</dfn> is a predicate on a type.
     the constraint is satisfied if and only if the substitution of template
     arguments into that type does not result in substitution failure. The
     result of successfully substituting template arguments into the dependent
-    type produces an <dfn>associated type</dfn>. Associated types are the
-    targets of conversion constraints, described below.</li>
+    type produces an <dfn>associated type</dfn>.</li>
 
-    <li>A <dfn>conversion constraint</dfn> is satisfied if and only if a valid 
-    expression is implicitly convertible to a non-dependent or associated type 
-    (<cxx-ref in="cxx" to="conv"></cxx-ref>).</li>
+    <li>A <dfn>result type constraint</dfn> is a predicate on the result type
+    of a valid expression. Let <code>E</code> be a valid expression and 
+    <code>X</code> be a <cxx-grammarterm>trailing-return-type</cxx-grammarterm>.
 
+    The constraint is satisfied if and only if <code>E</code> can be used as an 
+    argument to an invented function <code>f</code>, which has a single function
+    parameter of type <code>X</code> and returning <code>void</code>. That is,
+    the function call <code>f(E)</code> must be a valid expression.
+    
+    <cxx-note>
+    Each template parameter referred to by <code>X</code> is a template
+    parameter of the invented function <code>f</code>. If <code>X</code>
+    contains a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+    or <code>auto</code> specifier, then <code>f</code> is a generic function
+    (<cxx-ref to ="dcl.fct"></cxx-ref>).
+    </cxx-note>
+    </li>
 
     <li>A <dfn>constant expression constraint</dfn> is satisfied if and only
-    if a valid expression is a constant expression 
+    if a valid expression <code>E</code> is a constant expression 
     (<cxx-ref in="cxx" to="expr.const"></cxx-ref>).
     </li>
 
@@ -323,10 +333,10 @@ requires () {
       used. This set includes:
       <ul>
       <li>a valid expression constraint,</li>
-      <li>an optional associated type requirement</li>
-      <li>an optional conversion requirement or nested requirement,</li>
-      <li>an optional constant expression requirement, and </li>
-      <li>an optional an exception requirement.</li>
+      <li>an optional associated type constraint</li>
+      <li>an optional result type constraint,</li>
+      <li>an optional constant expression constraint, and </li>
+      <li>an optional an exception constraint.</li>
       </ul>
       A <cxx-grammarterm>compound-requirement</cxx-grammarterm> is
       satisfied if and only if every constraint in the set is satisfied.
@@ -344,49 +354,15 @@ requires () {
 
       <p>The presence of a
       <cxx-grammarterm>trailing-return-type</cxx-grammarterm> introduces 
-      additional requirements. These depend on whether or not the
-      <cxx-grammarterm>trailing-return-type</cxx-grammarterm> contains
-      a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
-      <ul>
-      
-      <li>If so, two new constraints are introduced. Let <code>C</code> be the 
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>. 
-
-      A valid type constraint is introduced for the type formed by substituting
-      <code>decltype((E))</code> for <code>C</code> in the
-      <cxx-grammarterm>trailing-return-type</cxx-grammarterm>. 
-
-      A new constraint is formed also according to the rules described in
-      <cxx-ref to="dcl.constr"></cxx-ref> by substituting 
-      <code>decltype((E))</code> as the constraint argument.</li>
-
-      <li>Otherwise, a valid type constraint is introduced for the trailing
-      <cxx-grammarterm>type-specifier</cxx-grammarterm>. Let <code>T</code>
-      be the associated type formed form successful substitution.
-      A conversion constraint requiring that <code>E</code> be
-      implicitly convertible to <code>T</code> is also introduced.</li>
-
-      </ul> <!-- </p> -->
-
-      <!-- TODO: I'm not sure we need this... it's mostly an optimization.
-           We can also avoid introducing associated type
-           requirements when the trailing-return-type is a 
-           simple-type-specifier not containing a simple-template-id.
-      
-      <p>If the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> is
-      not a dependent type, then no associated type requirement is
-      introduced.</p>
-       -->
+      a result type constraint on <code>E</code>.</p>
 
       <p>If the <code>constexpr</code> specifier is present then a constant 
       expression constraint is introduced for the valid expression 
-      <code>E</code>.<cxx-note>The constraint is satisfied only when
-      <code>E</code> is a constant expression.</cxx-note></p>
+      <code>E</code>.</p>
 
       <p>If the <code>noexcept</code> specifier is present, then an
       exception constraint is introduced for the valid expression
-      <code>E</code>.<cxx-note>The constraint is satisfied only when
-      <code>noexcept(E)</code> evaluates to <code>true</code>.</cxx-note></p>
+      <code>E</code>.</p>
 
       <p>
       <cxx-example>
@@ -398,37 +374,54 @@ requires(T x) {
   {x++}; #1
   {*x} -> typename T::r; #2
   {f(x)} -> const Inscrutible&amp; #3
-  {g(x)} noexcept -> T&amp; #4
+  {g(x)} noexcept -> auto&amp; #4
   constexpr {T::value}; #5
   constexpr {T() + T()} -> T #6;
 }
       </cxx-codeblock>
-      Requirement #1 introduces only a valid expression requirement and
-      is equivalent to a <cxx-grammarterm>simple-requirement</cxx-grammarterm>
-      containing the same expression.
+      Each of these requirements introduces a valid expression constraint
+      on the expression in its enclosing braces.
+
+      Requirement #1 introduces no additional constraints. It is equivalent to 
+      a <cxx-grammarterm>simple-requirement</cxx-grammarterm> containing the 
+      same expression.
       
-      In requirement #2, <code>*p</code> is a required valid expression and 
-      <code>typename T::r</code> is a required associated types. After 
-      substitution, <code>*p</code> must be implicitly convertible to the 
-      type named by <code>typename T::r</code>. 
+      Requirement #2 <code>*x</code> introduces a result type constraint
+      though its <cxx-grammarterm>trailing-return-type</cxx-grammarterm>,
+      <code>typename T::r</code>. The required valid expression <code>*x</code> 
+      must be usable as an argument to the invented function:
+      <cxx-codeblock>
+template&lt;class T&gt; 
+  void z1(typename T::r);
+      </cxx-codeblock>
 
-      In #3, <code>const decltype((f(x)))&</code> is a required associated
-      type, and <code>Inscrutible&lt;decltype((f(x)))&gt;</code> is a nested 
-      requirement.
+      Requirement #3 also introduces a result type constraint on its required
+      valid expression <code>f(x)</code>. This expression must be usable as
+      an argument to the invented generic function:
+      <cxx-codeblock>
+void z2(const Instrutible&amp;)
+      </cxx-codeblock>
+      
+      Requirement #4 introduces a result type constraint and an exception 
+      constraint. The required valid expression <code>g(x)</code> must
+      be usable as as an argument to the invented generic function:
+      <cxx-codeblock>
+void z3(auto&amp;);
+      </cxx-codeblock>
+      Additionally, <code>g(x)</code> must not propagate exceptions.
 
-      Requirement #3 includes an exception requirement, that <code>g(x)</code>
-      does not propagate requirements. It also requires an associated type
-      requirement (<code>T&amp;</code>) and a conversion requirement
-      (<code>g(x)</code> must be implicitly convertible to <code>T&amp;</code>).
+      Requirement #5 introduces a constant expression constraint:
+      <code>T::value</code> must be a constant expression. 
 
-      Requirement #5 includes a constant expression requirement, namely
-      that <code>T::value</code> must be a constant expression, but no
-      associated type, conversion, or nested requirements. 
-
-      #6 includes a constant expression requirement (<code>T() + T()</code>),
-      an associated type requirement (<code>T</code>), and a conversion
-      requirement (<code>T() + T()</code> must be implicitly convertible
-      to <code>T</code>).
+      The requirement in #6 introduces a result type constraint and a constant 
+      expression constraint. The required valid expression 
+      <code>T() + T()</code> must be usable as an argument to the invented 
+      function:
+      <cxx-codeblock>
+template&lt;class T&gt;
+  void z4(T);
+      </cxx-codeblock>
+      The valid expression must also be a constant expression.
       </cxx-example>
       </p>
     </cxx-section> <!-- expr.req.compound -->
