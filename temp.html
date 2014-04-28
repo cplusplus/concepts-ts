@@ -31,9 +31,9 @@
 
   <p>A <dfn>constrained template declaration</dfn> is a
   <cxx-grammarterm>template-declaration</cxx-grammarterm> with 
-  associated constraints. The <dfn>associated constraint</dfn>s of a 
+  associated constraints. The <dfn>associated constraints</dfn> of a 
   constrained template declaration are the conjunction of the associated 
-  constraints of all </p>
+  constraints of all</p>
   <ul>
     <li><cxx-grammarterm>constrained-parameter</cxx-grammarterm>s
     in template's <cxx-grammarterm>template-parameter-list</cxx-grammarterm> 
@@ -42,6 +42,23 @@
     introduced by <cxx-grammarterm>requires-clause</cxx-grammarterm>
     in the <cxx-grammarterm>template-declaration</cxx-grammarterm>.</li>
   </ul>
+
+  <cxx-example>
+Assuming <code>C</code> and <code>D</code> are concepts, the associated 
+constraints of:
+  <cxx-codeblock>
+template&lt;C T&gt;
+  requires D&lt;T&gt;
+    struct S;
+  </cxx-codeblock>
+are represented by the conjunction <code>C&lt;T&gt; &amp;&amp; D&lt;T&gt;</code>.
+Similarly the associated constraints of the following generic function:
+<cxx-codeblock>
+void f(C a, D b)
+</cxx-codeblock>
+are <code>C&lt;T1&gt; &amp;&amp; D&lt;T2&gt;</code> where <code>T1</code>
+and <code>T2</code> are function's the invented template parameters.
+  </cxx-example>
   
   <cxx-note>
   A function or member function may have a 
@@ -511,40 +528,15 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
       <cxx-section id="temp.deduct">
         <h1>Template argument deduction</h1>
 
-        <p>Modify
-        <cxx-ref in="cxx" to="temp.deduct"></cxx-ref>/2.
+        <p>Immediately after
+        <cxx-ref in="cxx" to="temp.deduct"></cxx-ref>/5, add the following
+        paragraph:</p>
 
-        <p>When an explicit template argument list is specified, the 
-        template arguments must be compatible with the template parameter 
-        list and must result in a valid function type as described below; 
-        otherwise type deduction fails. Specifically, the following steps 
-        are performed when evaluating an explicitly specified template 
-        argument list with respect to a given function template:
-        </p>
-
-        <ul>
-          <li>The specified template arguments must match the template 
-          parameters in kind (i.e., type, non-type, template). There must 
-          not be more arguments than there are parameters unless at least 
-          one parameter is a template parameter pack, and there shall be 
-          an argument for each non-pack parameter. Otherwise, type
-          deduction fails.</li>
-
-          <li>
-          Non-type arguments must match the types of the corresponding 
-          non-type template parameters, or must be convertible to the 
-          types of the corresponding non-type parameters as specified in 
-          <cxx-ref in="cxx" to="temp.arg.nontype"></cxx-ref> otherwise 
-          type deduction fails.</li>
-
-          <li><ins>If the function template is constrained, the specified 
-          template arguments are substituted into the associated 
-          constraints and evaluated. If the result of the evaluation is 
-          <code>false</code>, type deduction fails.</ins></li>
-
-          <li>The specified template argument values are substituted for 
-          the corresponding template parameters as specified below.
-        </ul>
+        <p>If the template has associated constraints, the template arguments
+        are substituted into those associated constraints and evaluated.
+        If the substitution results in an invalid type or expression, or
+        if the associated constraints evaluate to <code>false</code>,
+        type deduction fails.</p>
 
       </cxx-section> <!-- temp.deduct -->
 
