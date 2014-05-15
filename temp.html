@@ -3,35 +3,125 @@
   <h1>Templates</h1>
 
   <p>Modify the <cxx-grammarterm>template-declaration</cxx-grammarterm>
-  grammar in <cxx-ref in="cxx=" to="temp"></cxx-ref>.</p>
+  grammar in <cxx-ref in="cxx" to="temp"></cxx-ref>.</p>
 
   <p>
   <bnf-grammar>
     <bnf-rule>template-declaration</bnf-rule>
+      <del>
       <bnf-alt>
         <bnf-terminal>template</bnf-terminal>
         <bnf-terminal>&lt;</bnf-terminal>
         template-parameter-list
         <bnf-terminal>&gt;</bnf-terminal>
-        <ins>requires-clause<bnf-opt></bnf-opt></ins>
         declaration
       </bnf-alt>
-      <bnf-alt>
-      <ins>concept-introduction declaration</ins>
-      </bnf-alt>
+      </del>
+
+
+      <bnf-alt>template-head declaration</bnf-alt>
 
     <ins>
+    <bnf-rule>template-head</bnf-rule>
+      <bnf-alt>
+        <bnf-terminal>template</bnf-terminal>
+        <bnf-terminal>&lt;</bnf-terminal>
+        template-parameter-list
+        <bnf-terminal>&gt;</bnf-terminal>
+        requires-clause<bnf-opt></bnf-opt></bnf-alt>
+      <bnf-alt>
+        concept
+        <bnf-terminal>{</bnf-terminal>
+        introduction-list
+        <bnf-terminal>}</bnf-terminal>
+      </bnf-alt>
+
     <bnf-rule>requires-clause</bnf-rule>
       <bnf-alt><bnf-terminal>requires</bnf-terminal> constraint-expression</bnf-alt>
+
+      <bnf-rule>concept</bnf-rule>
+        <bnf-alt>nested-name-specifier<bnf-opt></bnf-opt>&nbsp; concept-name</bnf-alt>
+
+      <bnf-rule>introduction-list</bnf-rule>
+        <bnf-alt>identifier</bnf-alt>
+        <bnf-alt>introduction-list <bnf-terminal>,</bnf-terminal> identifier</bnf-alt>
     </ins>
   </bnf-grammar>
 
   <p>Add the following paragraphs after 
   <cxx-ref in="cxx" to="temp"></cxx-ref>/6.</p>
 
-  <p>A <dfn>constrained template declaration</dfn> is a
+  <p>A <cxx-grammarterm>requires-clause</cxx-grammarterm> associates a
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the
+  template declaration. A <dfn>constrained template declaration</dfn> is a
   <cxx-grammarterm>template-declaration</cxx-grammarterm> with 
-  associated constraints. The <dfn>associated constraints</dfn> of a 
+  associated constraints <cxx-ref to="temp.constr"></cxx-ref>.</p>
+
+  <p>A <cxx-grammarterm>template-declaration</cxx-grammarterm> is written in
+  terms of its <cxx-grammarterm>template-parameters</cxx-grammarterm>. These
+  parameters are declared explicitly in a
+  <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
+  (<cxx-ref to="temp.param"></cxx-ref>), or they are
+  introduced by a <cxx-grammarterm>concept</cxx-grammarterm> and its
+  <cxx-grammarterm>introduction-list</cxx-grammarterm>
+  (<cxx-ref to="temp.intro"></cxx-ref>).
+
+  In the latter case, the <cxx-grammarterm>concept-name</cxx-grammarterm> of
+  the <cxx-grammarterm>concept</cxx-grammarterm> shall refer to the
+  concept declaration having the same number of template parameters as
+  the number of <cxx-grammarterm>identifier</cxx-grammarterm>s in
+  <cxx-grammarterm>introduction-list</cxx-grammarterm>. 
+  
+  Each <cxx-grammarterm>identifier</cxx-grammarterm> in the 
+  <cxx-grammarterm>introduction-list</cxx-grammarterm> is declared to be
+  a template parameter whose kind matches the corresponding template
+  parameter in the concept declaration.
+
+  A new constraint is formed by substituting the declared parameters as
+  template arguments to the referenced concept. This constraint is
+  associated with the template declaration.
+  <cxx-example class="inline">
+  <cxx-codeblock>
+template&lt;typename T, int N, typename... Xs&gt;
+  concept bool Inscrutable() { ... };
+
+Mergeable{A, B, C} struct s;
+  </cxx-codeblock>
+  This class template declaration of <code>s</code> is equivalent to:
+  <cxx-codeblock>
+template&lt;typename A, int B, typename... C&gt;
+  requires Inscrutable&lt;A, B, C&gt;
+    struct s;
+  </cxx-codeblock>
+  The introduced parameter <code>C</code> is a template parameter pack.
+  </cxx-example>
+  </p>
+
+  <p>
+  <cxx-note>A template parameter with a default argument does not introduce
+  omitted identifiers. 
+  <cxx-example class="inline">
+  <cxx-codeblock>
+template&lt;typename T1, typename T2, typename T3 = T2&gt;
+  concept bool Ineffable() { ... };
+
+Ineffable{X, Y} void f();    // Error: not all parameters are introduced
+  </cxx-codeblock>
+  </cxx-example>
+  This would cause the introduction of an unnamed and 
+  unusable template parameter in the template declaration. 
+  </cxx-note>
+  </p>
+
+  <p>If a constrained declaration is introduced by a concept 
+  introduction, then all its declarations must have the same 
+  form.</p>
+
+
+
+  <!-- FIXME: Remove all information about associated constraints -->
+
+   The <dfn>associated constraints</dfn> of a 
   constrained template declaration are the conjunction of the associated 
   constraints of all</p>
   <ul>
@@ -67,7 +157,6 @@ and <code>T2</code> are function's the invented template parameters.
   constraints of the template declaration.
   </cxx-note>
 
-  <!-- FIXME: This could probably be written more explicitly. -->
   <p>The associated constraints of a <cxx-grammarterm>concept-introduction</cxx-grammarterm>
   are those required by the referenced concept definition. 
   <cxx-example class="inline">
@@ -83,7 +172,10 @@ template&lt;Integral T&gt;
   conjunction <code>Integral&lt;T&gt;() &amp;&amp; Unsigned&lt;T&gt;()</code>.
   </cxx-example>
   </p>
+  <!-- FIXME: Stop cutting here -->
 
+
+  <!-- FIXME: Move this to template constraints -->
   <p>A constrained template declaration's associated constraints must 
   be satisfied (<cxx-ref to="temp.constr"></cxx-ref>) to allow instantiation 
   of the constrained template. 
@@ -263,6 +355,7 @@ template&lt;C1... Args&gt; void f5(); // requires C1&lt;Args0&gt; && C1&lt;Args1
     </cxx-codeblock>
     </cxx-example>
     </p>
+  </cxx-section>
 
   <!-- FIXME: Check that this is in an appropriate place. -->
   <cxx-section id="temp.names">
@@ -865,99 +958,5 @@ void g();
     <code>Q</code> subsumes <code>P</code>. </p>
 
   </cxx-section> <!-- temp.constr -->
-
-
-  <cxx-section id="concept.intro">
-    <h1>Concept introductions</h1>
-
-    <p>Add this as a new section under 
-    <cxx-ref in="cxx" to="temp">"</cxx-ref>.</p>
-
-    <p> A <cxx-grammarterm>concept-introduction</cxx-grammarterm> allows 
-    the declaration of template and its associated constraints in a 
-    concise way.
-    <bnf-grammar>
-      <bnf-rule>concept-introduction</bnf-rule>
-        <bnf-alt>
-          concept-name
-          <bnf-terminal>{</bnf-terminal>
-          introduction-list
-          <bnf-terminal>}</bnf-terminal>
-          declaration
-        </bnf-alt>
-      <bnf-rule>introduction-list</bnf-rule>
-        <bnf-alt>identifier</bnf-alt>
-        <bnf-alt>
-          introduction-list <bnf-terminal>,</bnf-terminal> identifier
-        </bnf-alt>
-    </bnf-grammar>
-    </p>
-
-    <!-- TODO: This does not explain that an appropriate concept can
-         if they are overloaded. -->
-    <p>The <cxx-grammarterm>concept-introduction</cxx-grammarterm> names 
-    a concept and a list of identifiers to be used as template parameters, 
-    called the <dfn>introduced parameters</dfn> in the declaration. The 
-    number of <cxx-grammarterm>identifier</cxx-grammarterm>s in the 
-    <cxx-grammarterm>introduction-list</cxx-grammarterm> shall match the 
-    number of template parameters in the named concept.
-    <cxx-example class="inline">
-    <cxx-codeblock>
-template&lt;typename I1, typename I2, typename O&gt;
-  concept bool Mergeable() { ... };
-
-Mergeable{First, Second, Out} // OK
-  Out merge(First, First, Second, Second, Out); 
-
-Mergeable{X, Y} // Error: not enough parameters
-  void f(X, Y);
-    </cxx-codeblock>
-    </cxx-example>
-    </p>
-
-    <p>The introduced parameters are the template parameters of the declaration,
-    and they match the template parameters in the declaration of the named
-    concept. The associated constraints
-    of the declaration are formed by applying the introduced parameters as
-    arguments to the named concept (<cxx-ref to="dcl.constr"></cxx-ref>).
-    <cxx-example class="inline">
-    The following declaration
-    <cxx-codeblock>
-Mergeable{X, Y, Z}
-  Z merge(X, X, Y, Y, Z);
-    </cxx-codeblock>
-    is equivalent to the declaration below.
-    <cxx-codeblock>
-template&lt;typename X, typename Y, typename Z&gt;
-  requires Mergeable&lt;X, Y, Z&gt;()
-    Z merge(X, X, Y, Y, Z);
-    </cxx-codeblock>
-    </cxx-example>
-    </p>
-
-    <p>If a constrained declaration is introduced by a concept 
-    introduction, then all its declarations must have the same 
-    form.</p>
-
-    <p>The sequence of introduced parameters in a 
-    <cxx-grammarterm>concept-introduction</cxx-grammarterm>
-    shall have the same number of template parameters as the referenced 
-    concept.
-    <cxx-example class="inline">
-    <cxx-codeblock>
-template&lt;typename T1, typename T2, typename T3 = T2&gt;
-  concept bool Ineffable() { ... };
-
-Ineffable{X, Y} void f();    // Error: does not introduce all parameters
-Ineffable{X, Y, Z} void g(); // Ok
-    </cxx-codeblock>
-    </cxx-example>
-    <cxx-note>
-    Allowing default arguments to be deduced in a 
-    <cxx-grammarterm>concept-introduction</cxx-grammarterm> would cause 
-    the introduction of an unnamed and unusable template parameter in the 
-    template declaration.
-    </cxx-note>
-  </cxx-section> <!-- concept.intro -->
 
 </cxx-clause> <!-- temp -->

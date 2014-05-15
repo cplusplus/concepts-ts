@@ -25,6 +25,7 @@
 
   "expr.const"          : "5.19",
 
+  "dcl.dcl"           : "7",
   "dcl.spec"          : "7.1",
   "dcl.constexpr"     : "7.1.5",
   "dcl.type"          : "7.1.6",

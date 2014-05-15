@@ -2411,28 +2411,66 @@ template&lt;C T&gt;
     <bnf-rule>
     <span style="margin-left:.6in">template-declaration:<br></span>
   </bnf-rule>
+      <del>
       <bnf-alt>
     <span style="margin-left:1.2in">
         <bnf-terminal><code style="font-style:normal">template</code></bnf-terminal>
         <bnf-terminal><code style="font-style:normal">&lt;</code></bnf-terminal>
         template-parameter-list
         <bnf-terminal><code style="font-style:normal">&gt;</code></bnf-terminal>
-        <ins>requires-clause<bnf-opt><sub>opt</sub></bnf-opt></ins>
         declaration
       </span><br>
   </bnf-alt>
+      </del>
+
+
       <bnf-alt>
-    <span style="margin-left:1.2in">
-      <ins>concept-introduction declaration</ins>
-      </span><br>
+    <span style="margin-left:1.2in">template-head declaration</span><br>
   </bnf-alt>
 
     <ins>
+    <bnf-rule>
+    <span style="margin-left:.6in">template-head:<br></span>
+  </bnf-rule>
+      <bnf-alt>
+    <span style="margin-left:1.2in">
+        <bnf-terminal><code style="font-style:normal">template</code></bnf-terminal>
+        <bnf-terminal><code style="font-style:normal">&lt;</code></bnf-terminal>
+        template-parameter-list
+        <bnf-terminal><code style="font-style:normal">&gt;</code></bnf-terminal>
+        requires-clause<bnf-opt><sub>opt</sub></bnf-opt></span><br>
+  </bnf-alt>
+      <bnf-alt>
+    <span style="margin-left:1.2in">
+        concept
+        <bnf-terminal><code style="font-style:normal">{</code></bnf-terminal>
+        introduction-list
+        <bnf-terminal><code style="font-style:normal">}</code></bnf-terminal>
+      </span><br>
+  </bnf-alt>
+
     <bnf-rule>
     <span style="margin-left:.6in">requires-clause:<br></span>
   </bnf-rule>
       <bnf-alt>
     <span style="margin-left:1.2in"><bnf-terminal><code style="font-style:normal">requires</code></bnf-terminal> constraint-expression</span><br>
+  </bnf-alt>
+
+      <bnf-rule>
+    <span style="margin-left:.6in">concept:<br></span>
+  </bnf-rule>
+        <bnf-alt>
+    <span style="margin-left:1.2in">nested-name-specifier<bnf-opt><sub>opt</sub></bnf-opt>&nbsp; concept-name</span><br>
+  </bnf-alt>
+
+      <bnf-rule>
+    <span style="margin-left:.6in">introduction-list:<br></span>
+  </bnf-rule>
+        <bnf-alt>
+    <span style="margin-left:1.2in">identifier</span><br>
+  </bnf-alt>
+        <bnf-alt>
+    <span style="margin-left:1.2in">introduction-list <bnf-terminal><code style="font-style:normal">,</code></bnf-terminal> identifier</span><br>
   </bnf-alt>
     </ins>
   
