@@ -23,37 +23,26 @@
   <p>Insert the following paragraph after 
   <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>/1</p>
 
-  <p>A <cxx-grammarterm>declarator</cxx-grammarterm> followed by a 
-  <cxx-grammarterm>requires-clause</cxx-grammarterm> declares a 
-  <dfn>constrained declaration</dfn>. 
-
-  The constrained declaration shall be a a template declaration
-  or member function declaration of a class template.
-
-  The <cxx-grammarterm>requires-clause</cxx-grammarterm> associates
-  its constraint with the declaration 
-  (<cxx-ref to="temp.constr"></cxx-ref>).</p>
-
-  <p>A declarator that declares a constrained variable or type is 
-  ill-formed.</p>
-
-  <p>
+  <p>A declarator that declares generic function 
+  (<cxx-ref to="dcl.meaning"></cxx-ref>) may include a 
+  <cxx-grammarterm>requires-clause</cxx-grammarterm>. A program that
+  includes a <cxx-grammarterm>requires-clause</cxx-grammarterm> for any
+  other declaration is ill-formed.
   <cxx-example>
   Let <code>C</code> be a variable concept constraining a single
   type parameter:
   <cxx-codeblock>
-template&lt;typename T&gt;
-  struct S {
-    void g() requires C&lt;T&gt;; // Ok
-  }
-
 void f1(auto x) requires C&lt;decltyp(x)&gt;; // Ok
-void f2(int x) requires C&lt;int&gt;;         // Error: f2 does not have dependent type
-
-auto n requires C&lt;decltype(n)&gt; = g();   // Error: cannot declare a constrained variable.
+void f2(int x) requires C&lt;int&gt;;         // Error: f2 is not a generic function
+auto n requires C&lt;decltype(n)&gt; = g();   // Error: cannot constrain variable declarattion
+struct S { } requires C&lt;S&gt;;             // Error: cannot constrain a class declaration
   </cxx-codeblock>
   </cxx-example>
   </p>
+
+  <p>The <cxx-grammarterm>requires-clause</cxx-grammarterm> associates
+  its constraint with its template declaration 
+  (<cxx-ref to="temp"></cxx-ref>).</p>
 
 
   <cxx-section id="dcl.meaning">

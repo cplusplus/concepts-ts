@@ -257,20 +257,20 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
 
       <p>The meaning of the introduced constraint depends on the context
       in which the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
-      appears. If it appears in the
-      <cxx-grammarterm>decl-specifiers</cxx-grammarterm> of a
-      <cxx-grammarterm>parameter-declaration</cxx-grammarterm> of a 
+      appears. 
+
+      If it appears in the <cxx-grammarterm>decl-specifiers</cxx-grammarterm> 
+      of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> of a 
       generic lambda (<cxx-ref to="expr.prim.lambda"></cxx-ref>) or
       generic function (<cxx-ref to="dcl.fct"></cxx-ref>),
-      the the introduced constraint
-      is an associated constraint of the corresponding template. If it appears 
-      in <cxx-grammarterm>trailing-return-type</cxx-grammarterm> of a
-      <cxx-grammarterm>compound-requirement</cxx-grammarterm>, the introduced
-      constraint is evaluated as part of the enclosing
+      the the introduced constraint is associated with the corresponding 
+      template declaration (<cxx-ref to="temp"></cxx-ref>).
+
+      If it appears  in <cxx-grammarterm>trailing-return-type</cxx-grammarterm>
+      of a <cxx-grammarterm>compound-requirement</cxx-grammarterm>, the
+      introduced constraint is evaluated as part of the enclosing 
       <cxx-grammarterm>requires-expression</cxx-grammarterm> 
-      (<cxx-ref to="expr.req"></cxx-ref>).
-      </p>
-    
+      (<cxx-ref to="expr.req"></cxx-ref>). </p>
     </cxx-section> <!-- dcl.spec.constr -->
 
     <cxx-section id="dcl.concept">

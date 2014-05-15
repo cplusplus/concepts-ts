@@ -53,9 +53,7 @@
 
   <p>A <cxx-grammarterm>requires-clause</cxx-grammarterm> associates a
   <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the
-  template declaration. A <dfn>constrained template declaration</dfn> is a
-  <cxx-grammarterm>template-declaration</cxx-grammarterm> with 
-  associated constraints <cxx-ref to="temp.constr"></cxx-ref>.</p>
+  template declaration.</p>
 
   <p>A <cxx-grammarterm>template-declaration</cxx-grammarterm> is written in
   terms of its <cxx-grammarterm>template-parameters</cxx-grammarterm>. These
@@ -63,23 +61,28 @@
   <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
   (<cxx-ref to="temp.param"></cxx-ref>), or they are
   introduced by a <cxx-grammarterm>concept</cxx-grammarterm> and its
-  <cxx-grammarterm>introduction-list</cxx-grammarterm>
-  (<cxx-ref to="temp.intro"></cxx-ref>).
+  <cxx-grammarterm>introduction-list</cxx-grammarterm>.
 
   In the latter case, the <cxx-grammarterm>concept-name</cxx-grammarterm> of
   the <cxx-grammarterm>concept</cxx-grammarterm> shall refer to the
-  concept declaration having the same number of template parameters as
-  the number of <cxx-grammarterm>identifier</cxx-grammarterm>s in
+  concept declaration, called the <dfn>introducing concept</dfn>, having the 
+  same number of template parameters as the number of 
+  <cxx-grammarterm>identifier</cxx-grammarterm>s in
   <cxx-grammarterm>introduction-list</cxx-grammarterm>. 
   
   Each <cxx-grammarterm>identifier</cxx-grammarterm> in the 
   <cxx-grammarterm>introduction-list</cxx-grammarterm> is declared to be
-  a template parameter whose kind matches the corresponding template
-  parameter in the concept declaration.
+  a template parameter, called an <dfn>introduced template parameter</dfn>, 
+  whose kind matches the corresponding template parameter in the introducing 
+  concept.
 
-  A new constraint is formed by substituting the declared parameters as
-  template arguments to the referenced concept. This constraint is
-  associated with the template declaration.
+  A new constraint is formed by constructing a 
+  <cxx-grammarterm>template-id</cxx-grammarterm> whose
+  <cxx-grammarterm>template-name</cxx-grammarterm> is that of the
+  introducing concept and whose template arguments are the introduced 
+  template parameters. If the introducing concept is a function concept,
+  the constraint is a function call with no function arguments.
+  The constraint is associated with the template declaration.
   <cxx-example class="inline">
   <cxx-codeblock>
 template&lt;typename T, int N, typename... Xs&gt;
@@ -99,7 +102,8 @@ template&lt;typename A, int B, typename... C&gt;
 
   <p>
   <cxx-note>A template parameter with a default argument does not introduce
-  omitted identifiers. 
+  omitted identifiers. This would cause the introduction of an unnamed and 
+  unusable template parameter in the template declaration. 
   <cxx-example class="inline">
   <cxx-codeblock>
 template&lt;typename T1, typename T2, typename T3 = T2&gt;
@@ -108,8 +112,6 @@ template&lt;typename T1, typename T2, typename T3 = T2&gt;
 Ineffable{X, Y} void f();    // Error: not all parameters are introduced
   </cxx-codeblock>
   </cxx-example>
-  This would cause the introduction of an unnamed and 
-  unusable template parameter in the template declaration. 
   </cxx-note>
   </p>
 
@@ -118,73 +120,40 @@ Ineffable{X, Y} void f();    // Error: not all parameters are introduced
   form.</p>
 
 
-
-  <!-- FIXME: Remove all information about associated constraints -->
-
-   The <dfn>associated constraints</dfn> of a 
-  constrained template declaration are the conjunction of the associated 
-  constraints of all</p>
+  <p>A template declaration's <dfn>template constraints</dfn> are
+  constraints formed as the conjunction (logical and) of all 
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm>s 
+  associated with the template by
   <ul>
-    <li><cxx-grammarterm>constrained-parameter</cxx-grammarterm>s
-    in template's <cxx-grammarterm>template-parameter-list</cxx-grammarterm> 
-    (<cxx-ref to="temp.param"></cxx-ref>).</li>
-    <li> and all <cxx-grammarterm>constraint-expression</cxx-grammarterm>s 
-    introduced by <cxx-grammarterm>requires-clause</cxx-grammarterm>
-    in the <cxx-grammarterm>template-declaration</cxx-grammarterm>.</li>
+  <li><cxx-grammarterm>constrained-parameter</cxx-grammarterm>s in a
+    <cxx-grammarterm>template-parameter-list</cxx-grammarterm>,</li>
+
+  <li>a <cxx-grammarterm>requires-clause</cxx-grammarterm> following a
+  <cxx-grammarterm>template-parameter-list</cxx-grammarterm>, </li>
+
+  <li>introduction by a concept (<cxx-ref to="temp"></cxx-ref>),</li>
+
+  <li><cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s in
+    a <cxx-grammarterm>declarator</cxx-grammarterm>, and</li>
+
+  <li>a <cxx-grammarterm>requires-clause</cxx-grammarterm> in an
+  <cxx-grammarterm>init-declarator</cxx-grammarterm>,
+  <cxx-grammarterm>member-declarator</cxx-grammarterm>, or
+  <cxx-grammarterm>function-definition</cxx-grammarterm>.</li>
   </ul>
-
-  <cxx-example>
-Assuming <code>C</code> and <code>D</code> are concepts, the associated 
-constraints of:
-  <cxx-codeblock>
-template&lt;C T&gt;
-  requires D&lt;T&gt;
-    struct S;
-  </cxx-codeblock>
-are represented by the conjunction <code>C&lt;T&gt; &amp;&amp; D&lt;T&gt;</code>.
-Similarly the associated constraints of the following generic function:
-<cxx-codeblock>
-void f(C a, D b)
-</cxx-codeblock>
-are <code>C&lt;T1&gt; &amp;&amp; D&lt;T2&gt;</code> where <code>T1</code>
-and <code>T2</code> are function's the invented template parameters.
-  </cxx-example>
-  
   <cxx-note>
-  A function or member function may have a 
-  <cxx-grammarterm>requires-clause</cxx-grammarterm> in its
-  declarator. These constraints are also part of the associated 
-  constraints of the template declaration.
+  Template constraints form a constraint expression (<cxx-ref to="temp.constr"></cxx-ref>).
   </cxx-note>
+  <!-- </p> -->
+<!-- 
 
-  <p>The associated constraints of a <cxx-grammarterm>concept-introduction</cxx-grammarterm>
-  are those required by the referenced concept definition. 
-  <cxx-example class="inline">
-  <cxx-codeblock>
-template&lt;typename T&gt;
-  concept bool Integral() { return is_integral&lt;T&gt;::value; }
-
-template&lt;Integral T&gt;
-  requires Unsigned&lt;T&gt;()
-    T binary_gcd(T a, T b);
-</cxx-codeblock>
-  The associated constraints of <code>binary_gcd</code> are denoted by the
-  conjunction <code>Integral&lt;T&gt;() &amp;&amp; Unsigned&lt;T&gt;()</code>.
-  </cxx-example>
-  </p>
-  <!-- FIXME: Stop cutting here -->
+  <p>A templates constraints must be satisfied 
+  (<cxx-ref to="temp.constr"></cxx-ref>) in order for the corresponding
+  definition to be instantiated.
 
 
-  <!-- FIXME: Move this to template constraints -->
-  <p>A constrained template declaration's associated constraints must 
-  be satisfied (<cxx-ref to="temp.constr"></cxx-ref>) to allow instantiation 
-  of the constrained template. 
-
-  The associated constraints are satisfied by substituting template 
-  arguments into the constraints and evaluating substituted expression. 
-
-  Constraints are satisfied when the result of that evaluation is 
-  <code>true</code>.
+  odr-used within the program. A program that uses a template
+  specialization whose constraints cannot be satisfied is ill-formed.</p>
 
   Class template, alias template, and variable template constraints 
   are checked during name lookup (<cxx-ref to="temp.names"></cxx-ref>); 
@@ -196,7 +165,10 @@ template&lt;Integral T&gt;
   is ill-formed unless the associated constraints of the constrained 
   template are subsumed by the associated constraints of template 
   parameter. No diagnostic is required.
-  </p>
+  </p> -->
+
+
+
 
   <cxx-section id="temp.param">
     <h1>Template parameters</h1>
@@ -754,11 +726,13 @@ template struct X&lt;int&gt;; // Error: int does not satisfy C.
     </cxx-section> <!-- temp.explicit -->
   </cxx-section> <!-- temp.spec -->
 
+
   <cxx-section id="temp.constr">
     <h1>Template constraints</h1>
 
     <p>Add this as a new section under 
     <cxx-ref in="cxx" to="temp">"</cxx-ref>.</p>
+
 
     <p>
     Certain contexts require expressions that satisfy additional 
@@ -770,9 +744,6 @@ template struct X&lt;int&gt;; // Error: int does not satisfy C.
       <bnf-rule>constraint-expression</bnf-rule>
         <bnf-alt>logical-or-expression</bnf-alt>
     </bnf-grammar>
-    Constraint expressions are required after a 
-    <cxx-grammarterm>requires-clause</cxx-grammarterm> and in the body or
-    initializer of a concept definition.</p>
 
     <p>
     A <cxx-grammarterm>logical-or-expression</cxx-grammarterm> is a
