@@ -1,0 +1,38 @@
+
+<cxx-clause id="class">
+  <h1>Classes</h2>
+
+  <cxx-section id="class.mem"</cxx-section>
+    <h1>Class members</h1>
+
+    <p>In <cxx-ref in="cxx" to="class.mem"></cxx-ref>, modify the
+    <cxx-grammarterm>member-declarator</cxx-grammarterm> syntax.</p>
+
+    <bnf-grammar>
+      <bnf-rule>member-declarator</bnf-rule>
+      <bnf-alt>
+        declarator 
+        virt-specifier-seq<bnf-opt></bnf-opt>
+        pure-specifier-seq<bnf-opt></bnf-opt>
+        <ins>requires-clause<bnf-opt></bnf-opt></ins>
+      </bnf-alt>
+    </bnf-grammar>
+
+  <p>Insert the following paragraph after 
+  <cxx-ref in="cxx" to="class.mem">/8.</cxx-ref></p>
+
+  <p>A <cxx-grammarterm>requires-clause</cxx-grammarterm> 
+  (<cxx-ref to="temp"></cxx-ref>) shall only be present if the 
+  <cxx-grammarterm>declarator</cxx-grammarterm> declares a constrained member
+  function of a class template (<cxx-ref to="temp.mem.func"></cxx-ref>)
+  or a generic function (<cxx-ref to="dcl.fct"></cxx-ref>). 
+  It associates its  <cxx-grammarterm>constraint-expression</cxx-grammarterm> 
+  with the corresponding function template declaration.
+  <cxx-note>  
+  A generic function declared at class scope is a member function
+  template.
+  </cxx-note>
+  </p>
+
+  </cxx-section> <!-- class.mem -->
+</cxx-clause>

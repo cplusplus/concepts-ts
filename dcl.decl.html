@@ -23,11 +23,12 @@
   <p>Insert the following paragraph after 
   <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>/1</p>
 
-  <p>A declarator that declares generic function 
-  (<cxx-ref to="dcl.meaning"></cxx-ref>) may include a 
-  <cxx-grammarterm>requires-clause</cxx-grammarterm>. A program that
-  includes a <cxx-grammarterm>requires-clause</cxx-grammarterm> for any
-  other declaration is ill-formed.
+  <p>A <cxx-grammarterm>requires-clause</cxx-grammarterm> 
+  (<cxx-ref to="temp"></cxx-ref>) shall only be present if the
+  <cxx-grammarterm>declarator</cxx-grammarterm> declares a generic
+  function (<cxx-ref to="dcl.fct"></cxx-ref>). It associates its
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the
+  corresponding template declaration.
   <cxx-example>
   Let <code>C</code> be a variable concept constraining a single
   type parameter:
@@ -122,4 +123,39 @@ template&lt;C T&gt;
     
     </cxx-section> <!-- dcl.fct -->
   </cxx-section> <!-- dcl.meaning -->
+
+  <cxx-section id="dcl.fct.def">
+    <h1>Function definitions</h1>
+
+    <cxx-section id="dcl.fct.def.general">
+      <h1>In general</h1>
+    
+      <p>Modify the <cxx-grammarterm>function-definition</cxx-grammarterm>
+      syntax in <cxx-ref in="cxx" to="dcl.fct.def.general">/1</cxx-ref>
+      to include a <cxx-grammarterm>requires-clause</cxx-grammarterm>.</p>
+
+      <bnf-grammar>
+        <bnf-rule>function-definition</bnf-rule>
+          <bnf-alt>
+            attribute-specifier-seq<bnf-opt></bnf-opt>
+            decl-specifier-seq<bnf-opt></bnf-opt>
+            declarator
+            virt-specifier-seq<bnf-opt></bnf-opt>
+            <ins>requires-clause<bnf-opt></bnf-opt></ins>
+            function-body
+          </bnf-alt>
+      </bnf-grammar>
+
+      <p>Add the following paragraph at the end of
+      <cxx-ref in="cxx" to="dcl.fct.def.general">/1</cxx-ref>.</p>
+
+      <p>A <cxx-grammarterm>requires-clause</cxx-grammarterm> 
+      (<cxx-ref to="temp"></cxx-ref>) shall only be present if the
+      <cxx-grammarterm>declarator</cxx-grammarterm> declares a generic
+      function (<cxx-ref to="dcl.fct"></cxx-ref>). It associates its
+      <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the
+      corresponding template declaration.</p>
+    </cxx-section> <!-- dcl.fct.def.general -->
+  </cxx-section> <!-- dcl.fct.def -->
+
 </cxx-clause> <!-- dcl.decl -->

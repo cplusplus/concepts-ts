@@ -34,11 +34,17 @@
   "dcl.type.elab"     : "7.1.6.3",
   "dcl.spec.auto"     : "7.1.6.4",
 
-  "dcl.decl"          : "8",
-  "dcl.name"          : "8.1",
-  "dcl.ambig.res"     : "8.2",
-  "dcl.meaning"       : "8.3",
-  "dcl.fct"           : "8.3.5",
+  "dcl.decl"              : "8",
+  "dcl.name"              : "8.1",
+  "dcl.ambig.res"         : "8.2",
+  "dcl.meaning"           : "8.3",
+  "dcl.fct"               : "8.3.5",
+  "dcl.fct.def"           : "8.4",
+  "dcl.fct.def.general"   : "8.4.1",
+
+  "class"                 : "9",
+  "class.name"            : "9.1",
+  "class.mem"             : "9.2",
 
   "over"              : "13",
   "over.load"         : "13.1",

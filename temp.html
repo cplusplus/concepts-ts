@@ -5,30 +5,15 @@
   <p>Modify the <cxx-grammarterm>template-declaration</cxx-grammarterm>
   grammar in <cxx-ref in="cxx" to="temp"></cxx-ref>.</p>
 
-  <p>
   <bnf-grammar>
     <bnf-rule>template-declaration</bnf-rule>
-      <del>
       <bnf-alt>
         <bnf-terminal>template</bnf-terminal>
         <bnf-terminal>&lt;</bnf-terminal>
         template-parameter-list
         <bnf-terminal>&gt;</bnf-terminal>
-        declaration
+        <ins>requires-clause<bnf-opt></bnf-opt></bnf-alt></ins>
       </bnf-alt>
-      </del>
-
-
-      <bnf-alt>template-head declaration</bnf-alt>
-
-    <ins>
-    <bnf-rule>template-head</bnf-rule>
-      <bnf-alt>
-        <bnf-terminal>template</bnf-terminal>
-        <bnf-terminal>&lt;</bnf-terminal>
-        template-parameter-list
-        <bnf-terminal>&gt;</bnf-terminal>
-        requires-clause<bnf-opt></bnf-opt></bnf-alt>
       <bnf-alt>
         concept
         <bnf-terminal>{</bnf-terminal>
@@ -174,7 +159,7 @@ Ineffable{X, Y} void f();    // Error: not all parameters are introduced
     <h1>Template parameters</h1>
 
     <p>Modify the <cxx-grammarterm>template-parameter</cxx-grammarterm>
-    grammar in (<cxx-ref in="cxx" to="temp.param"></cxx-ref>) to include
+    grammar in <cxx-ref in="cxx" to="temp.param"></cxx-ref> to include
     <cxx-grammarterm>constrained-parameter</cxx-grammarterm>.
 
     <bnf-grammar>
