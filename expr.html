@@ -41,15 +41,24 @@
       <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, 
       in order of appearance. 
 
-      The invented type template-parameter is a parameter 
-      pack if the corresponding 
+      The invented type <cxx-grammarterm>template-parameter</cxx-grammarterm> 
+      is a parameter pack if the corresponding 
       <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
       declares a function parameter pack 
       (<cxx-ref in="cxx" to="dcl.fct"></cxx-ref>). 
-      <ins>The associated constraints of the generic lambda are the 
-      conjunction of constraints introduced by the use of 
-      <cxx-grammarterm>constrained-type-name</cxx-grammarterm>s in the
-      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>.</ins>
+      
+      If the 
+      <ins>The invented type <cxx-grammarterm>template-parameter</cxx-grammarterm>
+      is a constrained parameter if the 
+
+      If the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of the 
+      corresponding <cxx-grammarterm>parameter-declaration</cxx-grammarterm> 
+      includes a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>,
+      the invented type parameter is a 
+      <cxx-grammarterm>constrained-parameter</cxx-grammarterm>, whose
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> matches
+      that of the <cxx-grammarterm>parameter-declaration</cxx-grammarterm>.
+      (<cxx-ref to="temp.param"></cxx-ref>).</ins>
       
       The return type and function parameters of the function call operator 
       template are derived from the 
@@ -60,11 +69,46 @@
       <cxx-grammarterm>decl-specifiers</cxx-grammarterm> of the
       <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> with the 
       name of the corresponding invented 
-      <cxx-grammarterm>template-parameter</cxx-grammarterm>. </p>
+      <cxx-grammarterm>template-parameter</cxx-grammarterm>. 
+
+      <ins>
+      <cxx-example>
+      Consider the following:
+      <cxx-codeblock>
+template&lt;typename T&gt; concept bool C = ...;
+auto fun = [](const C& arg) { }
+      </cxx-codeblock>
+      The parameter <code>arg</code> has a 
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+      <code>C</code>, signifying that it is a generic lambda whose
+      closure type is like the following function object:
+      <cxx-codeblock>
+struct Fun {
+  template&lt;C __T&gt;
+    auto operator()(const __T& x) const { }
+};
+      </cxx-codeblock>
+      </cxx-example>
+      </ins>
+      </p>
+
+      <p>Also insert the following paragraph after
+      <cxx-ref in="cxx" to="expr.prim.lambda"></cxx-ref>/5.</p>
 
       <p>All placeholder types introduced using the same 
       <cxx-grammarterm>concept-name</cxx-grammarterm> have the same invented
-      template parameter.</p>
+      template parameter.
+      <cxx-example>
+      <cxx-codeblock>
+auto f = []()C a, C b) { }
+f(0, 0);   // Ok
+f(0, 'a'); // Error: template argument deduction failure
+      </cxx-codeblock>
+      The second call to <code>f</code> results in a compiler error because
+      the types of the deduced arguments cannot be unified.
+      </cxx-example>
+
+      </p>
     </cxx-section> <!-- expr.prim.lambda -->
 
 

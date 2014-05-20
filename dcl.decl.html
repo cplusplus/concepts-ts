@@ -26,13 +26,11 @@
   <p>A <cxx-grammarterm>requires-clause</cxx-grammarterm> 
   (<cxx-ref to="temp"></cxx-ref>) shall only be present if the
   <cxx-grammarterm>declarator</cxx-grammarterm> declares a generic
-  function (<cxx-ref to="dcl.fct"></cxx-ref>). It associates its
-  <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the
-  corresponding template declaration.
+  function (<cxx-ref to="dcl.fct"></cxx-ref>).
   <cxx-example>
-  Let <code>C</code> be a variable concept constraining a single
-  type parameter:
   <cxx-codeblock>
+template<typename T> concept bool C = ...;
+
 void f1(auto x) requires C&lt;decltyp(x)&gt;; // Ok
 void f2(int x) requires C&lt;int&gt;;         // Error: f2 is not a generic function
 auto n requires C&lt;decltype(n)&gt; = g();   // Error: cannot constrain variable declarattion
