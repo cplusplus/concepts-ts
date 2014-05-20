@@ -48,6 +48,19 @@
   introduced by a <cxx-grammarterm>concept</cxx-grammarterm> and its
   <cxx-grammarterm>introduction-list</cxx-grammarterm>.
 
+  In the latter case, each <cxx-grammarterm>identifier</cxx-grammarterm>
+  in the <cxx-grammarterm>introduction-list</cxx-grammarterm> is declared
+  to be a template parameter. Each template parameter shall match in kind
+  the corresponding template parameter of the concept definition designated by
+  the <cxx-grammarterm>concept</cxx-grammarterm>.
+
+  If, after lookup, the <cxx-grammarterm>concept</cxx-grammarterm> designates
+  an overloaded set of concept functions, the designated concept is the
+  one with the same number of template parameters as the number of
+  <cxx-grammarterm>identifier</cxx-grammarterm> in the
+  <cxx-grammarterm>introduction-list</cxx-grammarterm>.
+
+  <!--
   In the latter case, the <cxx-grammarterm>concept-name</cxx-grammarterm> of
   the <cxx-grammarterm>concept</cxx-grammarterm> shall refer to the
   concept declaration, called the <dfn>introducing concept</dfn>, having the 
@@ -60,14 +73,18 @@
   a template parameter, called an <dfn>introduced template parameter</dfn>, 
   whose kind matches the corresponding template parameter in the introducing 
   concept.
+  -->
 
-  A new constraint is formed by constructing a 
+  The introduction of template parameters by a 
+  <cxx-grammarterm>concept</cxx-grammarterm> constrains the template 
+  declaration. This constraint is a
   <cxx-grammarterm>template-id</cxx-grammarterm> whose
   <cxx-grammarterm>template-name</cxx-grammarterm> is that of the
-  introducing concept and whose template arguments are the introduced 
-  template parameters. If the introducing concept is a function concept,
-  the constraint is a function call with no function arguments.
-  The constraint is associated with the template declaration.
+  introducing <cxx-grammarterm>concept</cxx-grammarterm> and whose template 
+  arguments are the introduced template parameters. If the introducing concept 
+  is a function concept, the constraint is a function call with no function 
+  arguments. The constraint is associated with the template declaration.
+
   <cxx-example class="inline">
   <cxx-codeblock>
 template&lt;typename T, int N, typename... Xs&gt;
@@ -78,7 +95,7 @@ Mergeable{A, B, C} struct s;
   This class template declaration of <code>s</code> is equivalent to:
   <cxx-codeblock>
 template&lt;typename A, int B, typename... C&gt;
-  requires Inscrutable&lt;A, B, C&gt;
+  requires Inscrutable&lt;A, B, C&gt;()
     struct s;
   </cxx-codeblock>
   The introduced parameter <code>C</code> is a template parameter pack.
