@@ -152,9 +152,39 @@ template&lt;C T&gt;
       <p>A <cxx-grammarterm>requires-clause</cxx-grammarterm> 
       (<cxx-ref to="temp"></cxx-ref>) shall only be present if the
       <cxx-grammarterm>declarator</cxx-grammarterm> declares a generic
-      function (<cxx-ref to="dcl.fct"></cxx-ref>). It associates its
-      <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the
-      corresponding template declaration.</p>
+      function (<cxx-ref to="dcl.fct"></cxx-ref>) or a member function
+      definition (<cxx-ref to="class.mem"></cxx-ref>).
+      <cxx-note>
+      Constraints for a function template or member function template are
+      written after the <cxx-grammarterm>template-parameter-list</cxx-grammarterm>.
+      </cxx-note>
+      <cxx-example>
+      <cxx-codeblock>
+template&lt;typename T&gt; concept bool C1 = ...;
+template&lt;typename T&gt; concept bool C2 = ...;
+template&lt;typename T, typename U&gt; concept bool D = ...;
+
+void f(C1 a, C2 b) requires D&lt;decltype(a), decltype(b)&gt; { } // Ok
+
+template&lt;typename T&gt;
+  void f(const T& x) requires C&lt;T&gt;; // Error: f is declared as a template
+
+template&lt;typename T&gt;
+  struct S1 {
+    S1(T&) requires C1&lt;T&gt; { }   // Defines a constrained constructor
+    void f() requires C2&lt;T&gt; { } // Defines a constrained member function
+  };
+
+struct S2 {
+  void g(auto x) requires D&lt;decltype(x)&gt; { } // Ok
+};
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+      <p>A <cxx-grammarterm>function-definition</cxx-grammarterm>
+      shall not declare a destructor (<cxx-ref in="cxx" to="class.dtor"></cxx-ref>)
+      with a <cxx-grammarterm>requires-clause</cxx-grammarterm>.
     </cxx-section> <!-- dcl.fct.def.general -->
   </cxx-section> <!-- dcl.fct.def -->
 

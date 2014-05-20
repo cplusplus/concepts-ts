@@ -26,13 +26,32 @@
   <cxx-grammarterm>declarator</cxx-grammarterm> declares a constrained member
   function of a class template (<cxx-ref to="temp.mem.func"></cxx-ref>)
   or a generic function (<cxx-ref to="dcl.fct"></cxx-ref>). 
-  It associates its  <cxx-grammarterm>constraint-expression</cxx-grammarterm> 
-  with the corresponding function template declaration.
-  <cxx-note>  
-  A generic function declared at class scope is a member function
+  <cxx-example>
+  <cxx-codeblock>
+template&lt;typename T&gt; concept bool C = ...;
+template&lt;typename T&gt; concept bool D = ...;
+
+template&lt;typename T&gt;
+  struct A {
+    A(T*) requires C&lt;T&gt;;    // Declares a constrained constructor
+    void f() requires D&lt;T&gt;; // Declares a constrained member function
+  };
+
+struct B {
+  void g(int n) requires C&lt;int&gt;; // Error: cannont constraint a non-template
+  void h(C a, D b);              // Declares a constrained generic member function
+
+};
+  </cxx-codeblock>
+  </cxx-example>
+  <cxx-note>
+  A constrained generic function declared at class scope is a member function
   template.
   </cxx-note>
   </p>
+
+  <p>A destructor (<cxx-ref in="cxx" to="class.dtor"></cxx-ref>) shall not be 
+  declared with <cxx-grammarterm>requires-clause</cxx-grammarterm>s.</p>
 
   </cxx-section> <!-- class.mem -->
 </cxx-clause>

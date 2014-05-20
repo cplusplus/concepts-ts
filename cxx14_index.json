@@ -46,6 +46,8 @@
   "class.name"            : "9.1",
   "class.mem"             : "9.2",
 
+  "class.dtor"            : "12.4",
+
   "over"              : "13",
   "over.load"         : "13.1",
   "over.dcl"          : "13.2",
