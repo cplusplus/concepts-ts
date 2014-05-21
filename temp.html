@@ -372,14 +372,14 @@ template&lt;U... Args&gt; void f5(); // requires U&lt;Args0&gt; && U&lt;Args1&gt
     evaluate to <code>false</code>, then the program is ill-formed.
     <cxx-example>
     <cxx-codeblock>
-template<typename T> concept bool True = true;
-template<typename T> concept bool False = false;
+template&lt;typename T&gt; concept bool True = true;
+template&lt;typename T&gt; concept bool False = false;
 
-template<False T> struct S;
-template<True T> using Ptr = T*;
+template&lt;False T&gt; struct S;
+template&lt;True T&gt; using Ptr = T*;
 
-S<int>* x;   // Error: int does not satisfy the constraints of False.
-Ptr<int> z;  // Ok: z has type int*
+S&lt;int&gt;* x;   // Error: int does not satisfy the constraints of False.
+Ptr&lt;int&gt; z;  // Ok: z has type int*
     </cxx-codeblock>
     </cxx-example>
     <cxx-note>
@@ -444,12 +444,40 @@ temp&lt;z&gt; s2; // error: Z subsumes Y
     <cxx-section id="temp.class">
       <h1>Class templates</h1>
 
+
+      <p>Insert the following paragraph after 
+      <cxx-ref in="cxx" to="temp.class"></cxx-ref>/3.</p>
+
+      <p>When a member of a constrained class template is defined outside of 
+      its class template definition, it shall be specified with the
+      <cxx-grammarterm>template-parameters</cxx-grammarterm> and
+      associated constraints of the lass template.
+      <cxx-example>
+      <cxx-codeblock>
+template&lt;typename T&gt; concept bool Con = ...;
+
+template&lt;typename T&gt; requires Con&lt;T&gt;
+  struct S {
+    void f();
+    void g();
+  }
+
+template&lt;typename T&gt; 
+  requires Con&lt;T&gt;
+    void S&lt;T&gt;::f() { } // Ok: parameters and constraints match
+
+template&lt;typename T&gt;
+  void S&lt;T&gt;::g() { } // Error: no declaration of g() in S&lt;T&gt;
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+
       <cxx-section id="temp.mem.func">
         <h1>Member functions of class templates</h1>
 
         <p>Add the following paragraphs after
         <cxx-ref in="cxx" to="temp.mem.func"></cxx-ref>.
-
         
         <p>A member function of a class template whose declarator contains a
         <cxx-grammarterm>requires-clause</cxx-grammarterm> is a
@@ -464,8 +492,7 @@ template&lt;typename T&gt;
         </cxx-example>
         </p>
 
-        <p>
-        Constraints on member functions are instantiated as needed
+        <p>Constraints on member functions are instantiated as needed
         during overload resolution, not when the class template is
         instantiated
         (<cxx-ref in="cxx" to="temp.inst"></cxx-ref>).
@@ -477,8 +504,57 @@ template&lt;typename T&gt;
         </cxx-note>
         </p>
 
+        <p>A constrained member function of a class template may be defined
+        outside of its class template definition. Its definition shall be
+        specified with the constraints of its declaration.
+        <cxx-example>
+        Consider possible definitions of the constrained member function 
+        <code>S&lt;T&gt;f</code> from above.
+        <cxx-codeblock>
+template&lt;typenamae T&gt; 
+  void S&lt;T&gt;::f() { }                 // Error: no declaration of f() in S&lt;T&gt;.
+
+template&lt;typenamae T&gt; 
+  void S&lt;T&gt;::f() requires C&lt;T&gt;() { } // Ok: defines S&lt;T&gt;::f
+        </cxx-codeblock>
+        </cxx-example>
+        </p>
+
       </cxx-section> <!-- temp.mem.func -->
     </cxx-section> <!-- temp.class -->
+
+
+    <cxx-section id="temp.mem">
+      <h1>Member templates</h1>
+
+      <p>Insert the following paragraph after
+      <cxx-ref in="cxx" to="temp.mem"></cxx-ref>/1.</p>
+
+      <p>A constrained member template defined outside of its class template 
+      definition shall be specified with the
+      <cxx-grammarterm>template-parameter</cxx-grammarterm>s 
+      and constraints of the class template followed by
+      the template parameters and constraints of the member template.
+      <cxx-example>
+      <cxx-codeblock>
+template&lt;typename T&gt; concept bool Foo = ...;
+template&lt;typename T&gt; concept bool Bar = ...; // Different than Foo
+
+template&lt;Foo T&gt;
+  struct S {
+    template&lt;Bar U&gt; void f(U);
+    template&lt;Bar U&gt; void g(U);
+  };
+
+template&lt;Foo T&gt; template&lt;Bar U&gt; void S&lt;T&gt;::f(U); // Ok
+template&lt;Foo T&gt; template&lt;Foo U&gt; void S&lt;T&gt;::g(U); // Error: no g() declared in S
+      </cxx-codeblock>
+      The template constraints in the definition of <code>g</code> do not
+      match those in its declaration.
+      </cxx-example>
+      </p>
+    </cxx-section> <!-- temp.mem -->
+
 
     <cxx-section id="temp.friend">
       <h1>Friends</h1>
