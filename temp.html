@@ -186,82 +186,86 @@ Ineffable{X, Y} void f();    // Error: not all parameters are introduced
       <ins>
       <bnf-rule>constrained-parameter</bnf-rule>
         <bnf-alt>
-          constrained-type-specifier 
-          <bnf-terminal>...</bnf-terminal><bnf-opt></bnf-opt>
-          identifier
+          attribute-specifier-seq<bnf-opt></bnf-opt>
+          decl-specifier-seq
+          declarator
         </bnf-alt>
+        
         <bnf-alt>
-          constrained-type-specifier 
-          identifier
+          attribute-specifier-seq<bnf-opt></bnf-opt>
+          decl-specifier-seq
+          declarator
           <bnf-terminal>=</bnf-terminal>
-          constrained-type-initializer
+          constrained-initializer
         </bnf-alt>
 
-      <bnf-rule>constrained-type-initializer</bnf-rule>
-        <bnf-alt>type-id</bnf-alt>
-        <bnf-alt>id-expression</bnf-alt>
+        <bnf-alt>
+          attribute-specifier-seq<bnf-opt></bnf-opt>
+          decl-specifier-seq
+          abstract-declarator<bnf-opt></bnf-opt>
+        </bnf-alt>
+        
+        <bnf-alt>
+          attribute-specifier-seq<bnf-opt></bnf-opt>
+          decl-specifier-seq
+          abstract-declarator<bnf-opt></bnf-opt>
+          <bnf-terminal>=</bnf-terminal>
+          constrained-initializer
+        </bnf-alt>
 
+      <bnf-rule>constrained-initializer</bnf-rule>
+        <bnf-alt>type-id</bnf-alt>
+        <bnf-alt>initializer-clause</bnf-alt>
       </ins>
     </bnf-grammar>
+
+    <cxx-note> 
+    The <cxx-grammarterm>constrained-parameter</cxx-grammarterm>
+    syntax is, for all intents and purposes, the same as the
+    <cxx-grammarterm>parameter-declaration</cxx-grammarterm> syntax except
+    syntax of default arguments, which can also accept a 
+    <cxx-grammarterm>type-id</cxx-grammarterm>.
+    </cxx-note>
 
     <p>Add the following paragraphs after
     <cxx-ref in="cxx" to="temp.param"></cxx-ref>/15.</p>
 
     <p>A <dfn>constrained template parameter</dfn> is a
-    <cxx-grammarterm>constrained-parameter</cxx-grammarterm> or a
-    <cxx-grammarterm>parameter-declaration</cxx-grammarterm> whose
+    <cxx-grammarterm>constrained-parameter</cxx-grammarterm> whose
     <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> contains a
     <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
 
     A <cxx-grammarterm>constrained-parameter</cxx-grammarterm> 
-    defines its identifier to be a template parameter, and it introduces
-    an associated constraint of the template declaration.
-
-    In a constrained template parameter, the concept definition referred to 
-    by the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> is 
-    called the  <dfn>constraining concept</dfn>, and its first template 
-    parameter is called the <dfn>prototype parameter</dfn>.
-
-    <p>
-    The kind of the template parameter declared by a
-    <cxx-grammarterm>constrained-parameter</cxx-grammarterm> matches that 
-    of the prototype parameter.
-    
-    If the template parameter is a template template parameter, then
-    it has the same number and kind of template parameters as the
-    prototype parameter.
-    <cxx-example class="inline">
-    <cxx-codeblock>
-template&lt;typename T&gt;
-  concept bool C1 = ...;
-template&lt;template&lt;typename&gt; class X&gt;
-  concept bool C2() { ... }
-
-template&lt;C1 T&gt; void f(); // T is a type parameter
-template&lt;C2 X&gt; void g(); // X is a template with one type parameter
-    </cxx-codeblock>
-    </cxx-example>
-    </p>    
-
-    <p>If the constrained parameter is a non-type template parameter, then
-    then type of the declared parameter is formed by substituting the
-    type of prototype parameter for the
+    defines its identifier to be a template parameter that matches in
+    kind the first template parameter, called the <dfn>prototype parameter</dfn>, 
+    of the concept declaration designated by the 
     <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
+
     <cxx-example class="inline">
     <cxx-codeblock>
-template&lt;int N&gt;
+template&lt;typename T&gt; 
+  concept bool C1 = ...;
+template&lt;template&lt;typename&gt; class X&gt; 
+  concept bool C2 = ...;
+template&lt;int N&gt; 
   concept bool P = ...;
 
+template&lt;C1 T&gt; void f();       // T is a type parameter
+template&lt;C2 X&gt; void g();       // X is a template with one type parameter
 template&lt;P N&gt; void x();        // N has type int
 template&lt;const P* N&gt; void y(); // N has type const int*
     </cxx-codeblock>
     </cxx-example>
     </p>
 
-    <p>If the constraining concept is a variadic concept 
-    (<cxx-ref to="dcl.concept"></cxx-ref>), then the constrained template 
-    parameter is declared as a parameter pack. The declaration of the 
-    constrained template parameter shall include an ellipses.
+    <p>
+    The declared <cxx-grammarterm>template-parameter</cxx-grammarterm> is
+    a template parameter pack if the prototype parameter declares a
+    template parameter pack. In such cases, the 
+    <cxx-grammarterm>declarator-id</cxx-grammarterm> or
+    <cxx-grammarterm>abstract-declarator</cxx-grammarterm> of the
+    <cxx-grammarterm>constrained-parameter</cxx-grammarterm> shall
+    also include an ellipsis.
     <cxx-example class="inline">
     <cxx-codeblock>
 template&lt;typename... Ts&gt;
@@ -273,38 +277,53 @@ template&lt;X Xs&gt; void g();    // Error: must X must include ...
     </cxx-example>
     </p>
 
-    <p>The <cxx-grammarterm>constrained-type-initializer</cxx-grammarterm>
-    shall match the constrained template parameter.
-    <cxx-example>
+    <p>If the <cxx-grammarterm>constrained-parameter</cxx-grammarterm>
+    declares a type parameter, then the 
+    <cxx-grammarterm>constrained-initializer</cxx-grammarterm>
+    is parsed as a <cxx-grammarterm>type-id</cxx-grammarterm>. Otherwise, it
+    is parsed as a <cxx-grammarterm>initializer-clause</cxx-grammarterm>.
+    <cxx-example class="inline">
     <cxx-codeblock>
 template&lt;C1 T = int&gt; void p(); // Ok
 template&lt;P N = 0&gt; void q();    // Ok
-template&lt;P M = int&gt; void r();  // Error int is not an expression
+template&lt;P M = int&gt; void r();  // Error: int is not an expression
     </cxx-codeblock>
     </cxx-example>
     </p>
 
-    <p>If the constrained template parameter is not a template parameter
-    pack, then the constraint introduced by the 
-    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> in a
-    constrained template parameter is formed according to the rules
-    in section <cxx-ref to="dcl.spec.constr"></cxx-ref>. When forming the
-    constraint, the declared parameter used as a template argument in
-    place of the constrained type.
-    <cxx-example>
-<cxx-codeblock>
+    <p>The declaration of a 
+    <cxx-grammarterm>constrained-parameter</cxx-grammarterm> 
+    introduces a new constraint on the template declaration. 
+
+    The constraint is formed by substituting the declared 
+    <cxx-grammarterm>template-parameter</cxx-grammarterm> as the first
+    template argument of the concept declaration designated by the
+    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> in
+    the <cxx-grammarterm>constrained-parameter</cxx-grammarterm> declaration.
+
+    If the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> is
+    a <cxx-grammarterm>partial-concept-id</cxx-grammarterm>, its template
+    arguments are substituted after the declared
+    <cxx-grammarterm>template-parameter</cxx-grammarterm>.
+
+    If the designated concept is a function concept, then the 
+    introduced constraint is a function call.
+    <cxx-example class="inline">
+    <cxx-codeblock>
 template&lt;C1 T&gt; void f1(); // requires C1&lt;T&gt;
 template&lt;C2 U&gt; void f2(); // requires C2&lt;U&gt;
 template&lt;P N&gt; void f3(); // requires P&lt;N&gt;
-</cxx-codeblock>
-    <cxx-example>
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
 
-    <p>If the constrained template parameter is a template parameter pack,
-    the formation of the constraint depends on whether the constraining
-    concept is a variadic concept. 
+    <p>If the <cxx-grammarterm>constrained-parameter</cxx-grammarterm> declares 
+    a template parameter pack, the formation of the constraint depends on 
+    whether the designated concept designated by the parameter's
+    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> is variadic.
 
     Let <code>T</code> be the declared parameter, <code>C</code> be the
-    constraining concept, and <code>Args...</code> be a  sequence of template
+    designated concept, and <code>Args...</code> be a  sequence of template
     arguments from a <cxx-grammarterm>partial-concept-id</cxx-grammarterm>,
     possibly empty.
 
