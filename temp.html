@@ -342,9 +342,16 @@ template&lt;P N&gt; void f3(); // requires P&lt;N&gt;
     <code>T<i>i</i></code>.
     <cxx-example class="inline">
     <cxx-codeblock>
-template&lt;X... Xs&gt; void f4();    // requires X&lt;Xs...&gt;
-template&lt;C1... Args&gt; void f5(); // requires C1&lt;Args0&gt; && C1&lt;Args1&gt; && ... && C1&lt;Argsn&gt;
+template&lt;typename... Ts&gt; concept bool P = ...;
+template&lt;typename T> concept bool U = ...;
+
+
+template&lt;P... Xs&gt; void f4();   // requires P&lt;Xs...&gt;
+template&lt;U... Args&gt; void f5(); // requires U&lt;Args0&gt; && U&lt;Args1&gt; && ... && U&lt;Argsn&gt;
     </cxx-codeblock>
+    Here, <code>Args0</code>, <code>Args1</code>, etc. denote elements
+    of the template argument pack <code>Args</code> used as part of the
+    introduced constraint.
     </cxx-example>
     </p>
   </cxx-section>
@@ -353,26 +360,37 @@ template&lt;C1... Args&gt; void f5(); // requires C1&lt;Args0&gt; && C1&lt;Args1
   <cxx-section id="temp.names">
     <h1>Template names</h1>
 
-    <p>Modify <cxx-ref in="cxx" to="temp.names"></cxx-ref>/6.
+    <p>Insert the following paragraphs after 
+    <cxx-ref in="cxx" to="temp.names"></cxx-ref>/7.</p>
 
-    <p>A <cxx-grammarterm>simple-template-id</cxx-grammarterm> that 
-    names a class template specialization is a 
-    <cxx-grammarterm>class-name</cxx-grammarterm>. 
-
-    <ins>The template-arguments shall satisfy the associated constraints 
-    of the designated class, if any.</ins>
-    <cxx-example class="inline">
+    <p>If a <cxx-grammarterm>template-id</cxx-grammarterm> refers to a
+    specialization of a constrained template declaration, the template's
+    associated constraints are checked by substituting the
+    <cxx-grammarterm>template-arguments</cxx-grammarterm> into the
+    constraints and evaluating the resulting expression. If the substitution 
+    results in an invalid type or expression, or if the associated constraints 
+    evaluate to <code>false</code>, then the program is ill-formed.
+    <cxx-example>
     <cxx-codeblock>
-template&lt;Object T, int N&gt; // T must be an object type
-  class array;
+template<typename T> concept bool True = true;
+template<typename T> concept bool False = false;
 
-array&lt;int&amp;, 3&gt;* p; // error: int&amp; is not an object type
+template<False T> struct S;
+template<True T> using Ptr = T*;
+
+S<int>* x;   // Error: int does not satisfy the constraints of False.
+Ptr<int> z;  // Ok: z has type int*
     </cxx-codeblock>
     </cxx-example>
     <cxx-note>
+    Checking the constraints of a constrained class template does not 
+    require its instantiation. 
     This guarantees that a partial specialization cannot be less 
     specialized than a primary template. This requirement is enforced
     during name lookup, not when the partial specialization is declared.
+    </cxx-note>
+    </p>
+
     </cxx-note>
     </p>
   </cxx-section> <!-- temp.names -->
