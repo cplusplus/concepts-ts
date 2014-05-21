@@ -12,7 +12,7 @@
         <bnf-terminal>&lt;</bnf-terminal>
         template-parameter-list
         <bnf-terminal>&gt;</bnf-terminal>
-        <ins>requires-clause<bnf-opt></bnf-opt></bnf-alt></ins>
+        <ins><bnf-opt>requires-clause</bnf-opt></bnf-alt></ins>
       </bnf-alt>
       <bnf-alt>
         concept
@@ -25,7 +25,7 @@
       <bnf-alt><bnf-terminal>requires</bnf-terminal> constraint-expression</bnf-alt>
 
       <bnf-rule>concept</bnf-rule>
-        <bnf-alt>nested-name-specifier<bnf-opt></bnf-opt>&nbsp; concept-name</bnf-alt>
+        <bnf-alt><bnf-opt>nested-name-specifier</bnf-opt> concept-name</bnf-alt>
 
       <bnf-rule>introduction-list</bnf-rule>
         <bnf-alt>identifier</bnf-alt>
@@ -220,9 +220,9 @@ Ineffable{X, Y} void f();    // Error: not all parameters are introduced
 
     <cxx-note> 
     The <cxx-grammarterm>constrained-parameter</cxx-grammarterm>
-    syntax is, for all intents and purposes, the same as the
+    syntax is largely identical to the
     <cxx-grammarterm>parameter-declaration</cxx-grammarterm> syntax except
-    syntax of default arguments, which can also accept a 
+    syntax of default arguments, which is extended to also accept a 
     <cxx-grammarterm>type-id</cxx-grammarterm>.
     </cxx-note>
 

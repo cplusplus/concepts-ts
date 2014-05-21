@@ -1,0 +1,45 @@
+<!-- Copyright 2014 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<polymer-element name="cxx-footnote">
+  <template><style>
+    :host { font-family: serif; white-space: normal;
+            text-indent: initial; }
+    @media screen {
+      aside { float: right; max-width: 30%;
+              margin-left: 1em; }
+    }
+    @media print {
+      sup, .marker { display: none; }
+      aside { float: footnote; }
+    }
+  </style><!--
+    Be sure not to introduce whitespace here, as it appears around the footnote.
+  --><sup id="footnote-call-{{foot_num}}"><a href="#footnote-body-{{foot_num}}">{{foot_num}}</a></sup><aside class="footnote" id="footnote-body-{{foot_num}}"><span class="marker"><a href="#footnote-call-{{foot_num}}">{{foot_num}}</a>) </span><content/></aside></template>
+
+  <script>
+    (function() {
+      function renumberFootnotes() {
+        document.querySelectorAll('cxx-footnote').array().forEach(function(footnote, index) {
+          footnote.foot_num = index + 1;
+        });
+      }
+      Polymer('cxx-footnote', {
+        domReady: renumberFootnotes,
+        detached: renumberFootnotes,
+      });
+    })();
+  </script>
+</polymer-element>

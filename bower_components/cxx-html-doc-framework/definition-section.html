@@ -1,0 +1,39 @@
+<!-- Copyright 2014 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!--
+    Use this as <dl is="cxx-definition-section"> to build the unusual "terms
+    and definitions" section that gets numbered as if each term is a section,
+    but doesn't make them show up in the table of contents.
+-->
+<polymer-element name="cxx-definition-section" extends="dl">
+  <template>
+    <style>
+      polyfill-next-selector { content: 'dt'; }
+      ::content dt { font-weight: bold; }
+      polyfill-next-selector { content: 'dd'; }
+      ::content dd { margin-left: 0; }
+    </style>
+
+    <content></content>
+  </template>
+  <template id="cxx-definition-section-term" bind="">
+    {{parent_section.sec_num}}.{{term_number}}
+    <span style="float:right"><a href="#{{id}}">[{{id}}]</a></span>
+    <br clear="both"/>
+    <content></content>
+  </template>
+  <script src="definition-section.js"></script>
+</polymer-element>

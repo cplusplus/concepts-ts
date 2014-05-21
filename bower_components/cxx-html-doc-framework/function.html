@@ -1,0 +1,148 @@
+<!-- Copyright 2014 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<polymer-element name="cxx-function" constructor="CxxFunctionElement" noscript>
+  <template>
+    <style>
+      :host { display: block; page-break-inside: avoid;}
+      :host:not(:last-child) { margin-bottom: 3ex; }
+      :host > dl { margin: 0; margin-left: 2em; }
+      :host > pre { margin: 0; }
+    </style>
+    <pre><code><content select="cxx-signature"></content></code></pre>
+
+    <dl>
+      <content></content>
+    </dl>
+  </template>
+</polymer-element>
+<polymer-element name="cxx-signature" noscript>
+  <template><style>
+      :host {padding-left: 2em;display:block;text-indent:-2em;}
+      :host(.formatted) {padding-left: 0m; text-indent:0;}
+    </style><content></content></template>
+</polymer-element>
+<polymer-element name="cxx-attribute" constructor="CxxFunctionAttributeElement">
+  <template>
+    <style>
+      :host {display:block; margin-top: .5em; margin-bottom: .5em;}
+      dt { float: left; font-style: italic; font-weight: normal; padding-right: 1ex;}
+      dd { margin-left: 0em; }
+      /* @polyfill dd > ul, dd > ol */
+      ::content > ul, ::content > ol { clear: left; }
+    </style>
+    <dt>{{heading}}:</dt><dd><content></content></dd>
+  </template>
+  <script>
+    Polymer('cxx-attribute', {
+      attached: function() {
+        var parent = this.parentNode;
+        while (parent instanceof HTMLModElement)
+          parent = parent.parentNode;
+        if (!(parent instanceof CxxFunctionElement)) {
+          console.warn('<' + this.localName +
+                       '> element must be a child of <cxx-function> ' +
+                       '(ignoring <ins> and <del>):',
+                       this)
+        }
+      },
+    });
+  </script>
+</polymer-element>
+<polymer-element name="cxx-requires" extends="cxx-attribute">
+  <script>
+    Polymer('cxx-requires', {
+      heading: 'Requires',
+    });
+  </script>
+</polymer-element>
+<polymer-element name="cxx-preconditions" extends="cxx-attribute">
+  <!-- This extension was introduced by N3916. -->
+  <script>
+    Polymer('cxx-preconditions', {
+      heading: 'Preconditions',
+    });
+  </script>
+</polymer-element>
+<polymer-element name="cxx-effects" extends="cxx-attribute">
+  <script>
+    Polymer('cxx-effects', {
+      heading: 'Effects',
+    });
+  </script>
+</polymer-element>
+<polymer-element name="cxx-synchronization" extends="cxx-attribute">
+  <script>
+    Polymer('cxx-synchronization', {
+      heading: 'Synchronization',
+    });
+  </script>
+</polymer-element>
+<polymer-element name="cxx-postconditions" extends="cxx-attribute">
+  <script>
+    Polymer('cxx-postconditions', {
+      heading: 'Postconditions',
+    });
+  </script>
+</polymer-element>
+<polymer-element name="cxx-returns" extends="cxx-attribute">
+  <script>
+    Polymer('cxx-returns', {
+      heading: 'Returns',
+    });
+  </script>
+</polymer-element>
+<polymer-element name="cxx-throws" extends="cxx-attribute">
+  <script>
+    Polymer('cxx-throws', {
+      heading: 'Throws',
+    });
+  </script>
+</polymer-element>
+<polymer-element name="cxx-complexity" extends="cxx-attribute">
+  <script>
+    Polymer('cxx-complexity', {
+      heading: 'Complexity',
+    });
+  </script>
+</polymer-element>
+<polymer-element name="cxx-exception-safety" extends="cxx-attribute">
+  <script>
+    Polymer('cxx-exception-safety', {
+      heading: 'Exception safety',
+    });
+  </script>
+</polymer-element>
+<polymer-element name="cxx-remarks" extends="cxx-attribute">
+  <script>
+    Polymer('cxx-remarks', {
+      heading: 'Remarks',
+    });
+  </script>
+</polymer-element>
+<polymer-element name="cxx-error-conditions" extends="cxx-attribute">
+  <script>
+    Polymer('cxx-error-conditions', {
+      heading: 'Error conditions',
+    });
+  </script>
+</polymer-element>
+<polymer-element name="cxx-notes" extends="cxx-attribute">
+  <script>
+    Polymer('cxx-notes', {
+      heading: 'Notes',
+    });
+  </script>
+</polymer-element>

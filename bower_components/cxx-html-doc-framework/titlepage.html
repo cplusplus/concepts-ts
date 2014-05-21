@@ -1,0 +1,78 @@
+<!-- Copyright 2014 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!--
+Has children: cxx-docnum, time[pubdate], cxx-editor, cxx-revises,
+and <h1> for the title.
+
+The 'stage' attribute currently can only be "draft", but I'll extend this to
+support other TS and IS stages as we need them.
+
+cxx-titlepage sets the document title based on its <h1> child.
+-->
+<polymer-element name="cxx-titlepage" attributes="stage">
+  <template>
+    <style>
+      :host { display: block; min-height: 100%; }
+      @media print {
+        /* Using an exact height for printed documents works around a bug in
+           Prince that breaks footnotes when the html/body height is set to
+           100%. */
+        :host { height: 8.8in; }
+      }
+
+      /* position:relative on :host makes position:absolute on its children work
+         relative to :host's bounds. */
+      :host { position: relative; }
+      table { position: absolute; right: 0; top: 0; }
+      h1 { position: absolute; top: 40%; }
+      p.warning { position: absolute; bottom: 5%; }
+
+      h1 {text-align: center;}
+
+      th { text-align: left; vertical-align: top; }
+    </style>
+    <table>
+      <template if="{{docnum}}">
+        <tr><th>Document Number:</th><td><content select="cxx-docnum"/></td></tr>
+      </template>
+      <template if="{{pubdate}}">
+        <tr><th>Date:</th><td><content select="time[pubdate]"/></td></tr>
+      </template>
+      <template if="{{revises}}">
+        <tr><th>Revises:</th><td><content select="cxx-revises"/></td></tr>
+      </template>
+      <template if="{{editor}}">
+        <tr><th>Editor:</th><td><content select="cxx-editor"/></td></tr>
+      </template>
+    </table>
+    <h1>{{stage_title}}, {{iso_title_prefix}}{{title}}</h1>
+    <template if="{{stage == 'draft'}}">
+      <p class="warning"><strong>Note: this is an early draft. It’s known to be
+      incomplet and incorrekt, and it has lots of b<span
+      style="margin-left: -1.2pt; margin-right: 1pt">a</span>d<span
+      style="width:1.5em"> </span>for<span
+      style="margin-left:-3pt; margin-right:0.6pt">mat</span>ti<span
+      style="position:relative; top:-0.15ex">n</span>g.</strong></p>
+    </template>
+  </template>
+  <script src="titlepage.js"></script>
+</polymer-element>
+<polymer-element name="cxx-docnum" noscript>
+  <template><content></content></template>
+</polymer-element>
+<polymer-element name="cxx-editor" noscript>
+  <template><content></content></template>
+</polymer-element>

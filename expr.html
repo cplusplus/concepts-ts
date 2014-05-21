@@ -98,7 +98,7 @@ struct Fun {
       <p>All placeholder types introduced using the same 
       <cxx-grammarterm>concept-name</cxx-grammarterm> have the same invented
       template parameter.
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 auto f = []()C a, C b) { }
 f(0, 0);   // Ok
@@ -107,7 +107,6 @@ f(0, 'a'); // Error: template argument deduction failure
       The second call to <code>f</code> results in a compiler error because
       the types of the deduced arguments cannot be unified.
       </cxx-example>
-
       </p>
     </cxx-section> <!-- expr.prim.lambda -->
 
@@ -125,7 +124,7 @@ f(0, 'a'); // Error: template argument deduction failure
     <bnf-rule>requirement-parameter-list</bnf-rule>
       <bnf-alt>
         <bnf-terminal>(</bnf-terminal> 
-        parameter-declaration-clause<bnf-opt></bnf-opt>
+        <bnf-opt>parameter-declaration-clause</bnf-opt>
         <bnf-terminal>)</bnf-terminal>
       </bnf-alt>
 
@@ -151,10 +150,10 @@ f(0, 'a'); // Error: template argument deduction failure
 
     <bnf-rule>compound-requirement</bnf-rule>
       <bnf-alt>
-        <bnf-terminal>constexpr</bnf-terminal><bnf-opt></bnf-opt>
+        <bnf-opt><bnf-terminal>constexpr</bnf-terminal></bnf-opt>
         <bnf-terminal>{</bnf-terminal> expression <bnf-terminal>}</bnf-terminal>
-        <bnf-terminal>noexcept</bnf-terminal><bnf-opt></bnf-opt>
-        trailing-return-type<bnf-opt></bnf-opt>
+        <bnf-opt><bnf-terminal>noexcept</bnf-terminal></bnf-opt>
+        <bnf-opt>trailing-return-type</bnf-opt>
         <bnf-terminal>;</bnf-terminal>
       </bnf-alt>
 
@@ -266,7 +265,7 @@ template&lt;typename T&gt;
     (<cxx-ref in="cxx" to="expr.unary.noexcept"></cxx-ref>).
     </li>
     </ul>
-    </p>
+    <!-- </p> -->
 
     <p>A <cxx-grammarterm>requires-expression</cxx-grammarterm> evaluates to
     <code>true</code> if and only the atomic constraints introduced by
@@ -313,10 +312,13 @@ requires () {
       <p>A <cxx-grammarterm>type-requirement</cxx-grammarterm> introduces 
       valid type constraint for its 
       <cxx-grammarterm>typename-specifier</cxx-grammarterm>.
-      <cxx-note>A type requirement requests the validity of an associated
+      
+      <cxx-note>
+      A type requirement requests the validity of an associated
       type, either as a nested type name, a class template specialization,
-      or an alias template. It is not used to construct requirements for
+      or an alias template. It is not used to specify requirements for
       arbitrary <cxx-grammarterm>type-specifiers</cxx-grammarterm>.
+      </cxx-note>
       
       <cxx-example class="inline">
       <cxx-codeblock>
@@ -389,7 +391,8 @@ requires () {
       The required valid expression is an unevaluated operand
       (<cxx-ref in="cxx" to="basic.def.odr"></cxx-ref>)
       except in the case when the <code>constexpr</code> specifier is present.
-      These other requirements are described in the following paragraphs.</p>
+      These other requirements are described in the following paragraphs.
+      <!-- </p> -->
 
       <p>The brace-enclosed <cxx-grammarterm>expression</cxx-grammarterm> in
       a <cxx-grammarterm>compound-requirement</cxx-grammarterm> introduces

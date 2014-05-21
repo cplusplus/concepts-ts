@@ -12,9 +12,9 @@
       <bnf-rule>member-declarator</bnf-rule>
       <bnf-alt>
         declarator 
-        virt-specifier-seq<bnf-opt></bnf-opt>
-        pure-specifier-seq<bnf-opt></bnf-opt>
-        <ins>requires-clause<bnf-opt></bnf-opt></ins>
+        <bnf-opt>virt-specifier-seq</bnf-opt>
+        <bnf-opt>pure-specifier-seq</bnf-opt>
+        <ins><bnf-opt>requires-clause</bnf-opt></ins>
       </bnf-alt>
     </bnf-grammar>
 
@@ -26,7 +26,7 @@
   <cxx-grammarterm>declarator</cxx-grammarterm> declares a constrained member
   function of a class template (<cxx-ref to="temp.mem.func"></cxx-ref>)
   or a generic function (<cxx-ref to="dcl.fct"></cxx-ref>). 
-  <cxx-example>
+  <cxx-example class="inline">
   <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = ...;
 template&lt;typename T&gt; concept bool D = ...;

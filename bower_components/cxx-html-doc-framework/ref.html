@@ -1,0 +1,45 @@
+<!-- Copyright 2014 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<link rel="import" href="util/get-element-by-id.html"/>
+
+<!--
+    The 'to' attribute is the id of a <cxx-section> or <cxx-table> element (or subclass).
+
+    The 'insynopsis' attribute should be present if the reference is from
+    within a comment in a header or class synopsis. This will append ", <title>"
+    to the expansion. Otherwise, the reference is enclosed in parentheses.
+
+    If the 'in' attribute is present, it's the id of
+    a <cxx-foreign-index> element that maps section names to numbers
+    in that document.
+-->
+
+<polymer-element name="cxx-ref" attributes="to insynopsis in">
+  <template
+      ><cxx-get-element-by-id elemId="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id
+      ><template if="{{!in}}"><cxx-get-element-by-id elemId="{{to}}" elem="{{toElem}}"></cxx-get-element-by-id></template
+      ><template id="target_num"
+                 ><template if="{{inElem.index}}">{{inElem.name}} <span title="{{to}}">&#xa7;{{inElem.index[to]}}</span></template
+                 ><template if="{{!in}}"><a title="{{to}}" href="#{{to}}"
+                   ><template if="{{toElem.sec_num}}">{{toElem.sec_num}}</template
+                   ><template if="{{toElem.table_num}}">Table {{toElem.table_num}}</template
+                   ><template if="{{toElem.figure_num}}">Figure {{toElem.figure_num}}</template></a></template
+      ></template
+      ><template if="{{insynopsis}}">// <i><template bind="" ref="target_num"></template>, {{toElem.title_element.textContent}}</i></template
+      ><template if="{{!insynopsis}}"><template bind="" ref="target_num"></template></template
+  ></template>
+  <script src="ref.js"></script>
+</polymer-element>

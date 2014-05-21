@@ -14,8 +14,8 @@
     <bnf-rule>init-declarator</bnf-rule>
       <bnf-alt>
         declarator
-        requires-clause<bnf-opt></bnf-opt>
-        initializer<bnf-opt></bnf-opt>
+        <bnf-opt>requires-clause</bnf-opt>
+        <bnf-opt>initializer</bnf-opt>
       </bnf-alt>
   </bnf-grammar>
   </p>
@@ -27,7 +27,7 @@
   (<cxx-ref to="temp"></cxx-ref>) shall only be present if the
   <cxx-grammarterm>declarator</cxx-grammarterm> declares a generic
   function (<cxx-ref to="dcl.fct"></cxx-ref>).
-  <cxx-example>
+  <cxx-example class="inline">
   <cxx-codeblock>
 template<typename T> concept bool C = ...;
 
@@ -141,11 +141,11 @@ template&lt;C T&gt;
       <bnf-grammar>
         <bnf-rule>function-definition</bnf-rule>
           <bnf-alt>
-            attribute-specifier-seq<bnf-opt></bnf-opt>
-            decl-specifier-seq<bnf-opt></bnf-opt>
+            <bnf-opt>attribute-specifier-seq</bnf-opt>
+            <bnf-opt>decl-specifier-seq</bnf-opt>
             declarator
-            virt-specifier-seq<bnf-opt></bnf-opt>
-            <ins>requires-clause<bnf-opt></bnf-opt></ins>
+            <bnf-opt>virt-specifier-seq</bnf-opt>
+            <ins><bnf-opt>requires-clause</bnf-opt></ins>
             function-body
           </bnf-alt>
       </bnf-grammar>

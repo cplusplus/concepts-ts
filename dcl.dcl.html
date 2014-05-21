@@ -23,7 +23,9 @@
 
         <ins>
         <bnf-rule>constrained-type-specifier</bnf-rule>
-          <bnf-alt>nested-name-specifier<bnf-opt></bnf-opt> constrained-type-name</bnf-alt>
+          <bnf-alt>
+            <bnf-opt>nested-name-specifier</bnf-opt> constrained-type-name
+          </bnf-alt>
 
         <bnf-rule>constrained-type-name</bnf-rule>
           <bnf-alt>concept-name</bnf-alt>
@@ -134,7 +136,7 @@
       At least one concept referred
       to by the <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
       shall be a type concept (<cxx-ref to="dcl.concept"></cxx-ref>).
-      <cxx-example>
+      <cxx-example class="inline">
       Function concepts can be overloaded to accept different numbers and
       kinds of template arguments. This is sometimes done to generalize
       a single concept for different kinds of arguments.
@@ -299,7 +301,7 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
       (<cxx-ref in="cxx" to="dcl.constexpr"></cxx-ref>).
       </p>
 
-      <p>A function concept has the following restrictions: </p>
+      <p>A function concept has the following restrictions:
       <ul>
         <li> The template must be unconstrained.</li>
         <li> The result type must be <code>bool</code>. </li>
@@ -326,6 +328,7 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
       concept bool p = 0; // error: not a template
       </cxx-codeblock>
       </cxx-example>
+      <!-- </p> -->
 
       <p>A variable template has the following restrictions:
       <ul>
@@ -347,7 +350,7 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
         concept bool D3 = has_x&lt;T&gt;::value; // Error: constrained concept definition
       </cxx-codeblock>
       </cxx-example>
-      </p>
+      <!-- </p> -->
 
       <p>A program that declares an explicit or partial specialization of a concept
       definition is ill-formed.
