@@ -122,10 +122,10 @@ Ineffable{X, Y} void f();    // Error: not all parameters are introduced
   form.</p>
 
 
-  <p>A template declaration's <dfn>template constraints</dfn> are
-  constraints formed as the conjunction (logical and) of all 
-  <cxx-grammarterm>constraint-expression</cxx-grammarterm>s 
-  associated with the template by
+  <p>A template declaration's <dfn>associated constraints</dfn> are
+  the conjunction (logical and) of all 
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm>s introduced
+  by:
   <ul>
   <li><cxx-grammarterm>constrained-parameter</cxx-grammarterm>s in a
     <cxx-grammarterm>template-parameter-list</cxx-grammarterm>,</li>
@@ -144,11 +144,12 @@ Ineffable{X, Y} void f();    // Error: not all parameters are introduced
   <cxx-grammarterm>function-definition</cxx-grammarterm>.</li>
   </ul>
   <cxx-note>
-  Template constraints form a constraint expression (<cxx-ref to="temp.constr"></cxx-ref>).
+  A template's associated constraints form a constraint 
+  expression (<cxx-ref to="temp.constr"></cxx-ref>).
   </cxx-note>
   <!-- </p> -->
-<!-- 
 
+<!-- 
   <p>A templates constraints must be satisfied 
   (<cxx-ref to="temp.constr"></cxx-ref>) in order for the corresponding
   definition to be instantiated.
@@ -168,8 +169,6 @@ Ineffable{X, Y} void f();    // Error: not all parameters are introduced
   template are subsumed by the associated constraints of template 
   parameter. No diagnostic is required.
   </p> -->
-
-
 
 
   <cxx-section id="temp.param">
