@@ -71,7 +71,7 @@ void sort(C& c); // Ok (assuming C names a concept)
       <cxx-grammarterm>template-parameter-list</cxx-grammarterm> that 
       consists of one invented type 
       <cxx-grammarterm>template-parameter</cxx-grammarterm> for each
-      occurrence of <code>auto</code> or each unique occurence of a 
+      occurrence of <code>auto</code> or each unique occurrence of a 
       <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
       in the function's
       <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, 
@@ -83,22 +83,28 @@ void sort(C& c); // Ok (assuming C names a concept)
       <cxx-grammarterm>parameter-declaration</cxx-grammarterm> declares 
       a function parameter pack (<cxx-ref in="cxx" to="dcl.fct"></cxx-ref>).
       
-      <!-- TODO: I believe this duplicates a requirement elsewhere -->
-      The associated constraints of a generic function are 
-      the conjunction of constraints introduced by the use of 
-      <cxx-grammarterm>constrained-type-name</cxx-grammarterm>s in the 
-      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
-      and the <cxx-grammarterm>requires-clause</cxx-grammarterm> in
-      the function's declarator, if present.
+      If the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of the 
+      corresponding <cxx-grammarterm>parameter-declaration</cxx-grammarterm> 
+      includes a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>,
+      the invented type parameter is a 
+      <cxx-grammarterm>constrained-parameter</cxx-grammarterm>, whose
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> matches
+      that of the <cxx-grammarterm>parameter-declaration</cxx-grammarterm>.
+      (<cxx-ref to="temp.param"></cxx-ref>).</ins>
+
       <cxx-example class="inline">
       The following generic function declarations are equivalent:
       <cxx-codeblock>
+template&lt;typenaem T&gt;
+  conxtexpr bool C() { ... }
+
 auto f(auto x, const C&amp; y);
 
-template&lt;typename T1, typename T2>
-  requires C&lt;T2>()
-    auto f(T1 x, const T2&amp; y);
+template&lt;typename T1, C T2&gt;
+  auto f(T1 x, const T2&amp; y);
       </cxx-codeblock>
+      The type of <code>y</code> is a type parameter constrained by
+      <code>C</code>.
       </cxx-example>
       </p>
 
