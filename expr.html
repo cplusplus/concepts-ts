@@ -100,7 +100,7 @@ struct Fun {
       template parameter.
       <cxx-example class="inline">
       <cxx-codeblock>
-auto f = []()C a, C b) { }
+auto f = [](C a, C b) { };
 f(0, 0);   // Ok
 f(0, 'a'); // Error: template argument deduction failure
       </cxx-codeblock>
