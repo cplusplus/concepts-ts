@@ -31,9 +31,9 @@
   <cxx-codeblock>
 template<typename T> concept bool C = ...;
 
-void f1(auto x) requires C&lt;decltyp(x)&gt;; // Ok
+void f1(auto x) requires C&lt;decltype(x)&gt;;// Ok
 void f2(int x) requires C&lt;int&gt;;         // Error: f2 is not a generic function
-auto n requires C&lt;decltype(n)&gt; = g();   // Error: cannot constrain variable declarattion
+auto n requires C&lt;decltype(n)&gt; = g();   // Error: cannot constrain variable declaration
 struct S { } requires C&lt;S&gt;;             // Error: cannot constrain a class declaration
   </cxx-codeblock>
   </cxx-example>
