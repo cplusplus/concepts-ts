@@ -555,10 +555,10 @@ pre {
     
     <table>
       <template if="{{docnum}}"></template>
-        <tr><th>Document Number:</th><td><cxx-docnum>N3929</cxx-docnum></td></tr>
+        <tr><th>Document Number:</th><td><cxx-docnum>N4040</cxx-docnum></td></tr>
       
       <template if="{{pubdate}}"></template>
-        <tr><th>Date:</th><td><time pubdate="">2014-02-14</time></td></tr>
+        <tr><th>Date:</th><td><time pubdate="">2014-05-26</time></td></tr>
       
       <template if="{{revises}}"></template>
         <tr><th>Revises:</th><td><cxx-revises><a href="http://isocpp.org/files/papers/N3848.html">N3889</a></cxx-revises></td></tr>
@@ -1321,7 +1321,7 @@ auto fun = [](const C&amp; arg) { }</code></pre>
     
       <cxx-codeblock>
     
-    <pre><code>auto f = []()C a, C b) { }
+    <pre><code>auto f = [](C a, C b) { };
 f(0, 0);   // Ok
 f(0, 'a'); // Error: template argument deduction failure</code></pre>
   </cxx-codeblock>
@@ -1503,8 +1503,7 @@ f(0, 'a'); // Error: template argument deduction failure</code></pre>
     
     <pre><code>template&lt;typename T&gt;
   requires requires (T x) { x + x; }
-    T add(T a, T b) { return a + b; }
-  }</code></pre>
+    T add(T a, T b) { return a + b; }</code></pre>
   </cxx-codeblock>
     
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -1537,7 +1536,7 @@ f(0, 'a'); // Error: template argument deduction failure</code></pre>
     into the dependent expression produces a <dfn>valid expression</dfn>.</li>
 
     <li>A <dfn>valid type constraint</dfn> is a predicate on a type.
-    the constraint is satisfied if and only if the substitution of template
+    The constraint is satisfied if and only if the substitution of template
     arguments into that type does not result in substitution failure. The
     result of successfully substituting template arguments into the dependent
     type produces an <dfn>associated type</dfn>.</li>
@@ -1579,7 +1578,7 @@ f(0, 'a'); // Error: template argument deduction failure</code></pre>
     <p id="expr.req.7" para_num="7">A <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> evaluates to
     <code>true</code> if and only the atomic constraints introduced by
     each <cxx-grammarterm><i>requirement</i></cxx-grammarterm> in the 
-    <cxx-grammarterm><i>requirement-list</i></cxx-grammarterm> is satisfied
+    <cxx-grammarterm><i>requirement-list</i></cxx-grammarterm> are satisfied
     and <code>false</code> otherwise. The semantics of each kind of 
     requirement are described in the following sections.</p>
 
@@ -1592,7 +1591,7 @@ f(0, 'a'); // Error: template argument deduction failure</code></pre>
       
       <p id="expr.req.simple.1" para_num="1">A <cxx-grammarterm><i>simple-requirement</i></cxx-grammarterm> introduces a
       valid expression constraint for its 
-      <cxx-grammarterm><i>expression </i></cxx-grammarterm>. The expression is an
+      <cxx-grammarterm><i>expression</i></cxx-grammarterm>. The expression is an
       unevaluated operand (<cxx-ref in="cxx" to="basic.def.odr"><cxx-get-element-by-id elemid="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id><template if="{{!in}}"></template><template id="target_num"></template><template if="{{insynopsis}}"></template><template if="{{!insynopsis}}"></template><template bind="" ref="target_num"></template><template if="{{inElem.index}}"></template>C++14 <span title="basic.def.odr">§3.2</span><template if="{{!in}}"></template></cxx-ref>).
 
       <cxx-example class="inline">
@@ -1606,7 +1605,7 @@ f(0, 'a'); // Error: template argument deduction failure</code></pre>
       <cxx-codeblock>
     
     <pre><code>requires (T a, T b) {
-  a + b;  // A simple requirement;
+  a + b;  // A simple requirement
 }</code></pre>
   </cxx-codeblock>
       
@@ -1662,7 +1661,7 @@ f(0, 'a'); // Error: template argument deduction failure</code></pre>
     
       <cxx-codeblock>
     
-    <pre><code>requires() {
+    <pre><code>requires () {
   typename T::inner;         // Required nested type name
   typename Related&lt;T&gt;; // Required alias
 }</code></pre>
@@ -1904,8 +1903,8 @@ requires(T x) {
       <header><span class="section-number">4.1.1</span> <h1 data-bookmark-label="4.1.1 Simple type specifiers">Simple type specifiers</h1> <span style="float:right"><a href="#dcl.type.simple">[dcl.type.simple]</a></span></header>
       
       
-      <p id="dcl.type.simple.1" para_num="1">Extend the <cxx-grammarterm><i>simple-type-spcifier</i></cxx-grammarterm> 
-      to include <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
+      <p id="dcl.type.simple.1" para_num="1">Extend the <cxx-grammarterm><i>simple-type-specifier</i></cxx-grammarterm> 
+      production to include <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
       <bnf-grammar>
     
     
@@ -2295,15 +2294,15 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()</code></pre>
       <cxx-codeblock>
     
     <pre><code>template&lt;typename T&gt;
-        concept bool C1() { return true; } // OK
+  concept bool C1() { return true; } // OK
 
-      template&lt;typename T&gt;
-        concept int c2() { return 0; }  // error: must return bool
+template&lt;typename T&gt;
+  concept int C2() { return 0; }  // error: must return bool
 
-      template&lt;typename T&gt;
-        concept bool C3(T) { return true; } // error: must have no parameters
+template&lt;typename T&gt;
+  concept bool C3(T) { return true; } // error: must have no parameters
 
-      concept bool p = 0; // error: not a template</code></pre>
+concept bool p = 0; // error: not a template</code></pre>
   </cxx-codeblock>
       
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -2325,13 +2324,13 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()</code></pre>
       <cxx-codeblock>
     
     <pre><code>template&lt;typename T&gt;
-        concept bool D1 = has_x&lt;T&gt;::value; // OK
+  concept bool D1 = has_x&lt;T&gt;::value; // OK
 
-      template&lt;typename T&gt;
-        concept bool D2 = 3 + 4; // Error: initializer is not a constraint
+template&lt;typename T&gt;
+  concept bool D2 = 3 + 4; // Error: initializer is not a constraint
 
-      template&lt;Integral T&gt;
-        concept bool D3 = has_x&lt;T&gt;::value; // Error: constrained concept definition</code></pre>
+template&lt;Integral T&gt;
+  concept bool D3 = has_x&lt;T&gt;::value; // Error: constrained concept definition</code></pre>
   </cxx-codeblock>
       
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -2347,10 +2346,10 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()</code></pre>
       <cxx-codeblock>
     
     <pre><code>template&lt;typename T&gt;
-        concept bool C = is_iterator&lt;T&gt;::value;
+  concept bool C = is_iterator&lt;T&gt;::value;
 
-      template&lt;typename T&gt;
-        concept bool C&lt;T*&gt; = true; // Error: partial specialization of a concept</code></pre>
+template&lt;typename T&gt;
+  concept bool C&lt;T*&gt; = true; // Error: partial specialization of a concept</code></pre>
   </cxx-codeblock>
       
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -2431,9 +2430,9 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()</code></pre>
     
     <pre><code>template<typename t=""> concept bool C = ...;
 
-void f1(auto x) requires C&lt;decltyp(x)&gt;; // Ok
+void f1(auto x) requires C&lt;decltype(x)&gt;;// Ok
 void f2(int x) requires C&lt;int&gt;;         // Error: f2 is not a generic function
-auto n requires C&lt;decltype(n)&gt; = g();   // Error: cannot constrain variable declarattion
+auto n requires C&lt;decltype(n)&gt; = g();   // Error: cannot constrain variable declaration
 struct S { } requires C&lt;S&gt;;             // Error: cannot constrain a class declaration
   </typename></code></pre>
   </cxx-codeblock>
@@ -3382,7 +3381,7 @@ temp&lt;z&gt; s2; // error: Z subsumes Y</code></pre>
       <p id="temp.class.2" para_num="2">When a member of a constrained class template is defined outside of 
       its class template definition, it shall be specified with the
       <cxx-grammarterm><i>template-parameters</i></cxx-grammarterm> and
-      associated constraints of the lass template.
+      associated constraints of the class template.
       <cxx-example>
     
     <span class="nowrap">[ <em>Example:</em></span>
@@ -3936,8 +3935,7 @@ template struct X&lt;int&gt;; // Error: int does not satisfy C.</code></pre>
     <cxx-ref in="cxx" to="temp"><cxx-get-element-by-id elemid="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id><template if="{{!in}}"></template><template id="target_num"></template><template if="{{insynopsis}}"></template><template if="{{!insynopsis}}"></template><template bind="" ref="target_num"></template><template if="{{inElem.index}}"></template>C++14 <span title="temp">§14</span><template if="{{!in}}"></template></cxx-ref>.</p>
 
 
-    <p id="temp.constr.2" para_num="2">
-    Certain contexts require expressions that satisfy additional 
+    <p id="temp.constr.2" para_num="2">Certain contexts require expressions that satisfy additional
     requirements as detailed in this sub-clause. Expressions that 
     satisfy these requirements are called 
     <dfn>constraint expression</dfn>s or simply 
@@ -3956,18 +3954,15 @@ template struct X&lt;int&gt;; // Error: int does not satisfy C.</code></pre>
     
   </bnf-grammar>
 
-    </p><p id="temp.constr.3" para_num="3">
-    A <cxx-grammarterm><i>logical-or-expression</i></cxx-grammarterm> is a
+    </p><p id="temp.constr.3" para_num="3">A <cxx-grammarterm><i>logical-or-expression</i></cxx-grammarterm> is a
     <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> if, after 
     substituting template arguments, the resulting expression
     </p><ul>
     <li>is a constant expression,</li>
     <li>has type <code>bool</code>, and</li>
-    <li>the operands to every subexpression that is either a
-    <cxx-grammarterm><i>logical-or-expression</i></cxx-grammarterm> of the
-    form <code>P || Q</code> or a
-    <cxx-grammarterm><i>logical-and-expression</i></cxx-grammarterm> of the
-    form <code>P &amp;&amp; Q</code> has type <code>bool</code>.</li>
+    <li>both operands <code>P</code> and <code>Q</code> in every subexpression
+    of a constraint of the form <code>P || Q</code> or <code>P &amp;&amp; Q</code> 
+    have type <code>bool</code>.</li>
     </ul>
     <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
@@ -4000,20 +3995,21 @@ template struct X&lt;int&gt;; // Error: int does not satisfy C.</code></pre>
     <cxx-codeblock>
     
     <pre><code>C&lt;T&gt;()
-has_trait&lt;T&gt;::value // if value is a bool member
+has_trait&lt;T&gt;::value // only if value is a bool member
 P &amp;&amp; Q
 P || (Q &amp;&amp; R)
-M == N              // if the result type is bool
-M &lt; N               // if the result type is bool
+M == N              // only if the result type is bool
+has_trait&lt;T&gt;::value // only if value is a bool member
+M &lt; N               // only if the result type is bool
 M + N &gt;= 0
 P || !(M &lt; N)
 true
 false</code></pre>
   </cxx-codeblock>
-An expression of the form <code>M + N</code> is not a valid constraint when
-the arguments have type <code>int</code> since the expression's type is not
-<code>bool</code>. Using this expression as a constraint would make the
-program ill-formed.
+    An expression of the form <code>M + N</code> is not a valid constraint when
+    the arguments have type <code>int</code> since the expression's type is not
+    <code>bool</code>. Using this expression as a constraint would make the
+    program ill-formed.
     
     <span class="nowrap">— <em>end example</em> ]</span>
   </cxx-example>
@@ -4022,7 +4018,9 @@ program ill-formed.
     <p id="temp.constr.6" para_num="6">A subexpression of a
     <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> that 
     calls a function concept or refers to a variable concept 
-    <cxx-ref to="dcl.concept"><cxx-get-element-by-id elemid="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id><template if="{{!in}}"></template><cxx-get-element-by-id elemid="{{to}}" elem="{{toElem}}"></cxx-get-element-by-id><template id="target_num"></template><template if="{{insynopsis}}"></template><template if="{{!insynopsis}}"></template><template bind="" ref="target_num"></template><template if="{{inElem.index}}"></template><template if="{{!in}}"></template><a title="dcl.concept" href="#dcl.concept"><template if="{{toElem.sec_num}}"></template>4.1.4<template if="{{toElem.table_num}}"></template><template if="{{toElem.figure_num}}"></template></a></cxx-ref> is a <dfn>concept check</dfn>.</p>
+    <cxx-ref to="dcl.concept"><cxx-get-element-by-id elemid="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id><template if="{{!in}}"></template><cxx-get-element-by-id elemid="{{to}}" elem="{{toElem}}"></cxx-get-element-by-id><template id="target_num"></template><template if="{{insynopsis}}"></template><template if="{{!insynopsis}}"></template><template bind="" ref="target_num"></template><template if="{{inElem.index}}"></template><template if="{{!in}}"></template><a title="dcl.concept" href="#dcl.concept"><template if="{{toElem.sec_num}}"></template>4.1.4<template if="{{toElem.table_num}}"></template><template if="{{toElem.figure_num}}"></template></a></cxx-ref> is a <dfn>concept check</dfn>.
+    A concept check is not evaluated; it is simplified according to the
+    rules described in this.</p>
 
     <p id="temp.constr.7" para_num="7">Certain subexpressions of a
     <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> are 
@@ -4037,6 +4035,31 @@ program ill-formed.
     <li>a <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>, or</li>
     <li>a subexpression of an atomic constraint.</li>
     </ul>
+    The valid expression constraints, valid type constraints,
+    result type constraints, and exception constraints introduced
+    by a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> are
+    also atomic constraints.
+    <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    <cxx-codeblock>
+    
+    <pre><code>has_trait&lt;T&gt;::value
+M &lt; N
+M + N &gt;= 0
+true
+false</code></pre>
+  </cxx-codeblock>
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  </cxx-example>
+    <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    A concept check is not an atomic expression.
+    
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+    <!-- </p> -->
 
     <p id="temp.constr.8" para_num="8">Constraints are <dfn>simplified</dfn> by reducing them to 
     expressions containing only logical operators and atomic constraints.
@@ -4045,7 +4068,7 @@ program ill-formed.
     <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
     An implementation is not required to normalize the constraint by rewriting
-    it in e.g., disjunctive normal form.
+    in e.g., disjunctive normal form.
     
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
@@ -4053,10 +4076,7 @@ program ill-formed.
 
     <p id="temp.constr.9" para_num="9">A concept check that calls a function concept is simplified by
     substituting the explicit template arguments into the named function
-    body's return expression. If the check refers a variable concepts, the 
-    replacement is made by substituting the template arguments into the 
-    variable's initializer.
-    </p>
+    body's return expression. A concept check that refers to a variable concepts is simplified by substituting the template arguments into the variable's initializer. </p>
 
     <p id="temp.constr.10" para_num="10">A <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> is simplified
     by replacing it with the conjunction of constraints introduced by
@@ -4072,6 +4092,49 @@ program ill-formed.
   </cxx-note>
     </p>
  
+    <p id="temp.constr.11" para_num="11">
+    <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    Let <code>P</code> and Q be variable templates
+    that are atomic constraints.
+    <cxx-codeblock>
+    
+    <pre><code>template&lt;typename T&gt;
+  concept bool P_and_Q() { return P&lt;T&gt; &amp;&amp; Q&lt;T&gt;; }
+
+template&lt;typename T&gt;
+  concept bool P_or_Q = P&lt;T&gt; || Q&lt;T&gt;;
+
+template&lt;typename T&gt;
+  concept bool C = P_and_Q&lt;T&gt; &amp;&amp;
+                   requires(T x) { x.p() -&gt; int; };
+
+template&lt;typename X&gt;
+  requires P_and_Q&lt;X&gt;() void f();
+
+template&lt;typename X&gt;
+  requires P_or_Q&lt;X&gt; void g();
+
+template&lt;typename X&gt;
+  requires C&lt;X&gt; void h();</code></pre>
+  </cxx-codeblock>
+The associated constraints of <code>f</code> are simplified to
+the expression <code>P&lt;X&gt; &amp;&amp; Q&lt;X&gt;</code>,
+and the associated constraints of <code>g</code> are simplified
+to <code>P&lt;X&gt; || Q&lt;X&gt;</code>. The associated constraints
+of <code>h</code> are:
+<cxx-codeblock>
+    
+    <pre><code>P&lt;X&gt; &amp;&amp; Q&lt;X&gt;
+  &amp;&amp; /* requires x.p() for all x of type X* /
+  &amp;&amp; /* requires that x.p() convert to int */</code></pre>
+  </cxx-codeblock>
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  </cxx-example>
+    </p>
  <!-- 
     FIXME: Write a bunch of examples.
 
@@ -4107,11 +4170,11 @@ void g();
  -->
 
 
-    <p id="temp.constr.11" para_num="11">A constraint is <dfn>satisfied</dfn> if, after substituting template
+    <p id="temp.constr.12" para_num="12">A constraint is <dfn>satisfied</dfn> if, after substituting template
     arguments, it evaluates to <code>true</code>. Otherwise, the constraint is 
     <dfn>unsatisfied</dfn>.</p>
 
-    <p id="temp.constr.12" para_num="12">
+    <p id="temp.constr.13" para_num="13">
     For a mapping <i>M</i> from a set <i>X</i> of atomic 
     constraints to boolean values, let <i>G(M)</i> be the mapping 
     from constraints to boolean values such that <i>G(M)(C)</i> is 
@@ -4149,7 +4212,7 @@ void g();
     </p>
     -->
 
-    <p id="temp.constr.13" para_num="13">Two <cxx-grammarterm><i>constraint-expressions</i></cxx-grammarterm>
+    <p id="temp.constr.14" para_num="14">Two <cxx-grammarterm><i>constraint-expressions</i></cxx-grammarterm>
     <code>P</code> and <code>Q</code> are <dfn>logically equivalent</dfn> 
     if and only if <code>P</code> subsumes <code>Q</code> and 
     <code>Q</code> subsumes <code>P</code>. </p>
