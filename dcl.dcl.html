@@ -316,16 +316,16 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
       </ul>
       <cxx-example class="inline">
       <cxx-codeblock>
-      template&lt;typename T&gt;
-        concept bool C1() { return true; } // OK
+template&lt;typename T&gt;
+  concept bool C1() { return true; } // OK
 
-      template&lt;typename T&gt;
-        concept int c2() { return 0; }  // error: must return bool
+template&lt;typename T&gt;
+  concept int C2() { return 0; }  // error: must return bool
 
-      template&lt;typename T&gt;
-        concept bool C3(T) { return true; } // error: must have no parameters
+template&lt;typename T&gt;
+  concept bool C3(T) { return true; } // error: must have no parameters
 
-      concept bool p = 0; // error: not a template
+concept bool p = 0; // error: not a template
       </cxx-codeblock>
       </cxx-example>
       <!-- </p> -->
@@ -340,14 +340,14 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
       </ul>
       <cxx-example class="inline">
       <cxx-codeblock>
-      template&lt;typename T&gt;
-        concept bool D1 = has_x&lt;T&gt;::value; // OK
+template&lt;typename T&gt;
+  concept bool D1 = has_x&lt;T&gt;::value; // OK
 
-      template&lt;typename T&gt;
-        concept bool D2 = 3 + 4; // Error: initializer is not a constraint
+template&lt;typename T&gt;
+  concept bool D2 = 3 + 4; // Error: initializer is not a constraint
 
-      template&lt;Integral T&gt;
-        concept bool D3 = has_x&lt;T&gt;::value; // Error: constrained concept definition
+template&lt;Integral T&gt;
+  concept bool D3 = has_x&lt;T&gt;::value; // Error: constrained concept definition
       </cxx-codeblock>
       </cxx-example>
       <!-- </p> -->
@@ -356,11 +356,11 @@ F2&lt;Y&gt; X // becomes F2&lt;X, Y&gt;()
       definition is ill-formed.
       <cxx-example class="inline">
       <cxx-codeblock>
-      template&lt;typename T&gt;
-        concept bool C = is_iterator&lt;T&gt;::value;
+template&lt;typename T&gt;
+  concept bool C = is_iterator&lt;T&gt;::value;
 
-      template&lt;typename T&gt;
-        concept bool C&lt;T*&gt; = true; // Error: partial specialization of a concept
+template&lt;typename T&gt;
+  concept bool C&lt;T*&gt; = true; // Error: partial specialization of a concept
       </cxx-codeblock>
       </cxx-example>
       </p>
