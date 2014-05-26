@@ -848,8 +848,7 @@ template struct X&lt;int&gt;; // Error: int does not satisfy C.
     <cxx-ref in="cxx" to="temp">"</cxx-ref>.</p>
 
 
-    <p>
-    Certain contexts require expressions that satisfy additional 
+    <p>Certain contexts require expressions that satisfy additional
     requirements as detailed in this sub-clause. Expressions that 
     satisfy these requirements are called 
     <dfn>constraint expression</dfn>s or simply 
@@ -859,18 +858,15 @@ template struct X&lt;int&gt;; // Error: int does not satisfy C.
         <bnf-alt>logical-or-expression</bnf-alt>
     </bnf-grammar>
 
-    <p>
-    A <cxx-grammarterm>logical-or-expression</cxx-grammarterm> is a
+    <p>A <cxx-grammarterm>logical-or-expression</cxx-grammarterm> is a
     <cxx-grammarterm>constraint-expression</cxx-grammarterm> if, after 
     substituting template arguments, the resulting expression
     <ul>
     <li>is a constant expression,</li>
     <li>has type <code>bool</code>, and</li>
-    <li>the operands to every subexpression that is either a
-    <cxx-grammarterm>logical-or-expression</cxx-grammarterm> of the
-    form <code>P || Q</code> or a
-    <cxx-grammarterm>logical-and-expression</cxx-grammarterm> of the
-    form <code>P && Q</code> has type <code>bool</code>.</li>
+    <li>both operands <code>P</code> and <code>Q</code> in every subexpression
+    of a constraint of the form <code>P || Q</code> or <code>P &amp;&amp; Q</code> 
+    have type <code>bool</code>.</li>
     </ul>
     <cxx-note>
     A <cxx-grammarterm>constraint-expression</cxx-grammarterm> 
@@ -896,27 +892,30 @@ template struct X&lt;int&gt;; // Error: int does not satisfy C.
     following expressions can be used as constraints:
     <cxx-codeblock>
 C&lt;T&gt;()
-has_trait&lt;T&gt;::value // if value is a bool member
+has_trait&lt;T&gt;::value // only if value is a bool member
 P && Q
 P || (Q && R)
-M == N              // if the result type is bool
-M < N               // if the result type is bool
+M == N              // only if the result type is bool
+has_trait&lt;T&gt;::value // only if value is a bool member
+M < N               // only if the result type is bool
 M + N >= 0
 P || !(M < N)
 true
 false
     </cxx-codeblock>
-An expression of the form <code>M + N</code> is not a valid constraint when
-the arguments have type <code>int</code> since the expression's type is not
-<code>bool</code>. Using this expression as a constraint would make the
-program ill-formed.
+    An expression of the form <code>M + N</code> is not a valid constraint when
+    the arguments have type <code>int</code> since the expression's type is not
+    <code>bool</code>. Using this expression as a constraint would make the
+    program ill-formed.
     </cxx-example>
     </p>
 
     <p>A subexpression of a
     <cxx-grammarterm>constraint-expression</cxx-grammarterm> that 
     calls a function concept or refers to a variable concept 
-    <cxx-ref to="dcl.concept"></cxx-ref> is a <dfn>concept check</dfn>.</p>
+    <cxx-ref to="dcl.concept"></cxx-ref> is a <dfn>concept check</dfn>.
+    A concept check is not evaluated; it is simplified according to the
+    rules described in this.</p>
 
     <p>Certain subexpressions of a
     <cxx-grammarterm>constraint-expression</cxx-grammarterm> are 
@@ -931,6 +930,22 @@ program ill-formed.
     <li>a <cxx-grammarterm>requires-expression</cxx-grammarterm>, or</li>
     <li>a subexpression of an atomic constraint.</li>
     </ul>
+    The valid expression constraints, valid type constraints,
+    result type constraints, and exception constraints introduced
+    by a <cxx-grammarterm>requires-clause</cxx-grammarterm> are
+    also atomic constraints.
+    <cxx-example>
+    <cxx-codeblock>
+has_trait&lt;T&gt;::value
+M < N
+M + N >= 0
+true
+false
+    </cxx-codeblock>
+    </cxx-example>
+    <cxx-note>A concept check is not an atomic expression.
+    </cxx-note>
+    <!-- </p> -->
 
     <p>Constraints are <dfn>simplified</dfn> by reducing them to 
     expressions containing only logical operators and atomic constraints.
@@ -938,16 +953,13 @@ program ill-formed.
     are replaced by simplified expressions.
     <cxx-note>
     An implementation is not required to normalize the constraint by rewriting
-    it in e.g., disjunctive normal form.
+    in e.g., disjunctive normal form.
     </cxx-note>
     </p>
 
     <p>A concept check that calls a function concept is simplified by
     substituting the explicit template arguments into the named function
-    body's return expression. If the check refers a variable concepts, the 
-    replacement is made by substituting the template arguments into the 
-    variable's initializer.
-    </p>
+    body's return expression. A concept check that refers to a variable concepts is simplified by substituting the template arguments into the variable's initializer. </p>
 
     <p>A <cxx-grammarterm>requires-expression</cxx-grammarterm> is simplified
     by replacing it with the conjunction of constraints introduced by
@@ -960,6 +972,42 @@ program ill-formed.
     </cxx-note>
     </p>
  
+    <p>
+    <cxx-example>
+    Let <code>P</code> and </code>Q</code> be variable templates
+    that are atomic constraints.
+    <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool P_and_Q() { return P&lt;T&gt; &amp;&amp; Q&lt;T&gt;; }
+
+template&lt;typename T&gt;
+  concept bool P_or_Q = P&lt;T&gt; || Q&lt;T&gt;;
+
+template&lt;typename T&gt;
+  concept bool C = P_and_Q&lt;T&gt; &amp;&amp;
+                   requires(T x) { x.p() -&gt; int; };
+
+template&lt;typename X&gt;
+  requires P_and_Q&lt;X&gt;() void f();
+
+template&lt;typename X&gt;
+  requires P_or_Q&lt;X&gt; void g();
+
+template&lt;typename X&gt;
+  requires C&lt;X&gt; void h();
+    </cxx-codeblock>
+The associated constraints of <code>f</code> are simplified to
+the expression <code>P&lt;X&gt; &amp;&amp; Q&lt;X&gt;</code>,
+and the associated constraints of <code>g</code> are simplified
+to <code>P&lt;X&gt; || Q&lt;X&gt;</code>. The associated constraints
+of <code>h</code> are:
+<cxx-codeblock>
+P&lt;X&gt; &amp;&amp; Q&lt;X&gt;
+  &amp;&amp; /* requires x.p() for all x of type X* /
+  &amp;&amp; /* requires that x.p() convert to int */
+</cxx-codeblock>
+    </cxx-example>
+    </p>
  <!-- 
     FIXME: Write a bunch of examples.
 
