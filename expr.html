@@ -100,7 +100,7 @@ struct Fun {
       template parameter.
       <cxx-example class="inline">
       <cxx-codeblock>
-auto f = []()C a, C b) { }
+auto f = [](C a, C b) { };
 f(0, 0);   // Ok
 f(0, 'a'); // Error: template argument deduction failure
       </cxx-codeblock>
@@ -200,7 +200,6 @@ template&lt;typename T&gt;
 template&lt;typename T&gt;
   requires requires (T x) { x + x; }
     T add(T a, T b) { return a + b; }
-  }
     </cxx-codeblock>
     </cxx-example>
     </p>
@@ -231,7 +230,7 @@ template&lt;typename T&gt;
     into the dependent expression produces a <dfn>valid expression</dfn>.</li>
 
     <li>A <dfn>valid type constraint</dfn> is a predicate on a type.
-    the constraint is satisfied if and only if the substitution of template
+    The constraint is satisfied if and only if the substitution of template
     arguments into that type does not result in substitution failure. The
     result of successfully substituting template arguments into the dependent
     type produces an <dfn>associated type</dfn>.</li>
@@ -270,7 +269,7 @@ template&lt;typename T&gt;
     <p>A <cxx-grammarterm>requires-expression</cxx-grammarterm> evaluates to
     <code>true</code> if and only the atomic constraints introduced by
     each <cxx-grammarterm>requirement</cxx-grammarterm> in the 
-    <cxx-grammarterm>requirement-list</cxx-grammarterm> is satisfied
+    <cxx-grammarterm>requirement-list</cxx-grammarterm> are satisfied
     and <code>false</code> otherwise. The semantics of each kind of 
     requirement are described in the following sections.</p>
 
@@ -278,7 +277,7 @@ template&lt;typename T&gt;
       <h1>Simple requirements</h1>
       <p>A <cxx-grammarterm>simple-requirement</cxx-grammarterm> introduces a
       valid expression constraint for its 
-      <cxx-grammarterm>expression </cxx-grammarterm>. The expression is an
+      <cxx-grammarterm>expression</cxx-grammarterm>. The expression is an
       unevaluated operand (<cxx-ref in="cxx" to="basic.def.odr"></cxx-ref>).
 
       <cxx-example class="inline">
@@ -288,7 +287,7 @@ template&lt;typename T&gt;
       (<cxx-ref in="cxx" to="basic.compound"></cxx-ref>).
       <cxx-codeblock>
 requires (T a, T b) {
-  a + b;  // A simple requirement;
+  a + b;  // A simple requirement
 }
       </cxx-codeblock>
       </cxx-example>
@@ -322,7 +321,7 @@ requires () {
       
       <cxx-example class="inline">
       <cxx-codeblock>
-requires() {
+requires () {
   typename T::inner;         // Required nested type name
   typename Related&lt;T&gt;; // Required alias
 }
