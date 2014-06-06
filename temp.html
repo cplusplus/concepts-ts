@@ -238,7 +238,7 @@ Ineffable{X, Y} void f();    // Error: not all parameters are introduced
     A <cxx-grammarterm>constrained-parameter</cxx-grammarterm> 
     defines its identifier to be a template parameter that matches in
     kind the first template parameter, called the <dfn>prototype parameter</dfn>, 
-    of the concept declaration designated by the 
+    of the concept designated by the 
     <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
 
     <cxx-example class="inline">
@@ -258,8 +258,20 @@ template&lt;const P* N&gt; void y(); // N has type const int*
     </cxx-example>
     </p>
 
-    <p>
-    The declared <cxx-grammarterm>template-parameter</cxx-grammarterm> is
+    <p>If the prototype parameter is a type parameter (including template
+    template parameters), then the 
+    <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of the
+    constrained parameter shall consist of only the
+    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
+    <cxx-example>
+    <cxx-codeblock>
+template&lt;const C1&amp;&gt; // Error: declares a const-qualified type parameter
+  struct S;
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
+    <p>The declared <cxx-grammarterm>template-parameter</cxx-grammarterm> is
     a template parameter pack if the prototype parameter declares a
     template parameter pack. In such cases, the 
     <cxx-grammarterm>declarator-id</cxx-grammarterm> or
@@ -878,7 +890,6 @@ template&lt;&gt; void S2&lt;X&gt;::f(T a) requires C&lt;X&gt; { } // Error: extr
       </cxx-example>
       </p>
     </cxx-section> <!-- temp.expl.spec -->
-
   </cxx-section> <!-- temp.spec -->
 
 
