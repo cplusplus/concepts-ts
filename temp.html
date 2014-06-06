@@ -797,7 +797,7 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
     <cxx-section id="temp.inst">
       <h1>Implicit instantiation</h1>
 
-      <p>Insert the following pargraph after 
+      <p>Insert the following paragraph after 
       <cxx-ref in="cxx" to="temp.inst"></cxx-ref>/1.</p>
 
       <p>The implicit instantiation of a class template does not cause
@@ -831,6 +831,54 @@ template struct X&lt;int&gt;; // Error: int does not satisfy C.
       </cxx-example>
       </p>
     </cxx-section> <!-- temp.explicit -->
+
+    <cxx-section id="temp.expl.spec">
+      <h1>Explicit specialization</h1>
+
+      <p>Insert the following paragraphs under 
+      <cxx-ref in="cxx" to="temp.expl.spec"></cxx-ref>.</p>
+
+      <p>A constrained template declaration or constrained member function
+      of a class template can be declared by a declaration
+      introduced by <code>template&lt;&gt;</code>.</p>
+
+      <p>The <cxx-grammarterm>template arguments</cxx-grammarterm> of a
+      <cxx-grammarterm>simple-template-id</cxx-grammarterm> that
+      names an explicit specialization of a constrained template
+      declaration must satisfy that template's associated constraints
+      (<cxx-ref to="temp"></cxx-ref>).
+      <cxx-example class="inline">
+      <code>C</code> is the type concept defined in the previous
+      section.
+      <cxx-codeblock>
+template&lt;C T&gt;
+  struct S1 { };
+
+struct X { void c(); }
+
+template&lt;&gt; S1&lt;X&gt; { };   // OK: X satisfies C
+template&lt;&gt; S1&lt;int&gt; { }; // Error: int does not satisfy C
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+      <p>An explicit specialization of a constrained member function
+      (<cxx-ref to="temp.mem.func"></cxx-ref>) shall not include a
+      a <cxx-grammarterm>requires-clause</cxx-grammarterm>.
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt;
+  struct S2 { 
+    void f(T) requires C&lt;T&gt;;
+  };
+
+template&lt;&gt; void S2&lt;X&gt;::f(T a) { }               // OK
+template&lt;&gt; void S2&lt;X&gt;::f(T a) requires C&lt;X&gt; { } // Error: extra requires-clause
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+    </cxx-section> <!-- temp.expl.spec -->
+
   </cxx-section> <!-- temp.spec -->
 
 
