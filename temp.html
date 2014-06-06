@@ -442,9 +442,15 @@ template&lt;template&lt;Y&gt; class C&gt;
 template&lt;X T&gt; class x;
 template&lt;Z T&gt; class z;
 
-temp&lt;x&gt; s1; // Ok: X is subsumed by Y
-temp&lt;z&gt; s2; // error: Z subsumes Y
+temp&lt;x&gt; s1; // OK: X is subsumed by Y
+temp&lt;z&gt; s2; // Error: Z subsumes Y
       </cxx-codeblock>
+      The template <code>x</code> is a valid argument for <code>temp</code>
+      because any template arguments satisfying <code>Y</code> will also 
+      satisfy <code>X</code>. That is, all uses of <code>x</code> by
+      <code>temp</code> should result in well-formed programs. The 
+      template <code>y</code> is not valid because some template arguments 
+      satisfying <code>Y</code> may not satisfy <code>Z</code>.
       </cxx-example>
       </p>
 
