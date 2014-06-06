@@ -846,6 +846,10 @@ pre {
         <template if="{{sections.length > 0}}"></template>
       </li>
             
+              <li><span class="marker">7.5.3</span><a href="#temp.expl.spec">Explicit specialization</a><template bind="" ref="hierarchy"></template>
+        <template if="{{sections.length > 0}}"></template>
+      </li>
+            
           </ol>
         
       </li>
@@ -1257,10 +1261,6 @@ template<Input_iterator I, Predicate<Value_type<I>> P>
       declares a function parameter pack 
       (<cxx-ref in="cxx" to="dcl.fct"><cxx-get-element-by-id elemid="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id><template if="{{!in}}"></template><template id="target_num"></template><template if="{{insynopsis}}"></template><template if="{{!insynopsis}}"></template><template bind="" ref="target_num"></template><template if="{{inElem.index}}"></template>C++14 <span title="dcl.fct">§8.3.5</span><template if="{{!in}}"></template></cxx-ref>). 
       
-      If the 
-      <ins>The invented type <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>
-      is a constrained parameter if the 
-
       If the <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm> of the 
       corresponding <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> 
       includes a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>,
@@ -1268,7 +1268,7 @@ template<Input_iterator I, Predicate<Value_type<I>> P>
       <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>, whose
       <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> matches
       that of the <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm>.
-      (<cxx-ref to="temp.param"><cxx-get-element-by-id elemid="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id><template if="{{!in}}"></template><cxx-get-element-by-id elemid="{{to}}" elem="{{toElem}}"></cxx-get-element-by-id><template id="target_num"></template><template if="{{insynopsis}}"></template><template if="{{!insynopsis}}"></template><template bind="" ref="target_num"></template><template if="{{inElem.index}}"></template><template if="{{!in}}"></template><a title="temp.param" href="#temp.param"><template if="{{toElem.sec_num}}"></template>7.1<template if="{{toElem.table_num}}"></template><template if="{{toElem.figure_num}}"></template></a></cxx-ref>).</ins>
+      (<cxx-ref to="temp.param"><cxx-get-element-by-id elemid="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id><template if="{{!in}}"></template><cxx-get-element-by-id elemid="{{to}}" elem="{{toElem}}"></cxx-get-element-by-id><template id="target_num"></template><template if="{{insynopsis}}"></template><template if="{{!insynopsis}}"></template><template bind="" ref="target_num"></template><template if="{{inElem.index}}"></template><template if="{{!in}}"></template><a title="temp.param" href="#temp.param"><template if="{{toElem.sec_num}}"></template>7.1<template if="{{toElem.table_num}}"></template><template if="{{toElem.figure_num}}"></template></a></cxx-ref>).
       
       The return type and function parameters of the function call operator 
       template are derived from the 
@@ -1290,7 +1290,7 @@ template<Input_iterator I, Predicate<Value_type<I>> P>
       <cxx-codeblock>
     
     <pre><code>template&lt;typename T&gt; concept bool C = ...;
-auto fun = [](const C&amp; arg) { };</code></pre>
+auto fun = [](const C&amp; arg) { }</code></pre>
   </cxx-codeblock>
       The parameter <code>arg</code> has a 
       <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
@@ -2843,13 +2843,14 @@ struct B {
   In the latter case, each <cxx-grammarterm><i>identifier</i></cxx-grammarterm>
   in the <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm> is declared
   to be a template parameter. Each template parameter shall match in kind
-  the corresponding template parameter of the concept definition designated by
-  the <cxx-grammarterm><i>concept</i></cxx-grammarterm>.
+  and position the corresponding template parameter in the template
+  parameter list of the concept definition designated by the 
+  <cxx-grammarterm><i>concept</i></cxx-grammarterm>.
 
-  If, after lookup, the <cxx-grammarterm><i>concept</i></cxx-grammarterm> designates
-  an overloaded set of concept functions, the designated concept is the
-  one with the same number of template parameters as the number of
-  <cxx-grammarterm><i>identifier</i></cxx-grammarterm> in the
+  If the <cxx-grammarterm><i>concept</i></cxx-grammarterm> designates
+  an overloaded set of function concepts, the designated concept definition 
+  is the one having the same number of template parameters as the number of
+  <cxx-grammarterm><i>identifier</i></cxx-grammarterm>s in the
   <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm>.
 
   <!--
@@ -2886,7 +2887,7 @@ struct B {
     <pre><code>template&lt;typename T, int N, typename... Xs&gt;
   concept bool Inscrutable() { ... };
 
-Mergeable{A, B, C} struct s;</code></pre>
+Inscrutable{A, B, C} struct s;</code></pre>
   </cxx-codeblock>
   This class template declaration of <code>s</code> is equivalent to:
   <cxx-codeblock>
@@ -3089,7 +3090,7 @@ Ineffable{X, Y} void f();    // Error: not all parameters are introduced</code><
     A <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> 
     defines its identifier to be a template parameter that matches in
     kind the first template parameter, called the <dfn>prototype parameter</dfn>, 
-    of the concept declaration designated by the 
+    of the concept designated by the 
     <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
 
     <cxx-example class="inline">
@@ -3115,8 +3116,26 @@ template&lt;const P* N&gt; void y(); // N has type const int*</code></pre>
   </cxx-example>
     </p>
 
-    <p id="temp.param.4" para_num="4">
-    The declared <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> is
+    <p id="temp.param.4" para_num="4">If the prototype parameter is a type parameter (including template
+    template parameters), then the 
+    <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm> of the
+    constrained parameter shall consist of only the
+    <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
+    <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    <cxx-codeblock>
+    
+    <pre><code>template&lt;const C1&amp;&gt; // Error: declares a const-qualified type parameter
+  struct S;</code></pre>
+  </cxx-codeblock>
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  </cxx-example>
+    </p>
+
+    <p id="temp.param.5" para_num="5">The declared <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> is
     a template parameter pack if the prototype parameter declares a
     template parameter pack. In such cases, the 
     <cxx-grammarterm><i>declarator-id</i></cxx-grammarterm> or
@@ -3140,7 +3159,7 @@ template&lt;X Xs&gt; void g();    // Error: must X must include ...</code></pre>
   </cxx-example>
     </p>
 
-    <p id="temp.param.5" para_num="5">If the <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>
+    <p id="temp.param.6" para_num="6">If the <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>
     declares a type parameter, then the 
     <cxx-grammarterm><i>constrained-initializer</i></cxx-grammarterm>
     is parsed as a <cxx-grammarterm><i>type-id</i></cxx-grammarterm>. Otherwise, it
@@ -3160,7 +3179,7 @@ template&lt;P M = int&gt; void r();  // Error: int is not an expression</code></
   </cxx-example>
     </p>
 
-    <p id="temp.param.6" para_num="6">The declaration of a 
+    <p id="temp.param.7" para_num="7">The declaration of a 
     <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> 
     introduces a new constraint on the template declaration. 
 
@@ -3192,7 +3211,7 @@ template&lt;P N&gt; void f3(); // requires P&lt;N&gt;</code></pre>
   </cxx-example>
     </p>
 
-    <p id="temp.param.7" para_num="7">If the <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> declares 
+    <p id="temp.param.8" para_num="8">If the <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> declares 
     a template parameter pack, the formation of the constraint depends on 
     whether the designated concept designated by the parameter's
     <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> is variadic.
@@ -3343,9 +3362,17 @@ template&lt;template&lt;Y&gt; class C&gt;
 template&lt;X T&gt; class x;
 template&lt;Z T&gt; class z;
 
-temp&lt;x&gt; s1; // Ok: X is subsumed by Y
-temp&lt;z&gt; s2; // error: Z subsumes Y</code></pre>
+temp&lt;x&gt; s1; // OK: X is subsumed by Y
+temp&lt;z&gt; s2; // Error: Z subsumes Y</code></pre>
   </cxx-codeblock>
+      The template <code>x</code> is a valid argument for <code>temp</code>
+      because <code>temp</code> requires all arguments used with its
+      template template parameter <code>C</code> to satisfy a stronger
+      requirement. That is, any type satisfying the concept <code>Y</code> will
+      also satisfy the concept <code>X</code>. The template <code>z</code>
+      is not valid for the opposite reason. Some template argument satisfying 
+      <code>Y</code> may not satisfy <code>Z</code>, and that use of the
+      template template argument would result in an ill-formed program.
       
     <span class="nowrap">— <em>end example</em> ]</span>
   </cxx-example>
@@ -3541,20 +3568,10 @@ template&lt;Foo T&gt; template&lt;Foo U&gt; void S&lt;T&gt;::g(U); // Error: no 
       <cxx-ref in="cxx" to="temp.friend"><cxx-get-element-by-id elemid="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id><template if="{{!in}}"></template><template id="target_num"></template><template if="{{insynopsis}}"></template><template if="{{!insynopsis}}"></template><template bind="" ref="target_num"></template><template if="{{inElem.index}}"></template>C++14 <span title="temp.friend">§14.5.4</span><template if="{{!in}}"></template></cxx-ref>/9.
 
       </p><p id="temp.friend.2" para_num="2"> 
-      A <dfn>constrained friend</dfn> is a friend of a class 
-      template with associated constraints.
-
-      A constrained friend can be a constrained class template, 
-      constrained function template, or an ordinary (non-template) 
-      function.
+      A <dfn>constrained friend</dfn> of a class or class template is
+      a constrained class template, constrained function template, a 
+      constrained ordinary or generic (non-member) function definition.
       
-      <!-- TODO: What is shorthand? -->
-      Constraints on template friends are written using shorthand, 
-      introductions, or a requires clause following the 
-      <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>.
-
-      Constraints on non-template friend functions are written 
-      after the result type.
       <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
@@ -3565,17 +3582,21 @@ template&lt;Foo T&gt; template&lt;Foo U&gt; void S&lt;T&gt;::g(U); // Error: no 
     
     <pre><code>template&lt;typename T&gt;
   struct X {
-    template&lt;C U&gt;
-      friend void f(X x, U u) { }
+    template&lt;C U&gt;         
+      friend void f(X x, U u) { }    // Constrained function template
 
-    template&lt;C W&gt;
-      friend struct Z { };
+    template&lt;C W&gt;         
+      friend struct Z { };           // Constrained class template
 
-    friend bool operator==(X a, X b) requires C&lt;T&gt;() {
-      return true;
-    }
+    friend bool operator==(X a, X b) // Constrained ordinary function
+      requires C&lt;T&gt;() { return true; }
+
+    friend void g(X a, C b) { }      // Constrained generic function
   };</code></pre>
   </cxx-codeblock>
+      Note that <code>g</code> is a generic function because the the
+      parameter <code>b</code> has a
+      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
       
     <span class="nowrap">— <em>end example</em> ]</span>
   </cxx-example>
@@ -3622,10 +3643,8 @@ template&lt;Foo T&gt; template&lt;Foo U&gt; void S&lt;T&gt;::g(U); // Error: no 
   </cxx-example>
       </p>
 
-      <p id="temp.friend.5" para_num="5">
-      As with constrained member functions, constraints on non-template friend
-      functions are not instantiated during class template instantiation.
-      </p>
+      <p id="temp.friend.5" para_num="5">As with constrained member functions, constraints on non-template friend
+      functions are not instantiated during class template instantiation.</p>
 
     
     </section>
@@ -3869,7 +3888,7 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B</code></pre>
       
       
 
-      <p id="temp.inst.1" para_num="1">Insert the following pargraph after 
+      <p id="temp.inst.1" para_num="1">Insert the following paragraph after 
       <cxx-ref in="cxx" to="temp.inst"><cxx-get-element-by-id elemid="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id><template if="{{!in}}"></template><template id="target_num"></template><template if="{{insynopsis}}"></template><template if="{{!insynopsis}}"></template><template bind="" ref="target_num"></template><template if="{{inElem.index}}"></template>C++14 <span title="temp.inst">§14.7.1</span><template if="{{!in}}"></template></cxx-ref>/1.</p>
 
       <p id="temp.inst.2" para_num="2">The implicit instantiation of a class template does not cause
@@ -3903,7 +3922,7 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B</code></pre>
       <cxx-codeblock>
     
     <pre><code>template&lt;typname T&gt;
-  concept bool C = requires(T t) { t.c(); }s
+  concept bool C = requires(T t) { t.c(); };
 
 template&lt;typenane T&gt;
   requires C&lt;T&gt;
@@ -3918,6 +3937,72 @@ template struct X&lt;int&gt;; // Error: int does not satisfy C.</code></pre>
     
     </section>
   </cxx-section> <!-- temp.explicit -->
+
+    <cxx-section id="temp.expl.spec">
+    
+
+    <section>
+      <header><span class="section-number">7.5.3</span> <h1 data-bookmark-label="7.5.3 Explicit specialization">Explicit specialization</h1> <span style="float:right"><a href="#temp.expl.spec">[temp.expl.spec]</a></span></header>
+      
+      
+
+      <p id="temp.expl.spec.1" para_num="1">Insert the following paragraphs under 
+      <cxx-ref in="cxx" to="temp.expl.spec"><cxx-get-element-by-id elemid="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id><template if="{{!in}}"></template><template id="target_num"></template><template if="{{insynopsis}}"></template><template if="{{!insynopsis}}"></template><template bind="" ref="target_num"></template><template if="{{inElem.index}}"></template>C++14 <span title="temp.expl.spec">§14.7.3</span><template if="{{!in}}"></template></cxx-ref>.</p>
+
+      <p id="temp.expl.spec.2" para_num="2">A constrained template declaration or constrained member function
+      of a class template can be declared by a declaration
+      introduced by <code>template&lt;&gt;</code>.</p>
+
+      <p id="temp.expl.spec.3" para_num="3">The <cxx-grammarterm><i>template arguments</i></cxx-grammarterm> of a
+      <cxx-grammarterm><i>simple-template-id</i></cxx-grammarterm> that
+      names an explicit specialization of a constrained template
+      declaration must satisfy that template's associated constraints
+      (<cxx-ref to="temp"><cxx-get-element-by-id elemid="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id><template if="{{!in}}"></template><cxx-get-element-by-id elemid="{{to}}" elem="{{toElem}}"></cxx-get-element-by-id><template id="target_num"></template><template if="{{insynopsis}}"></template><template if="{{!insynopsis}}"></template><template bind="" ref="target_num"></template><template if="{{inElem.index}}"></template><template if="{{!in}}"></template><a title="temp" href="#temp"><template if="{{toElem.sec_num}}"></template>7<template if="{{toElem.table_num}}"></template><template if="{{toElem.figure_num}}"></template></a></cxx-ref>).
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <code>C</code> is the type concept defined in the previous
+      section.
+      <cxx-codeblock>
+    
+    <pre><code>template&lt;C T&gt;
+  struct S1 { };
+
+struct X { void c(); }
+
+template&lt;&gt; S1&lt;X&gt; { };   // OK: X satisfies C
+template&lt;&gt; S1&lt;int&gt; { }; // Error: int does not satisfy C</code></pre>
+  </cxx-codeblock>
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  </cxx-example>
+      </p>
+
+      <p id="temp.expl.spec.4" para_num="4">An explicit specialization of a constrained member function
+      (<cxx-ref to="temp.mem.func"><cxx-get-element-by-id elemid="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id><template if="{{!in}}"></template><cxx-get-element-by-id elemid="{{to}}" elem="{{toElem}}"></cxx-get-element-by-id><template id="target_num"></template><template if="{{insynopsis}}"></template><template if="{{!insynopsis}}"></template><template bind="" ref="target_num"></template><template if="{{inElem.index}}"></template><template if="{{!in}}"></template><a title="temp.mem.func" href="#temp.mem.func"><template if="{{toElem.sec_num}}"></template>7.4.1.1<template if="{{toElem.table_num}}"></template><template if="{{toElem.figure_num}}"></template></a></cxx-ref>) shall not include a
+      a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>.
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    
+    <pre><code>template&lt;typename T&gt;
+  struct S2 { 
+    void f(T) requires C&lt;T&gt;;
+  };
+
+template&lt;&gt; void S2&lt;X&gt;::f(T a) { }               // OK
+template&lt;&gt; void S2&lt;X&gt;::f(T a) requires C&lt;X&gt; { } // Error: extra requires-clause</code></pre>
+  </cxx-codeblock>
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  </cxx-example>
+      </p>
+    
+    </section>
+  </cxx-section> <!-- temp.expl.spec -->
   
     </section>
   </cxx-section> <!-- temp.spec -->
@@ -4020,7 +4105,7 @@ false</code></pre>
     calls a function concept or refers to a variable concept 
     <cxx-ref to="dcl.concept"><cxx-get-element-by-id elemid="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id><template if="{{!in}}"></template><cxx-get-element-by-id elemid="{{to}}" elem="{{toElem}}"></cxx-get-element-by-id><template id="target_num"></template><template if="{{insynopsis}}"></template><template if="{{!insynopsis}}"></template><template bind="" ref="target_num"></template><template if="{{inElem.index}}"></template><template if="{{!in}}"></template><a title="dcl.concept" href="#dcl.concept"><template if="{{toElem.sec_num}}"></template>4.1.4<template if="{{toElem.table_num}}"></template><template if="{{toElem.figure_num}}"></template></a></cxx-ref> is a <dfn>concept check</dfn>.
     A concept check is not evaluated; it is simplified according to the
-    rules described in this.</p>
+    rules described in this section.</p>
 
     <p id="temp.constr.7" para_num="7">Certain subexpressions of a
     <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> are 
