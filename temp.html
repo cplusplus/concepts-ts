@@ -564,37 +564,31 @@ template&lt;Foo T&gt; template&lt;Foo U&gt; void S&lt;T&gt;::g(U); // Error: no 
       <cxx-ref in="cxx" to="temp.friend"></cxx-ref>/9.
 
       <p> 
-      A <dfn>constrained friend</dfn> is a friend of a class 
-      template with associated constraints.
-
-      A constrained friend can be a constrained class template, 
-      constrained function template, or an ordinary (non-template) 
-      function.
+      A <dfn>constrained friend</dfn> of a class or class template is
+      a constrained class template, constrained function template, a 
+      constrained ordinary or generic (non-member) function definition.
       
-      <!-- TODO: What is shorthand? -->
-      Constraints on template friends are written using shorthand, 
-      introductions, or a requires clause following the 
-      <cxx-grammarterm>template-parameter-list</cxx-grammarterm>.
-
-      Constraints on non-template friend functions are written 
-      after the result type.
       <cxx-example class="inline">
       When <code>C</code> is a type concept, all of the following are valid 
       constrained friend declarations.
       <cxx-codeblock>
 template&lt;typename T&gt;
   struct X {
-    template&lt;C U&gt;
-      friend void f(X x, U u) { }
+    template&lt;C U&gt;         
+      friend void f(X x, U u) { }    // Constrained function template
 
-    template&lt;C W&gt;
-      friend struct Z { };
+    template&lt;C W&gt;         
+      friend struct Z { };           // Constrained class template
 
-    friend bool operator==(X a, X b) requires C&lt;T&gt;() {
-      return true;
-    }
+    friend bool operator==(X a, X b) // Constrained ordinary function
+      requires C&lt;T&gt;() { return true; }
+
+    friend void g(X a, C b) { }      // Constrained generic function
   };
       </cxx-codeblock>
+      Note that <code>g</code> is a generic function because the the
+      parameter <code>b</code> has a
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
       </cxx-example>
       </p>
 
@@ -627,10 +621,8 @@ template&lt;typename T&gt;
       </cxx-example>
       </p>
 
-      <p>
-      As with constrained member functions, constraints on non-template friend
-      functions are not instantiated during class template instantiation.
-      </p>
+      <p>As with constrained member functions, constraints on non-template friend
+      functions are not instantiated during class template instantiation.</p>
 
     </cxx-section> <!-- temp.firend -->
 
