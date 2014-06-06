@@ -51,13 +51,14 @@
   In the latter case, each <cxx-grammarterm>identifier</cxx-grammarterm>
   in the <cxx-grammarterm>introduction-list</cxx-grammarterm> is declared
   to be a template parameter. Each template parameter shall match in kind
-  the corresponding template parameter of the concept definition designated by
-  the <cxx-grammarterm>concept</cxx-grammarterm>.
+  and position the corresponding template parameter in the template
+  parameter list of the concept definition designated by the 
+  <cxx-grammarterm>concept</cxx-grammarterm>.
 
-  If, after lookup, the <cxx-grammarterm>concept</cxx-grammarterm> designates
-  an overloaded set of concept functions, the designated concept is the
-  one with the same number of template parameters as the number of
-  <cxx-grammarterm>identifier</cxx-grammarterm> in the
+  If the <cxx-grammarterm>concept</cxx-grammarterm> designates
+  an overloaded set of function concepts, the designated concept definition 
+  is the one having the same number of template parameters as the number of
+  <cxx-grammarterm>identifier</cxx-grammarterm>s in the
   <cxx-grammarterm>introduction-list</cxx-grammarterm>.
 
   <!--
