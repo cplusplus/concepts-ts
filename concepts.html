@@ -3143,18 +3143,17 @@ template&lt;const P* N&gt; void y(); // N has type const int*</code></pre>
   </cxx-example>
     </p>
 
-    <p id="temp.param.4" para_num="4"><ins class="local">If the prototype parameter is a type parameter (including template
-    template parameters), then the 
-    <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm> of the
+    <p id="temp.param.4" para_num="4"><ins class="local">If the prototype parameter is a type parameter, 
+    then the <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm> of the
     constrained parameter shall consist of only the
     <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
-    <cxx-example>
+    <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
     
     <cxx-codeblock>
     
-    <pre><code>template&lt;const C1&amp;&gt; // Error: declares a const-qualified type parameter
+    <pre><code>template&lt;const C1&gt; // Error: declares a const-qualified type parameter
   struct S;</code></pre>
   </cxx-codeblock>
     
