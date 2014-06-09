@@ -1,0 +1,22 @@
+
+del.local {
+  color: Black;
+  text-decoration: line-through;
+  background-color: LightCoral; 
+}
+del.local > * {
+  color: Black;
+  text-decoration: line-through;
+  background-color: LightCoral; 
+}
+
+ins.local {
+  color: Black;
+  text-decoration: underline;
+  background-color: LightSteelBlue; 
+}
+ins.local > * {
+  color: Black;
+  text-decoration: under;
+  background-color: LightSteelBlue; 
+}
