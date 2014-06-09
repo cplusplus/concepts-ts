@@ -263,9 +263,9 @@ template&lt;const P* N&gt; void y(); // N has type const int*
     <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of the
     constrained parameter shall consist of only the
     <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
-    <cxx-example>
+    <cxx-example class="inline">
     <cxx-codeblock>
-template&lt;const C1&amp;&gt; // Error: declares a const-qualified type parameter
+template&lt;const C1&gt; // Error: declares a const-qualified type parameter
   struct S;
     </cxx-codeblock>
     </cxx-example>
