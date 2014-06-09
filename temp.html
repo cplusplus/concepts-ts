@@ -850,7 +850,9 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
     <cxx-section id="temp.explicit">
       <h1>Explicit instantiation</h1>
 
-      <p>Insert the following paragraph under 
+      <p>
+      <del class="local">Insert the following pargraph after</del>
+      <ins class="local">Insert the following paragraph under</ins> 
       <cxx-ref in="cxx" to="temp.explicit"></cxx-ref>.</p>
 
       <p>An explicit instantiation of constrained template declaration
@@ -862,7 +864,7 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typname T&gt;
-  concept bool C = requires(T t) { t.c(); };
+  concept bool C = requires(T t) { t.c(); }<del class="local">s</del><ins class="local">;</ins>
 
 template&lt;typenane T&gt;
   requires C&lt;T&gt;
