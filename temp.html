@@ -51,9 +51,9 @@
   In the latter case, each <cxx-grammarterm>identifier</cxx-grammarterm>
   in the <cxx-grammarterm>introduction-list</cxx-grammarterm> is declared
   to be a template parameter. Each template parameter shall match in kind
-  and position the corresponding template parameter in the template
-  parameter list of the concept definition designated by the 
-  <cxx-grammarterm>concept</cxx-grammarterm>.
+  <ins class="local">and position</ins> the corresponding template parameter 
+  <ins class="local">in the template parameter list</ins> of the concept 
+  definition designated by the <cxx-grammarterm>concept</cxx-grammarterm>.
 
   If the <cxx-grammarterm>concept</cxx-grammarterm> designates
   an overloaded set of function concepts, the designated concept definition 
@@ -91,7 +91,8 @@
 template&lt;typename T, int N, typename... Xs&gt;
   concept bool Inscrutable() { ... };
 
-Inscrutable{A, B, C} struct s;
+<del class="local">Mergeable{A, B, C} struct s;</del>
+<ins class="local">Inscrutable{A, B, C} struct s;</ins>
   </cxx-codeblock>
   This class template declaration of <code>s</code> is equivalent to:
   <cxx-codeblock>
@@ -238,7 +239,8 @@ Ineffable{X, Y} void f();    // Error: not all parameters are introduced
     A <cxx-grammarterm>constrained-parameter</cxx-grammarterm> 
     defines its identifier to be a template parameter that matches in
     kind the first template parameter, called the <dfn>prototype parameter</dfn>, 
-    of the concept designated by the 
+    <del class="local">of the concept declaration designated by the</del>
+    <ins class="local">of the concept designated by the</ins>
     <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
 
     <cxx-example class="inline">
@@ -258,7 +260,7 @@ template&lt;const P* N&gt; void y(); // N has type const int*
     </cxx-example>
     </p>
 
-    <p>If the prototype parameter is a type parameter (including template
+    <p><ins class="local">If the prototype parameter is a type parameter (including template
     template parameters), then the 
     <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of the
     constrained parameter shall consist of only the
@@ -269,6 +271,7 @@ template&lt;const C1&amp;&gt; // Error: declares a const-qualified type paramete
   struct S;
     </cxx-codeblock>
     </cxx-example>
+    </ins>
     </p>
 
     <p>The declared <cxx-grammarterm>template-parameter</cxx-grammarterm> is
@@ -442,15 +445,20 @@ template&lt;template&lt;Y&gt; class C&gt;
 template&lt;X T&gt; class x;
 template&lt;Z T&gt; class z;
 
-temp&lt;x&gt; s1; // OK: X is subsumed by Y
+<del class="local">temp&lt;x&gt; s1; // Ok: X is subsumed by Y
+temp&lt;z&gt; s2; // error: Z subsumes Y
+</del>
+<ins class="local">temp&lt;x&gt; s1; // OK: X is subsumed by Y
 temp&lt;z&gt; s2; // Error: Z subsumes Y
+</ins>
       </cxx-codeblock>
+      <ins class="local">
       The template <code>x</code> is a valid argument for <code>temp</code>
       because any template arguments satisfying <code>Y</code> will also 
       satisfy <code>X</code>. That is, all uses of <code>x</code> by
       <code>temp</code> should result in well-formed programs. The 
       template <code>y</code> is not valid because some template arguments 
-      satisfying <code>Y</code> may not satisfy <code>Z</code>.
+      satisfying <code>Y</code> may not satisfy <code>Z</code>.</ins>
       </cxx-example>
       </p>
 
@@ -582,10 +590,25 @@ template&lt;Foo T&gt; template&lt;Foo U&gt; void S&lt;T&gt;::g(U); // Error: no 
       <cxx-ref in="cxx" to="temp.friend"></cxx-ref>/9.
 
       <p> 
+      <del class="local">A <dfn>constrained friend</dfn> is a friend of a class 
+      template with associated constraints.
+
+      A constrained friend can be a constrained class template, 
+      constrained function template, or an ordinary (non-template) 
+      function.</del>
+
+      <ins class="local">
       A <dfn>constrained friend</dfn> of a class or class template is
       a constrained class template, constrained function template, a 
-      constrained ordinary or generic (non-member) function definition.
+      constrained ordinary or generic (non-member) function definition. </ins>
       
+      <del class="local">
+      Constraints on template friends are written using shorthand, 
+      introductions, or a requires clause following the 
+      <cxx-grammarterm>template-parameter-list</cxx-grammarterm>.
+
+      Constraints on non-template friend functions are written 
+      after the result type. </del>
       <cxx-example class="inline">
       When <code>C</code> is a type concept, all of the following are valid 
       constrained friend declarations.
@@ -593,20 +616,21 @@ template&lt;Foo T&gt; template&lt;Foo U&gt; void S&lt;T&gt;::g(U); // Error: no 
 template&lt;typename T&gt;
   struct X {
     template&lt;C U&gt;         
-      friend void f(X x, U u) { }    // Constrained function template
+      friend void f(X x, U u) { }    <ins class="local">// Constrained function template</ins>
 
     template&lt;C W&gt;         
-      friend struct Z { };           // Constrained class template
+      friend struct Z { };           <ins class="local">// Constrained class template</ins>
 
-    friend bool operator==(X a, X b) // Constrained ordinary function
+    friend bool operator==(X a, X b) <ins class="local">// Constrained ordinary function</ins>
       requires C&lt;T&gt;() { return true; }
 
-    friend void g(X a, C b) { }      // Constrained generic function
+    <ins class="local">friend void g(X a, C b) { }      // Constrained generic function</ins>
   };
       </cxx-codeblock>
+      <ins class="local">
       Note that <code>g</code> is a generic function because the the
       parameter <code>b</code> has a
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.</ins>
       </cxx-example>
       </p>
 
@@ -853,6 +877,7 @@ template struct X&lt;int&gt;; // Error: int does not satisfy C.
     <cxx-section id="temp.expl.spec">
       <h1>Explicit specialization</h1>
 
+      <ins class="local">
       <p>Insert the following paragraphs under 
       <cxx-ref in="cxx" to="temp.expl.spec"></cxx-ref>.</p>
 
@@ -895,9 +920,9 @@ template&lt;&gt; void S2&lt;X&gt;::f(T a) requires C&lt;X&gt; { } // Error: extr
       </cxx-codeblock>
       </cxx-example>
       </p>
+      </ins>
     </cxx-section> <!-- temp.expl.spec -->
   </cxx-section> <!-- temp.spec -->
-
 
   <cxx-section id="temp.constr">
     <h1>Template constraints</h1>
@@ -973,7 +998,8 @@ false
     calls a function concept or refers to a variable concept 
     <cxx-ref to="dcl.concept"></cxx-ref> is a <dfn>concept check</dfn>.
     A concept check is not evaluated; it is simplified according to the
-    rules described in this section.</p>
+    <del class="local">rules described in this</del>
+    <ins class="local">rules described in this section</ins>.</p>
 
     <p>Certain subexpressions of a
     <cxx-grammarterm>constraint-expression</cxx-grammarterm> are 
