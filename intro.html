@@ -21,113 +21,6 @@
     <del>strikethrough</del> to represent deleted text.</p>
   </cxx-section>
 
-  <!--
-  <cxx-section id="intro.intro">
-    <h1>Introduction</h2>
-    
-    <p>C++ has long provided language support for generic programming in 
-    the form of templates. 
-    
-    However, these templates are unconstrained, allowing any type or value 
-    to be substituted for a template argument, often resulting in compiler 
-    errors. 
-    
-    What is lacking is a specification of an interface for a template, 
-    separate from its implementation, so that a use of a template can be 
-    selected among alternative templates and checked in isolation.</p>
-
-    <p>A concept is a predicate that defines the syntactic and semantic 
-    requirements on template arguments. 
-    A template argument that satisfies these requirements is said to be a 
-    <emph>model</emph> of that concept, or that the argument 
-    <emph>models</emph> the concept.
-    
-    Syntactic requirements specify the set of valid expressions that can 
-    be used with conforming types and the types associated with those 
-    expressions. 
-    
-    Semantic requirements describe the required behavior of those syntactic 
-    requirements and also provide complexity guarantees. 
-    
-    Concepts are the basis of generic programming in C++ and support the 
-    ability to reason about generic algorithms and data structures 
-    independently of their instantiation by concrete template arguments.</p>
-
-    <p>Concepts are not new to C++ or even to C (where Integral and 
-    Arithmetic are long-established concepts used to specify the language 
-    rules for types); the idea of stating and enforcing type requirements 
-    on template arguments has a long history. For example, several methods are 
-    discussed in <emph>The Design and Evolution of C++</emph> (1994). 
-    Concepts were a part of documentation of the STL and are used to 
-    express requirements in the C++ standard, ISO/IEC 14882. 
-    For example, Table 106 gives the definition of the STL 
-    <code>Iterator</code> concept as a list of valid expressions and their 
-    result types, operational semantics, and pre- and  post-conditions.</p>
-
-    <p>This specification describes a solution to the problem of 
-    constraining template arguments in the form "Concepts Lite." The 
-    goals of "Concepts Lite" are to
-    <ul>
-      <li>allow programmers to directly state the requirements of a set of 
-      template arguments as part of a template's interface,</li>
-
-      <li>support function overloading and class template specialization 
-        based on constraints,</li>
-
-      <li>seamlessly integrates a number of orthogonal features to provide
-      uniform syntax and semantics for generic lambdas, <code>auto</code>
-      declarations, and result type deduction,</li>
-
-      <li>fundamentally improves diagnostics by checking template arguments 
-      in terms of stated intent at the point of use,</li>
-
-      <li>do all of this without any runtime overhead or longer compilation 
-      times, when comparing similar programs using 
-      <code>enable_if</code>.</li>
-    </ul>
-    "Concepts Lite" does not provide facilities for checking template 
-    definitions separately from their instantiation, nor does it provide 
-    facilities for specifying or checking semantic requirements.</p>
-
-    <p>
-    <cxx-example>
-    The following program demonstrates a number of the C++ extensions
-    introduced by this specification.
-    <cxx-codeblock>
-template<typename T>
-  concept bool Input_iterator() {
-    return requires (T i) {
-      {++i} -> T&;
-      {*i} -> Value_type<T>;
-    };
-  }
-
-template<typename P, typename... Args>
-  concept bool Predicate() {
-    return requires(P pred, Args... args) {
-      {pred(args...)} -> bool;
-    };
-  }
-
-template<Input_iterator I, Predicate<Value_type<I>> P>
-  I find_if(I first, I last, P pred);
-    </cxx-codeblock>
-    Concepts are are defined as function or variable templates, declared
-    with the <code>concept</code> specifier. 
-    The syntactic requirements of each concept are enumerated with a
-    <cxx-grammarterm>requires-expression</cxx-grammarterm>.
-    These concepts are used to constrain the template parameters of the
-    <code>find_if</code> algorithm.
-    </cxx-example>
-    </p>
-
-    <p>This Technical Specification specifies requirements for 
-    implementations of an extension to the C++ programming language 
-    concerning the application of constraints to template arguments, 
-    the use of constraints in function overloading and class template 
-    specialization, and the definition of those constraints.</p>
-
--->
   
   <cxx-section id="intro.refs">
     <h1>Normative references</h1>
@@ -159,46 +52,67 @@ template<Input_iterator I, Predicate<Value_type<I>> P>
     given in the C++ Standard and the folowing apply.</p>
 
     <dl is="cxx-definition-section">
-      <dt id="atomic.defns.atomic-constraint">atomic constraint</dt>
-      <dd> A subexpression of a constraint that is not a 
-      <cxx-grammarterm>logical-and-expression</cxx-grammarterm>,
-      <cxx-grammarterm>logical-or-expression</cxx-grammarterm>,
-      or a subexpression of an atomic constraint. </dd>
+      <dt id="dfns.constr.atomic">atomic constraint</dt>
+      <dd>A subexpression of a 
+      <cxx-grammar-term>constraint-expression</cxx-grammar-term> 
+      whose subexpressions are not, themselves, atomic.</dd>
 
-<!-- FIXME: Formatting for multiple definitions is broken. 
+    <dt id="dfns.concept">concept</dt>
+    A named constraint.
+    <dd></dd>
 
-      <dt id="atomic.defns.associated-constraint">associated constraint</dt>
-      <dd>A conjunction of all constraints on a constrained template 
-        declaration that includes constraints on template parameters, 
-        constraints on function parameters, and constraints specified 
-        explicitly in a <cxx-grammarterm>requires-clause</cxx-grammarterm>.</dd>
- 
-      <dt id="atomic.defns.concept">concept</dt>
-      <dd>A template declared with the <code>concept</code> declaration 
-      specifier.</dd>
+    <dt>constraint</dt>
+    <dd></dd>
 
-      <dt id="atomic.defns.concept-check">concept check</dt>
-      <dd>A call to a function concept or a 
-      <cxx-grammarterm>template-id</cxx-grammarterm> that names a variable 
-      concept.</dd>
+    <dt id="dfns.concept.fn">function concept</dt>
+    <dd>A function template definition declared with the <code>concept</code>
+    specifier.</dd>
 
-      <dt id="atomic.defns.constraint">constraint</dt>
-      <dd>A constant expression with type <code>bool</code> that evaluates 
-      properties of template arguments, determining whether or not they 
-      can be substituted into a template.</dd>
+    <dt id="dfns.concept.var">variable concept</dt>
+    <dd>A variable template definition declared with the <code>concept</code>
+    specifier.</dd>
 
-      <dt id="atomic.defns.constrained-declaration">constrained-declaration</dt>
-      <dd>A declaration with associated constraints.</dd>
+    <dt id="dfns.concept.type">type concept</dt>
+    <dd>A type</dd>
 
-      <dt id="atomic.defns.generic-function">generic function</dt>
-      <dd>A constant expression that evaluates requirements of a template 
-      argument.</dd>
+    <dt id="dfns.valid-expression">valid expression</dt>
+    <dd>A type</dd>
 
-      <dt id="atomic.defns.introdduced-parameters">introduced parameters</dt>
-      <dd>A function declaration having <code>auto</code> or a 
-      <cxx-grammarterm>constrained-type-name<cxx-grammarterm> in the type 
-      specifier any of its parameters.</dd>
- -->
+    <dt id="dfns.associated-type">associated type</dt>
+    <dd>A type</dd>
+
+    <dt id="dfns.constr.valid-expression">valid expression constraint</dt>
+    <dd>A type</dd>
+
+    <dt id="dfns.constr.valid-type">valid type constraint</dt>
+    <dd>A type</dd>
+
+    <dt id="dfns.constr.result-type">result type constraint</dt>
+    <dd>A type</dd>
+
+    <dt id="dfns.constr.constexpr">constant expression constraint</dt>
+    <dd>A type</dd>
+
+    <dt id="dfns.constr.noexcept">exception constraint</dt>
+    <dd>A type</dd>
+
+    <dt id="dfns.constr.assoc">associated constraints</dt>
+    <dd>A type</dd>
+
+    <dt id="dfns.constr">constraint</dt>
+    <dd>A type</dd>
+
+    <dt id="dfns.constr.sat">satisfaction</dt>
+    <dd>A type</dd>
+
+    <dt id="dfns.constr.sub">subsumption</dt>
+    <dd>A type</dd>
+
+    <dt id="dfns.constr.eq">logical equivalence</dt>
+    <dd>Two <cxx-grammarterm>constraint-expressions</cxx-grammarterm>
+    <code>C</code> and <code>D</code> are logically equivalent if and
+    only if <code>C</code> subsumes <code>D</code> and <code>D</code>
+    subsumes <code>C</code>.</dd>
     </dl>
   </cxx-section>
 
