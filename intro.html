@@ -21,118 +21,9 @@
     <del>strikethrough</del> to represent deleted text.</p>
   </cxx-section>
 
-  <!--
-  <cxx-section id="intro.intro">
-    <h1>Introduction</h2>
-    
-    <p>C++ has long provided language support for generic programming in 
-    the form of templates. 
-    
-    However, these templates are unconstrained, allowing any type or value 
-    to be substituted for a template argument, often resulting in compiler 
-    errors. 
-    
-    What is lacking is a specification of an interface for a template, 
-    separate from its implementation, so that a use of a template can be 
-    selected among alternative templates and checked in isolation.</p>
-
-    <p>A concept is a predicate that defines the syntactic and semantic 
-    requirements on template arguments. 
-    A template argument that satisfies these requirements is said to be a 
-    <emph>model</emph> of that concept, or that the argument 
-    <emph>models</emph> the concept.
-    
-    Syntactic requirements specify the set of valid expressions that can 
-    be used with conforming types and the types associated with those 
-    expressions. 
-    
-    Semantic requirements describe the required behavior of those syntactic 
-    requirements and also provide complexity guarantees. 
-    
-    Concepts are the basis of generic programming in C++ and support the 
-    ability to reason about generic algorithms and data structures 
-    independently of their instantiation by concrete template arguments.</p>
-
-    <p>Concepts are not new to C++ or even to C (where Integral and 
-    Arithmetic are long-established concepts used to specify the language 
-    rules for types); the idea of stating and enforcing type requirements 
-    on template arguments has a long history. For example, several methods are 
-    discussed in <emph>The Design and Evolution of C++</emph> (1994). 
-    Concepts were a part of documentation of the STL and are used to 
-    express requirements in the C++ standard, ISO/IEC 14882. 
-    For example, Table 106 gives the definition of the STL 
-    <code>Iterator</code> concept as a list of valid expressions and their 
-    result types, operational semantics, and pre- and  post-conditions.</p>
-
-    <p>This specification describes a solution to the problem of 
-    constraining template arguments in the form "Concepts Lite." The 
-    goals of "Concepts Lite" are to
-    <ul>
-      <li>allow programmers to directly state the requirements of a set of 
-      template arguments as part of a template's interface,</li>
-
-      <li>support function overloading and class template specialization 
-        based on constraints,</li>
-
-      <li>seamlessly integrates a number of orthogonal features to provide
-      uniform syntax and semantics for generic lambdas, <code>auto</code>
-      declarations, and result type deduction,</li>
-
-      <li>fundamentally improves diagnostics by checking template arguments 
-      in terms of stated intent at the point of use,</li>
-
-      <li>do all of this without any runtime overhead or longer compilation 
-      times, when comparing similar programs using 
-      <code>enable_if</code>.</li>
-    </ul>
-    "Concepts Lite" does not provide facilities for checking template 
-    definitions separately from their instantiation, nor does it provide 
-    facilities for specifying or checking semantic requirements.</p>
-
-    <p>
-    <cxx-example>
-    The following program demonstrates a number of the C++ extensions
-    introduced by this specification.
-    <cxx-codeblock>
-template<typename T>
-  concept bool Input_iterator() {
-    return requires (T i) {
-      {++i} -> T&;
-      {*i} -> Value_type<T>;
-    };
-  }
-
-template<typename P, typename... Args>
-  concept bool Predicate() {
-    return requires(P pred, Args... args) {
-      {pred(args...)} -> bool;
-    };
-  }
-
-template<Input_iterator I, Predicate<Value_type<I>> P>
-  I find_if(I first, I last, P pred);
-    </cxx-codeblock>
-    Concepts are are defined as function or variable templates, declared
-    with the <code>concept</code> specifier. 
-    The syntactic requirements of each concept are enumerated with a
-    <cxx-grammarterm>requires-expression</cxx-grammarterm>.
-    These concepts are used to constrain the template parameters of the
-    <code>find_if</code> algorithm.
-    </cxx-example>
-    </p>
-
-    <p>This Technical Specification specifies requirements for 
-    implementations of an extension to the C++ programming language 
-    concerning the application of constraints to template arguments, 
-    the use of constraints in function overloading and class template 
-    specialization, and the definition of those constraints.</p>
-
--->
-  
   <cxx-section id="intro.refs">
     <h1>Normative references</h1>
 
-    <!-- TODO: Find the current WD number -->
     <cxx-ednote>The TS will formally refer to the ISO/IEC document
     defining the C++14 programming language. Until that document is
     published, the paper targets the current working draft
@@ -143,7 +34,7 @@ template<Input_iterator I, Predicate<Value_type<I>> P>
     edition cited applies. For undated references, the latest edition
     of the referenced document (including any amendments) applies.</p>
     <ul>
-      <li>ISO/IEC XXXX:2014, <cite>Programming Languages - C++</cite>
+      <li>ISO/IEC 1482:2014, <cite>Programming Languages - C++</cite>
       <cxx-foreign-index id="cxx" src="cxx14_index.json" name="C++14"></cxx-foreign-index></li>
     </ul>
 
@@ -156,7 +47,7 @@ template<Input_iterator I, Predicate<Value_type<I>> P>
     <h1>Terms and definitions</h1>
 
     <p>For the purposes of this document, the terms and definitions
-    given in the C++ Standard and the folowing apply.</p>
+    given in the C++ Standard and the following apply.</p>
 
     <dl is="cxx-definition-section">
       <dt id="atomic.defns.atomic-constraint">atomic constraint</dt>
