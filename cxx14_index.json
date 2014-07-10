@@ -72,6 +72,7 @@
   "temp.static"           : "14.5.1.3",
   "temp.mem.enum"         : "14.5.1.4",
   "temp.mem"              : "14.5.2",
+  "temp.variadic"         : "14.5.3",
   "temp.friend"           : "14.5.4",
   "temp.class.spec.match" : "14.5.5.1",
   "temp.class.order"      : "14.5.5.2",
