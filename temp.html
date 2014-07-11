@@ -9,6 +9,7 @@
   <!-- TODO: Put this in block quotes. Currently, some formatting is
        not propagated through the blockquote element, so I'm omitting
        it for now. -->
+  <p number="1" class="quoted">
   <bnf-grammar>
     <bnf-rule>template-declaration</bnf-rule>
       <bnf-alt>
@@ -42,6 +43,7 @@
         <bnf-alt><bnf-opt><bnf-terminal>...</bnf-terminal></bnf-opt> identifier</bnf-alt>
     </ins>
   </bnf-grammar>
+  </p>
   
   Add the following paragraphs after 
   <cxx-ref in="cxx" to="temp"></cxx-ref>/6.
@@ -525,38 +527,70 @@ template&lt;C T&gt; template&lt;typename U, typename __P&gt;
   </cxx-example>
   </p>
 
+
+  <!-- =================== 
+       Template Parameters 
+       =================== -->
+
   <cxx-section id="temp.param">
     <h1>Template parameters</h1>
 
     Modify the <cxx-grammarterm>template-parameter</cxx-grammarterm>
     grammar in <cxx-ref in="cxx" to="temp.param"></cxx-ref>/1 as follow.
 
-    <blockquote>
+    <p number="1" class="quoted">
     <bnf-grammar>
       <bnf-rule>template-parameter</bnf-rule>
         <del><bnf-alt>parameter-declaration</bnf-alt></del>
-        <ins><bnf-alt>non-type-parameter</bnf-alt></ins>
+        <ins><bnf-alt>constrained-or-non-type-parameter</bnf-alt></ins>
 
-      <ins>
-      <bnf-rule>non-type-parameter</bnf-rule>
-        <bnf-alt>parameter-declarator</bnf-alt>
-        <bnf-alt>
-          parameter-declarator <bnf-terminal>=</bnf-terminal> initializer-clause
-        </bnf-alt>
-
-        <bnf-alt>
-          parameter-declarator <bnf-terminal>=</bnf-terminal> type-id
-        </bnf-alt>
-
-        <bnf-alt>
-          parameter-declarator <bnf-terminal>=</bnf-terminal> id-expression
-        </bnf-alt>
+      <bnf-rule>constrained-or-non-type-parameter</bnf-rule>
+        <bnf-alt>basic-parameter-declaration</bnf-alt>
+        <bnf-alt>basic-parameter-declaration <bnf-terminal>=</bnf-terminal> initializer-clause </bnf-alt>
+        <bnf-alt>basic-parameter-declaration <bnf-terminal>=</bnf-terminal> type-id </bnf-alt>
+        <bnf-alt>basic-parameter-declaration <bnf-terminal>=</bnf-terminal> id-expression </bnf-alt>
       </ins>
     </bnf-grammar>
-    </blockquote>
+    </p>
     
-    <p>Add the following paragraphs after
-    <cxx-ref in="cxx" to="temp.param"></cxx-ref>/15.</p>
+    Modify <cxx-ref in="cxx" to="temp.param"></cxx-ref>/2 as follows.
+
+    <p number="2" class="quoted">
+    There is no semantic difference between <code>class</code> and <code>typename</code> 
+    in a <cxx-grammarterm>template-parameter</cxx-grammarterm>. <code>typename</code> 
+    followed by an <cxx-grammarterm>unqualified-id</cxx-grammarterm> names a 
+    template type parameter. <code>typename</code> followed by a 
+    <cxx-grammarterm>qualified-id</cxx-grammarterm> denotes the
+    type in a non-type 
+    <del><cxx-grammarterm>parameter-declaration</cxx-grammarterm></del>
+    <ins><cxx-grammarterm>constrained-or-non-type-parameter</cxx-grammarterm></ins>. 
+    </p>
+
+    Modify <cxx-ref in="cxx" to="temp.param"></cxx-ref>/15 as follows.
+
+    <p number="15" class="quoted">
+    If a <cxx-grammarterm>template-parameter</cxx-grammarterm> is a 
+    <cxx-grammarterm>type-parameter</cxx-grammarterm> with an ellipsis prior to 
+    its optional identifier 
+    or is a 
+    <del><cxx-grammarterm>parameter-declaration</cxx-grammarterm></del>
+    <ins><cxx-grammarterm>constrained-or-non-type-parameter</cxx-grammarterm></ins>
+    that declares a parameter pack (<cxx-ref to="dcl.fct"></cxx-ref>),
+    then the template-parameter is a template parameter pack 
+    (<cxx-ref to="temp.variadic"></cxx-ref>).
+     
+    A template parameter pack that is a
+    <del><cxx-grammarterm>parameter-declaration</cxx-grammarterm> </del>
+    <ins><cxx-grammarterm>constrained-or-non-type-parameter</cxx-grammarterm></ins>
+    whose type contains one or more unexpanded parameter packs is a pack 
+    expansion.
+    </p>
+
+    Add the following paragraphs after
+    <cxx-ref in="cxx" to="temp.param"></cxx-ref>/15.
+
+    <!-- TODO: I don't think I can write this until I've rewritten
+         the constrained-type-specifier work -->.
 
     <p>A <dfn>constrained template parameter</dfn> is a
     <cxx-grammarterm>constrained-parameter</cxx-grammarterm> whose

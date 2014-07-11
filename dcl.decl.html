@@ -46,8 +46,47 @@ struct S { } requires C&lt;S&gt;;             // Error: cannot constrain a class
     <cxx-section id="dcl.fct">
       <h1>Functions</h1>
 
-      <p>Add the following paragraphs after
-      <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>/14.</p>
+      Refactor the <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
+      grammar in <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>/3 to separate
+      the declaration of a parameter from its default argument.
+
+      <bnf-grammar>
+        <ins>
+        <bnf-rule>basic-parameter-declaration</bnf-rule>
+          <bnf-alt>
+            <bnf-opt>attribute-specifier-seq</bnf-opt> decl-specifier-seq declarator
+          </bnf-alt>
+          <bnf-alt>
+            <bnf-opt>attribute-specifier-seq</bnf-opt> decl-specifier-seq <bnf-opt>abstract-declarator</bnf-opt>
+          </bnf-alt>
+        </ins>
+
+        <bnf-rule>parameter-declaration</bnf-rule>
+          <del>
+          <bnf-alt>
+            <bnf-opt>attribute-specifier-seq</bnf-opt> decl-specifier-seq declarator
+          </bnf-alt>
+          <bnf-alt>
+            <bnf-opt>attribute-specifier-seq</bnf-opt> decl-specifier-seq declarator <bnf-terminal>=</bnf-terminal> initializer-clause
+          </bnf-alt>
+          <bnf-alt>
+            <bnf-opt>attribute-specifier-seq</bnf-opt> decl-specifier-seq <bnf-opt>abstract-declarator</bnf-opt>
+          </bnf-alt>
+          <bnf-alt>
+            <bnf-opt>attribute-specifier-seq</bnf-opt> decl-specifier-seq <bnf-opt>abstract-declarator</bnf-opt> <bnf-terminal>=</bnf-terminal> initializer-clause
+          </bnf-alt>
+          </del>
+          
+          <ins>
+          <bnf-alt>basic-parameter-declaration <bnf-terminal>=</bnf-terminal> initializer-clause</bnf-alt>
+          </ins>
+      </bnf-grammar>
+
+      <!-- TODO: In p4, I might need to add text to disambiguate ... with
+           constrained type specifiers. -->
+
+      Add the following paragraphs after
+      <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>/14.
 
       <p>A <defn>generic function</defn> is a function template whose
       <cxx-grammarterm>template-parameter-list</cxx-grammarterm> has a 

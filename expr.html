@@ -17,9 +17,63 @@
     <cxx-section id="expr.prim.lambda">
       <h1>Lambda expressions</h1>
 
-      <p>Modify 
-      <cxx-ref in="cxx" to="expr.prim.lambda"></cxx-ref>/5.</p>
+      Modify <cxx-ref in="cxx" to="expr.prim.lambda"></cxx-ref>/5.
 
+      <!-- TODO:
+
+      For a generic lambda, th closure type has a abbreviated, public inline, 
+      function call operator member whose parameter-declaration-clause
+      is the same as the parameter-declaration-clause of the 
+      lambda expression. The return type is also the same as of the
+      lambda expression:""
+
+      Examples:
+
+      -->
+
+      <p number="5" class="quoted">
+      The closure type 
+      <del>for a non-generic</del>
+      <ins> of a</ins>
+      <cxx-grammarterm>lambda-expression</cxx-grammarterm> has a public inline 
+      function call operator (<cxx-ref in="cxx" to="over.call"></cxx-ref>)
+      whose parameters and return type are described by the lambda-expression’s 
+      parameter-declaration-clause and trailing-return-type respectively. 
+
+      <del>
+      For a generic lambda, the closure type has a public inline function call
+      operator member template (<cxx-ref to="temp.mem"></cxx-ref>) whose 
+      <cxx-grammarterm>template-parameter-list</cxx-grammarterm> consists of 
+      one invented type <cxx-grammarterm>template-parameter</cxx-grammarterm> 
+      for each occurrence of <code>auto</code> in the lambda’s 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, in order 
+      of appearance.
+
+      The invented type <cxx-grammarter>template-parameter</cxx-grammarter> is 
+      a parameter pack if the corresponding 
+      <cxx-grammarterm>parameter-declaration declares</cxx-grammarterm> a 
+      function parameter pack (<cxx-ref to="dcl.fct"></cxx-ref>). 
+
+      The return type and function parameters of the function call operator 
+      template are derived from the 
+      <cxx-grammarterm>lambda-expression</cxx-grammarterm>’s 
+      <cxx-grammarterm>trailing-return-type</cxx-grammarterm> and 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> by 
+      replacing each occurrence of <code>auto</code> in the 
+      <cxx-grammarterm>decl-specifier</cxx-grammarterm>s of the 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
+      with the name of the corresponding invented template-parameter.
+      </del>
+
+      <ins>
+      <cxx-note>
+      If the <cxx-grammarterm>lambda-expression</cxx-grammarterm> is a
+      generic lambda, the closure type's function call operator is an
+      abbreviated function (<cxx-ref to="dcl.fct"></cxx-ref>).
+      </cxx-note>
+      </ins>
+      </p>
+<!-- 
       <p>The closure type for a non-generic
       <cxx-grammarterm>lambda-expression</cxx-grammarterm> has a public
       <code>inline</code> function call operator 
@@ -65,23 +119,27 @@
       <cxx-grammarterm>decl-specifiers</cxx-grammarterm> of the
       <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> with the 
       name of the corresponding invented 
-      <cxx-grammarterm>template-parameter</cxx-grammarterm>. 
+      <cxx-grammarterm>template-parameter</cxx-grammarterm>.  -->
 
+      Add the following example after those in 
+      <cxx-ref in="cxx" to="expr.prim.lambda"></cxx-ref>/5.
+
+      <p number="5" class="quoted">
       <ins>
       <cxx-example class="inline">
       Consider the following:
       <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = ...;
-auto fun = [](const C& arg) { }
+template&lt;typename T&gt; concept bool C = true;
+
+auto fun = [](const C&, C*) { } // OK: denotes a generic lambda
       </cxx-codeblock>
-      The parameter <code>arg</code> has a 
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
-      <code>C</code>, signifying that it is a generic lambda whose
-      closure type is like the following function object:
+      <code>C</code> is a 
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>,
+      signifying that the lambda is generic. The closure type of this
+      lambda is like the following function object:
       <cxx-codeblock>
 struct Fun {
-  template&lt;C __T&gt;
-    auto operator()(const __T& x) const { }
+    auto operator()(const C&, C*) const { }
 };
       </cxx-codeblock>
       </cxx-example>

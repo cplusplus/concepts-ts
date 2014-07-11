@@ -20,3 +20,7 @@ ins.local > * {
   text-decoration: under;
   background-color: LightSteelBlue; 
 }
+
+p.quoted {
+  margin-left: .25in;
+}
