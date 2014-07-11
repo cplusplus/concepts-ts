@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- Sources at https://github.com/cplusplus/concepts-ts -->
 <html><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8"><!--[if lte IE 8]><script>document.createElement("nav");document.createElement("section");document.createElement("time");document.createElement("CXX-TITLEPAGE");document.createElement("CXX-DOCNUM");document.createElement("CXX-REVISES");document.createElement("CXX-EDITOR");document.createElement("CXX-EMAIL");document.createElement("CXX-TOC");document.createElement("CXX-CLAUSE");document.createElement("CXX-SECTION");document.createElement("CXX-REF");document.createElement("CXX-EDNOTE");document.createElement("CXX-FOREIGN-INDEX");document.createElement("CXX-NOTE");document.createElement("CXX-GRAMMARTERM");document.createElement("BNF-GRAMMAR");document.createElement("BNF-RULE");document.createElement("BNF-ALT");document.createElement("CXX-EXAMPLE");document.createElement("CXX-CODEBLOCK");document.createElement("BNF-TERMINAL");document.createElement("BNF-OPT");document.createElement("CXX-PUBLISH-BUTTON");</script><![endif]--><style>template {display: none !important;} /* injected by platform.js */</style><style>body {transition: opacity ease-in 0.2s; } 
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><!--[if lte IE 8]><script>document.createElement("nav");document.createElement("section");document.createElement("time");document.createElement("CXX-TITLEPAGE");document.createElement("CXX-DOCNUM");document.createElement("CXX-REVISES");document.createElement("CXX-EDITOR");document.createElement("CXX-EMAIL");document.createElement("CXX-TOC");document.createElement("CXX-CLAUSE");document.createElement("CXX-SECTION");document.createElement("CXX-REF");document.createElement("CXX-EDNOTE");document.createElement("CXX-FOREIGN-INDEX");document.createElement("CXX-NOTE");document.createElement("CXX-GRAMMARTERM");document.createElement("BNF-GRAMMAR");document.createElement("BNF-RULE");document.createElement("BNF-ALT");document.createElement("CXX-GRAMMARTER");document.createElement("CXX-EXAMPLE");document.createElement("CXX-CODEBLOCK");document.createElement("BNF-TERMINAL");document.createElement("BNF-OPT");document.createElement("CXX-PUBLISH-BUTTON");</script><![endif]--><style>template {display: none !important;} /* injected by platform.js */</style><style>body {transition: opacity ease-in 0.2s; } 
 body[unresolved] {opacity: 0; display: block; overflow: hidden; } 
 </style><style shim-shadowdom-css="">style { display: none !important; }
 cxx-function {
@@ -436,6 +436,33 @@ cxx-example .nowrap {
   <meta charset="utf-8">
   
   
+  <style>
+del.local {
+  color: Black;
+  text-decoration: line-through;
+  background-color: LightCoral; 
+}
+del.local > * {
+  color: Black;
+  text-decoration: line-through;
+  background-color: LightCoral; 
+}
+
+ins.local {
+  color: Black;
+  text-decoration: underline;
+  background-color: LightSteelBlue; 
+}
+ins.local > * {
+  color: Black;
+  text-decoration: under;
+  background-color: LightSteelBlue; 
+}
+
+p.quoted {
+  margin-left: .25in;
+}
+</style>
 <style shim-shadowdom-css="">/* Copyright 2014 Google Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -1108,56 +1135,117 @@ pre {
       
       
 
-      <p para_num="1" id="expr.prim.lambda.1">Modify 
-      <cxx-ref in="cxx" to="expr.prim.lambda">C++ <span title="expr.prim.lambda">§5.1.2</span></cxx-ref>/5.</p>
+      Modify <cxx-ref in="cxx" to="expr.prim.lambda">C++ <span title="expr.prim.lambda">§5.1.2</span></cxx-ref>/5.
 
-      <p para_num="2" id="expr.prim.lambda.2">The closure type for a non-generic
-      <cxx-grammarterm><i>lambda-expression</i></cxx-grammarterm> has a public
+      <!-- TODO:
+
+      For a generic lambda, th closure type has a abbreviated, public inline, 
+      function call operator member whose parameter-declaration-clause
+      is the same as the parameter-declaration-clause of the 
+      lambda expression. The return type is also the same as of the
+      lambda expression:""
+
+      Examples:
+
+      -->
+
+      <p para_num="1" id="expr.prim.lambda.1" number="5" class="quoted">
+      The closure type 
+      <del>for a non-generic</del>
+      <ins> of a</ins>
+      <cxx-grammarterm><i>lambda-expression</i></cxx-grammarterm> has a public inline 
+      function call operator (<cxx-ref in="cxx" to="over.call">C++ <span title="over.call">§13.5.4</span></cxx-ref>)
+      whose parameters and return type are described by the lambda-expression’s 
+      parameter-declaration-clause and trailing-return-type respectively. 
+
+      <del>
+      For a generic lambda, the closure type has a public inline function call
+      operator member template (<cxx-ref to="temp.mem"><a title="temp.mem" href="#temp.mem">7.4.2</a></cxx-ref>) whose 
+      <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> consists of 
+      one invented type <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> 
+      for each occurrence of <code>auto</code> in the lambda’s 
+      <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>, in order 
+      of appearance.
+
+      The invented type <cxx-grammarter>template-parameter</cxx-grammarter> is 
+      a parameter pack if the corresponding 
+      <cxx-grammarterm><i>parameter-declaration declares</i></cxx-grammarterm> a 
+      function parameter pack (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">5.1.1</a></cxx-ref>). 
+
+      The return type and function parameters of the function call operator 
+      template are derived from the 
+      <cxx-grammarterm><i>lambda-expression</i></cxx-grammarterm>’s 
+      <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> and 
+      <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm> by 
+      replacing each occurrence of <code>auto</code> in the 
+      <cxx-grammarterm><i>decl-specifier</i></cxx-grammarterm>s of the 
+      <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>
+      with the name of the corresponding invented template-parameter.
+      </del>
+
+      <ins>
+      <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+      If the <cxx-grammarterm><i>lambda-expression</i></cxx-grammarterm> is a
+      generic lambda, the closure type's function call operator is an
+      abbreviated function (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">5.1.1</a></cxx-ref>).
+      
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+      </ins>
+      </p>
+<!-- 
+      <p>The closure type for a non-generic
+      <cxx-grammarterm>lambda-expression</cxx-grammarterm> has a public
       <code>inline</code> function call operator 
-      (<cxx-ref in="cxx" to="over.over">C++ <span title="over.over">§13.4</span></cxx-ref>) whose parameters 
+      (<cxx-ref in="cxx" to="over.over"></cxx-ref>) whose parameters 
       and return type 
-      are described by the <cxx-grammarterm><i>lambda-expression</i></cxx-grammarterm>'s 
-      <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm> and 
-      <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm>
+      are described by the <cxx-grammarterm>lambda-expression</cxx-grammarterm>'s 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> and 
+      <cxx-grammarterm>trailing-return-type</cxx-grammarterm>
       respectively. 
       
       For a generic lambda, the closure type has a public inline function call 
-      operator member template (<cxx-ref in="cxx" to="temp.mem">C++ <span title="temp.mem">§14.5.2</span></cxx-ref>) 
-      whose <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> 
+      operator member template (<cxx-ref in="cxx" to="temp.mem"></cxx-ref>) 
+      whose <cxx-grammarterm>template-parameter-list</cxx-grammarterm> 
       consists of one invented type 
-      <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> for each 
+      <cxx-grammarterm>template-parameter</cxx-grammarterm> for each 
       occurrence of <code>auto</code> <ins>or each unique occurrence of a 
-      <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm></ins>
+      <cxx-grammarterm>constrained-type-name</cxx-grammarterm></ins>
       in the lambda's 
-      <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>, 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, 
       in order of appearance. 
 
-      The invented type <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> 
+      The invented type <cxx-grammarterm>template-parameter</cxx-grammarterm> 
       is a parameter pack if the corresponding 
-      <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm>
+      <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
       declares a function parameter pack 
-      (<cxx-ref in="cxx" to="dcl.fct">C++ <span title="dcl.fct">§8.3.5</span></cxx-ref>). 
+      (<cxx-ref in="cxx" to="dcl.fct"></cxx-ref>). 
       
-      If the <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm> of the 
-      corresponding <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> 
-      includes a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>,
+      If the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of the 
+      corresponding <cxx-grammarterm>parameter-declaration</cxx-grammarterm> 
+      includes a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>,
       the invented type parameter is a 
-      <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>, whose
-      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> matches
-      that of the <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm>.
-      (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">7.1</a></cxx-ref>).
+      <cxx-grammarterm>constrained-parameter</cxx-grammarterm>, whose
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> matches
+      that of the <cxx-grammarterm>parameter-declaration</cxx-grammarterm>.
+      (<cxx-ref to="temp.param"></cxx-ref>).</ins>
       
       The return type and function parameters of the function call operator 
       template are derived from the 
-      <cxx-grammarterm><i>lambda-expression</i></cxx-grammarterm>'s 
-      <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> and 
-      <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>
+      <cxx-grammarterm>lambda-expression</cxx-grammarterm>'s 
+      <cxx-grammarterm>trailing-return-type</cxx-grammarterm> and 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
       by replacing each occurrence of <code>auto</code> in the 
-      <cxx-grammarterm><i>decl-specifiers</i></cxx-grammarterm> of the
-      <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm> with the 
+      <cxx-grammarterm>decl-specifiers</cxx-grammarterm> of the
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> with the 
       name of the corresponding invented 
-      <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>. 
+      <cxx-grammarterm>template-parameter</cxx-grammarterm>.  -->
 
+      Add the following example after those in 
+      <cxx-ref in="cxx" to="expr.prim.lambda">C++ <span title="expr.prim.lambda">§5.1.2</span></cxx-ref>/5.
+
+      <p para_num="2" id="expr.prim.lambda.2" number="5" class="quoted">
       <ins>
       <cxx-example class="inline">
     
@@ -1166,18 +1254,18 @@ pre {
       Consider the following:
       <cxx-codeblock>
     
-    </cxx-codeblock></cxx-example></ins></p><pre><code>template&lt;typename T&gt; concept bool C = ...;
-auto fun = [](const C&amp; arg) { }</code></pre>
+    </cxx-codeblock></cxx-example></ins></p><pre><code>template&lt;typename T&gt; concept bool C = true;
+
+auto fun = [](const C&amp;, C*) { } // OK: denotes a generic lambda</code></pre>
   
-      The parameter <code>arg</code> has a 
-      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
-      <code>C</code>, signifying that it is a generic lambda whose
-      closure type is like the following function object:
+      <code>C</code> is a 
+      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>,
+      signifying that the lambda is generic. The closure type of this
+      lambda is like the following function object:
       <cxx-codeblock>
     
     <pre><code>struct Fun {
-  template&lt;C __T&gt;
-    auto operator()(const __T&amp; x) const { }
+    auto operator()(const C&amp;, C*) const { }
 };</code></pre>
   </cxx-codeblock>
       
@@ -1858,13 +1946,45 @@ requires(T x) {
       
       
 
-      <p para_num="1" id="dcl.spec.auto.1">Modify
-      <cxx-ref in="cxx" to="dcl.spec.auto">C++ <span title="dcl.spec.auto">§7.1.6.4</span></cxx-ref>/1 so that the
-      last sentence reads:</p>
+      Modify <cxx-ref in="cxx" to="dcl.spec.auto">C++ <span title="dcl.spec.auto">§7.1.6.4</span></cxx-ref>/1 as
+      follows:
 
-      <p para_num="2" id="dcl.spec.auto.2">The <code>auto</code> <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm>
-      is also used to signify that a lambda is a generic lambda <ins>or that
-      a function is a generic function</ins>.</p>
+      <p para_num="1" id="dcl.spec.auto.1" number="1" class="quoted">
+      The <code>auto</code> and <code>decltype(auto)</code> 
+      <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm>s designate a 
+      placeholder type that will be replaced later, eitherby deduction from an 
+      initializer or by explicit specification with a 
+      <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm>. The 
+      <code>auto</code> <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm>
+      is also used to signify that a lambda is a generic lambda<ins>, or
+      that a function is an abbreviated function</ins>.
+      </p>
+
+
+      Insert the following paragraph to 
+      <cxx-ref in="cxx" to="dcl.spec.auto">C++ <span title="dcl.spec.auto">§7.1.6.4</span></cxx-ref>:
+
+      <p para_num="2" id="dcl.spec.auto.2">
+      If the <code>auto</code> <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm> 
+      appears as one of the <cxx-grammarter>decl-specifiers</cxx-grammarter> 
+      in the <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm> of a 
+      <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> of a 
+      function declaration, the function is an abbreviated function
+      (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">5.1.1</a></cxx-ref>).
+
+      <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    
+    </cxx-codeblock></cxx-example></p><pre><code>void f(auto&amp; x, auto y) { x += y; } // OK: an abbreviated function</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
     
     </section>
   </cxx-section> <!-- dcl.spec.auto -->
@@ -2335,10 +2455,79 @@ struct S { } requires C&lt;S&gt;;             // Error: cannot constrain a class
       
       
 
-      <p para_num="1" id="dcl.fct.1">Add the following paragraphs after
-      <cxx-ref in="cxx" to="dcl.fct">C++ <span title="dcl.fct">§8.3.5</span></cxx-ref>/14.</p>
+      Refactor the <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm>
+      grammar in <cxx-ref in="cxx" to="dcl.fct">C++ <span title="dcl.fct">§8.3.5</span></cxx-ref>/3 to separate
+      the declaration of a parameter from its default argument.
 
-      <p para_num="2" id="dcl.fct.2">A <defn>generic function</defn> is a function template whose
+      <bnf-grammar>
+    
+    
+        <ins>
+        <bnf-rule>
+    
+    basic-parameter-declaration:
+  </bnf-rule>
+          <bnf-alt>
+    
+    
+            <bnf-opt>attribute-specifier-seq<sub>opt</sub></bnf-opt> decl-specifier-seq declarator
+          
+  </bnf-alt>
+          <bnf-alt>
+    
+    
+            <bnf-opt>attribute-specifier-seq<sub>opt</sub></bnf-opt> decl-specifier-seq <bnf-opt>abstract-declarator<sub>opt</sub></bnf-opt>
+          
+  </bnf-alt>
+        </ins>
+
+        <bnf-rule>
+    
+    parameter-declaration:
+  </bnf-rule>
+          <del>
+          <bnf-alt>
+    
+    
+            <bnf-opt>attribute-specifier-seq<sub>opt</sub></bnf-opt> decl-specifier-seq declarator
+          
+  </bnf-alt>
+          <bnf-alt>
+    
+    
+            <bnf-opt>attribute-specifier-seq<sub>opt</sub></bnf-opt> decl-specifier-seq declarator <bnf-terminal><code>=</code></bnf-terminal> initializer-clause
+          
+  </bnf-alt>
+          <bnf-alt>
+    
+    
+            <bnf-opt>attribute-specifier-seq<sub>opt</sub></bnf-opt> decl-specifier-seq <bnf-opt>abstract-declarator<sub>opt</sub></bnf-opt>
+          
+  </bnf-alt>
+          <bnf-alt>
+    
+    
+            <bnf-opt>attribute-specifier-seq<sub>opt</sub></bnf-opt> decl-specifier-seq <bnf-opt>abstract-declarator<sub>opt</sub></bnf-opt> <bnf-terminal><code>=</code></bnf-terminal> initializer-clause
+          
+  </bnf-alt>
+          </del>
+          
+          <ins>
+          <bnf-alt>
+    
+    basic-parameter-declaration <bnf-terminal><code>=</code></bnf-terminal> initializer-clause
+  </bnf-alt>
+          </ins>
+      
+  </bnf-grammar>
+
+      <!-- TODO: In p4, I might need to add text to disambiguate ... with
+           constrained type specifiers. -->
+
+      Add the following paragraphs after
+      <cxx-ref in="cxx" to="dcl.fct">C++ <span title="dcl.fct">§8.3.5</span></cxx-ref>/14.
+
+      <p para_num="1" id="dcl.fct.1">A <defn>generic function</defn> is a function template whose
       <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> has a 
       <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> whose 
       <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm> is either 
@@ -2358,7 +2547,7 @@ void sort(C&amp; c); // Ok (assuming C names a concept)</code></pre>
   
       <p></p>
 
-      <p para_num="3" id="dcl.fct.3">The declaration of a generic function has a 
+      <p para_num="2" id="dcl.fct.2">The declaration of a generic function has a 
       <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> that 
       consists of one invented type 
       <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> for each
@@ -2405,7 +2594,7 @@ template&lt;typename T1, C T2&gt;
   
       <p></p>
 
-      <p para_num="4" id="dcl.fct.4">All placeholder types introduced using the same 
+      <p para_num="3" id="dcl.fct.3">All placeholder types introduced using the same 
       <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm> have the 
       same invented template parameter.
       <cxx-example class="inline">
@@ -2425,7 +2614,7 @@ template&lt;C T&gt;
   
       <p></p>
 
-      <p para_num="5" id="dcl.fct.5">If an entity is declared by an abbreviated template declaration, 
+      <p para_num="4" id="dcl.fct.4">If an entity is declared by an abbreviated template declaration, 
       then all its declarations must have the same form.</p>
     
     
@@ -2641,6 +2830,7 @@ struct B {
   <!-- TODO: Put this in block quotes. Currently, some formatting is
        not propagated through the blockquote element, so I'm omitting
        it for now. -->
+  <p para_num="1" id="temp.1" number="1" class="quoted">
   <bnf-grammar>
     
     
@@ -2707,11 +2897,12 @@ struct B {
     </ins>
   
   </bnf-grammar>
+  </p>
   
   Add the following paragraphs after 
   <cxx-ref in="cxx" to="temp">C++ <span title="temp">§14</span></cxx-ref>/6.
 
-  <p para_num="1" id="temp.1"> A <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> is written in
+  <p para_num="2" id="temp.2"> A <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> is written in
   terms of its template parameters. These
   parameters are declared explicitly in a
   <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
@@ -2720,7 +2911,7 @@ struct B {
   <cxx-grammarterm><i>concept-name</i></cxx-grammarterm> and following
   <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm>.</p>
 
-  <p para_num="2" id="temp.2"> The concept designated by the <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>
+  <p para_num="3" id="temp.3"> The concept designated by the <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>
   is determined by the <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm>.
   Let <code>C</code> be a <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>
   and <code>I1</code>, <code>I2</code>, ..., <code>I<i>n</i></code> be a 
@@ -2760,7 +2951,7 @@ C{X} void f(); // <i>error: resolution of the concept</i> C <i>is ambiguous</i><
   
   <p></p>
 
-  <p para_num="3" id="temp.3">Each <cxx-grammarterm><i>identifier</i></cxx-grammarterm>, <code>I</code>,
+  <p para_num="4" id="temp.4">Each <cxx-grammarterm><i>identifier</i></cxx-grammarterm>, <code>I</code>,
   in the <cxx-grammarterm><i>introduced-parameter</i></cxx-grammarterm>s
   of the <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm> 
   is declared to be a template parameter that matches the 
@@ -2821,9 +3012,9 @@ Unary_template{...X} // <i>error: the corresponding parameter is not a</i>
   
     <span class="nowrap">— <em>end example</em> ]</span>
   </cxx-example>
-  <p para_num="4" id="temp.4"></p>
+  <p para_num="5" id="temp.5"></p>
 
-  <p para_num="5" id="temp.5">
+  <p para_num="6" id="temp.6">
   <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
   A concept referred to be a <cxx-grammarterm><i>concept-name</i></cxx-grammarterm> 
@@ -2858,10 +3049,10 @@ one template parameter.
   
   <p></p>
 
-  <p para_num="6" id="temp.6"> The <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm> shall not
+  <p para_num="7" id="temp.7"> The <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm> shall not
   be empty.</p>
 
-  <p para_num="7" id="temp.7"> An introduced template parameter does not have a default template 
+  <p para_num="8" id="temp.8"> An introduced template parameter does not have a default template 
   argument, even if its corresponding template parameter does.
 
   <cxx-example class="inline">
@@ -2883,7 +3074,7 @@ Array&lt;double&gt; s2;    // <i>error:</i> Array <i>takes two template argument
   <p></p>
 
   <!-- FIXME: Does this belong here or in member functions? -->
-  <p para_num="8" id="temp.8">
+  <p para_num="9" id="temp.9">
   <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
   A constrained member function template of a constrained class template
@@ -2911,7 +3102,7 @@ C{T} D{U} void X&lt;T&gt;::f() { } // <i>OK: definition of</i> f()</code></pre>
   
   <p></p>
 
-  <p para_num="9" id="temp.9"> A <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> declared
+  <p para_num="10" id="temp.10"> A <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> declared
   by a concept introduction can also be an abbreviated function
   (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">5.1.1</a></cxx-ref>).
 
@@ -2967,7 +3158,7 @@ C{T} D{U} void X&lt;T&gt;::g(U, C) { } // <i>OK: definition of</i> X&lt;T&gt;::g
   </cxx-example>
   <p></p>
 
-  <p para_num="10" id="temp.10"> The introduction of a sequence of template parameters,
+  <p para_num="11" id="temp.11"> The introduction of a sequence of template parameters,
   <code>T1, T2, ..., T<i>n</i></code>, by a 
   <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>, <code>C</code>,
   associates a constraint with the 
@@ -3001,7 +3192,7 @@ D{P, ...Qs} struct T; // <i>associates</i> D&lt;P, Qs...&gt; <i>with</i> T</code
   <!-- FIXME: This should move to a separate section? -->
 
 
-  <p para_num="11" id="temp.11">A <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>'s 
+  <p para_num="12" id="temp.12">A <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>'s 
   <dfn>associated constraints</dfn> are a conjunction of all constraints 
   introduced by
   </p><ul>
@@ -3070,9 +3261,9 @@ template&lt;typename T&gt; requires C&lt;T&gt; void g(T);</code></pre>
   
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
-  <p para_num="12" id="temp.12">
+  <p para_num="13" id="temp.13">
 
-  </p><p para_num="13" id="temp.13"> When <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> is
+  </p><p para_num="14" id="temp.14"> When <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> is
   declared by a concept introduction, it is equivalent to a
   <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> whose
   <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> is defined 
@@ -3119,7 +3310,7 @@ template&lt;typename... Qs&gt;
   <p></p>
 
   <!-- TODO: Update based on rewrite of temp.param -->
-  <p para_num="14" id="temp.14">When a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>, <code>T</code>, is
+  <p para_num="15" id="temp.15">When a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>, <code>T</code>, is
   explicitly declared with <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
   that has constrained template parameters (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">7.1</a></cxx-ref>), it
   is equivalent to a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>, <code>E</code>,
@@ -3174,7 +3365,7 @@ template&lt;typename T&gt;
   
   <p></p>
 
-  <p para_num="15" id="temp.15"> When the declaration is an abbreviated function, it is 
+  <p para_num="16" id="temp.16"> When the declaration is an abbreviated function, it is 
   equivalent to a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>
   whose template parameters are declared according to the rules in
   <cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">5.1.1</a></cxx-ref>.
@@ -3202,7 +3393,7 @@ template&lt;typename T, typename U&gt;
   
   <p></p>
 
-  <p para_num="16" id="temp.16"> An abbreviated function can also be declared as a
+  <p para_num="17" id="temp.17"> An abbreviated function can also be declared as a
   <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>. The constraints
   associated by <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s
   in the <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm> of
@@ -3243,7 +3434,7 @@ C{T} void g2(T, D); // <i>OK: redeclaration of</i> g2(T, D)</code></pre>
   
 
 
-  <p></p><p para_num="17" id="temp.17"> A <dfn>trailing <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm></dfn> 
+  <p></p><p para_num="18" id="temp.18"> A <dfn>trailing <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm></dfn> 
   is a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> that appears after
   the <cxx-grammarterm><i>declarator</i></cxx-grammarterm> in an
   <cxx-grammarterm><i>init-declarator</i></cxx-grammarterm>
@@ -3284,6 +3475,11 @@ template&lt;C T&gt; template&lt;typename U, typename __P&gt;
   
   <p></p>
 
+
+  <!-- =================== 
+       Template Parameters 
+       =================== -->
+
   <cxx-section id="temp.param">
     
 
@@ -3295,7 +3491,7 @@ template&lt;C T&gt; template&lt;typename U, typename __P&gt;
     Modify the <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>
     grammar in <cxx-ref in="cxx" to="temp.param">C++ <span title="temp.param">§14.1</span></cxx-ref>/1 as follow.
 
-    <blockquote>
+    <p para_num="1" id="temp.param.1" number="1" class="quoted">
     <bnf-grammar>
     
     
@@ -3309,47 +3505,74 @@ template&lt;C T&gt; template&lt;typename U, typename __P&gt;
   </bnf-alt></del>
         <ins><bnf-alt>
     
-    non-type-parameter
+    constrained-or-non-type-parameter
   </bnf-alt></ins>
 
-      <ins>
       <bnf-rule>
     
-    non-type-parameter:
+    constrained-or-non-type-parameter:
   </bnf-rule>
         <bnf-alt>
     
-    parameter-declarator
+    basic-parameter-declaration
   </bnf-alt>
         <bnf-alt>
     
-    
-          parameter-declarator <bnf-terminal><code>=</code></bnf-terminal> initializer-clause
-        
+    basic-parameter-declaration <bnf-terminal><code>=</code></bnf-terminal> initializer-clause 
   </bnf-alt>
-
         <bnf-alt>
     
-    
-          parameter-declarator <bnf-terminal><code>=</code></bnf-terminal> type-id
-        
+    basic-parameter-declaration <bnf-terminal><code>=</code></bnf-terminal> type-id 
   </bnf-alt>
-
         <bnf-alt>
     
-    
-          parameter-declarator <bnf-terminal><code>=</code></bnf-terminal> id-expression
-        
+    basic-parameter-declaration <bnf-terminal><code>=</code></bnf-terminal> id-expression 
   </bnf-alt>
-      </ins>
+      
     
   </bnf-grammar>
-    </blockquote>
+    </p>
     
-    <p para_num="1" id="temp.param.1">Add the following paragraphs after
-    <cxx-ref in="cxx" to="temp.param">C++ <span title="temp.param">§14.1</span></cxx-ref>/15.</p>
+    Modify <cxx-ref in="cxx" to="temp.param">C++ <span title="temp.param">§14.1</span></cxx-ref>/2 as follows.
 
-    <p para_num="2" id="temp.param.2">A <dfn>constrained template parameter</dfn> is a
+    <p para_num="2" id="temp.param.2" number="2" class="quoted">
+    There is no semantic difference between <code>class</code> and <code>typename</code> 
+    in a <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>. <code>typename</code> 
+    followed by an <cxx-grammarterm><i>unqualified-id</i></cxx-grammarterm> names a 
+    template type parameter. <code>typename</code> followed by a 
+    <cxx-grammarterm><i>qualified-id</i></cxx-grammarterm> denotes the
+    type in a non-type 
+    <del><cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm></del>
+    <ins><cxx-grammarterm><i>constrained-or-non-type-parameter</i></cxx-grammarterm></ins>. 
+    </p>
+
+    Modify <cxx-ref in="cxx" to="temp.param">C++ <span title="temp.param">§14.1</span></cxx-ref>/15 as follows.
+
+    <p para_num="3" id="temp.param.3" number="15" class="quoted">
+    If a <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> is a 
+    <cxx-grammarterm><i>type-parameter</i></cxx-grammarterm> with an ellipsis prior to 
+    its optional identifier 
+    or is a 
+    <del><cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm></del>
+    <ins><cxx-grammarterm><i>constrained-or-non-type-parameter</i></cxx-grammarterm></ins>
+    that declares a parameter pack (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">5.1.1</a></cxx-ref>),
+    then the template-parameter is a template parameter pack 
+    (<cxx-ref to="temp.variadic"><a title="temp.variadic" href="#temp.variadic"></a></cxx-ref>).
+     
+    A template parameter pack that is a
+    <del><cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> </del>
+    <ins><cxx-grammarterm><i>constrained-or-non-type-parameter</i></cxx-grammarterm></ins>
+    whose type contains one or more unexpanded parameter packs is a pack 
+    expansion.
+    </p>
+
+    Add the following paragraphs after
+    <cxx-ref in="cxx" to="temp.param">C++ <span title="temp.param">§14.1</span></cxx-ref>/15.
+
+    <!-- TODO: I don't think I can write this until I've rewritten
+         the constrained-type-specifier work -->.
+
+    <p para_num="4" id="temp.param.4">A <dfn>constrained template parameter</dfn> is a
     <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> whose
     <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm> contains a
     <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
@@ -3383,7 +3606,7 @@ template&lt;const P* N&gt; void y(); // N has type const int*</code></pre>
   
     <p></p>
 
-    <p para_num="3" id="temp.param.3">If the prototype parameter is a type parameter (including template
+    <p para_num="5" id="temp.param.5">If the prototype parameter is a type parameter (including template
     template parameters), then the 
     <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm> of the
     constrained parameter shall consist of only the
@@ -3402,7 +3625,7 @@ template&lt;const P* N&gt; void y(); // N has type const int*</code></pre>
   
     <p></p>
 
-    <p para_num="4" id="temp.param.4">The declared <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> is
+    <p para_num="6" id="temp.param.6">The declared <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> is
     a template parameter pack if the prototype parameter declares a
     template parameter pack. In such cases, the 
     <cxx-grammarterm><i>declarator-id</i></cxx-grammarterm> or
@@ -3426,7 +3649,7 @@ template&lt;X Xs&gt; void g();    // Error: must X must include ...</code></pre>
   
     <p></p>
 
-    <p para_num="5" id="temp.param.5">If the <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>
+    <p para_num="7" id="temp.param.7">If the <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>
     declares a type parameter, then the 
     <cxx-grammarterm><i>constrained-initializer</i></cxx-grammarterm>
     is parsed as a <cxx-grammarterm><i>type-id</i></cxx-grammarterm>. Otherwise, it
@@ -3446,7 +3669,7 @@ template&lt;P M = int&gt; void r();  // Error: int is not an expression</code></
   
     <p></p>
 
-    <p para_num="6" id="temp.param.6">The declaration of a 
+    <p para_num="8" id="temp.param.8">The declaration of a 
     <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> 
     introduces a new constraint on the template declaration. 
 
@@ -3478,7 +3701,7 @@ template&lt;P N&gt; void f3(); // requires P&lt;N&gt;</code></pre>
   
     <p></p>
 
-    <p para_num="7" id="temp.param.7">If the <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> declares 
+    <p para_num="9" id="temp.param.9">If the <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> declares 
     a template parameter pack, the formation of the constraint depends on 
     whether the designated concept designated by the parameter's
     <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> is variadic.
