@@ -30,7 +30,10 @@ limitations under the License.
             // Assume there aren't any elements between cxx-section levels.
             for (var child = this.firstChild; child; child = child.nextSibling) {
                 if (child instanceof CxxSectionElement) {
-                    child.update_sec_nums(this.sec_num + '.' + (child_index++));
+                    if (child.number)
+                        child_index = Number(child.number);
+                    child.update_sec_nums(this.sec_num + '.' + child_index);
+                    child_index++;
                 }
             }
         },
@@ -71,6 +74,10 @@ limitations under the License.
         },
 
         numberParagraph: function(number, element) {
+            // If the paragraph is explicitly numbered, use that number.
+            if (element.hasAttribute("number"))
+                number = element.getAttribute("number")
+
             var id = this.id + '.' + number;
             if (element.id) {
                 console.warn('Paragraph already has id:', element);

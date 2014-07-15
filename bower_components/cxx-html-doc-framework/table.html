@@ -25,17 +25,28 @@ limitations under the License.
               border-collapse: collapse;
               border: thin solid black; }
       caption { white-space: nowrap; }
-      /* @polyfill caption caption */
+      polyfill-next-selector { content: 'caption caption' }
       ::content caption { display: inline; }
 
-      th, td { border-style: solid none; border-color: black;
-               border-width: thin;
-               padding: 0 0.25em; }
-      :host(.column-rules) th, :host(.column-rules) td {
-          border-left-style: solid; border-right-style: solid; }
-      th { border-bottom: double medium; }
-      :host(.center) td { text-align: center; }
-      :host(.list) td { border: none; }
+      polyfill-next-selector { content: 'th, td' }
+      ::content th, ::content td {
+        border-style: solid none; border-color: black;
+        border-width: thin;
+        padding: 0 0.25em; }
+
+      polyfill-next-selector { content: ':host(.column-rules) th, :host(.column-rules) td' }
+      :host(.column-rules) ::content th,
+      :host(.column-rules) ::content td {
+          border-left-style: solid;  border-right-style: solid;}
+
+      polyfill-next-selector { content: 'th' }
+      ::content th { border-bottom: double medium; }
+
+      polyfill-next-selector { content: ':host(.center) td' }
+      :host(.center) ::content td { text-align: center; }
+
+      polyfill-next-selector { content: ':host(.list) td' }
+      :host(.list) ::content td { border: none; }
     </style>
 
     <caption>Table {{table_num}} — <wbr><content select="caption"></content></caption>

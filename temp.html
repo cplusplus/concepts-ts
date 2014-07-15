@@ -820,15 +820,14 @@ temp&lt;z&gt; s2; // Error: Z subsumes Y
     </cxx-section> <!-- temp.arg.template -->
   </cxx-section> <!-- tmep.arg -->
 
-  <cxx-section id="temp.decls">
+  <cxx-section id="temp.decls" number="5">
     <h1>Template declarations</h1>
 
     <cxx-section id="temp.class">
       <h1>Class templates</h1>
 
-
-      <p>Insert the following paragraph after 
-      <cxx-ref in="cxx" to="temp.class"></cxx-ref>/3.</p>
+      Insert the following paragraph after 
+      <cxx-ref in="cxx" to="temp.class"></cxx-ref>/3.
 
       <p>When a member of a constrained class template is defined outside of 
       its class template definition, it shall be specified with the
@@ -938,7 +937,7 @@ template&lt;Foo T&gt; template&lt;Foo U&gt; void S&lt;T&gt;::g(U); // Error: no 
     </cxx-section> <!-- temp.mem -->
 
 
-    <cxx-section id="temp.friend">
+    <cxx-section id="temp.friend" number="4">
       <h1>Friends</h1>
 
       <p>Add the following paragraphs after
@@ -1005,7 +1004,7 @@ template&lt;typename T&gt;
       <p>As with constrained member functions, constraints on non-template friend
       functions are not instantiated during class template instantiation.</p>
 
-    </cxx-section> <!-- temp.firend -->
+    </cxx-section> <!-- temp.friend -->
 
     <cxx-section id="temp.class.spec">
       <h1>Class template partial specialization</h1>
@@ -1077,21 +1076,6 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
 
     <cxx-section id="temp.fct">
       <h1>Function templates</h1>
-
-      <cxx-section id="temp.deduct">
-        <h1>Template argument deduction</h1>
-
-        <p>Immediately after
-        <cxx-ref in="cxx" to="temp.deduct"></cxx-ref>/5, add the following
-        paragraph:</p>
-
-        <p>If the template has associated constraints, the template arguments
-        are substituted into those associated constraints and evaluated.
-        If the substitution results in an invalid type or expression, or
-        if the associated constraints evaluate to <code>false</code>,
-        type deduction fails.</p>
-
-      </cxx-section> <!-- temp.deduct -->
 
       <cxx-section id="temp.over.link">
         <h1>Function template overloading</h1>
@@ -1172,7 +1156,7 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
     </cxx-section> <!-- temp.fct -->
   </cxx-section> <!-- temp.decls -->
 
-  <cxx-section id="temp.spec">
+  <cxx-section id="temp.spec" number="7">
     <h1>Template instantiation and specialization</h1>
 
     <cxx-section id="temp.inst">
@@ -1260,6 +1244,27 @@ template&lt;&gt; void S2&lt;X&gt;::f(T a) requires C&lt;X&gt; { } // Error: extr
       </p>
     </cxx-section> <!-- temp.expl.spec -->
   </cxx-section> <!-- temp.spec -->
+
+
+  <cxx-section id="temp.fct.spec" number="8">
+    <h1>Function template specialization</h1>
+
+    <cxx-section id="temp.deduct" number="2">
+      <h1>Template argument deduction</h1>
+
+      After <cxx-ref in="cxx" to="temp.deduct"></cxx-ref>/5, add the following
+      paragraph:
+
+      <!-- TODO: Rewrite in terms of satisfaction. -->
+      <p number="6"> If the template has associated constraints, the template 
+      arguments are substituted into those associated constraints and evaluated.
+      If the substitution results in an invalid type or expression, or
+      if the associated constraints evaluate to <code>false</code>,
+      type deduction fails.</p>
+
+    </cxx-section> <!-- temp.deduct -->
+
+  </cxx-section>
 
 
   <cxx-section id="temp.constr">

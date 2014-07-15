@@ -1,4 +1,4 @@
-<cxx-clause id="expr">
+<cxx-clause id="expr" number="5">
   <h1>Expressions</h1>
 
   <cxx-section id="expr.prim">
@@ -8,33 +8,20 @@
     <cxx-grammarterm>requires-expression</cxx-grammarterm> to the
     rule, <cxx-grammarterm>primary-expression</cxx-grammarterm>.</p>
     
-    <!-- TODO:  Don't list existing elements -->
     <bnf-grammar>
       <bnf-rule>primary-expression</bnf-rule>
         <ins><bnf-alt>requires-expression</bnf-alt></ins>
     </bnf-grammar>
 
-    <cxx-section id="expr.prim.lambda">
+    <cxx-section id="expr.prim.lambda" number="2">
       <h1>Lambda expressions</h1>
 
       Modify <cxx-ref in="cxx" to="expr.prim.lambda"></cxx-ref>/5.
 
-      <!-- TODO:
-
-      For a generic lambda, th closure type has a abbreviated, public inline, 
-      function call operator member whose parameter-declaration-clause
-      is the same as the parameter-declaration-clause of the 
-      lambda expression. The return type is also the same as of the
-      lambda expression:""
-
-      Examples:
-
-      -->
-
       <p number="5" class="quoted">
       The closure type 
       <del>for a non-generic</del>
-      <ins> of a</ins>
+      <ins>for a</ins>
       <cxx-grammarterm>lambda-expression</cxx-grammarterm> has a public inline 
       function call operator (<cxx-ref in="cxx" to="over.call"></cxx-ref>)
       whose parameters and return type are described by the lambda-expression’s 
@@ -131,25 +118,30 @@
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = true;
 
-auto fun = [](const C&, C*) { } // OK: denotes a generic lambda
+auto gl = [](C& a, C* b) { a = *b } // OK: denotes a generic lambda
+
+struct Fun {
+    auto operator()(C& a, C* b) const { a = *b; }
+} fun;
       </cxx-codeblock>
       <code>C</code> is a 
       <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>,
-      signifying that the lambda is generic. The closure type of this
-      lambda is like the following function object:
+      signifying that the lambda is generic. The generic lambda, <code>gl</code>, 
+      and the function object, <code>fun</code>, have equivalent behavior when 
+      called with the same arguments.
       <cxx-codeblock>
-struct Fun {
-    auto operator()(const C&, C*) const { }
-};
       </cxx-codeblock>
       </cxx-example>
       </ins>
       </p>
 
-      <p>Also insert the following paragraph after
+
+      <!-- TODO: This moves into dcl.fct -->
+      Also insert the following paragraph after
       <cxx-ref in="cxx" to="expr.prim.lambda"></cxx-ref>/5.</p>
 
-      <p>All placeholder types introduced using the same 
+      <!--
+      <p> All placeholder types introduced using the same 
       <cxx-grammarterm>concept-name</cxx-grammarterm> have the same invented
       template parameter.
       <cxx-example class="inline">
@@ -162,6 +154,8 @@ f(0, 'a'); // Error: template argument deduction failure
       the types of the deduced arguments cannot be unified.
       </cxx-example>
       </p>
+      -->
+
     </cxx-section> <!-- expr.prim.lambda -->
 
 

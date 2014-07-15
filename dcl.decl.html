@@ -1,5 +1,5 @@
 
-<cxx-clause id="dcl.decl">
+<cxx-clause id="dcl.decl" number="8">
   <h1>Declarators</h1>
 
   <p>Modify <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>/1 as follows:</p>
@@ -40,10 +40,10 @@ struct S { } requires C&lt;S&gt;;             // Error: cannot constrain a class
   </p>
 
 
-  <cxx-section id="dcl.meaning">
+  <cxx-section id="dcl.meaning" number="3">
     <h1>Meaning of declarators</h1>
 
-    <cxx-section id="dcl.fct">
+    <cxx-section id="dcl.fct" number="5">
       <h1>Functions</h1>
 
       Refactor the <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
@@ -159,6 +159,13 @@ template&lt;C T&gt;
 
       <p>If an entity is declared by an abbreviated template declaration, 
       then all its declarations must have the same form.</p>
+
+
+      <!-- TODO: Add to /15 a rule that disambiguates the ... (without
+      a preceeding ',' for constrained-type-specifiers). If it's needed.
+
+      The "or contains auto" will need to be updated. -->
+
     
     </cxx-section> <!-- dcl.fct -->
   </cxx-section> <!-- dcl.meaning -->
