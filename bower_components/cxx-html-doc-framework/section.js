@@ -61,14 +61,13 @@ limitations under the License.
                  child = child.nextElementSibling) {
                 if (child instanceof CxxSectionElement)
                     return para_num;
-                else if (child instanceof HTMLParagraphElement &&
-                         !child.classList.contains('cont'))
-                    this.numberParagraph(para_num++, child);
+                else if (child instanceof HTMLParagraphElement && !child.classList.contains('cont'))
+                    para_num = this.numberParagraph(para_num, child);
                 else if (child instanceof CxxFunctionElement) {
-                    this.numberParagraph(para_num++, child);
+                    para_num = this.numberParagraph(para_num, child);
                     para_num = this.numberParagraphChildren(child, para_num);
                 } else if (child instanceof CxxFunctionAttributeElement)
-                    this.numberParagraph(para_num++, child);
+                    para_num = this.numberParagraph(para_num, child);
             }
             return para_num;
         },
@@ -76,7 +75,7 @@ limitations under the License.
         numberParagraph: function(number, element) {
             // If the paragraph is explicitly numbered, use that number.
             if (element.hasAttribute("number"))
-                number = element.getAttribute("number")
+                number = Number(element.getAttribute("number"))
 
             var id = this.id + '.' + number;
             if (element.id) {
@@ -88,6 +87,7 @@ limitations under the License.
                 element.id = id;
             }
             element.setAttribute('para_num', number);
+            return number + 1
         }
     })
 })();

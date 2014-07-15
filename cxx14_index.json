@@ -95,5 +95,11 @@
   "temp.explicit"         : "14.7.2",
   "temp.expl.spec"        : "14.7.3",
 
-  "temp.deduct"           : "14.8.2"
+  "temp.deduct"           : "14.8.2",
+  "temp.deduct.call"      : "14.8.2.1",
+  "temp.deduct.funcaddr"  : "14.8.2.2",
+  "temp.deduct.conv"      : "14.8.2.3",
+  "temp.deduct.partial"   : "14.8.2.4",
+  "temp.deduct.type"      : "14.8.2.5",
+  "temp.deduct.decl"      : "14.8.2.6"
 }

@@ -4,8 +4,10 @@
   <cxx-section id="dcl.spec">
     <h1>Specifiers</h1>
 
-    <p>Extend the <cxx-grammarterm>decl-specifier</cxx-grammarterm> production
+    Extend the <cxx-grammarterm>decl-specifier</cxx-grammarterm> production
     to include the <code>concept</code> specifier.
+
+    <p class="quoted">
     <bnf-grammar>
       <bnf-rule>decl-specifier</bnf-rule>
         <ins><bnf-alt><bnf-terminal>concept</bnf-terminal></bnf-alt></ins>
@@ -17,8 +19,12 @@
 
       <cxx-section id="dcl.type.simple" number="2">
         <h1>Simple type specifiers</h1>
-        <p>Extend the <cxx-grammarterm>simple-type-specifier</cxx-grammarterm> 
-        production to include <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
+        
+        Add <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        to the grammar for <cxx-grammarterm>simple-type-specifier</cxx-grammarterm>s
+        in <cxx-ref in="cxx" to="dcl.type.simple"></cxx-ref>.
+
+        <p class="quoted">
         <bnf-grammar>
           <bnf-rule>simple-type-specifier</bnf-rule>
             <ins><bnf-alt>constrained-type-specifier</bnf-alt></ins>
@@ -46,7 +52,7 @@
           </ins>
         </bnf-grammar>
         </p>
-      </cxx-section>
+      </cxx-section> <!-- dcl.type.simple -->
 
 
       <cxx-section id="dcl.spec.auto" number="4">
@@ -58,53 +64,108 @@
         <p number="1" class="quoted">
         The <code>auto</code> and <code>decltype(auto)</code> 
         <cxx-grammarterm>type-specifier</cxx-grammarterm>s designate a 
-        placeholder type that will be replaced later, eitherby deduction from an 
-        initializer or by explicit specification with a 
+        placeholder type that will be replaced later, either by deduction from 
+        an initializer or by explicit specification with a 
         <cxx-grammarterm>trailing-return-type</cxx-grammarterm>. The 
         <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
         is also used to signify that a lambda is a generic lambda<ins>, or
         that a function is an abbreviated function</ins>.
         </p>
 
-
         Modify <cxx-ref in="cxx" to="dcl.spec.auto"></cxx-ref>/3 as follows:
 
         <p number="3" class="quoted">
-        
-       If the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
-       appears
-       
-       <del>as one of the <cxx-grammarterm>decl-specifier</cxx-grammarterm>s
-       in the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of</del>
+        If the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
+        appears
+        <del>as one of the <cxx-grammarterm>decl-specifier</cxx-grammarterm>s
+        in the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of</del>
+        <ins>in the type of</ins>
+        a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> of a 
+        <cxx-grammarterm>lambda-expression</cxx-grammarterm>
+        <ins>or function declaration</ins>, <del>the</del><ins>that</ins> lambda 
+        is a <dfn>generic lambda</dfn> (<cxx-ref to="expr.prim.lambda"></cxx-ref>)<ins>, or 
+        that function is an <dfn>abbreviated function</dfn> 
+        (<cxx-ref to="dcl.fct"></cxx-ref>)</ins>.
 
-       <ins>in</ins>
+        <ins>
+        The use of the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
+        in the type of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
+        is valid only when the type of that parameter has one of the
+        following forms:
+        <cxx-codeblock>
+auto
+<i>cv-list</i> auto
+auto*
+auto&amp;
+auto&amp;&amp;
+auto[<i>integer-constant</i>]
+<i>template-name</i>&lt;auto&gt; (where <i>template-name</i> refers to a class template)
+<i>type</i>(auto)
+auto()
+auto <i>type</i>::*
+<i>type</i> auto::*
+auto (<i>type</i>::*)()
+<i>type</i> (auto::*)()
+<i>type</i> (<i>type</i>::*)(auto)
+        </cxx-codeblock>
 
-       a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> of a 
-       <cxx-grammarterm>lambda-expression</cxx-grammarterm>
-       <ins>or function declaration</ins>, <del>the</del><ins>that</ins> lambda 
-       is a generic lambda (<cxx-ref to="expr.prim.lambda"></cxx-ref>)<ins>, or 
-       that function is an abbreviated function (<cxx-ref to="dcl.fct"></cxx-ref>)</ins>.
-       </p>
+        where <code>(auto)</code> represents a 
+        <cxx-grammarterm>parameter-type-list</cxx-grammarterm>
+        where at least one parameter type contains an <code>auto</code>
+        <cxx-grammarterm>type-specifier</cxx-grammarterm>, and 
+        <cxx-grammarterm>()</cxx-grammarterm> represents a
+        <cxx-grammarterm>parameter-type-list</cxx-grammarterm> where no 
+        parameter type contains an <code>auto</code> 
+        <cxx-grammarterm>type-specifier</cxx-grammarterm>. 
+
+        Similarly, <code>&lt;T&gt;</code> represents template argument
+        lists where at least one argument contains an
+        <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>.
+
+        The <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
+        shall not appear in a non-deduced context
+        (<cxx-ref in="cxx" to="temp.deduct.type"></cxx-ref>).
+
+        <!-- TODO: Say something more informative here? -->
+        <cxx-note>
+        The forms of types in which the 
+        <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
+        can appear are a subset of those forms from which a
+        template type argument can be deduced. 
+        </cxx-note>
+        </p>
 
         Add the following example to <cxx-ref in="cxx" to="dcl.spec.auto"></cxx-ref>/3:
 
         <p number="3" class="quoted">
         <cxx-example>
         <cxx-codeblock>
-  void f(auto&amp; x, auto y) { x += y; } // OK: an abbreviated function
+template&lt;typename T&gt; class Vec { };
+template&lt;typename T, int N&gt; class Array { };
+template&lt;typename T, typename U&gt; class Pair { };
+template&lt;int N&gt; class Num { };
+
+void f1(auto&amp;, auto);                     // <i>OK: an abbreviated function</i>
+auto f2 = [](void (*)(auto)){};           // <i>OK: a generic lambda</i>
+void f3(auto (*)(int));                   // <i>OK: an abbreviated function</i>
+void f4(Vec&lt;auto&gt;&amp;);                      // <i>OK: an abbreviated function</i>
+void f5(Pair&lt;const auto&amp;, auto*&gt;);        // <i>OK: an abbreviated function</i>
+template&lt;int N&gt; void f6(Array&lt;auto, N&gt;*); // <i>OK: an abbreviated function template</i>
+void f7(auto::Vec&lt;int&gt;);                  // <i>error: auto used in a non-deduced context</i>
+void f8(Num&lt;sizeof(auto)&gt;);               // <i>error: auto used in a non-deduced context</i>
+void f9(auto x = auto());                 // <i>error: auto used in default argument</i>
         </cxx-codeblock>
         </cxx-example>
         </p>
 
-
-        <!-- TODO: Add paragraphs that explain exactly where auto is
-        allowed, and wher eit is not. Give numerous examples -->
-
       </cxx-section> <!-- dcl.spec.auto -->
 
 
-        <!-- TODO: Relax the requirements in /1-2 to allow 
-             constrained-type-specifiers in more contexts. -->
+
+        <!-- TODO: Rewrite this section so that it reflects and refers
+             to dcl.spec.auto. In particular, we want to say where these
+             are allowed, how their placeholder types are deduced, and
+             what constraint is introduced. -->
       <cxx-section id="dcl.spec.constr">
         <h1>Constrained type specifiers</h1>
 

@@ -20,21 +20,21 @@
   </bnf-grammar>
   </p>
 
-  <p>Insert the following paragraph after 
-  <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>/1</p>
+  Insert the following paragraph after 
+  <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>/1.
 
-  <p>A <cxx-grammarterm>requires-clause</cxx-grammarterm> 
+  <p> A <cxx-grammarterm>requires-clause</cxx-grammarterm> 
   (<cxx-ref to="temp"></cxx-ref>) shall only be present if the
   <cxx-grammarterm>declarator</cxx-grammarterm> declares a generic
   function (<cxx-ref to="dcl.fct"></cxx-ref>).
   <cxx-example class="inline">
   <cxx-codeblock>
-template<typename T> concept bool C = ...;
+template<typename T> concept bool C = true;
 
-void f1(auto x) requires C&lt;decltype(x)&gt;;// Ok
-void f2(int x) requires C&lt;int&gt;;         // Error: f2 is not a generic function
-auto n requires C&lt;decltype(n)&gt; = g();   // Error: cannot constrain variable declaration
-struct S { } requires C&lt;S&gt;;             // Error: cannot constrain a class declaration
+void f1(auto x) requires C&lt;decltype(x)&gt;;// <i>OK</i>
+void f2(int x) requires C&lt;int&gt;;         // <i>OK</i>
+auto n requires C&lt;decltype(n)&gt; = g();   // <i>error: cannot constrain variable declaration</i>
+struct S { } requires C&lt;S&gt;;             // <i>error: cannot constrain a class definition</i>
   </cxx-codeblock>
   </cxx-example>
   </p>
@@ -46,6 +46,9 @@ struct S { } requires C&lt;S&gt;;             // Error: cannot constrain a class
     <cxx-section id="dcl.fct" number="5">
       <h1>Functions</h1>
 
+      <!-- NOTE: Removal pending discussion of constrained-parameters.
+           My feeling is that this will go. -->
+      <!-- 
       Refactor the <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
       grammar in <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>/3 to separate
       the declaration of a parameter from its default argument.
@@ -81,12 +84,92 @@ struct S { } requires C&lt;S&gt;;             // Error: cannot constrain a class
           <bnf-alt>basic-parameter-declaration <bnf-terminal>=</bnf-terminal> initializer-clause</bnf-alt>
           </ins>
       </bnf-grammar>
+      -->
+      
+    
+      <!-- TODO: Add to /15 a rule that disambiguates the ... (without
+      a preceeding ',' for constrained-type-specifiers). If it's needed.
 
-      <!-- TODO: In p4, I might need to add text to disambiguate ... with
-           constrained type specifiers. -->
+      The "or contains auto" will need to be updated. -->
 
       Add the following paragraphs after
       <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>/14.
+
+      <!-- TODO: Extend this to support constrained-type-specifiers -->
+      
+      <p number="15">
+      An abbreviated function (<cxx-ref to="dcl.spec.auto"></cxx-ref>)
+      (call it <code>F</code>) is equivalent to a 
+      function template (<cxx-ref to="temp.fct"></cxx-ref>) (call it 
+      <code>T</code>) whose 
+      <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
+      includes one invented type <cxx-grammarterm>template-parameter</cxx-grammarterm>
+      for each occurrence of <code>auto</code> in the 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> of
+      <code>F</code>, in order of appearance. 
+
+<!--
+      The invented type <cxx-grammarterm>template-parameter</cxx-grammarterm> is 
+      a parameter pack if the corresponding 
+      <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
+      declares a function parameter pack. 
+ -->
+
+      The function parameters of <code>T</code> are derived from the
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> of
+      <code>F</code> by replacing each occurrence of <code>auto</code> with the 
+      name of the corresponding invented 
+      <cxx-grammarterm>template-parameter</cxx-grammarterm>.
+      
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt; class Vec { };
+template&lt;typename T, typename U&gt; class Pair { };
+
+void f1(auto);
+void f2(auto&amp;, auto);
+auto f3(void (*)(auto));
+void f4(auto (*)(int));
+void f5(Vec&lt;auto&gt;&amp;);
+void f6(Pair&lt;const auto&amp;, auto*&gt;);
+
+template&lt;typename T&gt; void g1(T);           // <i>OK: Equivalent to</i> f1(auto)
+template&lt;typename T1, typename T2&gt; 
+  void g2(T1&amp;, T2);                        // <i>OK: Equivalent to</i> f2(auto&amp;, auto)
+template&lt;typename T&gt; void g3(void (*)(T)); // <i>OK: Equivalent to</i> f3(void (*)(auto))
+template&lt;typenaem T&gt; void g4(T (*)(int));  // <i>OK: Equivalent to</i> f4(auto (*)(int))
+template&lt;typename T&gt; void g5(Vec&lt;T&gt;&amp;);     // <i>OK: Equivalent to</i> f5(Vec&lt;auto&gt;&amp;)
+template&lt;typename T1, typename T2&gt; 
+  void g6(Pair&lt;const T1&amp;, T2*&gt;);           // <i>OK: Equivalent to</i> f6(Pair&lt;const auto&amp;, auto*&gt;)
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+      <!-- TODO: Variadics are broken. We're allowed to use multiple autos
+           per parameter type. If the parameter declares a function
+           parameter pack, the there must be at most one auto specifiers.
+
+           void f(vector<auto>... Ts); // Ok?
+       -->
+
+
+      <!-- TODO: Move into temp.fct? -->
+      <p> A function template can be an abbreviated function. The
+      invented <cxx-grammarterm>template-parameter</cxx-grammarterm>s are
+      added to the <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
+      after the explicitly declared <cxx-grammarterm>template-parameter</cxx-grammarterm>s.
+
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T, int N&gt; class Array { };
+
+template&lt;int N&gt; void f(Array&lt;auto, N&gt;*);
+template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: Equivalent to f(Array&lt;auto, N&gt;*)
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+      <!--
 
       <p>A <defn>generic function</defn> is a function template whose
       <cxx-grammarterm>template-parameter-list</cxx-grammarterm> has a 
@@ -94,12 +177,6 @@ struct S { } requires C&lt;S&gt;;             // Error: cannot constrain a class
       <cxx-grammarterm>type-specifier</cxx-grammarterm> is either 
       <code>auto</code> or a 
       <cxx-grammarterm>constrained-type-name</cxx-grammarterm>.
-      <cxx-example class="inline">
-      <cxx-codeblock>
-auto f(auto x);  // Ok
-void sort(C& c); // Ok (assuming C names a concept)
-      </cxx-codeblock>
-      </cxx-example>
       </p>
 
       <p>The declaration of a generic function has a 
@@ -156,17 +233,8 @@ template&lt;C T&gt;
       </cxx-codeblock>
       </cxx-example>
       </p>
+      -->
 
-      <p>If an entity is declared by an abbreviated template declaration, 
-      then all its declarations must have the same form.</p>
-
-
-      <!-- TODO: Add to /15 a rule that disambiguates the ... (without
-      a preceeding ',' for constrained-type-specifiers). If it's needed.
-
-      The "or contains auto" will need to be updated. -->
-
-    
     </cxx-section> <!-- dcl.fct -->
   </cxx-section> <!-- dcl.meaning -->
 
