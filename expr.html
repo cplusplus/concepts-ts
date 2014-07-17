@@ -59,54 +59,6 @@
       abbreviated function (<cxx-ref to="dcl.fct"></cxx-ref>).
       </cxx-note>
       </ins>
-      </p>
-<!-- 
-      <p>The closure type for a non-generic
-      <cxx-grammarterm>lambda-expression</cxx-grammarterm> has a public
-      <code>inline</code> function call operator 
-      (<cxx-ref in="cxx" to="over.over"></cxx-ref>) whose parameters 
-      and return type 
-      are described by the <cxx-grammarterm>lambda-expression</cxx-grammarterm>'s 
-      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> and 
-      <cxx-grammarterm>trailing-return-type</cxx-grammarterm>
-      respectively. 
-      
-      For a generic lambda, the closure type has a public inline function call 
-      operator member template (<cxx-ref in="cxx" to="temp.mem"></cxx-ref>) 
-      whose <cxx-grammarterm>template-parameter-list</cxx-grammarterm> 
-      consists of one invented type 
-      <cxx-grammarterm>template-parameter</cxx-grammarterm> for each 
-      occurrence of <code>auto</code> <ins>or each unique occurrence of a 
-      <cxx-grammarterm>constrained-type-name</cxx-grammarterm></ins>
-      in the lambda's 
-      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, 
-      in order of appearance. 
-
-      The invented type <cxx-grammarterm>template-parameter</cxx-grammarterm> 
-      is a parameter pack if the corresponding 
-      <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
-      declares a function parameter pack 
-      (<cxx-ref in="cxx" to="dcl.fct"></cxx-ref>). 
-      
-      If the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of the 
-      corresponding <cxx-grammarterm>parameter-declaration</cxx-grammarterm> 
-      includes a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>,
-      the invented type parameter is a 
-      <cxx-grammarterm>constrained-parameter</cxx-grammarterm>, whose
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> matches
-      that of the <cxx-grammarterm>parameter-declaration</cxx-grammarterm>.
-      (<cxx-ref to="temp.param"></cxx-ref>).</ins>
-      
-      The return type and function parameters of the function call operator 
-      template are derived from the 
-      <cxx-grammarterm>lambda-expression</cxx-grammarterm>'s 
-      <cxx-grammarterm>trailing-return-type</cxx-grammarterm> and 
-      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
-      by replacing each occurrence of <code>auto</code> in the 
-      <cxx-grammarterm>decl-specifiers</cxx-grammarterm> of the
-      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> with the 
-      name of the corresponding invented 
-      <cxx-grammarterm>template-parameter</cxx-grammarterm>.  -->
 
       Add the following example after those in 
       <cxx-ref in="cxx" to="expr.prim.lambda"></cxx-ref>/5.

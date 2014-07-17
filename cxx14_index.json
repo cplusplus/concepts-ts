@@ -3,9 +3,10 @@
   
   "lex.key"           : "2.12",
 
-  "basic.def.odr"     : "3.2",
-  "basic.fundamental" : "3.9.1",
-  "basic.compound"    : "3.9.2",
+  "basic.def.odr"           : "3.2",
+  "basic.scope.namespace"   : "3.3.6",
+  "basic.fundamental"       : "3.9.1",
+  "basic.compound"          : "3.9.2",
 
   "conv"              : "4",
   
@@ -25,6 +26,10 @@
 
   "expr.const"          : "5.19",
 
+  "stmt.block"        : "6.3",
+  "stmt.for"          : "6.5.3",
+
+
   "dcl.dcl"           : "7",
   "dcl.spec"          : "7.1",
   "dcl.constexpr"     : "7.1.5",
@@ -41,6 +46,7 @@
   "dcl.fct"               : "8.3.5",
   "dcl.fct.def"           : "8.4",
   "dcl.fct.def.general"   : "8.4.1",
+  "dcl.init.list"         : "8.5.4",
 
   "class"                 : "9",
   "class.name"            : "9.1",
