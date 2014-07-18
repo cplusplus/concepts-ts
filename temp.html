@@ -85,7 +85,7 @@ Eq{A, B} void f2(A, B); // <i>OK:</i> Eq{A, B} <i>designates #2</i>
 template&lt;typename T&gt; concept bool C() { return true; }
 template&lt;int N&gt; concept bool C() { return true; }
 
-C{X} void f(); // <i>error: resolution of the concept</i> C <i>is ambiguous</i>
+C{X} void f(); // <i>error: resolution of </i> C{X} <i>is ambiguous</i>
   </cxx-codeblock>
   </cxx-example>
   </p>

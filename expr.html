@@ -59,6 +59,7 @@
       abbreviated function (<cxx-ref to="dcl.fct"></cxx-ref>).
       </cxx-note>
       </ins>
+      </p>
 
       Add the following example after those in 
       <cxx-ref in="cxx" to="expr.prim.lambda"></cxx-ref>/5.
@@ -70,7 +71,7 @@
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = true;
 
-auto gl = [](C& a, C* b) { a = *b } // OK: denotes a generic lambda
+auto gl = [](C& a, C* b) { a = *b } // <i>OK: denotes a generic lambda</i>
 
 struct Fun {
     auto operator()(C& a, C* b) const { a = *b; }
@@ -81,29 +82,9 @@ struct Fun {
       signifying that the lambda is generic. The generic lambda, <code>gl</code>, 
       and the function object, <code>fun</code>, have equivalent behavior when 
       called with the same arguments.
-      <cxx-codeblock>
-      </cxx-codeblock>
       </cxx-example>
       </ins>
       </p>
-
-
-      <!-- TODO: This moves into dcl.fct -->
-      <!--
-      <p> All placeholder types introduced using the same 
-      <cxx-grammarterm>concept-name</cxx-grammarterm> have the same invented
-      template parameter.
-      <cxx-example class="inline">
-      <cxx-codeblock>
-auto f = [](C a, C b) { };
-f(0, 0);   // Ok
-f(0, 'a'); // Error: template argument deduction failure
-      </cxx-codeblock>
-      The second call to <code>f</code> results in a compiler error because
-      the types of the deduced arguments cannot be unified.
-      </cxx-example>
-      </p>
-      -->
 
     </cxx-section> <!-- expr.prim.lambda -->
 
@@ -366,6 +347,12 @@ requires () {
     </cxx-section> <!-- expr.re.nested -->
 
 
+
+    <!-- TODO: {e}->cv void is ill-formed.
+
+         For two reasons. First, we can't actually form an invented
+         function template that takes cv void as an argumnet (oops).
+         Second, even if we could, no expression converts to void. -->
 
     <cxx-section id="expr.req.compound">
       <h1>Compound requirements</h1>
