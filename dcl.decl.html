@@ -34,10 +34,8 @@ template<typename T> concept bool C = true;
 
 void f1(auto x) requires C&lt;decltype(x)&gt;; // <i>OK</i>
 void f2(int x) requires C&lt;int&gt;;          // <i>OK</i>
-auto n requires C&lt;decltype(n)&gt; = 'a';    // <i>error: constrained variable declaration</i>
-  </cxx-codeblock>
+auto n requires C&lt;decltype(n)&gt; = 'a';    // <i>error: constrained variable declaration</i></cxx-codeblock>
   </cxx-example>
-
   </p>
 
   <p class="quoted"> 
