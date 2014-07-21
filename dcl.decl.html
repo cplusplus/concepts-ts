@@ -2,43 +2,49 @@
 <cxx-clause id="dcl.decl" number="8">
   <h1>Declarators</h1>
 
-  <p>Modify <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>/1 as follows:</p>
+  Modify <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>/1 as follows:
 
-  <p>A declarator declares a single variable, function, or type, within a 
+  <p class="quoted">
+  A declarator declares a single variable, function, or type within a 
   declaration. The <cxx-grammarterm>init-declarator-list</cxx-grammarterm>
   appearing in a declaration is a comma-separated sequence of declarators, 
-  each of which can 
+  each of which may
   <del>have an initializer</del>
   <ins>have constraints, an initializer, or both</ins>.
   <bnf-grammar>
     <bnf-rule>init-declarator</bnf-rule>
       <bnf-alt>
         declarator
-        <bnf-opt>requires-clause</bnf-opt>
+        <ins><bnf-opt>requires-clause</bnf-opt></ins>
         <bnf-opt>initializer</bnf-opt>
       </bnf-alt>
   </bnf-grammar>
   </p>
 
-  Insert the following paragraph after 
-  <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>/1.
+  Insert the following paragraphs.
 
-  <p> A <cxx-grammarterm>requires-clause</cxx-grammarterm> 
-  (<cxx-ref to="temp"></cxx-ref>) shall only be present if the
-  <cxx-grammarterm>declarator</cxx-grammarterm> declares a generic
-  function (<cxx-ref to="dcl.fct"></cxx-ref>).
+  <p class="quoted">
+  A <cxx-grammarterm>requires-clause</cxx-grammarterm> in an
+  <cxx-grammarterm>init-declarator</cxx-grammarterm> shall only appear
+  with a function declarator (<cxx-ref to="dcl.fct"></cxx-ref>).
+
   <cxx-example class="inline">
   <cxx-codeblock>
 template<typename T> concept bool C = true;
 
-void f1(auto x) requires C&lt;decltype(x)&gt;;// <i>OK</i>
-void f2(int x) requires C&lt;int&gt;;         // <i>OK</i>
-auto n requires C&lt;decltype(n)&gt; = g();   // <i>error: cannot constrain variable declaration</i>
-struct S { } requires C&lt;S&gt;;             // <i>error: cannot constrain a class definition</i>
+void f1(auto x) requires C&lt;decltype(x)&gt;; // <i>OK</i>
+void f2(int x) requires C&lt;int&gt;;          // <i>OK</i>
+auto n requires C&lt;decltype(n)&gt; = 'a';    // <i>error: constrained variable declaration</i>
   </cxx-codeblock>
   </cxx-example>
+
   </p>
 
+  <p class="quoted"> 
+  If present, the <cxx-grammarterm>requires-clause</cxx-grammarterm> associates its
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the declared
+  function (<cxx-ref to="temp"></cxx-ref>).
+  </p>
 
   <cxx-section id="dcl.meaning" number="3">
     <h1>Meaning of declarators</h1>
@@ -55,13 +61,9 @@ struct S { } requires C&lt;S&gt;;             // <i>error: cannot constrain a cl
       Add the following paragraphs after
       <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>/14.
 
-      <!-- TODO: Extend this to support constrained-type-specifiers -->
-      
       <p number="15">
       An abbreviated function (<cxx-ref to="dcl.spec.auto"></cxx-ref>)
-      (call it <code>F</code>) is equivalent to a 
-      function template (<cxx-ref to="temp.fct"></cxx-ref>) (call it 
-      <code>T</code>) whose 
+      is equivalent a function template (<cxx-ref to="temp.fct"></cxx-ref>) whose
       <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
       includes one invented type <cxx-grammarterm>template-parameter</cxx-grammarterm>
       for each occurrence of a placeholder type, designated by either 
@@ -69,47 +71,68 @@ struct S { } requires C&lt;S&gt;;             // <i>error: cannot constrain a cl
       (<cxx-ref to="dcl.spec.auto">"</cxx-ref>)
       or by a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
       (<cxx-ref to="dcl.spec.constr"></cxx-ref>),
-      in the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> of
-      <code>F</code>, in order of appearance. 
+      in the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, 
+      in order of appearance. 
 
       The invented type <cxx-grammarterm>template-parameter</cxx-grammarterm> is 
       a parameter pack if the corresponding 
       <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
       declares a function parameter pack (<cxx-ref to="dcl.fct"></cxx-ref>)
       and the type of the parameter contains only one placeholder type.
+      If the type of the function parameter that declares a function
+      parameter pack contains more than one placeholder type, the program
+      is ill-formed.
 
-      The function parameters of <code>T</code> are derived from the
-      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> of
-      <code>F</code> by replacing each occurrence of a placeholder type 
-      with the  name of the corresponding invented type
-      <cxx-grammarterm>template-parameter</cxx-grammarterm>.
-      
+      The adjusted function parameters of an abbreviated function are derived 
+      from the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> 
+      by replacing each occurrence of a placeholder type with the  name of the 
+      corresponding invented type <cxx-grammarterm>template-parameter</cxx-grammarterm>.
+
       <!-- TODO: Write examples with concepts -->
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; class Vec { };
 template&lt;typename T, typename U&gt; class Pair { };
 
-void f1(auto);
-void f2(auto&amp;, auto);
-auto f3(void (*)(auto));
-void f4(auto (*)(int));
-void f5(Vec&lt;auto&gt;&amp;);
-void f6(Pair&lt;auto&amp;, auto*&gt;);
-void f7(auto&amp;&amp;...);
-void f8(Vec&lt;auto&gt;...);
+void f1(const auto&amp;, auto);
+void f2(Vec&lt;auto*&gt;...);
+void f3(auto (auto::*)(auto));
 
-template&lt;typename T&gt; void f1(T);                        // <i>equivalent to</i> f1(auto)
-template&lt;typename T, typename U&gt; void f2(T&amp;, U);        // <i>equivalent to</i> f2(auto&amp;, auto)
-template&lt;typename T&gt; void f3(void (*)(T));              // <i>equivalent to</i> f3(void (*)(auto))
-template&lt;typename T&gt; void f4(T (*)(int));               // <i>equivalent to</i> f4(auto (*)(int))
-template&lt;typename T&gt; void f5(Vec&lt;T&gt;&amp;);                  // <i>equivalent to</i> f5(Vec&lt;auto&gt;&amp;)
-template&lt;typename T, typename U&gt; void f6(Pair&lt;T&amp;, U*&gt;); // <i>equivalent to</i> f6(Pair&lt;auto&amp;, auto*&gt;)
-template&lt;typename... Args&gt; void f7(Args&amp;&amp;...);          // <i>equivalent to</i> f7(auto&amp;&amp;...)
-template&lt;typename... Args&gt; void f8(Vec&lt;Args&gt;...);       // <i>equivalent to</i> f8(Vec&lt;auto&gt;...)
+template&lt;typename T, typename U&gt; 
+  void f1(const T&, U);       // <i>equivalent to</i> f1(const auto&amp;, auto)
+template&lt;typename... T&gt; 
+  void f2(Vec&lt;T*>...);       // <i>equivalent to</i> f2(Vec&lt;auto*&gt;...)
+template&lt;typename T, typename U, typename V&gt;
+  void f3(T (U::*)(V));      // <i>equivalent to</i> f3(auto (auto::*)(auto))
+
+void foo(Pair&lt;auto, auto&gt;...) // <i>error: multiple placeholder types in a parameter pack</i>
+      </cxx-codeblock>
+      </cxx-example>
+  
+      <cxx-example>
+      An abbreviated function whose parameter types include
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s can
+      be equivalently declared using 
+      <cxx-grammarterm>constrained-parameter</cxx-grammarterm>s
+      (<cxx-ref to="temp"></cxx-ref>).
+      <cxx-codeblock>
+template&lt;typename T&gt; concept bool C1 = true;
+template&lt;typename T&gt; concept bool C2 = true;
+template&lt;typename T, typename U&gt; concept bool D = true;
+
+void g1(const C1*, C2&amp;);
+void g2(Vec&lt;C1&gt;&amp;);
+void g3(C1&amp;...);
+void g4(Vec&lt;D&lt;int&gt;&gt;);
+
+template&lt;C1 T, C2 U&gt; void g1(const T*, U&amp;); // <i>equivalent to</i> g1(const C1*, C2&amp;)
+template&lt;C1 T&gt; void g2(Vec&lt;T&gt;&amp;);            // <i>equivalent to</i> g2(Vec&lt;C1&gt;&amp;)
+template&lt;C1... Ts&gt; void g3(Ts...&amp;);         // <i>equivalent to</i> g3(C1&amp;...)
+template&lt;D&lt;int&gt; T&gt; void g4(Vec&lt;T&gt;);         // <i>equivalent to</i> g4(Vec&lt;D&lt;int&gt;>)
       </cxx-codeblock>
       </cxx-example>
       </p>
+
 
       <!-- TODO: This moves into dcl.fct -->
       <p> All placeholder types introduced using the same 
@@ -159,7 +182,6 @@ void f5(Tuple&lt;C&amp;, C*, N::C&gt; p);
       </cxx-example>
       </p>
 
-
       <!-- TODO: Move into temp.fct? -->
       <p> A function template can be an abbreviated function. The
       invented <cxx-grammarterm>template-parameter</cxx-grammarterm>s are
@@ -176,71 +198,6 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: Equivalent 
       </cxx-example>
       </p>
 
-      <!--
-
-      <p>A <defn>generic function</defn> is a function template whose
-      <cxx-grammarterm>template-parameter-list</cxx-grammarterm> has a 
-      <cxx-grammarterm>parameter-declaration</cxx-grammarterm> whose 
-      <cxx-grammarterm>type-specifier</cxx-grammarterm> is either 
-      <code>auto</code> or a 
-      <cxx-grammarterm>constrained-type-name</cxx-grammarterm>.
-      </p>
-
-      <p>The declaration of a generic function has a 
-      <cxx-grammarterm>template-parameter-list</cxx-grammarterm> that 
-      consists of one invented type 
-      <cxx-grammarterm>template-parameter</cxx-grammarterm> for each
-      occurrence of <code>auto</code> or each unique occurrence of a 
-      <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
-      in the function's
-      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, 
-      in order of appearance. 
-      
-      The invented type of 
-      <cxx-grammarterm>template-parameter</cxx-grammarterm> is a parameter 
-      pack if the corresponding 
-      <cxx-grammarterm>parameter-declaration</cxx-grammarterm> declares 
-      a function parameter pack (<cxx-ref in="cxx" to="dcl.fct"></cxx-ref>).
-      
-      If the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of the 
-      corresponding <cxx-grammarterm>parameter-declaration</cxx-grammarterm> 
-      includes a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>,
-      the invented type parameter is a 
-      <cxx-grammarterm>constrained-parameter</cxx-grammarterm>, whose
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> matches
-      that of the <cxx-grammarterm>parameter-declaration</cxx-grammarterm>.
-      (<cxx-ref to="temp.param"></cxx-ref>).</ins>
-
-      <cxx-example class="inline">
-      The following generic function declarations are equivalent:
-      <cxx-codeblock>
-template&lt;typenaem T&gt;
-  conxtexpr bool C() { ... }
-
-auto f(auto x, const C&amp; y);
-
-template&lt;typename T1, C T2&gt;
-  auto f(T1 x, const T2&amp; y);
-      </cxx-codeblock>
-      The type of <code>y</code> is a type parameter constrained by
-      <code>C</code>.
-      </cxx-example>
-      </p>
-
-      <p>All placeholder types introduced using the same 
-      <cxx-grammarterm>constrained-type-name</cxx-grammarterm> have the 
-      same invented template parameter.
-      <cxx-example class="inline">
-      The following generic function declarations are equivalent:
-      <cxx-codeblock>
-auto g(C a, C* b);
-
-template&lt;C T&gt;
-  auto g(T a, T* b);
-      </cxx-codeblock>
-      </cxx-example>
-      </p>
-      -->
 
     </cxx-section> <!-- dcl.fct -->
   </cxx-section> <!-- dcl.meaning -->
@@ -251,10 +208,11 @@ template&lt;C T&gt;
     <cxx-section id="dcl.fct.def.general">
       <h1>In general</h1>
     
-      <p>Modify the <cxx-grammarterm>function-definition</cxx-grammarterm>
+      Modify the <cxx-grammarterm>function-definition</cxx-grammarterm>
       syntax in <cxx-ref in="cxx" to="dcl.fct.def.general">/1</cxx-ref>
-      to include a <cxx-grammarterm>requires-clause</cxx-grammarterm>.</p>
+      to include a <cxx-grammarterm>requires-clause</cxx-grammarterm>.
 
+      <p class="quoted">
       <bnf-grammar>
         <bnf-rule>function-definition</bnf-rule>
           <bnf-alt>
@@ -266,47 +224,16 @@ template&lt;C T&gt;
             function-body
           </bnf-alt>
       </bnf-grammar>
-
-      <p>Add the following paragraph at the end of
-      <cxx-ref in="cxx" to="dcl.fct.def.general">/1</cxx-ref>.</p>
-
-      <p>A <cxx-grammarterm>requires-clause</cxx-grammarterm> 
-      (<cxx-ref to="temp"></cxx-ref>) shall only be present if the
-      <cxx-grammarterm>declarator</cxx-grammarterm> declares a generic
-      function (<cxx-ref to="dcl.fct"></cxx-ref>) or a member function
-      definition (<cxx-ref to="class.mem"></cxx-ref>).
-      <cxx-note>
-      Constraints for a function template or member function template are
-      written after the <cxx-grammarterm>template-parameter-list</cxx-grammarterm>.
-      </cxx-note>
-      <cxx-example>
-      <cxx-codeblock>
-template&lt;typename T&gt; concept bool C1 = ...;
-template&lt;typename T&gt; concept bool C2 = ...;
-template&lt;typename T, typename U&gt; concept bool D = ...;
-
-void f(C1 a, C2 b) requires D&lt;decltype(a), decltype(b)&gt; { } // Ok
-
-template&lt;typename T&gt;
-  void f(const T& x) requires C&lt;T&gt;; // Error: f is declared as a template
-
-template&lt;typename T&gt;
-  struct S1 {
-    S1(T&) requires C1&lt;T&gt; { }   // Defines a constrained constructor
-    void f() requires C2&lt;T&gt; { } // Defines a constrained member function
-  };
-
-struct S2 {
-  void g(auto x) requires D&lt;decltype(x)&gt; { } // Ok
-};
-      </cxx-codeblock>
-      </cxx-example>
       </p>
 
-      <p>A <cxx-grammarterm>function-definition</cxx-grammarterm>
-      shall not declare a destructor (<cxx-ref in="cxx" to="class.dtor"></cxx-ref>)
-      with a <cxx-grammarterm>requires-clause</cxx-grammarterm>.
+      Add the following paragraph.
+
+      <p number="9" class="quoted">
+      <ins> If present, the <cxx-grammarterm>requires-clause</cxx-grammarterm>
+      associates its <cxx-grammarterm>constraint-expression</cxx-grammarterm>
+      with the function (<cxx-ref to="temp"></cxx-ref>).
+      </p>
+
     </cxx-section> <!-- dcl.fct.def.general -->
   </cxx-section> <!-- dcl.fct.def -->
-
 </cxx-clause> <!-- dcl.decl -->

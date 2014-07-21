@@ -382,8 +382,7 @@ template&lt;typename U1, typename U2&gt; void g(Pair&lt;const U1&amp;, const U2*
         <cxx-grammarterm>type-specifier</cxx-grammarterm>.
         </p>
 
-        <!-- TODO: Consider adding this to the list of non-deduced
-             contexts. -->
+        <!-- TODO: Consider adding this to the list of non-deduced contexts. -->
         <!--
         <p>
         The <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
@@ -393,11 +392,9 @@ template&lt;typename U1, typename U2&gt; void g(Pair&lt;const U1&amp;, const U2*
         </p>
         -->
 
-        <p>
-        If <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
-        appears in the type of a 
-        <cxx-grammarterm>parameter-declaration</cxx-grammarterm> of a
-        <cxx-grammarterm>lambda-expression</cxx-grammarterm>, the lambda
+        <p> If <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        appears in the type of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> 
+        of a <cxx-grammarterm>lambda-expression</cxx-grammarterm>, the lambda
         is a generic lambda (<cxx-ref to="expr.prim.lambda"></cxx-ref>).
 
         Similarly, if a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
@@ -450,13 +447,16 @@ template&lt;typename T&gt; concept bool Iter() {
         of concept definitions (<cxx-ref to="dcl.spec.concept"></cxx-ref>)
         called the <dfn>candidate concept set</dfn>.
 
-        The first declared <cxx-grammarterm>template-parameter</cxx-grammarterm> 
-        of a concept definition is called its <dfn>prototype parameter</dfn>.
 
-        Only concept definitions whose prototype parameter is a template
-        <cxx-grammarterm>type-parameter</cxx-grammarterm> are in the
-        candidate concept set referred to by a 
-        <cxx-grammarterm>concept-name</cxx-grammarterm>.
+        Only type concepts are included in the candidate concept set of
+        <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
+        
+        <cxx-note>
+        The candidate concept set of a 
+        <cxx-grammarterm>concept-name</cxx-grammarterm> in a
+        <cxx-grammarterm>constrained-parameter</cxx-grammarterm> includes
+        non-type concepts (<cxx-ref to="temp.param"></cxx-ref>).
+        </cxx-note>
 
         If the candidate concept set is empty, the program is ill-formed.
 
@@ -649,7 +649,7 @@ C&lt;T1&gt; &amp;&amp; D&lt;T2, int&gt;
     <cxx-section id="dcl.spec.concept">
       <h1><code>concept</code> specifier</h1>
 
-      <p>The <code>concept</code> specifier shall be applied to only the 
+      <p> The <code>concept</code> specifier shall be applied only to the 
       definition of a function template or variable template. 
       A function template definition having the <code>concept</code>
       specifier is called a <dfn>function concept</dfn>. A variable 
@@ -658,14 +658,14 @@ C&lt;T1&gt; &amp;&amp; D&lt;T2, int&gt;
       to either a function concept and its definition or 
       a variable concept and its initializer.</p>
 
-      <p>A <dfn>type concept</dfn> is a concept whose first template
-      parameter is a <cxx-grammarterm>type-parameter</cxx-grammarterm>, but 
-      not a template template parameter. 
+      <p> The first declared template parameter of a concept definition is its
+      <dfn>prototype parameter</dfn>. 
 
-      Otherwise, the concept is a <dfn>non-type concept</dfn>.
+      A <dfn>type concept</dfn> is a concept whose prototype parameter is a type
+      <cxx-grammarterm>template-parameter</cxx-grammarterm>. 
 
-      A <dfn>variadic concept</dfn> is a concept whose first template
-      parameter is a template parameter pack.
+      A <dfn>variadic concept</dfn> is a concept whose prototype parameter
+      is a template parameter pack.
       </p>
 
       <p>Every concept definition is also a <code>constexpr</code> declaration
@@ -675,33 +675,28 @@ C&lt;T1&gt; &amp;&amp; D&lt;T2, int&gt;
       <p>A function concept has the following restrictions:
       <ul>
         <li> The template must be unconstrained.</li>
-        <li> The result type must be <code>bool</code>. </li>
+        <li> The return type must be <code>bool</code>. </li>
         <li> The declaration shall have a 
         <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
         equivalent to <code>()</code>. </li>
-        <li> The declaration shall be a definition. </li>
         <li> The function shall not be recursive. </li>
         <li> The function body shall consist of a single <code>return</code> 
-        statement whose expression shall be a
+        statement whose <cxx-grammarterm>expression</cxx-grammarterm> shall be a
         <cxx-grammarterm>constraint-expression</cxx-grammarterm>. </li>
       </ul>
       <cxx-example class="inline">
       <cxx-codeblock>
-template&lt;typename T&gt;
-  concept bool C1() { return true; } // OK
-
-template&lt;typename T&gt;
-  concept int C2() { return 0; }  // error: must return bool
-
-template&lt;typename T&gt;
-  concept bool C3(T) { return true; } // error: must have no parameters
-
-concept bool p = 0; // error: not a template
+template&lt;typename T&gt; 
+  concept bool C1() { return true; }  // <i>OK</i>
+template&lt;typename T&gt; 
+  concept int C2() { return 0; }      // <i>error: return type is not</i> bool
+template&lt;typename T&gt; 
+  concept bool C3(T) { return true; } // <i>error: must have no parameters</i>
       </cxx-codeblock>
       </cxx-example>
       <!-- </p> -->
 
-      <p>A variable template has the following restrictions:
+      <p>A variable concept has the following restrictions:
       <ul>
         <li> The template must be unconstrained. </li>
         <li> The declared type must be <code>bool</code>. </li>
@@ -711,27 +706,29 @@ concept bool p = 0; // error: not a template
       </ul>
       <cxx-example class="inline">
       <cxx-codeblock>
-template&lt;typename T&gt;
-  concept bool D1 = has_x&lt;T&gt;::value; // OK
-
-template&lt;typename T&gt;
-  concept bool D2 = 3 + 4; // Error: initializer is not a constraint
-
-template&lt;Integral T&gt;
-  concept bool D3 = has_x&lt;T&gt;::value; // Error: constrained concept definition
+template&lt;typename T&gt; 
+  concept bool V1 = true;  // OK
+template&lt;typename T&gt; 
+  concept bool V2 = 3 + 4; // <i>error: initializer is not a constraint-expression</i>
+template&lt;Integral T&gt; 
+  concept bool V3 = true;  // <i>error: constrained template</i>
+concept bool V4 = 0;       // <i>error: not a template</i>
       </cxx-codeblock>
       </cxx-example>
       <!-- </p> -->
 
-      <p>A program that declares an explicit or partial specialization of a concept
+      <p>A program that declares an explicit instantiation, an explicit 
+      specialization, or a partial specialization of a concept
       definition is ill-formed.
       <cxx-example class="inline">
       <cxx-codeblock>
-template&lt;typename T&gt;
-  concept bool C = is_iterator&lt;T&gt;::value;
+template&lt;typename T&gt; concept bool C = false;
 
-template&lt;typename T&gt;
-  concept bool C&lt;T*&gt; = true; // Error: partial specialization of a concept
+template concept bool C&lt;char&gt;; // <i>error: explicit instantiation of a concept</i>
+template&lt;&gt; 
+  concept bool C&lt;int&gt; = true;  // <i>error: explicit specialization of a concept</i>
+template&lt;typename T&gt; 
+  concept bool C&lt;T*&gt; = true;   // <i>error: partial specialization of a concept</i>
       </cxx-codeblock>
       </cxx-example>
       </p>
