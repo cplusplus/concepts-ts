@@ -76,6 +76,36 @@
         Add the following paragraph after 
         <cxx-ref in="cxx" to="dcl.spec.auto"></cxx-ref>/1.
 
+        <p>
+        When a <cxx-grammarterm>simple-type-specifier</cxx-grammarterm> is
+        a <cxx-grammarterm>simple-template-id</cxx-grammarterm>, its
+        <cxx-grammarterm>template-argument-list</cxx-grammarterm> may contain
+        multiple occurrences of the the <code>auto</code> 
+        <cxx-grammarterm>type-specifier</cxx-grammarterm>.
+
+        A placeholder type shall not appear in a non-deduced context
+        (<cxx-ref in="cxx" to="temp.deduct.type"></cxx-ref>).
+
+        <cxx-example class="inline">
+        <cxx-codeblock>
+namespace N {
+  template&lt;typename T&gt; struct Wrap;
+  template&lt;typename T&gt; Wrap<T> make_wrap(T);
+}
+template&lt;typename T, typename U&gt; struct Pair;
+template&lt;typename T, typename U&gt; Pair&lt;T, U&gt; make_pair(T, U);
+template&lt;int N&gt; struct Size { };
+Size<0> s;
+
+N::Wrap&lt;auto&gt; a = N::make_wrap(0.0);    // OK
+Pair&lt;auto, auto&gt; p = make_pair(0, 'a'); // OK
+auto::Wrap&lt;int&gt; x = N::make_wrap(0);    // <i>error:</i> auto <i>used in a non-deduced context</i>
+Size&lt;sizeof(auto)&gt; y = s;               // <i>error:</i> auto <i>used in a non-deduced context</i>
+        </cxx-codeblock>
+        </cxx-example>
+        </p>
+
+        <!--
         <p class="quoted">
         <ins>
         The <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
@@ -124,6 +154,7 @@ auto (<i>type</i>::*)()
         </cxx-note>
         </ins>
         </p>
+        -->
 
         Modify <cxx-ref in="cxx" to="dcl.spec.auto"></cxx-ref>/2 to read:
 
@@ -132,9 +163,16 @@ auto (<i>type</i>::*)()
         declarator in the 
         <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm>, 
         <cxx-grammarterm>type-specifier-seq</cxx-grammarterm>,
-        <cxx-grammarterm>conversion-function-id</cxx-grammarterm>, or 
-        <cxx-grammarterm>trailing-return-type</cxx-grammarterm>, in any 
-        context where such a declarator is valid. 
+        <cxx-grammarterm>conversion-function-id</cxx-grammarterm>, or
+        <cxx-grammarterm>trailing-return-type</cxx-grammarterm>,
+        in any context where such a declarator is valid. 
+
+        <ins>
+        The <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
+        can also appear in the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm>
+        of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> of
+        function declarator.
+        </ins>
 
         If the function declarator includes a 
         <cxx-grammarterm>trailing-return-type</cxx-grammarterm>
@@ -152,9 +190,10 @@ auto (<i>type</i>::*)()
         If the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
         appears
         <del>as one of the <cxx-grammarterm>decl-specifier</cxx-grammarterm>s
-        in the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of</del>
-        <ins>in the type of</ins>
-        a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> of a 
+        in the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of
+        a <cxx-grammarterm>parameter-declaration</cxx-grammarterm></del>
+        <ins>in the parameter types</ins> 
+        of a
         <cxx-grammarterm>lambda-expression</cxx-grammarterm>, the lambda is
         a <dfn>generic lambda</dfn>.
 
@@ -166,8 +205,8 @@ auto glambda = [](int i, auto a) { return i; }; // <i>OK: a generic lambda</i>
 
         <ins>
         Similarly, if the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
-        appears in the type of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
-        of a function declaration, the function is an <dfn>abbreviated function</dfn> 
+        appears in the parameter types of a function declarator, that is an 
+        <dfn>abbreviated function</dfn> 
         (<cxx-ref to="dcl.fct"></cxx-ref>)
 
         <cxx-example class="inline">
@@ -309,7 +348,7 @@ auto x2 = { 1, 2.0 };               // <i>error: cannot deduce element type</i> 
 auto&amp; x3 = 12;                      // <i>OK:</i> decltype(x3) <i>is</i> const int&amp;
 const auto* p = &x3;                // <i>OK:</i> decltype(p) <i>is</i> const int*
 Vec&lt;auto&gt; v1 = make_vec({1, 2, 3}); // <i>OK:</i> decltpye(v1) <i>is</i> Vec&lt;int&gt;
-Vec&lt;auto&gt; v2 = {1, 2, 3});          // <i>error: cannot deduce element type</i></ins>
+Vec&lt;auto&gt; v2 = {1, 2, 3};           // <i>error: cannot deduce element type</i></ins>
         </cxx-codeblock>
         </cxx-example>
 
@@ -343,21 +382,14 @@ template&lt;typename U1, typename U2&gt; void g(Pair&lt;const U1&amp;, const U2*
       </cxx-section> <!-- dcl.spec.auto -->
 
 
-
-        <!-- TODO: Rewrite this section so that it reflects and refers
-             to dcl.spec.auto. In particular, we want to say where these
-             are allowed, how their placeholder types are deduced, and
-             what constraint is introduced. -->
       <cxx-section id="dcl.spec.constr">
         <h1>Constrained type specifiers</h1>
 
         Add this section to <cxx-ref in="cxx" to="dcl.type"></cxx-ref>.
-        The usual formatting marks are omitted since all text is new.
 
-        <p>
-        A <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        <p> A <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
         designates a placeholder type that will be replaced later by
-        deduction from the <cxx-gramarterm>expression</cxx-gramarterm> in a 
+        deduction from the <cxx-grammarterm>expression</cxx-grammarterm> in a 
         <cxx-grammarterm>compound-requirement</cxx-grammarterm> or 
         function argument. 
 
@@ -370,17 +402,42 @@ template&lt;typename U1, typename U2&gt; void g(Pair&lt;const U1&amp;, const U2*
         that a function is an abbreviated function. 
         </p>
 
-        <!-- TODO: Maybe a little fuzzy. -->
         <p>
-        Like the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
-        (<cxx-ref to="dcl.spec.auto"></cxx-ref>), 
-        <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
-        can be used to construct other types. The forms of types that
-        can be constructed, and the use of 
-        <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
-        within them are the same as those specified for the <code>auto</code>
-        <cxx-grammarterm>type-specifier</cxx-grammarterm>.
+        As with the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
+        (<cxx-ref to="dcl.spec.auto"></cxx-ref>),
+        when a <cxx-grammarterm>simple-type-specifier</cxx-grammarterm> is a
+        <cxx-grammarterm>simple-template-id</cxx-grammarterm>, its
+        <cxx-grammarterm>template-argument-list</cxx-grammarterm> may contain
+        multiple <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s.
+        A <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> shall
+        not appear in a non-deduced context.
+
+        <cxx-example class="inline">
+        <cxx-codeblock>
+template&lt;typename T&gt; concept bool C = true;
+template&lt;typename T, int N&gt; concept bool D = true;
+
+namespace N {
+  template&lt;typename T&gt; struct Wrap;
+}
+template&lt;typename T, typename U&gt; struct Pair;
+
+void f1(N::Wrap&lt;C&gt;);    // <i>OK</i>
+void f2(Pair&lt;C, D&lt;0&gt;&gt;); // <i>OK</i>
+void f3(C::Wrap&lt;D&lt;1&gt;&gt;); // <i>error:</i> C <i>used in a non-deduced context</i>
+        </cxx-codeblock>
+        </cxx-example>
         </p>
+
+        <p> 
+        A <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        can appear with a function declarator in the 
+        <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> or in the
+        <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of a
+        <cxx-grammarterm>parameter-declaration</cxx-grammarterm> in that
+        declarator, in any context where such a declarator is valid.
+        </p>
+
 
         <!-- TODO: Consider adding this to the list of non-deduced contexts. -->
         <!--
