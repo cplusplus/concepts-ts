@@ -55,6 +55,17 @@ auto n requires C&lt;decltype(n)&gt; = 'a';    // <i>error: constrained variable
 
       The "or contains auto" will need to be updated. -->
 
+      Modify the second sentence of paragraph 5. The remainder of this
+      paragraph has been omitted.
+
+      <p class="quoted" number="5">
+      A single name can be used for several different functions in a single 
+      scope; this is function overloading (<cxx-ref to="over"></cxx-ref>). 
+
+      All declarations for a function shall agree exactly in <del>both</del> 
+      the return type<ins>,</ins> <del>and</del> the parameter-type-list<ins>,
+      and asssociated constraints, if any (<cxx-ref to="temp"></cxx-ref>)</ins>.
+      </p>
 
       Add the following paragraphs after
       <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>/14.
@@ -191,7 +202,7 @@ void f5(Tuple&lt;C&amp;, C*, N::C&gt; p);
 template&lt;typename T, int N&gt; class Array { };
 
 template&lt;int N&gt; void f(Array&lt;auto, N&gt;*);
-template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: Equivalent to f(Array&lt;auto, N&gt;*)
+template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent to f(Array&lt;auto, N&gt;*)
       </cxx-codeblock>
       </cxx-example>
       </p>

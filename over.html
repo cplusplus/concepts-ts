@@ -1,0 +1,108 @@
+
+<cxx-clause id="class" number="13">
+  <h1>Overloading</h1>
+
+  Modify paragraph 1.
+
+  <p class="quoted">
+  When two or more different declarations are specified for a single name 
+  in the same scope, that name is said to be overloaded. By extension, two 
+  declarations in the same scope that declare the same name but with
+  different types 
+  <ins>or different associated constraints (<cxx-ref to="temp"></cxx-ref>)</ins>
+  are called <dfn>overloaded declarations</dfn>. Only function and function 
+  template declarations can be overloaded; variable and type declarations 
+  cannot be overloaded.
+  </p>
+
+
+  <cxx-section id="over.dcl" number="2">
+    <h1>Declaration matching</h1>
+
+    Modify paragraph 1. The existing example is omitted from this text.
+
+    <p class="quoted">
+    Two function declarations of the same name refer to the same function if 
+    they are in the same scope and have equivalent parameter declarations 
+    (<cxx-ref in="cxx" to="over.load"></cxx-ref>)
+    <ins>and equivalent associated constraints, 
+    if any (<cxx-ref to="temp"></cxx-ref>)</ins>.
+    </p>
+  </cxx-section> <!-- over.dcl -->
+
+  <cxx-section id="over.match">
+    <h1>Overload resolution</h1>
+
+    <cxx-section id="over.match.viable">
+      <h1>Viable functions</h1>
+
+      Modify paragraph 1.
+
+      <p class="quoted">
+      From the set of candidate functions constructed for a given context 
+      (<cxx-ref in="cxx" to="over.match.funcs"></cxx-ref>), a set of viable 
+      functions is chosen, from which the best function will be selected by 
+      comparing argument conversion sequences and associated constraints
+      for the best fit (<cxx-ref to="over.match.best"></cxx-ref>).
+
+      The selection of viable functions considers 
+      <ins>their associated constraints, if any (<cxx-ref to="temp"></cxx-ref>), and</ins>
+      their relationships between arguments and function parameters other 
+      than the ranking of conversion sequences.
+      </p>
+
+      Insert the following paragraph after paragraph 1.
+
+      <p class="quoted" number="2">
+      First, for a function to be viable, if it has associated constraints
+      (<cxx-ref to="temp"></cxx-ref>), those constraints shall be 
+      satisfied (<cxx-ref to="temp.constr"></cxx-ref>).
+      </p>
+
+      Modify paragraph 2 as follows:
+
+      <p class="quoted" number="3">
+      <del>First</del><ins>Second</ins>, to be a viable function ...
+      </p>
+
+      Modify paragraph 3 as follows:
+
+      <p class="quoted" number="4">
+      <del>Second</del><ins>Third</ins>, for <code>F</code> to be a viable function ...
+      </p>
+
+    </cxx-section> <!-- over.match.viable -->
+
+    <cxx-section id="over.match.best">
+      <h1>Best viable function</h1>
+
+      Modify the last item in the list in paragraph 1 and extend it with
+      a new item.
+
+      <p class="quoted">
+      Define ICS<i>i</i>(<code>F</code>) as follows:
+      <ul>
+      <li> ... </li>
+      <li> <code>F1</code> and <code>F2</code> are function template 
+      specializations, and the function template for <code>F1</code> is more 
+      specialized than the template for <code>F2</code> according to the 
+      partial ordering rules described in 
+      <cxx-ref to="temp.func.order"></cxx-ref><del>.</del><ins>, or, if not that,
+      </li>
+      
+      <li><ins>
+      <code>F1</code> and <code>F2</code> are member functions of a class 
+      template specialization, <code>T</code>, and <code>M1</code> and 
+      <code>M2</code> are the member function declarations in the template
+      of <code>T</code> that correspond to <code>F1</code> and <code>F2</code>,
+      respectively, and <code>M1</code> is more constrained than <code>M2</code>
+      according to the partial ordering of constraints described in
+      <cxx-ref to="temp.constr"></cxx-ref>.
+      </ins></li>
+      </p>
+
+    </cxx-section> <!-- over.match.best -->
+
+  </cxx-section> <!-- over.match -->
+
+</cxx-clause>

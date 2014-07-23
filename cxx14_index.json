@@ -52,6 +52,12 @@
   "class.name"            : "9.1",
   "class.mem"             : "9.2",
 
+  "class.derived"         : "10",
+  "class.mi"              : "10.1",
+  "class.member.lookup"   : "10.2",
+  "class.virtual"         : "10.3",
+  "class.abstract"        : "10.4",
+
   "class.dtor"            : "12.4",
 
   "over"              : "13",

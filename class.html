@@ -1,13 +1,14 @@
 
 <cxx-clause id="class" number="9">
-  <h1>Classes</h2>
+  <h1>Classes</h1>
 
   <cxx-section id="class.mem" number="2">
     <h1>Class members</h1>
 
-    <p>In <cxx-ref in="cxx" to="class.mem"></cxx-ref>, modify the
-    <cxx-grammarterm>member-declarator</cxx-grammarterm> syntax.</p>
+    In <cxx-ref in="cxx" to="class.mem"></cxx-ref>, modify the
+    <cxx-grammarterm>member-declarator</cxx-grammarterm> syntax.
 
+    <p class="quoted">
     <bnf-grammar>
       <bnf-rule>member-declarator</bnf-rule>
       <bnf-alt>
@@ -17,41 +18,53 @@
         <ins><bnf-opt>requires-clause</bnf-opt></ins>
       </bnf-alt>
     </bnf-grammar>
+    </p>
 
-  <p>Insert the following paragraph after 
-  <cxx-ref in="cxx" to="class.mem">/8.</cxx-ref></p>
+  Insert the following paragraphs after <cxx-ref in="cxx" to="class.mem"></cxx-ref>/8.
 
-  <p>A <cxx-grammarterm>requires-clause</cxx-grammarterm> 
-  (<cxx-ref to="temp"></cxx-ref>) shall only be present if the 
-  <cxx-grammarterm>declarator</cxx-grammarterm> declares a constrained member
-  function of a class template (<cxx-ref to="temp.mem.func"></cxx-ref>)
-  or a generic function (<cxx-ref to="dcl.fct"></cxx-ref>). 
+  <p class="quoted" number="9">
+  A <cxx-grammarterm>requires-clause</cxx-grammarterm> shall only appear
+  in a <cxx-grammarterm>member-declarator</cxx-grammarterm> if its
+  <cxx-grammarterm>declarator</cxx-grammarterm> is a function declarator.
+
+  The <cxx-grammarterm>requires-clause</cxx-grammarterm> associates its 
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the function.
+
   <cxx-example class="inline">
   <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = ...;
-template&lt;typename T&gt; concept bool D = ...;
+template&lt;typename T&gt; concept bool C = true;
 
-template&lt;typename T&gt;
-  struct A {
-    A(T*) requires C&lt;T&gt;;    // Declares a constrained constructor
-    void f() requires D&lt;T&gt;; // Declares a constrained member function
-  };
-
-struct B {
-  void g(int n) requires C&lt;int&gt;; // Error: cannont constraint a non-template
-  void h(C a, D b);              // Declares a constrained generic member function
-
+struct A {
+  A(int*) requires C&lt;int&gt;;  // <i>OK</i>
+  void f() requires C&lt;int&gt;; // <i>OK</i>
+  int x requires C&lt;T&gt;       // <i>error: constrained member viarable</i>
 };
+
   </cxx-codeblock>
   </cxx-example>
-  <cxx-note>
-  A constrained generic function declared at class scope is a member function
-  template.
-  </cxx-note>
   </p>
 
-  <p>A destructor (<cxx-ref in="cxx" to="class.dtor"></cxx-ref>) shall not be 
-  declared with <cxx-grammarterm>requires-clause</cxx-grammarterm>s.</p>
-
   </cxx-section> <!-- class.mem -->
+
+  <cxx-section id="class.mfct">
+    <h1>Member functions</h1>
+
+    <cxx-section id="class.mfct.non-static">
+      <h1>Nonstatic member functions</h1>
+
+      Modify paragraph 6 to read:
+
+      <p number="6">
+      A non-static member function may be declared 
+      <dfn>virtual (<cxx-ref in="cxx" to="class.virtual"></cxx-ref>) or 
+      <dfn>pure virtual</dfn> (<cxx-ref in="cxx" to="class.abstract"></cxx-ref>)<ins>,
+      unless the member function has associated constraints
+      (<cxx-ref to="temp"></cxx-ref>), in which case the program is
+      ill-formed</ins>.
+      </p>
+
+    </cxx-section>
+
+  </cxx-section>
+
 </cxx-clause>
