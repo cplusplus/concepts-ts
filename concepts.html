@@ -793,187 +793,7 @@ pre {
         
       </li>
             
-              <li><span class="marker">1</span><a href="#intro">General</a>
-        
-          <ol>
-            
-              <li><span class="marker">1.1</span><a href="#general.scope">Scope</a>
-        
-      </li>
-            
-              <li><span class="marker">1.2</span><a href="#intro.refs">Normative references</a>
-        
-      </li>
-            
-              <li><span class="marker">1.3</span><a href="#intro.defns">Terms and definitions</a>
-        
-      </li>
-            
-              <li><span class="marker">1.4</span><a href="#intro.compliance">Implementation compliance</a>
-        
-      </li>
-            
-              <li><span class="marker">1.5</span><a href="#intro.ack">Acknowledgments</a>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-              <li><span class="marker">2</span><a href="#lex">Lexical conventions</a>
-        
-          <ol>
-            
-              <li><span class="marker">2.1</span><a href="#lex.key">Keywords</a>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-              <li><span class="marker">5</span><a href="#expr">Expressions</a>
-        
-          <ol>
-            
-              <li><span class="marker">5.1</span><a href="#expr.prim">Primary expressions</a>
-        
-          <ol>
-            
-              <li><span class="marker">5.1.2</span><a href="#expr.prim.lambda">Lambda expressions</a>
-        
-      </li>
-            
-              <li><span class="marker">5.1.3</span><a href="#expr.req">Requires expressions</a>
-        
-          <ol>
-            
-              <li><span class="marker">5.1.3.1</span><a href="#expr.req.simple">Simple requirements</a>
-        
-      </li>
-            
-              <li><span class="marker">5.1.3.2</span><a href="#expr.req.type">Type requirements</a>
-        
-      </li>
-            
-              <li><span class="marker">5.1.3.3</span><a href="#expr.req.nested">Nested requirements</a>
-        
-      </li>
-            
-              <li><span class="marker">5.1.3.4</span><a href="#expr.req.compound">Compound requirements</a>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-              <li><span class="marker">7</span><a href="#dcl.dcl">Declarations</a>
-        
-          <ol>
-            
-              <li><span class="marker">7.1</span><a href="#dcl.spec">Specifiers</a>
-        
-          <ol>
-            
-              <li><span class="marker">7.1.6</span><a href="#dcl.type">Type specifiers</a>
-        
-          <ol>
-            
-              <li><span class="marker">7.1.6.2</span><a href="#dcl.type.simple">Simple type specifiers</a>
-        
-      </li>
-            
-              <li><span class="marker">7.1.6.4</span><a href="#dcl.spec.auto">auto specifier</a>
-        
-      </li>
-            
-              <li><span class="marker">7.1.6.5</span><a href="#dcl.spec.constr">Constrained type specifiers</a>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-              <li><span class="marker">7.1.7</span><a href="#dcl.spec.concept">concept specifier</a>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-              <li><span class="marker">8</span><a href="#dcl.decl">Declarators</a>
-        
-          <ol>
-            
-              <li><span class="marker">8.3</span><a href="#dcl.meaning">Meaning of declarators</a>
-        
-          <ol>
-            
-              <li><span class="marker">8.3.5</span><a href="#dcl.fct">Functions</a>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-              <li><span class="marker">8.4</span><a href="#dcl.fct.def">Function definitions</a>
-        
-          <ol>
-            
-              <li><span class="marker">8.4.1</span><a href="#dcl.fct.def.general">In general</a>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-              <li><span class="marker">9</span><a href="#class">Classes</a>
-        
-          <ol>
-            
-              <li><span class="marker">9.2</span><a href="#class.mem">Class members</a>
-        
-      </li>
-            
-              <li><span class="marker">9.3</span><a href="#class.mfct">Member functions</a>
-        
-          <ol>
-            
-              <li><span class="marker">9.3.1</span><a href="#class.mfct.non-static">Nonstatic member functions</a>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-              <li><span class="marker">13</span><a href="#class">Overloading</a>
+              <li><span class="marker">13</span><a href="#over">Overloading</a>
         
           <ol>
             
@@ -1378,8 +1198,10 @@ pre {
       <ins>for a</ins>
       <cxx-grammarterm><i>lambda-expression</i></cxx-grammarterm> has a public inline 
       function call operator (<cxx-ref in="cxx" to="over.call">C++ <span title="over.call">§13.5.4</span></cxx-ref>)
-      whose parameters and return type are described by the lambda-expression’s 
-      parameter-declaration-clause and trailing-return-type respectively. 
+      whose parameters and return type are described by the 
+      <cxx-grammarterm><i>lambda-expression</i></cxx-grammarterm>’s 
+      <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm> and 
+      <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> respectively. 
 
       <del>
       For a generic lambda, the closure type has a public inline function call
@@ -1407,7 +1229,7 @@ pre {
       </del>
 
       <ins>
-      For a generic lambda, the function call operator is an abbreviated
+      For a generic lambda, that function call operator is an abbreviated
       member function (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>).
       </ins>
       </p>
@@ -1421,12 +1243,11 @@ pre {
     
     <span class="nowrap">[ <em>Example:</em></span>
     
-      Consider the following:
       <cxx-codeblock>
     
     </cxx-codeblock></cxx-example></ins></p><pre><code>template&lt;typename T&gt; concept bool C = true;
 
-auto gl = [](C&amp; a, C* b) { a = *b } // <i>OK: denotes a generic lambda</i>
+auto gl = [](C&amp; a, C* b) { a = *b }; // <i>OK: denotes a generic lambda</i>
 
 struct Fun {
     auto operator()(C&amp; a, C* b) const { a = *b; }
@@ -2427,11 +2248,11 @@ auto (<i>type</i>::*)()
     </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; struct Vec;
 template&lt;typename T&gt; Vec&lt;T&gt; make_vec(std::initalizer_list&lt;T&gt;);
 
-auto x1 = { 1, 2 };                 // <ins><i>OK:</i> </ins> decltype(x1) <i>is</i> std::initializer_list&lt;int&gt;
+auto x1 = { 1, 2 };                 // <ins><i>OK:</i></ins> decltype(x1) <i>is</i> std::initializer_list&lt;int&gt;
 auto x2 = { 1, 2.0 };               // <i>error: cannot deduce element type</i> <ins>
 auto&amp; x3 = 12;                      // <i>OK:</i> decltype(x3) <i>is</i> const int&amp;
 const auto* p = &amp;x3;                // <i>OK:</i> decltype(p) <i>is</i> const int*
-Vec&lt;auto&gt; v1 = make_vec({1, 2, 3}); // <i>OK:</i> decltpye(v1) <i>is</i> Vec&lt;int&gt;
+Vec&lt;auto&gt; v1 = make_vec({1, 2, 3}); // <i>OK:</i> decltype(v1) <i>is</i> Vec&lt;int&gt;
 Vec&lt;auto&gt; v2 = {1, 2, 3};           // <i>error: cannot deduce element type</i></ins></code></pre>
   
         
@@ -2579,8 +2400,8 @@ void f3(C::Wrap&lt;D&lt;1&gt;&gt;); // <i>error:</i> C <i>used in a non-deduced 
     </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C = true;
 template&lt;typename T&gt; class Vec;
 
-auto gl [](C&amp; a, C* b) { a = *b; } // <i>OK: a generic lambda</i>
-void af(const Vec&lt;C&gt;&amp; x);          // <i>OK: an abbreviated function</i></code></pre>
+auto gl = [](C&amp; a, C* b) { a = *b; }; // <i>OK: a generic lambda</i>
+void af(const Vec&lt;C&gt;&amp; x);             // <i>OK: an abbreviated function</i></code></pre>
   
         
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -2626,7 +2447,6 @@ template&lt;typename T&gt; concept bool Iter() {
         of concept definitions (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">7.1.7</a></cxx-ref>)
         called the <dfn>candidate concept set</dfn>.
 
-
         Only type concepts are included in the candidate concept set of
         <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
         
@@ -2646,8 +2466,9 @@ template&lt;typename T&gt; concept bool Iter() {
     
         The candidate concept set has multiple members
         only when referring to a set of overloaded function concepts.
-        There is at most one member when a <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>
-        refers to a variable concept has at most one member.
+        There is at most one member of this set when a 
+        <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>
+        refers to a variable concept.
         
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
@@ -2800,8 +2621,8 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
         
         <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
-        <code>A<sub>1</sub>, A<sub>2</sub>, ... A<sub><i>n</i></sub>&gt;</code>
-        is an empty empty if the <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm>
+        <code>A<sub>1</sub>, A<sub>2</sub>, ... A<sub><i>n</i></sub></code>
+        is empty if the <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm>
         is a <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>.
         
     <span class="nowrap">— <em>end note</em> ]</span>
@@ -2816,10 +2637,10 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
     </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C = true;
 template&lt;typename T, typename U&gt; concept bool D() { return true; }
 
-void f(C&amp;);     // associates C&lt;T&gt; with f
-void g(D&lt;int&gt;); // associates D&lt;U, int&gt; with g</code></pre>
+void f(C&amp;);     // associates C&lt;T1&gt; with f
+void g(D&lt;int&gt;); // associates D&lt;T2, int&gt; with g</code></pre>
   
-        In the associated constraints, <code>T</code> and <code>U</code> 
+        In the associated constraints, <code>T1</code> and <code>T2</code> 
         are invented template type parameters corresponding to the 
         <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
         in their respective declarations.
@@ -2844,8 +2665,9 @@ void g(D&lt;int&gt;); // associates D&lt;U, int&gt; with g</code></pre>
     
         <cxx-codeblock>
     
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typemame T&gt; concept bool C = true;
-template&lt;typemame T, typename U&gt; concept bool D = true;
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C = true;
+template&lt;typename T, typename U&gt; concept bool D = true;
+tempkate&lt;typename A, typename B&gt; class Pair;
 
 void f(Pair&lt;C, D&lt;int&gt;&gt;&amp; p);</code></pre>
   
@@ -3049,28 +2871,42 @@ template&lt;typename T&gt;
   <cxx-grammarterm><i>init-declarator</i></cxx-grammarterm> shall only appear
   with a function declarator (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>).
 
+  If present, the <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> associates 
+  its <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> with the declared
+  function (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>).
   <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
     
   <cxx-codeblock>
     
-    </cxx-codeblock></cxx-example></p><pre><code>template<typename t=""> concept bool C = true;
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C = true;
 
 void f1(auto x) requires C&lt;decltype(x)&gt;; // <i>OK</i>
 void f2(int x) requires C&lt;int&gt;;          // <i>OK</i>
-auto n requires C&lt;decltype(n)&gt; = 'a';    // <i>error: constrained variable declaration</i></typename></code></pre>
+auto n requires C&lt;decltype(n)&gt; = 'a';    // <i>error: constrained variable declaration</i></code></pre>
   
   
     <span class="nowrap">— <em>end example</em> ]</span>
   
   <p></p>
 
-  <p para_num="3" id="dcl.decl.3" class="quoted"> 
-  If present, the <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> associates its
-  <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> with the declared
-  function (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>).
-  </p>
+  <p para_num="3" id="dcl.decl.3" class="quoted">
+  The names of parameters in a function declarator are visible in the
+  <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> of the
+  <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>.
+  <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+  <cxx-codeblock>
+    
+    </cxx-codeblock></cxx-example></p><pre><code>void f(int n) requires sizeof(n) == 4; // OK</code></pre>
+  
+  
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+  <p></p>
 
   <cxx-section id="dcl.meaning" number="3">
     
@@ -3098,19 +2934,33 @@ auto n requires C&lt;decltype(n)&gt; = 'a';    // <i>error: constrained variable
 
       <p para_num="5" id="dcl.fct.5" class="quoted" number="5">
       A single name can be used for several different functions in a single 
-      scope; this is function overloading (<cxx-ref to="over"><a title="over" href="#over"></a></cxx-ref>). 
+      scope; this is function overloading (<cxx-ref to="over"><a title="over" href="#over">13</a></cxx-ref>). 
 
       All declarations for a function shall agree exactly in <del>both</del> 
       the return type<ins>,</ins> <del>and</del> the parameter-type-list<ins>,
       and asssociated constraints, if any (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>)</ins>.
       </p>
 
-      Add the following paragraphs after
-      <cxx-ref in="cxx" to="dcl.fct">C++ <span title="dcl.fct">§8.3.5</span></cxx-ref>/14.
+      Modify paragraph 15. Note that the footnote reference has been
+      omitted.
 
       <p para_num="15" id="dcl.fct.15" number="15">
+      There is a syntactic ambiguity when an ellipsis occurs at the end of a 
+      <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm> without
+      a preceding comma. In this case, the ellipsis is parsed as part of the 
+      <cxx-grammarterm><i>abstract-declarator</i></cxx-grammarterm> if the type of the
+      parameter either names a template parameter pack that has not been 
+      expanded or contains <del><code>auto</code></del><ins>a placeholder
+      type</ins>; otherwise, it is parsed as part of the 
+      <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>.
+      </p>
+
+      Add the following paragraphs after
+      <cxx-ref in="cxx" to="dcl.fct">C++ <span title="dcl.fct">§8.3.5</span></cxx-ref>/15.
+
+      <p para_num="16" id="dcl.fct.16" number="16">
       An abbreviated function (<cxx-ref to="dcl.spec.auto"><a title="dcl.spec.auto" href="#dcl.spec.auto">7.1.6.4</a></cxx-ref>)
-      is equivalent a function template (<cxx-ref to="temp.fct"><a title="temp.fct" href="#temp.fct">14.5.6</a></cxx-ref>) whose
+      is equivalent to a function template (<cxx-ref to="temp.fct"><a title="temp.fct" href="#temp.fct">14.5.6</a></cxx-ref>) whose
       <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
       includes one invented type <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>
       for each occurrence of a placeholder type, designated by either 
@@ -3120,6 +2970,14 @@ auto n requires C&lt;decltype(n)&gt; = 'a';    // <i>error: constrained variable
       (<cxx-ref to="dcl.spec.constr"><a title="dcl.spec.constr" href="#dcl.spec.constr">7.1.6.5</a></cxx-ref>),
       in the <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>, 
       in order of appearance. 
+
+      If the placeholder type is designated by a
+      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>, the
+      invented template parameter is a 
+      <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>
+      (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>)
+      declared with same 
+      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
 
       The invented type <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> is 
       a parameter pack if the corresponding 
@@ -3150,13 +3008,13 @@ void f2(Vec&lt;auto*&gt;...);
 void f3(auto (auto::*)(auto));
 
 template&lt;typename T, typename U&gt; 
-  void f1(const T&amp;, U);       // <i>equivalent to</i> f1(const auto&amp;, auto)
+  void f1(const T&amp;, U);        // <i>equivalent to</i> f1(const auto&amp;, auto)
 template&lt;typename... T&gt; 
-  void f2(Vec&lt;T*&gt;...);       // <i>equivalent to</i> f2(Vec&lt;auto*&gt;...)
+  void f2(Vec&lt;T*&gt;...);         // <i>equivalent to</i> f2(Vec&lt;auto*&gt;...)
 template&lt;typename T, typename U, typename V&gt;
-  void f3(T (U::*)(V));      // <i>equivalent to</i> f3(auto (auto::*)(auto))
+  void f3(T (U::*)(V));        // <i>equivalent to</i> f3(auto (auto::*)(auto))
 
-void foo(Pair&lt;auto, auto&gt;...) // <i>error: multiple placeholder types in a parameter pack</i></code></pre>
+void foo(Pair&lt;auto, auto&gt;...); // <i>error: multiple placeholder types in a parameter pack</i></code></pre>
   
       
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -3166,11 +3024,6 @@ void foo(Pair&lt;auto, auto&gt;...) // <i>error: multiple placeholder types in a
     
     <span class="nowrap">[ <em>Example:</em></span>
     
-      An abbreviated function whose parameter types include
-      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s can
-      be equivalently declared using 
-      <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>s
-      (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>).
       <cxx-codeblock>
     
     <pre><code>template&lt;typename T&gt; concept bool C1 = true;
@@ -3184,7 +3037,7 @@ void g4(Vec&lt;D&lt;int&gt;&gt;);
 
 template&lt;C1 T, C2 U&gt; void g1(const T*, U&amp;); // <i>equivalent to</i> g1(const C1*, C2&amp;)
 template&lt;C1 T&gt; void g2(Vec&lt;T&gt;&amp;);            // <i>equivalent to</i> g2(Vec&lt;C1&gt;&amp;)
-template&lt;C1... Ts&gt; void g3(Ts...&amp;);         // <i>equivalent to</i> g3(C1&amp;...)
+template&lt;C1... Ts&gt; void g3(Ts&amp;...);         // <i>equivalent to</i> g3(C1&amp;...)
 template&lt;D&lt;int&gt; T&gt; void g4(Vec&lt;T&gt;);         // <i>equivalent to</i> g4(Vec&lt;D&lt;int&gt;&gt;)</code></pre>
   </cxx-codeblock>
       
@@ -3193,8 +3046,7 @@ template&lt;D&lt;int&gt; T&gt; void g4(Vec&lt;T&gt;);         // <i>equivalent t
       <p></p>
 
 
-      <!-- TODO: This moves into dcl.fct -->
-      <p para_num="16" id="dcl.fct.16"> All placeholder types introduced using the same 
+      <p para_num="17" id="dcl.fct.17"> All placeholder types introduced using the same 
       <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> have the 
       same invented template type parameter.
       <cxx-example class="inline">
@@ -3207,8 +3059,8 @@ template&lt;D&lt;int&gt; T&gt; void g4(Vec&lt;T&gt;);         // <i>equivalent t
   template&lt;typename T&gt; concept bool C = true;
 }
 template&lt;typename T&gt; concept bool C = true;
-template&lt;typename T, int&gt; concept D = true;
-template&lt;typename, int = 0&gt; E = true;
+template&lt;typename T, int&gt; concept bool D = true;
+template&lt;typename, int = 0&gt; concept bool E = true;
 
 void f0(C a, C b);</code></pre>
   
@@ -3230,7 +3082,7 @@ void f3(D&lt;0&gt; a, D&lt;1&gt; b);</code></pre>
       <code>b</code> have different invented template type parameters.
       <cxx-codeblock>
     
-    <pre><code>void f4(E a, E&lt;&gt; b, E&lt;0&gt; c)</code></pre>
+    <pre><code>void f4(E a, E&lt;&gt; b, E&lt;0&gt; c);</code></pre>
   </cxx-codeblock>
       The types of <code>a</code>, <code>b</code>, and <code>c</code> are
       distinct invented template type parameters even though the constraints 
@@ -3252,7 +3104,7 @@ void f5(Tuple&lt;C&amp;, C*, N::C&gt; p);</code></pre>
       <p></p>
 
       <!-- TODO: Move into temp.fct? -->
-      <p para_num="17" id="dcl.fct.17"> A function template can be an abbreviated function. The
+      <p para_num="18" id="dcl.fct.18"> A function template can be an abbreviated function. The
       invented <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>s are
       added to the <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
       after the explicitly declared <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>s.
@@ -3392,6 +3244,12 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
 
   The <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> associates its 
   <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> with the function.
+  </p>
+
+  <p para_num="10" id="class.mem.10" class="quoted">
+  The names of parameters in a function declarator are visible in the
+  <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> of the
+  <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>. </p>
 
   <cxx-example class="inline">
     
@@ -3399,18 +3257,18 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
     
   <cxx-codeblock>
     
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C = true;
+    <pre><code>template&lt;typename T&gt; concept bool C = true;
 
 struct A {
   A(int*) requires C&lt;int&gt;;  // <i>OK</i>
   void f() requires C&lt;int&gt;; // <i>OK</i>
   int x requires C&lt;T&gt;       // <i>error: constrained member viarable</i>
 };</code></pre>
-  
+  </cxx-codeblock>
   
     <span class="nowrap">— <em>end example</em> ]</span>
-  
-  <p></p>
+  </cxx-example>
+  <p para_num="11" id="class.mem.11"></p>
 
   
     </section>
@@ -3456,17 +3314,17 @@ struct A {
   </cxx-clause>
 
 
-<cxx-clause id="class" number="13">
+<cxx-clause id="over" number="13">
     
 
     <section>
-      <header><span class="section-number">13</span> <h1 data-bookmark-label="13 Overloading">Overloading</h1> <span style="float:right"><a href="#class">[class]</a></span></header>
+      <header><span class="section-number">13</span> <h1 data-bookmark-label="13 Overloading">Overloading</h1> <span style="float:right"><a href="#over">[over]</a></span></header>
       
   
 
   Modify paragraph 1.
 
-  <p para_num="1" id="class.1" class="quoted">
+  <p para_num="1" id="over.1" class="quoted">
   When two or more different declarations are specified for a single name 
   in the same scope, that name is said to be overloaded. By extension, two 
   declarations in the same scope that declare the same name but with
@@ -3476,6 +3334,19 @@ struct A {
   template declarations can be overloaded; variable and type declarations 
   cannot be overloaded.
   </p>
+
+  Modify paragraph 3. The itemized list in this paragraph is omitted.
+
+  <p para_num="3" id="over.3" number="3" class="quoted">
+  <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+  As specified in <cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>, function declarations 
+  that have equivalent parameter declarations 
+  <ins>and associated constraints, if any (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>)</ins>,
+  declare the same function and therefore cannot be overloaded: ...
+  
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note></p>
 
 
   <cxx-section id="over.dcl" number="2">
@@ -4284,40 +4155,64 @@ template&lt;C T&gt; template&lt;typename U, typename __P&gt;
     
     template-parameter:
   </bnf-rule>
-        <del><bnf-alt>
-    
-    parameter-declaration
-  </bnf-alt></del>
         <ins><bnf-alt>
     
-    constrained-or-non-type-parameter
+    constrained-parameter
   </bnf-alt></ins>
 
+      <ins>
       <bnf-rule>
     
-    constrained-or-non-type-parameter:
+    constrained-parameter:
   </bnf-rule>
+        <!-- non-default constrained parameter -->
         <bnf-alt>
     
-    basic-parameter-declaration
+    
+          constrained-type-specifier 
+          <bnf-opt>...<sub>opt</sub></bnf-opt>
+          <bnf-opt>identifier<sub>opt</sub></bnf-opt>
+        
   </bnf-alt>
+
+        <!-- constrained non-type template parameters -->
         <bnf-alt>
     
-    basic-parameter-declaration <bnf-terminal><code>=</code></bnf-terminal> initializer-clause 
+    
+          constrained-type-specifier 
+          <bnf-opt>identifier<sub>opt</sub></bnf-opt>
+          <bnf-terminal><code>=</code></bnf-terminal>
+          initializer-clause
+        
   </bnf-alt>
+
+        <!-- constrained type template parameters -->
         <bnf-alt>
     
-    basic-parameter-declaration <bnf-terminal><code>=</code></bnf-terminal> type-id 
+    
+          constrained-type-specifier 
+          <bnf-opt>identifier<sub>opt</sub></bnf-opt>
+          <bnf-terminal><code>=</code></bnf-terminal>
+          type-id
+        
   </bnf-alt>
+
+        <!-- constrained template template parameters -->
         <bnf-alt>
     
-    basic-parameter-declaration <bnf-terminal><code>=</code></bnf-terminal> id-expression 
+    
+          constrained-type-specifier 
+          <bnf-opt>identifier<sub>opt</sub></bnf-opt>
+          <bnf-terminal><code>=</code></bnf-terminal>
+          id-expression
+        
   </bnf-alt>
-      
+      </ins>
     
   </bnf-grammar>
     </p>
     
+
     Modify <cxx-ref in="cxx" to="temp.param">C++ <span title="temp.param">§14.1</span></cxx-ref>/2 as follows.
 
     <p para_num="2" id="temp.param.2" number="2" class="quoted">
