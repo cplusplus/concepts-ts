@@ -67,10 +67,24 @@ auto n requires C&lt;decltype(n)&gt; = 'a';    // <i>error: constrained variable
       and asssociated constraints, if any (<cxx-ref to="temp"></cxx-ref>)</ins>.
       </p>
 
-      Add the following paragraphs after
-      <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>/14.
+      Modify paragraph 15. Note that the footnote reference has been
+      omitted.
 
       <p number="15">
+      There is a syntactic ambiguity when an ellipsis occurs at the end of a 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> without
+      a preceding comma. In this case, the ellipsis is parsed as part of the 
+      <cxx-grammarterm>abstract-declarator</cxx-grammarterm> if the type of the
+      parameter either names a template parameter pack that has not been 
+      expanded or contains <del><code>auto</code></del><ins>a placeholder
+      type</ins>; otherwise, it is parsed as part of the 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>.
+      </p>
+
+      Add the following paragraphs after
+      <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>/15.
+
+      <p number="16">
       An abbreviated function (<cxx-ref to="dcl.spec.auto"></cxx-ref>)
       is equivalent a function template (<cxx-ref to="temp.fct"></cxx-ref>) whose
       <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
@@ -82,6 +96,14 @@ auto n requires C&lt;decltype(n)&gt; = 'a';    // <i>error: constrained variable
       (<cxx-ref to="dcl.spec.constr"></cxx-ref>),
       in the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, 
       in order of appearance. 
+
+      If the placeholder type is designated by a
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>, the
+      invented template parameter is a 
+      <cxx-grammarterm>constrained-parameter</cxx-grammarterm>
+      (<cxx-ref to="temp.param"></cxx-ref>)
+      declared with same 
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
 
       The invented type <cxx-grammarterm>template-parameter</cxx-grammarterm> is 
       a parameter pack if the corresponding 
@@ -119,11 +141,6 @@ void foo(Pair&lt;auto, auto&gt;...) // <i>error: multiple placeholder types in a
       </cxx-example>
   
       <cxx-example>
-      An abbreviated function whose parameter types include
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s can
-      be equivalently declared using 
-      <cxx-grammarterm>constrained-parameter</cxx-grammarterm>s
-      (<cxx-ref to="temp"></cxx-ref>).
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C1 = true;
 template&lt;typename T&gt; concept bool C2 = true;
@@ -143,7 +160,6 @@ template&lt;D&lt;int&gt; T&gt; void g4(Vec&lt;T&gt;);         // <i>equivalent t
       </p>
 
 
-      <!-- TODO: This moves into dcl.fct -->
       <p> All placeholder types introduced using the same 
       <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> have the 
       same invented template type parameter.
