@@ -343,11 +343,11 @@ template&lt;typename T&gt; concept bool C() {
 template&lt;typename T&gt; struct Vec;
 template&lt;typename T&gt; Vec&lt;T&gt; make_vec(std::initalizer_list&lt;T&gt;);
 
-auto x1 = { 1, 2 };                 // <ins><i>OK:</i> </ins> decltype(x1) <i>is</i> std::initializer_list&lt;int&gt;
+auto x1 = { 1, 2 };                 // <ins><i>OK:</i></ins> decltype(x1) <i>is</i> std::initializer_list&lt;int&gt;
 auto x2 = { 1, 2.0 };               // <i>error: cannot deduce element type</i> <ins>
 auto&amp; x3 = 12;                      // <i>OK:</i> decltype(x3) <i>is</i> const int&amp;
 const auto* p = &x3;                // <i>OK:</i> decltype(p) <i>is</i> const int*
-Vec&lt;auto&gt; v1 = make_vec({1, 2, 3}); // <i>OK:</i> decltpye(v1) <i>is</i> Vec&lt;int&gt;
+Vec&lt;auto&gt; v1 = make_vec({1, 2, 3}); // <i>OK:</i> decltype(v1) <i>is</i> Vec&lt;int&gt;
 Vec&lt;auto&gt; v2 = {1, 2, 3};           // <i>error: cannot deduce element type</i></ins>
         </cxx-codeblock>
         </cxx-example>
@@ -462,8 +462,8 @@ void f3(C::Wrap&lt;D&lt;1&gt;&gt;); // <i>error:</i> C <i>used in a non-deduced 
 template&lt;typename T&gt; concept bool C = true;
 template&lt;typename T&gt; class Vec;
 
-auto gl [](C&amp; a, C* b) { a = *b; } // <i>OK: a generic lambda</i>
-void af(const Vec&lt;C&gt;&amp; x);          // <i>OK: an abbreviated function</i>
+auto gl = [](C&amp; a, C* b) { a = *b; }; // <i>OK: a generic lambda</i>
+void af(const Vec&lt;C&gt;&amp; x);             // <i>OK: an abbreviated function</i>
         </cxx-codeblock>
         </cxx-example>
         </p>
@@ -501,7 +501,6 @@ template&lt;typename T&gt; concept bool Iter() {
         of concept definitions (<cxx-ref to="dcl.spec.concept"></cxx-ref>)
         called the <dfn>candidate concept set</dfn>.
 
-
         Only type concepts are included in the candidate concept set of
         <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
         
@@ -517,8 +516,9 @@ template&lt;typename T&gt; concept bool Iter() {
         <cxx-note>
         The candidate concept set has multiple members
         only when referring to a set of overloaded function concepts.
-        There is at most one member when a <cxx-grammarterm>concept-name</cxx-grammarterm>
-        refers to a variable concept has at most one member.
+        There is at most one member of this set when a 
+        <cxx-grammarterm>concept-name</cxx-grammarterm>
+        refers to a variable concept.
         </cxx-note>
 
         <cxx-example class="inline">
@@ -647,8 +647,8 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
         when the designated concept is a function concept.
         
         <cxx-note>
-        <code>A<sub>1</sub>, A<sub>2</sub>, ... A<sub><i>n</i></sub>&gt;</code>
-        is an empty empty if the <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
+        <code>A<sub>1</sub>, A<sub>2</sub>, ... A<sub><i>n</i></sub></code>
+        is empty if the <cxx-grammarterm>constrained-type-name</cxx-grammarterm>
         is a <cxx-grammarterm>concept-name</cxx-grammarterm>.
         </cxx-note>
 
@@ -657,10 +657,10 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
 template&lt;typename T&gt; concept bool C = true;
 template&lt;typename T, typename U&gt; concept bool D() { return true; }
 
-void f(C&amp;);     // associates C&lt;T&gt; with f
-void g(D&lt;int&gt;); // associates D&lt;U, int&gt; with g
+void f(C&amp;);     // associates C&lt;T1&gt; with f
+void g(D&lt;int&gt;); // associates D&lt;T2, int&gt; with g
         </cxx-codeblock>
-        In the associated constraints, <code>T</code> and <code>U</code> 
+        In the associated constraints, <code>T1</code> and <code>T2</code> 
         are invented template type parameters corresponding to the 
         <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
         in their respective declarations.
@@ -679,8 +679,9 @@ void g(D&lt;int&gt;); // associates D&lt;U, int&gt; with g
 
         <cxx-example class="inline">
         <cxx-codeblock>
-template&lt;typemame T&gt; concept bool C = true;
-template&lt;typemame T, typename U&gt; concept bool D = true;
+template&lt;typename T&gt; concept bool C = true;
+template&lt;typename T, typename U&gt; concept bool D = true;
+tempkate&lt;typename A, typename B&gt; class Pair;
 
 void f(Pair&lt;C, D&lt;int&gt;&gt;&amp; p);
         </cxx-codeblock>

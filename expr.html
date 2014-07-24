@@ -24,8 +24,10 @@
       <ins>for a</ins>
       <cxx-grammarterm>lambda-expression</cxx-grammarterm> has a public inline 
       function call operator (<cxx-ref in="cxx" to="over.call"></cxx-ref>)
-      whose parameters and return type are described by the lambda-expression’s 
-      parameter-declaration-clause and trailing-return-type respectively. 
+      whose parameters and return type are described by the 
+      <cxx-grammarterm>lambda-expression</cxx-grammarterm>’s 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> and 
+      <cxx-grammarterm>trailing-return-type</cxx-grammarterm> respectively. 
 
       <del>
       For a generic lambda, the closure type has a public inline function call
@@ -53,7 +55,7 @@
       </del>
 
       <ins>
-      For a generic lambda, the function call operator is an abbreviated
+      For a generic lambda, that function call operator is an abbreviated
       member function (<cxx-ref to="dcl.fct"></cxx-ref>).
       </ins>
       </p>
@@ -64,11 +66,10 @@
       <p number="5" class="quoted">
       <ins>
       <cxx-example class="inline">
-      Consider the following:
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = true;
 
-auto gl = [](C& a, C* b) { a = *b } // <i>OK: denotes a generic lambda</i>
+auto gl = [](C& a, C* b) { a = *b }; // <i>OK: denotes a generic lambda</i>
 
 struct Fun {
     auto operator()(C& a, C* b) const { a = *b; }
