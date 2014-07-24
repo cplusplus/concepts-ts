@@ -541,18 +541,45 @@ template&lt;C T&gt; template&lt;typename U, typename __P&gt;
     <p number="1" class="quoted">
     <bnf-grammar>
       <bnf-rule>template-parameter</bnf-rule>
-        <del><bnf-alt>parameter-declaration</bnf-alt></del>
-        <ins><bnf-alt>constrained-or-non-type-parameter</bnf-alt></ins>
+        <ins><bnf-alt>constrained-parameter</bnf-alt></ins>
 
-      <bnf-rule>constrained-or-non-type-parameter</bnf-rule>
-        <bnf-alt>basic-parameter-declaration</bnf-alt>
-        <bnf-alt>basic-parameter-declaration <bnf-terminal>=</bnf-terminal> initializer-clause </bnf-alt>
-        <bnf-alt>basic-parameter-declaration <bnf-terminal>=</bnf-terminal> type-id </bnf-alt>
-        <bnf-alt>basic-parameter-declaration <bnf-terminal>=</bnf-terminal> id-expression </bnf-alt>
+      <ins>
+      <bnf-rule>constrained-parameter</bnf-rule>
+        <!-- non-default constrained parameter -->
+        <bnf-alt>
+          constrained-type-specifier 
+          <bnf-opt>...</bnf-opt>
+          <bnf-opt>identifier</bnf-opt>
+        </bnf-alt>
+
+        <!-- constrained non-type template parameters -->
+        <bnf-alt>
+          constrained-type-specifier 
+          <bnf-opt>identifier</bnf-opt>
+          <bnf-terminal>=</bnf-terminal>
+          initializer-clause
+        </bnf-alt>
+
+        <!-- constrained type template parameters -->
+        <bnf-alt>
+          constrained-type-specifier 
+          <bnf-opt>identifier</bnf-opt>
+          <bnf-terminal>=</bnf-terminal>
+          type-id
+        </bnf-alt>
+
+        <!-- constrained template template parameters -->
+        <bnf-alt>
+          constrained-type-specifier 
+          <bnf-opt>identifier</bnf-opt>
+          <bnf-terminal>=</bnf-terminal>
+          id-expression
+        </bnf-alt>
       </ins>
     </bnf-grammar>
     </p>
     
+
     Modify <cxx-ref in="cxx" to="temp.param"></cxx-ref>/2 as follows.
 
     <p number="2" class="quoted">
