@@ -15,10 +15,10 @@ limitations under the License.
 
 @page {
     margin: 10%;
-    @top-left { content: "© ISO/IEC"; font-size: 10pt; }
-    @top-right { content: string(docnum); font-weight: bold; font-size: 10pt; }
-    @bottom-left { content: string(current-section, last); font-size: 10pt; }
-    @bottom-right { content: counter(page); font-size: 10pt; }
+    @top-left { content: "© ISO/IEC"; font-size: 9pt; }
+    @top-right { content: string(docnum); font-weight: bold; font-size: 9pt; }
+    @bottom-left { content: string(current-section, last); font-size: 9pt; }
+    @bottom-right { content: counter(page); font-size: 9pt; }
 }
 cxx-titlepage { page: title; page-break-after: always; }
 @page title {
@@ -35,7 +35,7 @@ cxx-titlepage { page: title; page-break-after: always; }
 }
 
 @media print {
-    html { font-size: 10pt; }
+    html { font-size: 9pt; }
     * /deep/ code { font-size: 80%; }
     /* Note that only Prince generates clickable links. */
     * /deep/ a[href] { text-decoration:none; }
