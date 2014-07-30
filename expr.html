@@ -396,15 +396,15 @@ requires () {
       <cxx-example>
       <cxx-codeblock>
 template&lt;typename I&gt;
-  concept bool Inscrutible() { ... }
+  concept bool Inscrutable() { ... }
 
 requires(T x) {
   {x++}; #1
   {*x} -> typename T::r; #2
-  {f(x)} -> const Inscrutible&amp; #3
-  {g(x)} noexcept -> auto&amp; #4
+  {f(x)} -> const Inscrutable&amp;; #3
+  {g(x)} noexcept -> auto&amp;; #4
   constexpr {T::value}; #5
-  constexpr {T() + T()} -> T #6;
+  constexpr {T() + T()} -> T; #6;
 }
       </cxx-codeblock>
       Each of these requirements introduces a valid expression constraint
@@ -415,7 +415,7 @@ requires(T x) {
       same expression.
       
       Requirement #2 <code>*x</code> introduces a result type constraint
-      though its <cxx-grammarterm>trailing-return-type</cxx-grammarterm>,
+      through its <cxx-grammarterm>trailing-return-type</cxx-grammarterm>,
       <code>typename T::r</code>. The required valid expression <code>*x</code> 
       must be usable as an argument to the invented function:
       <cxx-codeblock>
@@ -427,7 +427,7 @@ template&lt;class T&gt;
       valid expression <code>f(x)</code>. This expression must be usable as
       an argument to the invented generic function:
       <cxx-codeblock>
-void z2(const Instrutible&amp;)
+void z2(const Inscrutable&amp;)
       </cxx-codeblock>
       
       Requirement #4 introduces a result type constraint and an exception 
