@@ -28,13 +28,8 @@
   <cxx-grammarterm>declarator</cxx-grammarterm> is a function declarator.
 
   The <cxx-grammarterm>requires-clause</cxx-grammarterm> associates its 
-  <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the function.
-  </p>
-
-  <p class="quoted">
-  The names of parameters in a function declarator are visible in the
-  <cxx-grammarterm>constraint-expression</cxx-grammarterm> of the
-  <cxx-grammarterm>requires-clause</cxx-grammarterm>. </p>
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the 
+  member function.
 
   <cxx-example class="inline">
   <cxx-codeblock>
@@ -47,6 +42,12 @@ struct A {
 };
   </cxx-codeblock>
   </cxx-example>
+  </p>
+
+  <p class="quoted">
+  The names of parameters in a function declarator are visible in the
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm> of the
+  <cxx-grammarterm>requires-clause</cxx-grammarterm>. </p>
   </p>
 
   </cxx-section> <!-- class.mem -->

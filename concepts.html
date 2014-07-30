@@ -582,10 +582,10 @@ pre {
     
     <table>
       
-        <tbody><tr><th>Document Number:</th><td><cxx-docnum>NXXX</cxx-docnum></td></tr>
+        <tbody><tr><th>Document Number:</th><td><cxx-docnum>DXXX</cxx-docnum></td></tr>
       
       
-        <tr><th>Date:</th><td><time pubdate="">2014-07-29</time></td></tr>
+        <tr><th>Date:</th><td><time pubdate="">2014-07-30</time></td></tr>
       
       
         <tr><th>Revises:</th><td><cxx-revises><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4040.pdf">N4040</a></cxx-revises></td></tr>
@@ -1230,7 +1230,8 @@ pre {
 
       <ins>
       For a generic lambda, that function call operator is an abbreviated
-      member function (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>).
+      member function, whose parameters and return type are derived according
+      to the rules in <cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>.
       </ins>
       </p>
 
@@ -1898,18 +1899,22 @@ requires(T x) {
         </p>
 
 
-        Add the following paragraph after 
+        Add the following paragraphs after 
         <cxx-ref in="cxx" to="dcl.spec.auto">C++ <span title="dcl.spec.auto">§7.1.6.4</span></cxx-ref>/1.
 
-        <p para_num="2" id="dcl.spec.auto.2">
-        When a <cxx-grammarterm><i>simple-type-specifier</i></cxx-grammarterm> is
-        a <cxx-grammarterm><i>simple-template-id</i></cxx-grammarterm>, its
-        <cxx-grammarterm><i>template-argument-list</i></cxx-grammarterm> may contain
-        multiple occurrences of the the <code>auto</code> 
-        <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm>.
+        <p para_num="2" id="dcl.spec.auto.2" class="quoted"> 
+        The <code>auto</code> <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm>
+        may be used to describe patterns of types to be matched deduction.
 
-        A placeholder type shall not appear in a non-deduced context
-        (<cxx-ref in="cxx" to="temp.deduct.type">C++ <span title="temp.deduct.type">§14.8.2.5</span></cxx-ref>).
+        Within such types, a placeholder type shall not appear in a non-deduced 
+        context (<cxx-ref in="cxx" to="temp.deduct.type">C++ <span title="temp.deduct.type">§14.8.2.5</span></cxx-ref>).
+
+<!--         When a <cxx-grammarterm>simple-type-specifier</cxx-grammarterm> is
+        a <cxx-grammarterm>simple-template-id</cxx-grammarterm>, its
+        <cxx-grammarterm>template-argument-list</cxx-grammarterm> may contain
+        multiple occurrences of the the <code>auto</code> 
+        <cxx-grammarterm>type-specifier</cxx-grammarterm>.
+ -->
 
         <cxx-example class="inline">
     
@@ -1923,11 +1928,13 @@ requires(T x) {
 };
 template&lt;typename T, typename U&gt; struct Pair;
 template&lt;typename T, typename U&gt; Pair&lt;T, U&gt; make_pair(T, U);
-template&lt;int N&gt; struct Size { };
+
+template&lt;int N&gt; struct Size { void f(int) { }  };
 Size&lt;0&gt; s;
 
-N::Wrap&lt;auto&gt; a = N::make_wrap(0.0);    // OK
-Pair&lt;auto, auto&gt; p = make_pair(0, 'a'); // OK
+void (auto::*)(auto) p = &amp;Size&lt;0&gt;::f;   // <i>OK</i>
+N::Wrap&lt;auto&gt; a = N::make_wrap(0.0);    // <i>OK</i>
+Pair&lt;auto, auto&gt; p = make_pair(0, 'a'); // <i>OK</i>
 auto::Wrap&lt;int&gt; x = N::make_wrap(0);    // <i>error:</i> auto <i>used in a non-deduced context</i>
 Size&lt;sizeof(auto)&gt; y = s;               // <i>error:</i> auto <i>used in a non-deduced context</i>
         </t></code></pre>
@@ -1936,7 +1943,6 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error:</i> auto <i>used in a
     <span class="nowrap">— <em>end example</em> ]</span>
   
         <p></p>
-
 
         Modify <cxx-ref in="cxx" to="dcl.spec.auto">C++ <span title="dcl.spec.auto">§7.1.6.4</span></cxx-ref>/2 to read:
 
@@ -2015,10 +2021,11 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error:</i> auto <i>used in a
         <cxx-ref in="cxx" to="dcl.spec.auto">C++ <span title="dcl.spec.auto">§7.1.6.4</span></cxx-ref>/3.
 
         <p para_num="4" id="dcl.spec.auto.4" class="quoted">
-        The <code>auto</code> <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm> 
-        can appear in the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> 
+        If the <code>auto</code> <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm> 
+        appears in the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> 
         of a <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> in
-        a <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>
+        a <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>, that
+        return type introduces a deduction constraint
         (<cxx-ref to="expr.req.compound"><a title="expr.req.compound" href="#expr.req.compound">5.1.3.4</a></cxx-ref>).
         
         <cxx-example class="inline">
@@ -2063,7 +2070,7 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error:</i> auto <i>used in a
         Either <code>auto</code> shall appear in the 
         <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm>, or
         <code>decltype(auto)</code> shall appear as one of the
-        <cxx-grammarterm><i>decl-specifier</i></cxx-grammarterm>s in the
+        <cxx-grammarterm><i>decl-specifier</i></cxx-grammarterm>s of the
         <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm>.
         </ins>
 
@@ -2116,7 +2123,7 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error:</i> auto <i>used in a
         </del>
 
         <ins>
-        Otherwise obtain <code>P</code> from <code>T</code> as follows:
+        Otherwise, obtain <code>P</code> from <code>T</code> as follows:
         </ins></p><ul>
         <li> in general, replace each occurrence of <code>auto</code> in
         the variable type with a new invented type template parameter, or </li>
@@ -2327,7 +2334,7 @@ is the deduced type of the parameter <code>x</code> in the call of
              constrained parameter (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>);</li>
         <li> the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> of
              a <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm>,
-             signifying a deduction constraint (<cxx-ref to="expr.req"><a title="expr.req" href="#expr.req">5.1.3</a></cxx-ref>). </li>
+             signifying a deduction constraint (<cxx-ref to="expr.req.compound"><a title="expr.req.compound" href="#expr.req.compound">5.1.3.4</a></cxx-ref>). </li>
         </ul>
         A program that includes <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
         in any other contexts is ill-formed.
@@ -2339,29 +2346,17 @@ is the deduced type of the parameter <code>x</code> in the call of
         <cxx-codeblock>
     
     <pre><code>template&lt;typename T&gt; concept bool C = true;
+template&lt;typename T, int N&gt; concept bool D = true;
 
 template&lt;typename T&gt; class Vec;
-
-auto gl = [](C&amp; a, C* b) { a = *b; }; // <i>OK: a generic lambda</i>
-void af(const Vec&lt;C&gt;&amp; x);             // <i>OK: an abbreviated function</i></code></pre>
-  </cxx-codeblock>
-        
-    <span class="nowrap">— <em>end example</em> ]</span>
-  </cxx-example>
-
-        <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
-        <cxx-codeblock>
-    
-    <pre><code>template&lt;typename T&gt; concept bool C = true;
-template&lt;typename T, int N&gt; concept bool D = true;
 
 struct N {
   template&lt;typename T&gt; struct Wrap;
 }
 template&lt;typename T, typename U&gt; struct Pair;
+
+auto gl = [](C&amp; a, C* b) { a = *b; }; // <i>OK: a generic lambda</i>
+void af(const Vec&lt;C&gt;&amp; x);             // <i>OK: an abbreviated function</i>
 
 void f1(N::Wrap&lt;C&gt;);    // <i>OK</i>
 void f2(Pair&lt;C, D&lt;0&gt;&gt;); // <i>OK</i>
@@ -2405,7 +2400,7 @@ const C* x = 0;  // <i>error:</i> C <i>used in a variable type</i>
 D&lt;0&gt; fn(int x);  // <i>error:</i> D&lt;0&gt; <i>used as a return type</i></code></pre>
   </cxx-codeblock>
 A <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> cannot be
-used in the type of a variable declaration.
+used in the type of a variable declaration or the return type of a function.
         
     <span class="nowrap">— <em>end example</em> ]</span>
   </cxx-example>
@@ -2518,19 +2513,7 @@ template&lt;typename T&gt; concept bool Iter() {
         set of concept definitions (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">7.1.7</a></cxx-ref>)
         called the <dfn>candidate concept set</dfn>.
 
-        <!--
-        Only type concepts are included in the candidate concept set of a
-        <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
-        
-        <cxx-note>
-        The candidate concept set of a 
-        <cxx-grammarterm>concept-name</cxx-grammarterm> in a
-        <cxx-grammarterm>constrained-parameter</cxx-grammarterm> includes
-        non-type concepts (<cxx-ref to="temp.param"></cxx-ref>).
-        </cxx-note>
-        -->
-
-        If the candidate concept set is empty, the program is ill-formed.
+        If that set is empty, the program is ill-formed.
 
         <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
@@ -2591,7 +2574,7 @@ void f(Seq&lt;&gt;);</code></pre>
         is resolved by determining the viability of each concept in the
         candidate concept set.
 
-        For each concept <code>C<sub><i>i</i></sub></code> in the candidate concept 
+        For each concept, <code>C<sub><i>i</i></sub></code>, in the candidate concept 
         set referred to by the concept name, <code>C</code>, form a 
         <cxx-grammarterm><i>template-id</i></cxx-grammarterm>, <code>TT</code>
         as follows.
@@ -2599,7 +2582,7 @@ void f(Seq&lt;&gt;);</code></pre>
         Let <code>X</code> be a template argument that matches
         the type and form (<cxx-ref to="temp.arg"><a title="temp.arg" href="#temp.arg">14.3</a></cxx-ref>) of the prototype 
         parameter (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">7.1.7</a></cxx-ref>)
-        of <code>C<sub><i>i</i></sub></code>. 
+        of the <i>i</i><sup>th</sup> candidate concept, <code>C<sub><i>i</i></sub></code>. 
 
         If the <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm> is
         a <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>, <code>TT</code> is
@@ -2614,9 +2597,9 @@ void f(Seq&lt;&gt;);</code></pre>
 
         The concept <code>C<sub><i>i</i></sub></code> is a 
         <dfn>viable concept candidate</dfn> when all
-        <cxx-grammarterm><i>template-arguments</i></cxx-grammarterm> of the
-        <cxx-grammarterm><i>template-id</i></cxx-grammarterm>, <code>TT</code> match 
-        the template parameters of the concept, <code>C<sub><i>i</i></sub></code>.
+        <cxx-grammarterm><i>template-arguments</i></cxx-grammarterm> of <code>TT</code> 
+        match the template parameters of the concept, 
+        <code>C<sub><i>i</i></sub></code> (<cxx-ref to="temp.arg"><a title="temp.arg" href="#temp.arg">14.3</a></cxx-ref>).
 
         If, after determining the viability of each concept, there is a
         single viable concept candidate, that is the concept designated by the
@@ -2853,7 +2836,7 @@ template&lt;typename T&gt;
     <pre><code>template&lt;typename T&gt; 
   concept bool V2 = 3 + 4; // <i>error: initializer is not a constraint-expression</i>
 template&lt;Integral T&gt; 
-  concept bool V3 = true;  // <i>error: constrained template</i>
+  concept bool V3 = true;  // <i>error: constrained template declared as a concept</i>
 concept bool V4 = 0;       // <i>error: not a template</i></code></pre>
   </cxx-codeblock>
       
@@ -3026,7 +3009,7 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
       a preceding comma. In this case, the ellipsis is parsed as part of the 
       <cxx-grammarterm><i>abstract-declarator</i></cxx-grammarterm> if the type of the
       parameter either names a template parameter pack that has not been 
-      expanded or contains <code>auto</code> <ins>or a 
+      expanded or contains <ins>either</ins> <code>auto</code> <ins>or a 
       <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm></ins>; otherwise, 
       it is parsed as part of the 
       <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>.

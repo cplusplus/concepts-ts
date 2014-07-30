@@ -1204,10 +1204,9 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
 
       <p number="14">
       If the explicit instantiation names a constrained function template, 
-      member function, or member function template, then the
-      explicit specialization shall have associated constraints that are
-      equivalent to those of the associated constraints of the template 
-      declaration (<cxx-ref to="temp"></cxx-ref>) after substituting the 
+      member function, or member function template, the explicit specialization 
+      shall have associated constraints that are equivalent to those of the 
+      template declaration (<cxx-ref to="temp"></cxx-ref>) after substituting the
       specified or deduced template arguments into the template's associated 
       constraints.
 
@@ -1216,9 +1215,8 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
       respective template declarations as if the templates were unconstrained.
 
       The template arguments of an explicit specialization are not required
-      to satisfy the associated constraints of the declaration's 
-      template declaration (if any). 
-      
+      to satisfy the associated constraints of the declaration (if any). 
+
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = requires (T t) { t.f(); };
@@ -1232,9 +1230,8 @@ template void f(Effable) requires C&lt;Effable&gt;; // <i>OK</i>
 template void f(int) requires C&lt;int&gt;;         // <i>OK</i>
       </cxx-codeblock>
       </cxx-example>
+
       <cxx-example class="inline">
-      The explicit instantiation of a constrained class template does not
-      include a specification of associated constraints.
       <cxx-codeblock>
 template&lt;C T&gt; struct Vec { };
 
@@ -1258,7 +1255,7 @@ template void S&lt;int&gt;::f();               // <i>OK: explicit specialization
 template void S&lt;int&gt;::f() requires C&lt;T&gt;; // <i>OK: explicit specialization of #2</i>
       </cxx-codeblock>
       In the last declaration, the <cxx-grammarterm>requires-clause</cxx-grammarterm> 
-      is need to determine which declaration is being explicitly instantiated.
+      is needed to determine which declaration is being explicitly instantiated.
       </cxx-example>
       </p>
 

@@ -81,7 +81,7 @@ void g(int n) requires sizeof(n) == 4;
       a preceding comma. In this case, the ellipsis is parsed as part of the 
       <cxx-grammarterm>abstract-declarator</cxx-grammarterm> if the type of the
       parameter either names a template parameter pack that has not been 
-      expanded or contains <code>auto</code> <ins>or a 
+      expanded or contains <ins>either</ins> <code>auto</code> <ins>or a 
       <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm></ins>; otherwise, 
       it is parsed as part of the 
       <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>.
