@@ -88,10 +88,10 @@
 
         <cxx-example class="inline">
         <cxx-codeblock>
-namespace N {
+struct N {
   template&lt;typename T&gt; struct Wrap;
-  template&lt;typename T&gt; Wrap<T> make_wrap(T);
-}
+  template&lt;typename T&gt; static Wrap<T> make_wrap(T);
+};
 template&lt;typename T, typename U&gt; struct Pair;
 template&lt;typename T, typename U&gt; Pair&lt;T, U&gt; make_pair(T, U);
 template&lt;int N&gt; struct Size { };
