@@ -257,7 +257,7 @@ template&lt;typename T&gt;
       unevaluated operand (<cxx-ref in="cxx" to="basic.def.odr"></cxx-ref>).
 
       <cxx-example class="inline">
-      The following is requirement evaluates to <code>true</code> for all 
+      The following requirement evaluates to <code>true</code> for all
       arithmetic types (<cxx-ref in="cxx" to="basic.fundamental"></cxx-ref>),
       and <code>false</code> for pointer types 
       (<cxx-ref in="cxx" to="basic.compound"></cxx-ref>).
@@ -274,7 +274,7 @@ requires (T a, T b) {
       <cxx-example class="inline">
       <cxx-codeblock>
 requires () {
-  new T[-1];  // error: the valid expression well never be well-formed.
+  new T[-1];  // error: the valid expression will never be well-formed.
 }
       </cxx-codeblock>
       </cxx-example>
@@ -305,7 +305,7 @@ requires () {
       </cxx-example>
       </p>
 
-      <p>If the required type will always results in a substitution failure,
+      <p>If the required type will always result in a substitution failure,
       then the program is ill-formed.
       <cxx-example class="inline">
       <cxx-codeblock>
@@ -363,7 +363,7 @@ requires () {
       <li>an optional associated type constraint</li>
       <li>an optional result type constraint,</li>
       <li>an optional constant expression constraint, and </li>
-      <li>an optional an exception constraint.</li>
+      <li>an optional exception constraint.</li>
       </ul>
       A <cxx-grammarterm>compound-requirement</cxx-grammarterm> is
       satisfied if and only if every constraint in the set is satisfied.
