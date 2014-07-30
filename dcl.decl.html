@@ -35,9 +35,8 @@
   <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = true;
 
-void f1(auto x) requires C&lt;decltype(x)&gt;; // <i>OK</i>
-void f2(int x) requires C&lt;int&gt;;          // <i>OK</i>
-auto n requires C&lt;decltype(n)&gt; = 'a';    // <i>error: constrained variable declaration</i></cxx-codeblock>
+void f1(int x) requires C&lt;int&gt;;       // <i>OK</i>
+auto n requires C&lt;decltype(n)&gt; = 'a'; // <i>error: constrained variable declaration</i></cxx-codeblock>
   </cxx-example>
   </p>
 
@@ -45,9 +44,12 @@ auto n requires C&lt;decltype(n)&gt; = 'a';    // <i>error: constrained variable
   The names of parameters in a function declarator are visible in the
   <cxx-grammarterm>constraint-expression</cxx-grammarterm> of the
   <cxx-grammarterm>requires-clause</cxx-grammarterm>.
-  <cxx-example>
+  <cxx-example class="inline">
   <cxx-codeblock>
-void f(int n) requires sizeof(n) == 4; // OK
+template&lt;typename T&gt; concept bool C = true;
+
+void f(auto x) requires C&lt;decltype(x)&gt;;
+void g(int n) requires sizeof(n) == 4;
   </cxx-codeblock>
   </cxx-example>
   </p>
@@ -57,11 +59,6 @@ void f(int n) requires sizeof(n) == 4; // OK
 
     <cxx-section id="dcl.fct" number="5">
       <h1>Functions</h1>
-
-      <!-- TODO: Add to /15 a rule that disambiguates the ... (without
-      a preceeding ',' for constrained-type-specifiers). If it's needed.
-
-      The "or contains auto" will need to be updated. -->
 
       Modify the second sentence of paragraph 5. The remainder of this
       paragraph has been omitted.
@@ -78,54 +75,58 @@ void f(int n) requires sizeof(n) == 4; // OK
       Modify paragraph 15. Note that the footnote reference has been
       omitted.
 
-      <p number="15">
+      <p class="quoted" number="15">
       There is a syntactic ambiguity when an ellipsis occurs at the end of a 
       <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> without
       a preceding comma. In this case, the ellipsis is parsed as part of the 
       <cxx-grammarterm>abstract-declarator</cxx-grammarterm> if the type of the
       parameter either names a template parameter pack that has not been 
-      expanded or contains <del><code>auto</code></del><ins>a placeholder
-      type</ins>; otherwise, it is parsed as part of the 
+      expanded or contains <code>auto</code> <ins>or a 
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm></ins>; otherwise, 
+      it is parsed as part of the 
       <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>.
       </p>
 
       Add the following paragraphs after
       <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>/15.
 
-      <p number="16">
+      <p class="quoted" number="16">
       An abbreviated function (<cxx-ref to="dcl.spec.auto"></cxx-ref>)
       is equivalent to a function template (<cxx-ref to="temp.fct"></cxx-ref>) whose
       <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
-      includes one invented type <cxx-grammarterm>template-parameter</cxx-grammarterm>
-      for each occurrence of a placeholder type, designated by either 
-      the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
-      (<cxx-ref to="dcl.spec.auto">"</cxx-ref>)
-      or by a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
-      (<cxx-ref to="dcl.spec.constr"></cxx-ref>),
-      in the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, 
+      includes one invented <cxx-grammarterm>template-parameter</cxx-grammarterm>
+      for each occurrence of a placeholder in the 
+      <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, 
       in order of appearance. 
 
-      If the placeholder type is designated by a
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>, the
-      invented template parameter is a 
-      <cxx-grammarterm>constrained-parameter</cxx-grammarterm>
-      (<cxx-ref to="temp.param"></cxx-ref>)
-      declared with same 
+      If the placeholder is designated by the <code>auto</code>
+      <cxx-grammarterm>type-specifier</cxx-grammarterm>, then the corresponding
+      invented template parameter is a type 
+      <cxx-grammarterm>template-parameter</cxx-grammarterm>.
+
+      Otherwise, the placeholder is designated by a
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>, and
+      the corresponding invented parameter matches the type and form of
+      the prototype parameter of the concept designated by the
       <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
 
-      The invented type <cxx-grammarterm>template-parameter</cxx-grammarterm> is 
+      The invented <cxx-grammarterm>template-parameter</cxx-grammarterm> is 
       a parameter pack if the corresponding 
       <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
       declares a function parameter pack (<cxx-ref to="dcl.fct"></cxx-ref>)
-      and the type of the parameter contains only one placeholder type.
+      and the type of the parameter contains only one placeholder.
+
       If the type of the function parameter that declares a function
-      parameter pack contains more than one placeholder type, the program
+      parameter pack that contains more than one placeholder, the program
       is ill-formed.
 
       The adjusted function parameters of an abbreviated function are derived 
       from the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> 
-      by replacing each occurrence of a placeholder type with the  name of the 
-      corresponding invented type <cxx-grammarterm>template-parameter</cxx-grammarterm>.
+      by replacing each occurrence of a placeholder with the name of the 
+      corresponding invented <cxx-grammarterm>template-parameter</cxx-grammarterm>.
+
+      If the replacement of a placeholder with the name of a template parameter
+      results in an invalid parameter declaration, the program is ill-formed.
 
       <!-- TODO: Write examples with concepts -->
       <cxx-example class="inline">
@@ -148,7 +149,7 @@ void foo(Pair&lt;auto, auto&gt;...); // <i>error: multiple placeholder types in 
       </cxx-codeblock>
       </cxx-example>
   
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C1 = true;
 template&lt;typename T&gt; concept bool C2 = true;
@@ -165,12 +166,23 @@ template&lt;C1... Ts&gt; void g3(Ts&amp;...);         // <i>equivalent to</i> g3
 template&lt;D&lt;int&gt; T&gt; void g4(Vec&lt;T&gt;);         // <i>equivalent to</i> g4(Vec&lt;D&lt;int&gt;>)
       </cxx-codeblock>
       </cxx-example>
+
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;int N&gt; concept bool Num = true;
+
+void h(Num*); // <i>error: invalid type in parameter declaration</i>
+      </cxx-codeblock>
+The equivalent and erroneous declaration would have this form:
+      <cxx-codeblock>
+template&lt;int N&gt; void h(N*); // <i>error: invalid type</i>
+      </cxx-codeblock>
+      </cxx-example>
       </p>
 
-
-      <p> All placeholder types introduced using the same 
+      <p> All placeholders introduced using the same 
       <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> have the 
-      same invented template type parameter.
+      same invented template parameter.
       <cxx-example class="inline">
       <cxx-codeblock>
 namespace N {
@@ -184,18 +196,21 @@ void f0(C a, C b);
       </cxx-codeblock>
       The types of <code>a</code> and <code>b</code> are the same invented template
       type parameter.
+
       <cxx-codeblock>
 void f1(C& a, C* b);
       </cxx-codeblock>
       The type of <code>a</code> is a reference to an invented template type parameter 
       (call it <code>T</code>), and the type of <code>b</code> is a pointer to 
       <code>T</code>.
+
       <cxx-codeblock>
 void f2(N::C a, C b);
 void f3(D&lt;0&gt; a, D&lt;1&gt; b);
       </cxx-codeblock>
       In both functions, the parameters <code>a</code> and
       <code>b</code> have different invented template type parameters.
+
       <cxx-codeblock>
 void f4(E a, E&lt;&gt; b, E&lt;0&gt; c);
       </cxx-codeblock>
@@ -204,6 +219,7 @@ void f4(E a, E&lt;&gt; b, E&lt;0&gt; c);
       associated by the each of the 
       <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
       (<cxx-ref to="dcl.spec.constr"></cxx-ref>) are equivalent.
+
       <cxx-codeblock>
 template&lt;typename...&gt; struct Tuple;
 
@@ -212,6 +228,14 @@ void f5(Tuple&lt;C&amp;, C*, N::C&gt; p);
       The type of <code>p</code> is <code>Tuple&lt;T&, T*, U&gt;</code> where 
       <code>T</code> and <code>U</code> are the invented template type parameters
       corresponding to <code>C</code> and <code>N::C</code>, respectively.
+
+      <cxx-codeblock>
+template&lt;int N&gt; concept Num = true;
+template&lt;int A&gt; struct X;
+
+void f6(X&lt;Num&gt; a, X&lt;Num&gt; b);
+      </cxx-codeblock>
+      The types of <code>a</code> and <code>b</code> have the same type.
       </cxx-example>
       </p>
 
@@ -230,7 +254,6 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
       </cxx-codeblock>
       </cxx-example>
       </p>
-
 
     </cxx-section> <!-- dcl.fct -->
   </cxx-section> <!-- dcl.meaning -->
