@@ -55,7 +55,15 @@
       </del>
 
       <ins>
-      For a generic lambda, that function call operator is an abbreviated
+      A <dfn>generic lambda</dfn> is a 
+      <cxx-grammarterm>lambda-expression</cxx-grammarterm> where either the
+      <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm> or a
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> appears
+      in a parameter type of the
+      <cxx-grammarterm>lambda-declarator</cxx-grammarterm>.
+
+
+      For a generic lambda, the function call operator is an abbreviated
       member function, whose parameters and return type are derived according
       to the rules in <cxx-ref to="dcl.fct"></cxx-ref>.
       </ins>
