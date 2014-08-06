@@ -601,37 +601,6 @@ void h(X&lt;Num&gt;); // associates Num&lt;M&gt; <i>with</i> h
         corresponding to the prototype parameter of <code>Num</code>.
         </cxx-example>
         </p>
-
-
-
-        <!-- TODO: Move this into 14.
-        <p>
-        When multiple <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
-        appear in the type of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
-        or a <cxx-grammarterm>trailing-return-type</cxx-grammarterm>,
-        the associated constraints are a conjunction of the constraints 
-        associated by each <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
-        These constraints are evaluated in the order in which they appear.
-
-        <cxx-example class="inline">
-        <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = true;
-template&lt;typename T, typename U&gt; concept bool D = true;
-template&lt;typename A, typename B&gt; class Pair;
-
-void f(Pair&lt;C, D&lt;int&gt;&gt;&amp; p);
-        </cxx-codeblock>
-        The constraint associated by the type of the parameter <code>p</code>
-        are:
-        <cxx-codeblock>
-C&lt;T1&gt; &amp;&amp; D&lt;T2, int&gt;
-        </cxx-codeblock>
-        where <code>T1</code> and <code>T2</code> are the invented template
-        type parameters corresponding to the 
-        <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
-        <code>C</code> and <code>D&lt;int&gt;</code>.
-        </p>
-        -->
       </cxx-section> <!-- dcl.spec.constr -->
 
     </cxx-section> <!-- dcl.type -->
