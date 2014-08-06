@@ -47,26 +47,16 @@
         <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
         is also used to signify that a lambda is a generic lambda<ins> or
         that a function declaration is an abbreviated function</ins>.
-        </p>
 
+        <cxx-note>
+        The use of the <code>auto</code> 
+        <cxx-grammarterm>type-specifier</cxx-grammarterm> in a non-deduced 
+        context (<cxx-ref in="c++" to="temp.deduct.type"></cxx-ref>) will cause the 
+        deduction of a value for that placeholder type to fail, resulting
+        in an ill-formed program.
+        </cxx-note>
 
-        Add the following paragraphs after 
-        <cxx-ref in="cxx" to="dcl.spec.auto"></cxx-ref>/1.
-
-        <p class="quoted"> 
-        The <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
-        may be used to describe patterns of types to be matched deduction.
-
-        Within such types, a placeholder type shall not appear in a non-deduced 
-        context (<cxx-ref in="cxx" to="temp.deduct.type"></cxx-ref>).
-
-<!--         When a <cxx-grammarterm>simple-type-specifier</cxx-grammarterm> is
-        a <cxx-grammarterm>simple-template-id</cxx-grammarterm>, its
-        <cxx-grammarterm>template-argument-list</cxx-grammarterm> may contain
-        multiple occurrences of the the <code>auto</code> 
-        <cxx-grammarterm>type-specifier</cxx-grammarterm>.
- -->
-
+        <ins class"local">
         <cxx-example class="inline">
         <cxx-codeblock>
 struct N {
@@ -82,8 +72,8 @@ Size<0> s;
 void (auto::*)(auto) p = &amp;Size&lt;0&gt;::f;   // <i>OK</i>
 N::Wrap&lt;auto&gt; a = N::make_wrap(0.0);    // <i>OK</i>
 Pair&lt;auto, auto&gt; p = make_pair(0, 'a'); // <i>OK</i>
-auto::Wrap&lt;int&gt; x = N::make_wrap(0);    // <i>error:</i> auto <i>used in a non-deduced context</i>
-Size&lt;sizeof(auto)&gt; y = s;               // <i>error:</i> auto <i>used in a non-deduced context</i>
+auto::Wrap&lt;int&gt; x = N::make_wrap(0);    // <i>error: failed to deduce a value for</i> auto
+Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce a value for</i> auto
         </cxx-codeblock>
         </cxx-example>
         </p>
@@ -99,17 +89,15 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error:</i> auto <i>used in a
         <cxx-grammarterm>trailing-return-type</cxx-grammarterm>,
         in any context where such a declarator is valid. 
 
-        <ins>
-        The <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
-        can also appear in the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm>
-        of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> of a
-        function declarator.
-        </ins>
-
         If the function declarator includes a 
         <cxx-grammarterm>trailing-return-type</cxx-grammarterm>
         (<cxx-ref to="dcl.fct"></cxx-ref>),
         that specifies the declared return type of the function.
+
+        The <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
+        can also appear in the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm>
+        of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> of a
+        function declarator.
 
         If the declared return type of the function contains a placeholder 
         type, the return type of the function is deduced from return 
@@ -127,7 +115,7 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error:</i> auto <i>used in a
         <ins>in a parameter type</ins> 
         of a
         <cxx-grammarterm>lambda-expression</cxx-grammarterm>, the lambda is
-        a <dfn>generic lambda</dfn>.
+        a generic lambda (<cxx-ref to="expr.prim.lambda"></cxx-ref>).
 
         <cxx-example class="inline">
         <cxx-codeblock>
@@ -138,8 +126,7 @@ auto glambda = [](int i, auto a) { return i; }; // <i>OK: a generic lambda</i>
         <ins>
         Similarly, if the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
         appears in a parameter type of a function declarator, that is an 
-        <dfn>abbreviated function</dfn> 
-        (<cxx-ref to="dcl.fct"></cxx-ref>)
+        abbreviated function (<cxx-ref to="dcl.fct"></cxx-ref>).
 
         <cxx-example class="inline">
         <cxx-codeblock>
