@@ -461,7 +461,7 @@ template&lt;typename T, typename U&gt;
 template&lt;typename T, typename U&gt;
   requires D&lt;U&gt;() &amp;&amp; C&lt;T&gt;  
     void f(T, T, U): // <i>error: constraints are functionally equivalent</i>
-                     // <i>but not equivalent to those of</i> f(C, C, D)<i>;
+                     // <i>but not equivalent to those of</i> f(C, C, D)</i>;
                      // <i>no diagnostic required</i></cxx-codeblock>
   </cxx-example>
   </p>
@@ -1224,35 +1224,28 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
       cannot be constrained; such declarations simply refer to their 
       respective template declarations as if the templates were unconstrained.
 
-      The template arguments of an explicit specialization are not required
-      to satisfy the associated constraints of the declaration (if any). 
+      The template arguments of an explicit specialization shall satisfy
+      the associated constraints of the template declaration, if any
+      (<cxx-ref to="temp.constr"></cxx-ref>).
 
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = requires (T t) { t.f(); };
 
 void f(C) { }
+struct X { void f(); };
 
-struct Effable { void f(); };
+template void f(double);              // <i>error: no matching declaration</i>
+template void f(X) requires C&lt;X&gt;;     // <i>OK</i>
+template void f(int) requires C&lt;int&gt;; // <i>error: constraints not satisfied</i>
 
-template void f(double);                      // <i>error: no matching declaration</i>
-template void f(Effable) requires C&lt;Effable&gt;; // <i>OK</i>
-template void f(int) requires C&lt;int&gt;;         // <i>OK</i>
-      </cxx-codeblock>
-      </cxx-example>
-
-      <cxx-example class="inline">
-      <cxx-codeblock>
 template&lt;C T&gt; struct Vec { };
 
-template struct Vec&lt;int&gt;; // <i>OK</i>
-
-Vec&lt;int&gt; v;               // <i>error: invalid type</i>
+template struct Vec&lt;X&gt;;   // <i>OK</i>
+template struct Vec&lt;int&gt;; // <i>error: constraints not satisfied</i>
       </cxx-codeblock>
-      While the explicit instantiation of <code>Vec&lt;int&gt;</code> is
-      valid, the use of that type is not, since <code>int</code> does
-      not satisfy <code>C</code>.
       </cxx-example>
+      
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt;
