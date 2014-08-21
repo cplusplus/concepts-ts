@@ -97,22 +97,75 @@
       specializations, and the function template for <code>F1</code> is more 
       specialized than the template for <code>F2</code> according to the 
       partial ordering rules described in 
-      <cxx-ref to="temp.func.order"></cxx-ref><del>.</del><ins>, or, if not that,
-      </li>
+      <cxx-ref to="temp.func.order"></cxx-ref><del>.</del><ins>, or, 
+      if not that,</ins> </li>
       
       <li><ins>
-      <code>F1</code> and <code>F2</code> are member functions of a class 
-      template specialization, <code>T</code>, and <code>M1</code> and 
-      <code>M2</code> are the member function declarations in the template
-      of <code>T</code> that correspond to <code>F1</code> and <code>F2</code>,
-      respectively, and <code>M1</code> is more constrained than <code>M2</code>
-      according to the partial ordering of constraints described in
-      <cxx-ref to="temp.constr"></cxx-ref>.
-      </ins></li>
-      </p>
-
+      <code>F1</code> is more constrained than <code>F2</code> according to
+      the partial ordering of constraints described in 
+      <cxx-ref to="temp.constr"></cxx-ref>.</ins></li>
+      </ul>
+      <!-- </p> -->
     </cxx-section> <!-- over.match.best -->
-
   </cxx-section> <!-- over.match -->
+
+  <cxx-section id="over.over">
+    <h1>Address of overloaded function</h1>
+
+    The introduction of constraints modifies the rules for determining
+    which function is selected when taking the address of an overloaded
+    function. Insert a new paragraph before paragraph 4.
+
+    <p class="quoted" number="4">
+    If a single constrained function is selected, and the constraints are
+    not satisfied (<cxx-ref to="temp.constr"></cxx-ref>), the program
+    is ill-formed. 
+    </p>
+
+    Replace the existing paragraph 4 with this paragraph.
+
+    <!-- FIXME: This algorithm is going to be a common theme. It should
+         be called out somewhere in overload resolution. -->
+    <p class="quote" number="5">
+    If more than one function, any function or function template specialization
+    in that set are eliminated if their associated constraint (if any) are not 
+    satisfied (<cxx-ref to="temp.constr"></cxx-ref>). Among the remaining
+    functions, the following rules are used to choose the  the best function. 
+
+    A selected function <code>F1</code> is a better choice another selected 
+    function <code>F2</code> if:
+    <ul>
+    <li><code>F1</code> is not a function template specialization and
+    <code>F2</code>is a function template specialization, or if not that,</li>
+    
+    <li><code>F1</code> and <code>F2</code> are function template 
+    specializations, and the function template for <code>F1</code> is more 
+    specialized than the template for <code>F2</code> according to the partial 
+    ordering rules described in <cxx-ref to="temp.func.order"></cxx-ref>,
+    or if not that, </li>
+
+    <li><code>F1</code> is more constrained than <code>F2</code> according
+    to the partial ordering rules described in 
+    <cxx-ref to="temp.constr"></cxx-ref>.
+    </ul>
+    If there is exactly one function that is better than all others, then
+    that is the selected function. Otherwise, the program is ill-formed.
+
+    Include the following examples in paragraph 5 (paragraph 6 in this
+    document):
+
+    <p class="quote" number="6">
+    <cxx-example>
+    <cxx-codeblock>
+void f() { }                // <i>#1</i>
+void f() requires true { }; // <i>#2</i>
+void g() requires false;
+
+void (*pf)() = &amp;f;         // <i>selects #2</i>
+void (*pg)() = &amp;g;         // <i>error: g() cannot be selected</i>
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+    </cxx-section> <!-- over.over -->
 
 </cxx-clause>
