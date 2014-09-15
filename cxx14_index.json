@@ -113,5 +113,15 @@
   "temp.deduct.conv"      : "14.8.2.3",
   "temp.deduct.partial"   : "14.8.2.4",
   "temp.deduct.type"      : "14.8.2.5",
-  "temp.deduct.decl"      : "14.8.2.6"
+  "temp.deduct.decl"      : "14.8.2.6",
+
+  "except"                : "15",
+  "except.throw"          : "15.1",
+  "except.ctor"           : "15.2",
+  "except.handle"         : "15.3",
+  "except.spec"           : "15.4",
+  "except.special"        : "15.5",
+  "except.terminate"      : "15.5.1",
+  "except.unexcpected"    : "15.5.2",
+  "except.uncaught"       : "15.5.3",
 }
