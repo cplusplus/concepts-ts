@@ -289,7 +289,7 @@ template&lt;typename T&gt; Vec&lt;T&gt; make_vec(std::initalizer_list&lt;T&gt;) 
 
 auto x1 = { 1, 2 };                 // <ins><i>OK:</i></ins> decltype(x1) <i>is</i> std::initializer_list&lt;int&gt;
 auto x2 = { 1, 2.0 };               // <i>error: cannot deduce element type</i> <ins>
-auto&amp; x3 = &x1.begin();             // <i>OK:</i> decltype(x3) <i>is</i> int&amp;
+auto&amp; x3 = *x1.begin();             // <i>OK:</i> decltype(x3) <i>is</i> int&amp;
 const auto* p = &x3;                // <i>OK:</i> decltype(p) <i>is</i> const int*
 Vec&lt;auto&gt; v1 = make_vec({1, 2, 3}); // <i>OK:</i> decltype(v1) <i>is</i> Vec&lt;int&gt;
 Vec&lt;auto&gt; v2 = {1, 2, 3};           // <i>error: cannot deduce element type</i></ins>
