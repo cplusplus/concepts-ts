@@ -2,7 +2,8 @@
 <cxx-clause id="dcl.decl" number="8">
   <h1>Declarators</h1>
 
-  Modify <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>/1 as follows:
+  Modify the definition of the <cxx-grammarterm>init-declarator</cxx-grammarterm>
+  production in <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>/1 as follows:
 
   <p class="quoted">
   A declarator declares a single variable, function, or type within a 
@@ -91,8 +92,13 @@ void g(int n) requires sizeof(n) == 4;
       <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>/15.
 
       <p class="quoted" number="16">
-      An abbreviated function (<cxx-ref to="dcl.spec.auto"></cxx-ref>)
-      is equivalent to a function template (<cxx-ref to="temp.fct"></cxx-ref>) whose
+      An <dfn>abbreviated function</dfn> is a function whose
+      parameter-type-list inclues one or more placeholders 
+      (<cxx-ref to="dcl.spec.auto"></cxx-ref>,
+      <cxx-ref to="dcl.spec.constr"></cxx-ref>).
+
+      An abbreviated function is equivalent to a function template 
+      (<cxx-ref to="temp.fct"></cxx-ref>) whose
       <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
       includes one invented <cxx-grammarterm>template-parameter</cxx-grammarterm>
       for each occurrence of a placeholder in the 
@@ -107,17 +113,21 @@ void g(int n) requires sizeof(n) == 4;
       Otherwise, the placeholder is designated by a
       <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>, and
       the corresponding invented parameter matches the type and form of
-      the prototype parameter of the concept designated by the
+      the prototype parameter (<cxx-ref to="dcl.spec.concept"></cxx-ref>) of 
+      the concept designated by the 
       <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
 
       The invented <cxx-grammarterm>template-parameter</cxx-grammarterm> is 
       a parameter pack if the corresponding 
       <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
-      declares a function parameter pack (<cxx-ref to="dcl.fct"></cxx-ref>)
-      and the type of the parameter contains only one placeholder.
+      declares a function parameter pack and the type of the parameter 
+      contains only one placeholder.
 
+      <!-- TODO: This is up for discussion. Striking it should have
+           no serious consequence. Note that there is a corresponding
+           example in this section. -->
       If the type of the function parameter that declares a function
-      parameter pack that contains more than one placeholder, the program
+      parameter pack containing more than one placeholder, the program
       is ill-formed.
 
       The adjusted function parameters of an abbreviated function are derived 
@@ -128,7 +138,6 @@ void g(int n) requires sizeof(n) == 4;
       If the replacement of a placeholder with the name of a template parameter
       results in an invalid parameter declaration, the program is ill-formed.
 
-      <!-- TODO: Write examples with concepts -->
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; class Vec { };
@@ -139,18 +148,14 @@ void f2(Vec&lt;auto*&gt;...);
 void f3(auto (auto::*)(auto));
 
 template&lt;typename T, typename U&gt; 
-  void f1(const T&, U);        // <i>equivalent to</i> f1(const auto&amp;, auto)
+  void f1(const T&, U);        // <i>redeclaration of</i> f1(const auto&amp;, auto)
 template&lt;typename... T&gt; 
-  void f2(Vec&lt;T*&gt;...);         // <i>equivalent to</i> f2(Vec&lt;auto*&gt;...)
+  void f2(Vec&lt;T*&gt;...);         // <i>redeclaration of</i> f2(Vec&lt;auto*&gt;...)
 template&lt;typename T, typename U, typename V&gt;
-  void f3(T (U::*)(V));        // <i>equivalent to</i> f3(auto (auto::*)(auto))
+  void f3(T (U::*)(V));        // <i>redeclaration of</i> f3(auto (auto::*)(auto))
 
 void foo(Pair&lt;auto, auto&gt;...); // <i>error: multiple placeholder types in a parameter pack</i>
-      </cxx-codeblock>
-      </cxx-example>
-  
-      <cxx-example class="inline">
-      <cxx-codeblock>
+
 template&lt;typename T&gt; concept bool C1 = true;
 template&lt;typename T&gt; concept bool C2 = true;
 template&lt;typename T, typename U&gt; concept bool D = true;
@@ -160,10 +165,10 @@ void g2(Vec&lt;C1&gt;&amp;);
 void g3(C1&amp;...);
 void g4(Vec&lt;D&lt;int&gt;&gt;);
 
-template&lt;C1 T, C2 U&gt; void g1(const T*, U&amp;); // <i>equivalent to</i> g1(const C1*, C2&amp;)
-template&lt;C1 T&gt; void g2(Vec&lt;T&gt;&amp;);            // <i>equivalent to</i> g2(Vec&lt;C1&gt;&amp;)
-template&lt;C1... Ts&gt; void g3(Ts&amp;...);         // <i>equivalent to</i> g3(C1&amp;...)
-template&lt;D&lt;int&gt; T&gt; void g4(Vec&lt;T&gt;);         // <i>equivalent to</i> g4(Vec&lt;D&lt;int&gt;>)
+template&lt;C1 T, C2 U&gt; void g1(const T*, U&amp;); // <i>redeclaration of</i> g1(const C1*, C2&amp;)
+template&lt;C1 T&gt; void g2(Vec&lt;T&gt;&amp;);            // <i>redeclaration of</i> g2(Vec&lt;C1&gt;&amp;)
+template&lt;C1... Ts&gt; void g3(Ts&amp;...);         // <i>redeclaration of</i> g3(C1&amp;...)
+template&lt;D&lt;int&gt; T&gt; void g4(Vec&lt;T&gt;);         // <i>redeclaration of</i> g4(Vec&lt;D&lt;int&gt;>)
       </cxx-codeblock>
       </cxx-example>
 
@@ -219,24 +224,6 @@ void f4(E a, E&lt;&gt; b, E&lt;0&gt; c);
       associated by the each of the 
       <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
       (<cxx-ref to="dcl.spec.constr"></cxx-ref>) are equivalent.
-
-      <cxx-codeblock>
-template&lt;typename...&gt; struct Tuple;
-
-void f5(Tuple&lt;C&amp;, C*, N::C&gt; p);
-      </cxx-codeblock>
-      The type of <code>p</code> is <code>Tuple&lt;T&, T*, U&gt;</code> where 
-      <code>T</code> and <code>U</code> are the invented template type parameters
-      corresponding to <code>C</code> and <code>N::C</code>, respectively.
-
-      <cxx-codeblock>
-template&lt;int N&gt; concept Num = true;
-template&lt;int A&gt; struct X;
-
-void f6(X&lt;Num&gt; a, X&lt;Num&gt; b);
-      </cxx-codeblock>
-      The types of <code>a</code> and <code>b</code> have the same type.
-      </cxx-example>
       </p>
 
       <!-- TODO: Move into temp.fct? -->
