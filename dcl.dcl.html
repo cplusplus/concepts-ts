@@ -638,7 +638,9 @@ void h(X&lt;Num&gt;); // associates Num&lt;M&gt; <i>with</i> h
       in namespace scope (<cxx-ref in="cxx" to="basic.scope.namespace"></cxx-ref>).
       
       A function template definition having the <code>concept</code>
-      specifier is called a <dfn>function concept</dfn>. 
+      specifier is called a <dfn>function concept</dfn>. A function
+      concept is a non-throwing function 
+      (<cxx-ref in="cxx" to="expect.spec"></cxx-ref>).
       
       A variable template definition having the <code>concept</code> 
       specifier is called a <dfn>variable concept</dfn>.
@@ -664,48 +666,57 @@ struct S {
       </cxx-example>
       </p>
 
+      <p> No storage specifiers shall appear in a declaration with the 
+      <code>concept</code> specifier. Additionally, a concept definition
+      shall not include the <code>friend</code> or <code>constexpr</code>
+      specifiers. </p>
+
+      <p> Every concept definition is also a <code>constexpr</code> declaration
+      (<cxx-ref in="cxx" to="dcl.constexpr"></cxx-ref>). </p>
+
+      <p>A concept definition shall be unconstrained.
+      <cxx-note>
+      A concept defines a total mapping from its template arguments to the 
+      values <code>true</code> and <code>false</code>.
+      </cxx-note>
+      </p>
+
       <p> The first declared template parameter of a concept definition is its
       <dfn>prototype parameter</dfn>. 
-
-      <!-- FIXME: Am I using this? -->
-      A <dfn>type concept</dfn> is a concept whose prototype parameter is a type
-      <cxx-grammarterm>template-parameter</cxx-grammarterm>. 
 
       A <dfn>variadic concept</dfn> is a concept whose prototype parameter
       is a template parameter pack.
       </p>
 
-      <p>Every concept definition is also a <code>constexpr</code> declaration
-      (<cxx-ref in="cxx" to="dcl.constexpr"></cxx-ref>).
-      </p>
-
       <p>A function concept has the following restrictions:
       <ul>
-        <li> The template must be unconstrained.</li>
-        <li> The return type must be <code>bool</code>. </li>
+        <li> No <cxx-grammarterm>function-specifier</cxx-grammarterm>s shall
+             appear in the declaration. </li>
+        <li> The return type shall be <code>bool</code>. </li>
         <li> The declaration shall have a 
         <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
         equivalent to <code>()</code>. </li>
         <li> The function shall not be recursive. </li>
         <li> The function body shall consist of a single <code>return</code> 
         statement whose <cxx-grammarterm>expression</cxx-grammarterm> shall be a
-        <cxx-grammarterm>constraint-expression</cxx-grammarterm>. </li>
+        <cxx-grammarterm>constraint-expression</cxx-grammarterm>
+        (<cxx-ref to="temp.constr"></cxx-ref>).
+        </li>
       </ul>
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; 
-  concept int C2() { return 0; }      // <i>error: return type is not</i> bool
+  concept int F1() { return 0; }      // <i>error: return type is not</i> bool
 template&lt;typename T&gt; 
-  concept bool C3(T) { return true; } // <i>error: must have no parameters</i>
+  concept bool F2(T) { return true; } // <i>error: must have no parameters</i>
       </cxx-codeblock>
       </cxx-example>
       <!-- </p> -->
 
       <p>A variable concept has the following restrictions:
       <ul>
-        <li> The template must be unconstrained. </li>
-        <li> The declared type must be <code>bool</code>. </li>
-        <li> The declaration must have an initializer. </li>
+        <li> The declared type sall be <code>bool</code>. </li>
+        <li> The declaration sall have an initializer. </li>
         <li> The initializer shall be a 
         <cxx-grammarterm>constraint-expression</cxx-grammarterm>. </li>
       </ul>
