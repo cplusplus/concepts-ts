@@ -376,6 +376,29 @@ template&lt;class T1, class T2, class T2, class T3, class T4, class T5, class T6
         Deduction of a placeholder from a template argument succeeds only when 
         the deduced value satisfies the constraints associated by the
         <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
+
+        <cxx-example class="inline">
+        <cxx-codeblock>
+template&lt;typename T&gt; concept bool C1 = false;
+template&lt;int N&gt; concept bool C2 = false;
+template&lt;template&lt;typename&gt; class X&gt; C3 = false;
+
+template&lt;typename T, int N&gt; class Array { };
+template&lt;typename T, template&lt;typename&gt; class A&gt; class Stack { };
+template&lt;typename T&gt; class Alloc { };
+
+void f1(C1 c);            // C1 <i>designates a placeholder type</i>
+void f2(Array&lt;auto, C2&gt;); // C2 <i>designates a placeholder for an integer value</i>
+void f3(Stack&lt;auto, C3&gt;); // C3 <i>designates a placeholder for a class template</i>
+
+f1(0);                    // <i>error</i>
+f2(Array&lt;int, 3&gt;{});      // <i>error</i>
+f3(Stack&lt;char, Alloc&gt;{}); // <i>error</i>
+        </cxx-codeblock>
+In each of these function calls, the deduction of the placeholder designated 
+by the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+fails because the associated constraints are not satisfied.
+        </cxx-example>
         </p>
 
         <p>
