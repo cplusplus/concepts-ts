@@ -64,6 +64,9 @@
   "over.load"         : "13.1",
   "over.dcl"          : "13.2",
   "over.match"        : "13.3",
+  "over.match.funcs"  : "13.3.1",
+  "over.match.viable" : "13.3.2",
+  "over.match.best"   : "13.3.3",
   "over.over"         : "13.4",
   "over.oper"         : "13.5",
   "over.call"         : "13.5.4",
@@ -123,5 +126,5 @@
   "except.special"        : "15.5",
   "except.terminate"      : "15.5.1",
   "except.unexcpected"    : "15.5.2",
-  "except.uncaught"       : "15.5.3",
+  "except.uncaught"       : "15.5.3"
 }
