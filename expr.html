@@ -16,12 +16,26 @@
     <cxx-section id="expr.prim.lambda" number="2">
       <h1>Lambda expressions</h1>
 
-      Modify <cxx-ref in="cxx" to="expr.prim.lambda"></cxx-ref>/5.
+      Insert the following paragraph after paragraph 4 to define the
+      term "generic lambda". 
 
       <p number="5" class="quoted">
-      The closure type 
-      <del>for a non-generic</del>
-      <ins>for a</ins>
+      A <dfn>generic lambda</dfn> is a 
+      <cxx-grammarterm>lambda-expression</cxx-grammarterm> where either the
+      <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm> 
+      (<cxx-ref to="dcl.spec.auto"></cxx-ref>)
+      or a
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> 
+      (<cxx-ref to="dcl.spec.constr"></cxx-ref>)
+      appears in a parameter type of the
+      <cxx-grammarterm>lambda-declarator</cxx-grammarterm>.
+      </p>
+
+      Modify paragraph 5 so that the meaning of a generic lambda is defined 
+      in terms of its abbreviated member function call operator.
+
+      <p number="6" class="quoted">
+      The closure type for a non-generic
       <cxx-grammarterm>lambda-expression</cxx-grammarterm> has a public inline 
       function call operator (<cxx-ref in="cxx" to="over.call"></cxx-ref>)
       whose parameters and return type are described by the 
@@ -55,14 +69,6 @@
       </del>
 
       <ins>
-      A <dfn>generic lambda</dfn> is a 
-      <cxx-grammarterm>lambda-expression</cxx-grammarterm> where either the
-      <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm> or a
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> appears
-      in a parameter type of the
-      <cxx-grammarterm>lambda-declarator</cxx-grammarterm>.
-
-
       For a generic lambda, the function call operator is an abbreviated
       member function, whose parameters and return type are derived according
       to the rules in <cxx-ref to="dcl.fct"></cxx-ref>.
@@ -70,7 +76,9 @@
       </p>
 
       Add the following example after those in 
-      <cxx-ref in="cxx" to="expr.prim.lambda"></cxx-ref>/5.
+      <cxx-ref in="cxx" to="expr.prim.lambda"></cxx-ref>/5. Note that
+      the existing examples in the original document are omitted in this
+      document.
 
       <p number="5" class="quoted">
       <ins>
