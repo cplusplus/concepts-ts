@@ -2,13 +2,10 @@
 <cxx-clause id="temp" number="14">
   <h1>Templates</h1>
 
-  <!-- Editing instruction -->
   Modify the <cxx-grammarterm>template-declaration</cxx-grammarterm>
-  grammar in <cxx-ref in="cxx" to="temp"></cxx-ref>/1.
+  grammar in paragraph 1 to allow a template declaration introduced
+  by a concept.
 
-  <!-- TODO: Put this in block quotes. Currently, some formatting is
-       not propagated through the blockquote element, so I'm omitting
-       it for now. -->
   <p number="1" class="quoted">
   <bnf-grammar>
     <bnf-rule>template-declaration</bnf-rule>
@@ -85,7 +82,7 @@ Eq{A, B} void f2(A, B); // <i>OK:</i> Eq{A, B} <i>designates #2</i>
 template&lt;typename T&gt; concept bool C() { return true; }
 template&lt;int N&gt; concept bool C() { return true; }
 
-C{X} void f(); // <i>error: resolution of </i> C{X} <i>is ambiguous</i>
+C{X} void f(); // <i>error: resolution of</i> C{X} <i>is ambiguous</i>
   </cxx-codeblock>
   </cxx-example>
   </p>
