@@ -2,7 +2,7 @@
 <cxx-clause id="over" number="13">
   <h1>Overloading</h1>
 
-  Modify paragraph 1.
+  Modify paragraph 1 to allow overloading based on constraints.
 
   <p class="quoted">
   When two or more different declarations are specified for a single name 
@@ -15,7 +15,9 @@
   cannot be overloaded.
   </p>
 
-  Modify paragraph 3. The itemized list in this paragraph is omitted.
+  Update paragraph 3 to mention a function's overloaded constraints. 
+  Note that the itemized list in the original text is omitted in this
+  document.
 
   <p number="3" class="quoted">
   <cxx-note>
@@ -29,7 +31,9 @@
   <cxx-section id="over.dcl" number="2">
     <h1>Declaration matching</h1>
 
-    Modify paragraph 1. The existing example is omitted from this text.
+    Modify paragraph 1 to extend the notion of declaration matching to
+    also include a function's associated constrains. Note that the
+    example in the original text is omitted in this document.
 
     <p class="quoted">
     Two function declarations of the same name refer to the same function if 
@@ -46,7 +50,9 @@
     <cxx-section id="over.match.viable">
       <h1>Viable functions</h1>
 
-      Modify paragraph 1.
+      Update paragraph 1 to require the checking of a candidate's associated
+      constraints when determining if that candidate is a viable candidate
+      for a function call.
 
       <p class="quoted">
       From the set of candidate functions constructed for a given context 
@@ -61,21 +67,20 @@
       than the ranking of conversion sequences.
       </p>
 
-      Insert the following paragraph after paragraph 1.
+      Insert the following paragraph after paragraph 1; this introduces
+      new a criterion for determining if a candidate is viable. Also, update
+      the beginning of the subsequent paragraphs to account for the
+      insertion.
 
       <p class="quoted" number="2">
-      First, for a function to be viable, if it has associated constraints
-      (<cxx-ref to="temp"></cxx-ref>), those constraints shall be 
-      satisfied (<cxx-ref to="temp.constr"></cxx-ref>).
+      First, for <code>F</code> to be a viable function, if <code>F</code> has 
+      associated constraints (<cxx-ref to="temp"></cxx-ref>), those 
+      constraints shall be satisfied (<cxx-ref to="temp.constr"></cxx-ref>).
       </p>
-
-      Modify paragraph 2 as follows:
 
       <p class="quoted" number="3">
       <del>First</del><ins>Second</ins>, to be a viable function ...
       </p>
-
-      Modify paragraph 3 as follows:
 
       <p class="quoted" number="4">
       <del>Second</del><ins>Third</ins>, for <code>F</code> to be a viable function ...
@@ -87,7 +92,10 @@
       <h1>Best viable function</h1>
 
       Modify the last item in the list in paragraph 1 and extend it with
-      a new item.
+      a final comparison based on the associated constraints of those
+      functions. This applies to both normal functions and specializations
+      of function templates. Note that the preceding (unmodified) items
+      in the original document are elided in this document.
 
       <p class="quoted">
       Define ICS<i>i</i>(<code>F</code>) as follows:
