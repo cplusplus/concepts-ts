@@ -1,0 +1,37 @@
+
+<cxx-clause id="class.derived" number="10">
+  <h1>Derived classes</h1>
+
+  <cxx-section id="class.virtual" number="3">
+    <h1>Virtual functions</h1>
+
+    Insert the following paragraph after paragraph 5 in order to
+    prohibit the declaration of constrained virtual functions and
+    the overriding of a virtual function by a constrained member
+    function.
+
+    <p class="quoted" number="6">
+    If a virtual function has associated constraints 
+    (<cxx-ref to="temp"></cxx-ref>), the program is ill-formed. If
+    a constrained member function overrides a virtual function in any
+    base class, the program is ill-formed.
+    <cxx-example class="inline">
+    <cxx-codeblock>
+struct A {
+  virtual void f() requires true; // <i>error: constrained virtual function</i>
+};
+
+struct B {
+  virtual void f();
+};
+
+struct D : B {
+  void f() requires true; // <i>error: constrained override</i>
+}
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
+    </cxx-section> <!-- class.virtual -->
+
+</cxx-clause> <!-- class.derived -->

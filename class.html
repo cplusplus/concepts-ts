@@ -14,63 +14,39 @@
       <bnf-alt>
         declarator 
         <bnf-opt>virt-specifier-seq</bnf-opt>
-        <bnf-opt>pure-specifier-seq</bnf-opt>
         <ins><bnf-opt>requires-clause</bnf-opt></ins>
+        <bnf-opt>pure-specifier-seq</bnf-opt>
       </bnf-alt>
     </bnf-grammar>
     </p>
 
-  Insert the following paragraphs after <cxx-ref in="cxx" to="class.mem"></cxx-ref>/8.
+    Insert the following paragraphs after <cxx-ref in="cxx" to="class.mem"></cxx-ref>/8.
 
-  <p class="quoted" number="9">
-  A <cxx-grammarterm>requires-clause</cxx-grammarterm> shall only appear
-  in a <cxx-grammarterm>member-declarator</cxx-grammarterm> if its
-  <cxx-grammarterm>declarator</cxx-grammarterm> is a function declarator.
+    <p class="quoted" number="9">
+    A <cxx-grammarterm>requires-clause</cxx-grammarterm> shall only appear
+    in a <cxx-grammarterm>member-declarator</cxx-grammarterm> if its
+    <cxx-grammarterm>declarator</cxx-grammarterm> is a function declarator.
 
-  The <cxx-grammarterm>requires-clause</cxx-grammarterm> associates its 
-  <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the 
-  member function.
+    The <cxx-grammarterm>requires-clause</cxx-grammarterm> associates its 
+    <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the 
+    member function.
 
-  <cxx-example class="inline">
-  <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = true;
+    <cxx-example class="inline">
+    <cxx-codeblock>
+  struct A {
+    A(int*) requires true;  // <i>OK: constrained constructor</i>
+    ~A() requires true;     // <i>OK: constrained destructor</i>
+    void f() requires true; // <i>OK: constrained member function</i>
+    int x requires true;    // <i>error: constrained member variable</i>
+  };
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
 
-struct A {
-  A(int*) requires C&lt;int&gt;;  // <i>OK</i>
-  void f() requires C&lt;int&gt;; // <i>OK</i>
-  int x requires C&lt;T&gt;       // <i>error: constrained member viarable</i>
-};
-  </cxx-codeblock>
-  </cxx-example>
-  </p>
-
-  <p class="quoted">
-  The names of parameters in a function declarator are visible in the
-  <cxx-grammarterm>constraint-expression</cxx-grammarterm> of the
-  <cxx-grammarterm>requires-clause</cxx-grammarterm>. </p>
-  </p>
-
+    <p class="quoted">
+    The names of parameters in a function declarator are visible in the
+    <cxx-grammarterm>constraint-expression</cxx-grammarterm> of the
+    <cxx-grammarterm>requires-clause</cxx-grammarterm>. </p>
   </cxx-section> <!-- class.mem -->
-
-  <cxx-section id="class.mfct">
-    <h1>Member functions</h1>
-
-    <cxx-section id="class.mfct.non-static">
-      <h1>Nonstatic member functions</h1>
-
-      Modify paragraph 6 to read:
-
-      <p number="6">
-      A non-static member function may be declared 
-      <dfn>virtual (<cxx-ref in="cxx" to="class.virtual"></cxx-ref>) or 
-      <dfn>pure virtual</dfn> (<cxx-ref in="cxx" to="class.abstract"></cxx-ref>)<ins>,
-      unless the member function has associated constraints
-      (<cxx-ref to="temp"></cxx-ref>), in which case the program is
-      ill-formed</ins>.
-      </p>
-
-    </cxx-section>
-
-  </cxx-section>
 
 </cxx-clause>
