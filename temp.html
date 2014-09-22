@@ -691,11 +691,15 @@ template&lt;C5... Cx&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter 
   </cxx-section> <!-- temp.param -->
 
 
+  <!-- ==============
+       Template Names 
+       ============== -->
+
   <!-- FIXME: Check that this is in an appropriate place. -->
   <cxx-section id="temp.names">
     <h1>Template names</h1>
 
-    <p>Insert the following paragraphs after 
+    Insert the following paragraphs after 
     <cxx-ref in="cxx" to="temp.names"></cxx-ref>/7.</p>
 
     <p>If a <cxx-grammarterm>template-id</cxx-grammarterm> refers to a
@@ -730,15 +734,23 @@ Ptr&lt;int&gt; z;  // Ok: z has type int*
     </p>
   </cxx-section> <!-- temp.names -->
 
+
+  <!-- ==================
+       Template Arguments
+       ================== -->
+
   <cxx-section id="temp.arg">
     <h1>Template arguments</h1>
 
     <cxx-section id="temp.arg.template">
       <h1>Template template arguments</h1>
 
-      <p>Modify <cxx-ref in="cxx" to="temp.arg.template"></cxx-ref>.
+      Modify paragraph 3 to include rules for matching constrained template 
+      template parameters. Note that the examples following this paragraph in
+      the original document are omitted.
 
-      <p>A <cxx-grammarterm>template-argument</cxx-grammarterm> matches 
+      <p number="3" class="quoted">
+      A <cxx-grammarterm>template-argument</cxx-grammarterm> matches 
       a template <cxx-grammarterm>template-parameter</cxx-grammarterm> 
       (call it <code>P</code>) when each of the template parameters in 
       the <cxx-grammarterm>template-parameter-list</cxx-grammarterm> of 
@@ -747,67 +759,107 @@ Ptr&lt;int&gt; z;  // Ok: z has type int*
       <code>A</code>) matches the corresponding template parameter in 
       the <cxx-grammarterm>template-parameter-list</cxx-grammarterm> of 
       <code>P</code><ins>, and the associated constraints of <code>P</code> 
-      shall subsume the associated constraints of <code>A</code>
+      subsume the associated constraints of <code>A</code>
       (<cxx-ref to="temp.constr"></cxx-ref>)</ins>.
+
+      Two template parameters match if they are of the same kind 
+      (type, non-type, template), 
+      for non-type <cxx-grammarterm>template-parameter</cxx-grammarterm>s,
+      their types are equivalent (<cxx-ref to="temp.over.link"></cxx-ref>), and 
+      for template <cxx-grammarterm>template-parameter</cxx-grammarterm>s, 
+      each of their corresponding 
+      <cxx-grammarterm>template-parameter</cxx-grammarterm>s matches, recursively. 
+
+      When <code>P</code>’s <cxx-grammarterm>template-parameter-list</cxx-grammarterm> 
+      contains a template parameter pack 
+      (<cxx-ref in="cxx" to="temp.variadic"></cxx-ref>), the template parameter 
+      pack will match zero or more template parameters or template parameter 
+      packs in the <cxx-grammarterm>template-parameter-list</cxx-grammarterm> of 
+      <code>A</code> with the same type and form as the template parameter
+      pack in <code>P</code> (ignoring whether those template parameters are 
+      template parameter packs).
+      </p>
+
+      Add the following example to the end of paragraph 3, after the
+      examples given in the original document.
+
+      <p number="3" class="quoted">
       <cxx-example class="inline">
       <cxx-codeblock>
-template&lt;typename T&gt;
-  concept bool X = has_x&lt;T&gt;::value;
-template&lt;typename T&gt;
-  concept bool Y = X&lt;T&gt; && has_y&lt;T&gt;::value;
-template&lt;typename T&gt;
-  concept bool Z = Y&lt;T&gt; && has_z&lt;T&gt;::value;
+template&lt;typename T&gt; concept bool C = requires (T t) { t.f(); };
+template&lt;typename T&gt; concept bool D = C&lt;T&gt; && requires (T t) { t.g(); };
 
-template&lt;template&lt;Y&gt; class C&gt;
-  class temp { ... };
+template&lt;template&lt;C&gt; class P&gt;
+  struct S { };
 
-template&lt;X T&gt; class x;
-template&lt;Z T&gt; class z;
+template&lt;C&gt; struct X { };
+template&lt;D&gt; struct Y { };
+template&lt;typename T&gt; struct Z { };
 
-temp&lt;x&gt; s1; // OK: X is subsumed by Y
-temp&lt;z&gt; s2; // Error: Z subsumes Y
+S&lt;X&gt; s1; // <i>OK:</i> X <i>has the same constraints as</i> P
+S&lt;Y&gt; s2; // <i>error: the constraints of</i> P <i>do not subsume those of</i> Y
+S&lt;Z&gt; s3; // OK: <i>the constraints of P subsume those of</i> Z
       </cxx-codeblock>
-      The template <code>x</code> is a valid argument for <code>temp</code>
-      because any template arguments satisfying <code>Y</code> will also 
-      satisfy <code>X</code>. That is, all uses of <code>x</code> by
-      <code>temp</code> should result in well-formed programs. The 
-      template <code>y</code> is not valid because some template arguments 
-      satisfying <code>Y</code> may not satisfy <code>Z</code>.
       </cxx-example>
       </p>
 
     </cxx-section> <!-- temp.arg.template -->
   </cxx-section> <!-- tmep.arg -->
 
+
+  <!-- =====================
+       Template declarations
+       ===================== -->
+
   <cxx-section id="temp.decls" number="5">
     <h1>Template declarations</h1>
+
+
+    <!-- ===============
+         Class templates
+         =============== -->
 
     <cxx-section id="temp.class">
       <h1>Class templates</h1>
 
-      Insert the following paragraph after 
-      <cxx-ref in="cxx" to="temp.class"></cxx-ref>/3.
+      Modify paragraph 3 to require template constraints for out-of-class
+      definitions of members of constrained templates. Note that the example
+      in the original document is omitted. The example in this paragraph
+      is to be added after the omitted example.
 
-      <p>When a member of a constrained class template is defined outside of 
-      its class template definition, it shall be specified with the
-      <cxx-grammarterm>template-parameters</cxx-grammarterm> and
-      associated constraints of the class template.
+      <p number="3" class="quoted">
+      When a member function, a member class, a member enumeration, a static 
+      data member or a member template of a class template is defined outside 
+      of the class template definition, the member definition is defined as a 
+      template definition in which the 
+      <cxx-grammarterm>template-parameter</cxx-grammarterm>s 
+      <ins>and associated constraints</ins> are those of the class template.
+
+      The names of the template parameters used in the definition of the 
+      member may be different from the template parameter names used in the 
+      class template definition. The template argument list following the class
+      template name in the member definition shall name the parameters in the 
+      same order as the one used in the template parameter list of the member. 
+
+      Each template parameter pack shall be expanded with an ellipsis in the 
+      template argument list.
+
       <cxx-example>
       <cxx-codeblock>
-template&lt;typename T&gt; concept bool Con = ...;
+template&lt;typename T&gt; concept bool C = true;
+template&lt;typename T&gt; concept bool D = true;
 
-template&lt;typename T&gt; requires Con&lt;T&gt;
-  struct S {
+template&lt;C T&gt; struct S {
     void f();
     void g();
+    template&lt;D U&gt; struct Inner;
   }
 
-template&lt;typename T&gt; 
-  requires Con&lt;T&gt;
-    void S&lt;T&gt;::f() { } // Ok: parameters and constraints match
+template&lt;C T&gt; void S&lt;T&gt;::f() { }        // <i>OK: parameters and constraints match</i>
+template&lt;typename T&gt; void S&lt;T&gt;::g() { } // <i>error: no matching declaration for</i> S&lt;T&gt;
 
-template&lt;typename T&gt;
-  void S&lt;T&gt;::g() { } // Error: no declaration of g() in S&lt;T&gt;
+template&lt;C T&gt; 
+  template&lt;D U&gt; struct S&lt;T&gt;::Inner { }; // <i>OK</i>
       </cxx-codeblock>
       </cxx-example>
       </p>
