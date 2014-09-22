@@ -146,7 +146,7 @@ Unary_template{...X} // <i>error: the corresponding parameter is not a</i>
 
   <p>
   <cxx-note>
-  A concept referred to be a <cxx-grammarterm>concept-name</cxx-grammarterm> 
+  A concept referred to by a <cxx-grammarterm>concept-name</cxx-grammarterm> 
   may have template parameters with default template arguments. An
   <cxx-grammarterm>introduction-list</cxx-grammarterm> may omit 
   <cxx-grammarterm>identifier</cxx-grammarterm>s for a corresponding template
@@ -163,7 +163,7 @@ Ineffable{T} void f(T); // <i>OK:</i> f(T) <i>is a function template with</i>
                         // <i>a single template type parameter</i> T
   </cxx-codeblock>
 There is no <cxx-grammarterm>introduced-parameter</cxx-grammarterm> 
-that corresponds to the template parameter, <code>B</code>, in the
+that corresponds to the template parameter <code>B</code> in the
 <code>Ineffable</code> concept, so <code>f(T)</code> is declared with only
 one template parameter.
   </cxx-example>
@@ -326,7 +326,7 @@ D{P, ...Qs} struct T; // <i>associates</i> D&lt;P, Qs...&gt; <i>with</i> T
   <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = true;
 
-// <i>all of the following declarations are equivalent:</i>
+// <i>all of the following declare the same function:</i>
 void g(C);
 template&lt;C T&gt; void g(T);
 C{T} void g(T);
@@ -543,51 +543,37 @@ template&lt;C T&gt; template&lt;typename U, typename __P&gt;
     <h1>Template parameters</h1>
 
     Modify the <cxx-grammarterm>template-parameter</cxx-grammarterm>
-    grammar in <cxx-ref in="cxx" to="temp.param"></cxx-ref>/1 as follow.
+    grammar in <cxx-ref in="cxx" to="temp.param"></cxx-ref>/1 in order
+    to allow constrained template parameters.
 
     <p number="1" class="quoted">
+
     <bnf-grammar>
       <bnf-rule>template-parameter</bnf-rule>
-        <ins><bnf-alt>constrained-parameter</bnf-alt></ins>
+        <del><bnf-alt>parameter-declaration</bnf-alt></del>
+        <ins><bnf-alt>non-type-or-constrained-parameter</bnf-alt></ins>
 
       <ins>
-      <bnf-rule>constrained-parameter</bnf-rule>
-        <!-- non-default constrained parameter -->
+      <bnf-rule>non-type-or-constrained-parameter</bnf-rule>
+        <bnf-alt>basic-parameter-declaration</bnf-alt>
+
         <bnf-alt>
-          constrained-type-specifier 
-          <bnf-opt>...</bnf-opt>
-          <bnf-opt>identifier</bnf-opt>
+          basic-parameter-declaration <bnf-terminal>=</bnf-terminal> initializer
         </bnf-alt>
 
-        <!-- constrained non-type template parameters -->
         <bnf-alt>
-          constrained-type-specifier 
-          <bnf-opt>identifier</bnf-opt>
-          <bnf-terminal>=</bnf-terminal>
-          initializer-clause
+          basic-parameter-declaration <bnf-terminal>=</bnf-terminal> type-id
         </bnf-alt>
 
-        <!-- constrained type template parameters -->
         <bnf-alt>
-          constrained-type-specifier 
-          <bnf-opt>identifier</bnf-opt>
-          <bnf-terminal>=</bnf-terminal>
-          type-id
-        </bnf-alt>
-
-        <!-- constrained template template parameters -->
-        <bnf-alt>
-          constrained-type-specifier 
-          <bnf-opt>identifier</bnf-opt>
-          <bnf-terminal>=</bnf-terminal>
-          id-expression
+          basic-parameter-declaration <bnf-terminal>=</bnf-terminal> id-expression
         </bnf-alt>
       </ins>
     </bnf-grammar>
     </p>
     
-
-    Modify <cxx-ref in="cxx" to="temp.param"></cxx-ref>/2 as follows.
+    Update the wording in <cxx-ref in="cxx" to="temp.param"></cxx-ref>/2 as 
+    follows.
 
     <p number="2" class="quoted">
     There is no semantic difference between <code>class</code> and <code>typename</code> 
@@ -597,111 +583,129 @@ template&lt;C T&gt; template&lt;typename U, typename __P&gt;
     <cxx-grammarterm>qualified-id</cxx-grammarterm> denotes the
     type in a non-type 
     <del><cxx-grammarterm>parameter-declaration</cxx-grammarterm></del>
-    <ins><cxx-grammarterm>constrained-or-non-type-parameter</cxx-grammarterm></ins>. 
+    <ins><cxx-grammarterm>non-type-or-constrained-parameter</cxx-grammarterm></ins>. 
     </p>
 
-    Modify <cxx-ref in="cxx" to="temp.param"></cxx-ref>/15 as follows.
+    Insert the following paragraphs after paragraph 3 in order to distinguish
+    between a template parameter that declares a non-type parameter and a
+    template-parameter that declares a constrained parameter, which may
+    declare a type parameter. 
 
-    <p number="15" class="quoted">
-    If a <cxx-grammarterm>template-parameter</cxx-grammarterm> is a 
-    <cxx-grammarterm>type-parameter</cxx-grammarterm> with an ellipsis prior to 
-    its optional identifier 
-    or is a 
-    <del><cxx-grammarterm>parameter-declaration</cxx-grammarterm></del>
-    <ins><cxx-grammarterm>constrained-or-non-type-parameter</cxx-grammarterm></ins>
-    that declares a parameter pack (<cxx-ref to="dcl.fct"></cxx-ref>),
-    then the template-parameter is a template parameter pack 
-    (<cxx-ref to="temp.variadic"></cxx-ref>).
-     
-    A template parameter pack that is a
-    <del><cxx-grammarterm>parameter-declaration</cxx-grammarterm> </del>
-    <ins><cxx-grammarterm>constrained-or-non-type-parameter</cxx-grammarterm></ins>
-    whose type contains one or more unexpanded parameter packs is a pack 
-    expansion.
+    <p number="3" class="quoted">
+    When a <cxx-grammarterm>non-type-or-constrained-parameter</cxx-grammarterm> has
+    the following form:
+    <bnf-grammar>
+    <bnf-alt>
+    constrained-type-specifier <bnf-opt>...</bnf-opt> <bnf-opt>identifier</bnf-opt>
+    </bnf-alt>
+    </bnf-grammar>
+    it declares a <dfn>constrained template parameter</dfn>.
+
+    Otherwise the parameter is a non-type 
+    <cxx-grammarterm>template-parameter</cxx-grammarterm>.
     </p>
 
-    Add the following paragraphs after
-    <cxx-ref in="cxx" to="temp.param"></cxx-ref>/15.
-
-    <!-- TODO: I don't think I can write this until I've rewritten
-         the constrained-type-specifier work -->.
-
-    <p>A <dfn>constrained template parameter</dfn> is a
-    <cxx-grammarterm>constrained-parameter</cxx-grammarterm> whose
-    <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> contains a
-    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
-
-    A <cxx-grammarterm>constrained-parameter</cxx-grammarterm> 
-    defines its identifier to be a template parameter that matches in
-    kind the first template parameter, called the <dfn>prototype parameter</dfn>, 
-    of the concept designated by the 
-    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
-
-    <cxx-example class="inline">
+    <p class="quoted">
+    If the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
+    appears in the the parameter type of a
+    <cxx-grammarterm>non-type-or-constrained-parameter</cxx-grammarterm>,
+    the program is ill-formed. The program is also ill-formed if a
+    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> appears
+    anywhere in the <cxx-grammarterm>basic-parameter-declaration</cxx-grammarterm> 
+    and the form of that declaration does not match the form above.
+    <cxx-example>
     <cxx-codeblock>
-template&lt;typename T&gt; 
-  concept bool C1 = ...;
-template&lt;template&lt;typename&gt; class X&gt; 
-  concept bool C2 = ...;
-template&lt;int N&gt; 
-  concept bool P = ...;
+template&lt;typename T&gt; concept bool C = true;
+template&lt;typename T&gt; concept bool D = true;
 
-template&lt;C1 T&gt; void f();       // T is a type parameter
-template&lt;C2 X&gt; void g();       // X is a template with one type parameter
-template&lt;P N&gt; void x();        // N has type int
-template&lt;const P* N&gt; void y(); // N has type const int*
+template&lt;C T&gt; struct S1;       // <i>OK:</i> T <i>is a constrained template parameter</i>
+template&lt;int N&gt; struct S2;     // <i>OK:</i> N <i>is a non-type template parameter</i>
+template&lt;auto X&gt; struct S2;    // <i>error: auto in template parameter</i>
+template&lt;const D N&gt; void f1(); // <i>error:</i> D <i>is used with a const-qualifier</i>
+template&lt;D* N&gt; void f2();      // <i>error:</i> N <i>declares a pointer-to-</i>D
     </cxx-codeblock>
     </cxx-example>
     </p>
 
-    <p>If the prototype parameter is a type parameter (including template
-    template parameters), then the 
-    <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of the
-    constrained parameter shall consist of only the
-    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
+
+    Insert the following paragraphs after paragraph 8. These paragraphs
+    define the meaning of a constrained template parameter.
+
+
+    <p>A constrained template parameter declares a template parameter whose
+    type and form match that of the prototype parameter of the concept 
+    designated by its <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
+    The designated concept is found using the rules in
+    <cxx-ref to="dcl.spec.constr"></cxx-ref>. 
+
+    In particular, when 
+    <code>T</code> is a template parameter declared as 
+    <cxx-grammarterm>non-type-or-constrained-parameter</cxx-grammarterm>,
+    and <code>P</code> is its corresponding prototype parameter, then
+    <code>T</code> is declared as follows:
+    
+    <ul>
+    <li> If <code>P</code> is a type 
+    <cxx-grammarterm>template-parameter</cxx-grammarterm> declared with
+    the <code>code</code> or <code>typename</code>, <code>T</code> is also 
+    type <cxx-grammarterm>template-parameter</cxx-grammarterm> . It is 
+    unspecified whether <code>T</code> is declared with <code>class</code>
+    or <code>typename</code>.</li>
+
+    <li> If <code>P</code> is a non-type 
+    <cxx-grammarterm>template-parameter</cxx-grammarterm>, <code>T</code> is 
+    also a non-type <cxx-grammarterm>template-parameter</cxx-grammarterm>
+    having the same type as <code>P</code>.</li>
+
+    <!-- TODO: A template template parameter can be declared with
+         typename in addition to class. -->
+    <li> If <code>P</code> is a template 
+    <cxx-grammarterm>template-parameter</cxx-grammarterm>, <code>T</code> is
+    also a template <cxx-grammarterm>template-parameter</cxx-grammarterm>
+    having the same <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
+    <code>P</code>.</li>
+
+    <li> If <code>P</code> declares a template parameter pack,
+    <code>T</code> also declares a template parameter pack. In such cases,
+    <code>T</code> shall be declared with <code>...</code> following its
+    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.</li>
+    </ul>
+
     <cxx-example class="inline">
     <cxx-codeblock>
-template&lt;const C1&gt; // Error: declares a const-qualified type parameter
-  struct S;
+template&lt;typename T&gt; concept bool C1 = true;
+template&lt;template&lt;typename&gt; class X&gt; concept bool C2 = true;
+template&lt;int N&gt; concept bool C3 = true;
+template&lt;typename... Ts&gt; concept bool C4 = true;
+template&lt;char... Cs&gt; concept bool C5 = true;
+
+template&lt;C1 T&gt; void f1();     // <i>OK:</i> T <i>is a type template-parameter</i>
+template&lt;C2 X&gt; void f2();     // <i>OK:</i> X <i>is a template with one type-parameter</i>
+template&lt;C3 N&gt; void f3();     // <i>OK:</i> N <i>has type int</i>
+template&lt;C4... Ts&gt; void f4(); // <i>OK:</i> Ts <i>is a template parameter pack of types</i>
+template&lt;C4 Ts&gt; void f5();    // <i>error: parameter pack declared without</i> ...
+template&lt;C5... Cx&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter pack of</i> char<i>s</i>
     </cxx-codeblock>
     </cxx-example>
     </p>
 
-    <p>The declared <cxx-grammarterm>template-parameter</cxx-grammarterm> is
-    a template parameter pack if the prototype parameter declares a
-    template parameter pack. In such cases, the 
-    <cxx-grammarterm>declarator-id</cxx-grammarterm> or
-    <cxx-grammarterm>abstract-declarator</cxx-grammarterm> of the
-    <cxx-grammarterm>constrained-parameter</cxx-grammarterm> shall
-    also include an ellipsis.
-    <cxx-example class="inline">
-    <cxx-codeblock>
-template&lt;typename... Ts&gt;
-  concept bool X = ...;
 
-template&lt;X... Xs&gt; void f(); // Xs is a parameter pack
-template&lt;X Xs&gt; void g();    // Error: must X must include ...
-    </cxx-codeblock>
-    </cxx-example>
+    <!-- FIXME: This isn't right. -->
+    <p>A constrained template parameter associates a constraint with the
+    template declaration in which it is declared. That constraint is formed
+    by first deriving a constraint 
+
+
+    <cxx-grammarterm>template-id</cxx-grammarterm> used to
+    identify the concept designated by the
+    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>, as 
+    described in <cxx-ref to="dcl.spec.constr"></cxx-ref>. Let
+    <code>TT</code> be that <cxx-grammarterm>template-id</cxx-grammarterm>.
+    The constraint is formed by 
+
+    according
+    to the rules in <cxx-ref to="dcl.spec.constr"></cxx-ref>. 
     </p>
-
-    <p>If the <cxx-grammarterm>constrained-parameter</cxx-grammarterm>
-    declares a type parameter, then the 
-    <cxx-grammarterm>constrained-initializer</cxx-grammarterm>
-    is parsed as a <cxx-grammarterm>type-id</cxx-grammarterm>. Otherwise, it
-    is parsed as a <cxx-grammarterm>initializer-clause</cxx-grammarterm>.
-    <cxx-example class="inline">
-    <cxx-codeblock>
-template&lt;C1 T = int&gt; void p(); // Ok
-template&lt;P N = 0&gt; void q();    // Ok
-template&lt;P M = int&gt; void r();  // Error: int is not an expression
-    </cxx-codeblock>
-    </cxx-example>
-    </p>
-
-    <p>The declaration of a 
-    <cxx-grammarterm>constrained-parameter</cxx-grammarterm> 
-    introduces a new constraint on the template declaration. 
 
     The constraint is formed by substituting the declared 
     <cxx-grammarterm>template-parameter</cxx-grammarterm> as the first
@@ -763,6 +767,33 @@ template&lt;U... Args&gt; void f5(); // requires U&lt;Args0&gt; && U&lt;Args1&gt
     introduced constraint.
     </cxx-example>
     </p>
+
+
+    <!-- FIXME: I don't know what this is. -->
+
+    Modify <cxx-ref in="cxx" to="temp.param"></cxx-ref>/15 as follows.
+
+    <p number="15" class="quoted">
+    If a <cxx-grammarterm>template-parameter</cxx-grammarterm> is a 
+    <cxx-grammarterm>type-parameter</cxx-grammarterm> with an ellipsis prior to 
+    its optional identifier 
+    or is a 
+    <del><cxx-grammarterm>parameter-declaration</cxx-grammarterm></del>
+    <ins><cxx-grammarterm>constrained-or-non-type-parameter</cxx-grammarterm></ins>
+    that declares a parameter pack (<cxx-ref to="dcl.fct"></cxx-ref>),
+    then the template-parameter is a template parameter pack 
+    (<cxx-ref to="temp.variadic"></cxx-ref>).
+     
+    A template parameter pack that is a
+    <del><cxx-grammarterm>parameter-declaration</cxx-grammarterm> </del>
+    <ins><cxx-grammarterm>constrained-or-non-type-parameter</cxx-grammarterm></ins>
+    whose type contains one or more unexpanded parameter packs is a pack 
+    expansion.
+    </p>
+
+    Add the following paragraphs after
+    <cxx-ref in="cxx" to="temp.param"></cxx-ref>/15.
+
   </cxx-section>
 
 
