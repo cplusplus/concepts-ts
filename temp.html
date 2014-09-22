@@ -861,13 +861,38 @@ template&lt;typename T&gt; void S&lt;T&gt;::g() { } // <i>error: no matching dec
 template&lt;C T&gt; 
   template&lt;D U&gt; struct S&lt;T&gt;::Inner { }; // <i>OK</i>
       </cxx-codeblock>
+      The declaration of <code>S&lt;T&gt;::g()</code> does not match because
+      it does not have the associated constraints of <code>S</code>.
       </cxx-example>
       </p>
 
 
+    <!-- ===================================
+         Member functions of class templates
+         =================================== -->
+
       <cxx-section id="temp.mem.func">
         <h1>Member functions of class templates</h1>
 
+        Add the following example to the end of paragraph 1.
+
+        <p number="1" class="quoted">
+        <cxx-example>
+        <cxx-codeblock>
+template&lt;typename T&gt; struct S {
+  void f() requires true;
+  void g() requires true;
+};
+
+template&lt;typename T&gt; 
+  void S&lt;T&gt;::f() requires true { } // <i>OK</i>
+template&lt;typename T&gt; 
+  void S&lt;T&gt;::g()                   // <i>error: no matching function in</i> S&lt;T&gt;
+        </cxx-codeblock>
+        </cxx-example>
+        </p>
+
+        <!--
         <p>Add the following paragraphs after
         <cxx-ref in="cxx" to="temp.mem.func"></cxx-ref>.
         
@@ -884,17 +909,6 @@ template&lt;typename T&gt;
         </cxx-example>
         </p>
 
-        <p>Constraints on member functions are instantiated as needed
-        during overload resolution, not when the class template is
-        instantiated
-        (<cxx-ref in="cxx" to="temp.inst"></cxx-ref>).
-        <cxx-note>
-        Constraints on member functions do not affect the declared 
-        interface of a class. That is, a constrained copy constructor 
-        is still a copy constructor, even if it will not be viable for 
-        a specialization of the class template.
-        </cxx-note>
-        </p>
 
         <p>A constrained member function of a class template may be defined
         outside of its class template definition. Its definition shall be
@@ -903,7 +917,7 @@ template&lt;typename T&gt;
         Consider possible definitions of the constrained member function 
         <code>S&lt;T&gt;f</code> from above.
         <cxx-codeblock>
-template&lt;typenamae T&gt; 
+template&lt;typename T&gt; 
   void S&lt;T&gt;::f() { }                 // Error: no declaration of f() in S&lt;T&gt;.
 
 template&lt;typenamae T&gt; 
@@ -911,6 +925,7 @@ template&lt;typenamae T&gt;
         </cxx-codeblock>
         </cxx-example>
         </p>
+        -->
 
       </cxx-section> <!-- temp.mem.func -->
     </cxx-section> <!-- temp.class -->
@@ -1170,16 +1185,59 @@ template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
   <cxx-section id="temp.spec" number="7">
     <h1>Template instantiation and specialization</h1>
 
+
     <cxx-section id="temp.inst">
       <h1>Implicit instantiation</h1>
 
-      <p>Insert the following paragraph after 
-      <cxx-ref in="cxx" to="temp.inst"></cxx-ref>/1.</p>
+      Add the following paragraph after paragraph 1 in order to explain
+      the how constrained members are instantiated.
 
-      <p>The implicit instantiation of a class template does not cause
-      the instantiation of the associated constraints of constrained member 
-      functions.</p>
+      <p>
+      When a constrained member of a class is instantiated, new constraints
+      for the instantiated declaration are formed by substituting the
+      template arguments into the associated constraints of that member.
+      The resulting expression is not evaluated after this substitution.
+
+      If the substitution fails, the program is ill-formed.
+
+      <cxx-note>
+      The evaluation of constraints happens during lookup or overload
+      resolution (<cxx-ref to="over"></cxx-ref>). Preserving the spelling
+      of the substituted constraint also allows constrained member function
+      to be partially ordered by those constraints according to the rules
+      in <cxx-ref to="temp.constr"></cxx-ref>.
+      </cxx-note>
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt; concept bool C = sizeof(T) &gt; 2;
+template&lt;typename T&gt; concept bool D = C<T> && sizeof(T) &gt; 4;
+
+template&lt;typename T&gt; struct S {
+  S() requires C&lt;T&gt; { }
+  S() requires D&lt;T&gt; { throw 0; }
+};
+
+S&lt;char&gt; s1;    // error: no matching constructor
+S&lt;char[8]&gt; s2; // OK: but throws
+      </cxx-codeblock>
+      The instantiation of <code>S&lt;char&gt;</code> produces a class
+      template specialization having the constructors, 
+      <code>S&lt;char&gt;::S() requires C&lt;char&gt;</code> and
+      <code>S&lt;char&gt;::S() requires D&lt;char&gt;</code>.
+
+      Even though neither constructor will be selected by overload resolution,
+      they remain a part of the class template specialization, and therefore
+      suppress the generation of a default constructor.
+
+      The default constructor invoked by the declaration of <code>s2</code>
+      is the more constrained: the constraint
+      <code>D&lt;char[8]&gt;</code> subsumes <code>C&lt;char[8]&gt;</code>.
+      </cxx-example>
+      </cxx-note>
+      </p>
+
     </cxx-section> <!-- temp.inst -->
+
 
     <cxx-section id="temp.explicit">
       <h1>Explicit instantiation</h1>
