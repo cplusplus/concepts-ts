@@ -14,6 +14,8 @@
   "expr.prim"         : "5.1",
   "expr.prim.general" : "5.1.1",
   "expr.prim.lambda"  : "5.1.2",
+  "expr.prim.req"     : "5.1.3",
+  "expr.prim.fold"    : "5.1.4",
 
   "expr.unary"          : "5.3",
   "expr.unary.op"       : "5.3.1",
