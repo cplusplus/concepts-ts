@@ -61,6 +61,37 @@ void g(int n) requires sizeof(n) == 4;
     <cxx-section id="dcl.fct" number="5">
       <h1>Functions</h1>
 
+      Refactor the grammar for 
+      <cxx-grammarterm>parameter-declaration</cxx-grammarterm>s in
+      paragraph 3 in order to support the definition of
+      <cxx-grammarterm>template-parameter</cxx-grammarterm>s in
+      Clause 14.
+
+      <p class="quoted" number="3">
+
+      <bnf-grammar>
+      
+        <bnf-rule>parameter-declaration</bnf-rule>
+          <bnf-alt>
+            basic-parameter-declaration
+          </bnf-alt>
+          <bnf-alt>
+            basic-parameter-declaration <bnf-terminal>=</bnf-terminal> initializer
+          </bnf-alt>
+
+        <bnf-rule>basic-parameter-declaration</bnf-rule>
+          <bnf-alt>
+            <bnf-opt>attribute-specifier-seq</bnf-opt>
+            decl-specifier-seq 
+            declarator
+          </bnf-alt>
+          <bnf-alt>
+            <bnf-opt>attribute-specifier-seq</bnf-opt> 
+            decl-specifier-seq 
+            <bnf-opt>abstract-declarator</bnf-opt>
+          </bnf-alt>
+      </p>
+
       Modify the second sentence of paragraph 5. The remainder of this
       paragraph has been omitted.
 
@@ -125,7 +156,8 @@ void g(int n) requires sizeof(n) == 4;
 
       <!-- TODO: This is up for discussion. Striking it should have
            no serious consequence. Note that there is a corresponding
-           example in this section. -->
+           example in this section. Also, I need to modify the previous
+           sentence to remove this restriction. -->
       If the type of the function parameter that declares a function
       parameter pack containing more than one placeholder, the program
       is ill-formed.

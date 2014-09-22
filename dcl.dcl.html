@@ -414,7 +414,7 @@ fails because the associated constraints are not satisfied.
         <li> a parameter of a lambda, signifying a generic lambda 
              (<cxx-ref to="expr.prim.lambda"></cxx-ref>);</li>
         <li> the parameter type of a template parameter, signifying a
-             constrained parameter (<cxx-ref to="temp.param"></cxx-ref>);</li>
+             constrained template parameter (<cxx-ref to="temp.param"></cxx-ref>);</li>
         <li> the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> of
              a <cxx-grammarterm>compound-requirement</cxx-grammarterm>,
              signifying a deduction constraint (<cxx-ref to="expr.req.compound"></cxx-ref>). </li>
@@ -534,6 +534,9 @@ void f(Seq&lt;&gt;);
         parameter (<cxx-ref to="dcl.spec.concept"></cxx-ref>)
         of the candidate concept. 
 
+        The template <code>X</code> is called the 
+        <dfn>deduced concept argument</dfn>.
+
         If the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> in
         the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> is
         a <cxx-grammarterm>concept-name</cxx-grammarterm>, <code>TT</code> is
@@ -590,20 +593,70 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
         a <cxx-grammarterm>compound-requirement</cxx-grammarterm> includes
         an associated constraint in the conjunction of constraints introduced
         by that requirement (<cxx-ref to="expr.req.compound"></cxx-ref>).
+
+        When a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        is used in a <cxx-grammarterm>template-parameter</cxx-grammarterm>,
+        the constrained it associated with the 
+        <cxx-grammarter>template-declaration</cxx-grammarter> in which the
+        <cxx-grammarterm>template-parameter</cxx-grammarterm> is declared.
         </p>
 
-        <p>
-        The constraint associated by a 
+        <p> The constraint associated by a
         <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
         is derived from the <cxx-grammarterm>template-id</cxx-grammarterm> 
         (called <code>TT</code> above) used to determine the viability of
         the designated concept (call it <code>D</code>).
 
-        The associated constraint is
-        the <cxx-grammarterm>id-expression</cxx-grammarterm>
-        <code>TT</code> when the <code>D</code> is a variable concept, and
-        the function call <code>TT()</code> when the <code>D</code> is a 
+        The constraint is formed by replacing the
+        deduced concept argument <code>X</code> in <code>TT</code> with a 
+        template argument, <code>A</code>. That template argument is
+        defined as follows:
+        <ul>
+        <li> when the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        appears in the type of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
+        of a function declaration, <code>A</code> is the name of the
+        invented template parameter corresponding to the 
+        <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        (<cxx-ref to="dcl.fct"></cxx-ref>);</li>
+
+        <li> when the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        appears in the <cxx-grammarterm>trailing-return-type</cxx-grammarterm>
+        of a <cxx-grammarterm>compound-requirement</cxx-grammarterm>,
+        <code>A</code> is the type deduced for that
+        <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        from the expression <cxx-grammarterm>expression</cxx-grammarterm> in the
+        requirement (<cxx-ref to="expr.prim.req"></cxx-ref>);</li>
+
+        <li> when the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        appears in a <cxx-grammarterm>template-parameter</cxx-grammarterm>
+        declaration, <code>A</code> is the name of the declared
+        parameter (<cxx-ref to="temp.param"></cxx-ref>). </li>
+        </ul>
+
+        Let <code>TT2</code> be a <cxx-grammarterm>template-id</cxx-grammarterm>
+        formed as follows. 
+
+        If <code>A</code> is a template parameter (possibly invented) that 
+        declares a template parameter pack, and <code>D</code>
+        is a variadic concept (<cxx-ref to="dcl.spec.concept"></cxx-ref>),
+        <code>TT2</code> is formed by replacing <code>X</code> in 
+        <code>TT</code> with the pack expansion <code>A...</code>.
+
+        Otherwise <code>TT2</code> is formed by replacing <code>X</code>
+        with <code>A</code>.
+
+        Let <code>E</code> be the <cxx-grammarterm>id-expression</cxx-grammarterm>
+        <code>TT2</code> when the <code>D</code> is a variable concept, and
+        the function call <code>TT2()</code> when the <code>D</code> is a 
         function concept.
+
+        If <code>A</code> is a template parameter that declares a template
+        parameter pack, and <code>D</code> is not a variadic concept,
+        then the associated constraint is the fold expression 
+        <code>(... &amp;&amp; E)</code>
+        (<cxx-ref in="cxx" to="expr.prim.fold"></cxx-ref>).
+        
+        Otherwise, the associated constraint is the expression <code>E</code>.
         
         <cxx-example class="inline">
         <cxx-codeblock>
@@ -613,15 +666,32 @@ template&lt;int N&gt; concept bool Num = true;
 
 template&lt;int&gt; struct X { };
 
-void f(C&amp;);     // <i>associates</i> C&lt;T1&gt; <i>with</i> f
-void g(D&lt;int&gt;); // <i>associates</i> D&lt;T2, int&gt;() <i>with</i> g
-void h(X&lt;Num&gt;); // associates Num&lt;M&gt; <i>with</i> h
+void f(C&amp;);             // <i>associates</i> C&lt;T1&gt; <i>with</i> f
+void g(D&lt;int&gt;);         // <i>associates</i> D&lt;T2, int&gt;() <i>with</i> g
+void h(X&lt;Num&gt;);          // <i>associates</i> Num&lt;M&gt; <i>with</i> h
+template&lt;C T&gt; struct s1; // <i>associates</i> C&lt;T&gt; <i>with</i> s1
         </cxx-codeblock>
         In the associated constraints, <code>T1</code> and <code>T2</code> 
         are invented type template parameters corresponding to the
         prototype parameter of their respective designated concepts.
         Likewise, <code>M</code> is a non-type template parameter
         corresponding to the prototype parameter of <code>Num</code>.
+        <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool Req = 
+    requires (T t) {
+      {*t} -> const C&amp;; // <i>adds the constraint</i> C&lt;A&gt; <i>to</i> Req
+    };
+        </cxx-codeblock>
+        In the constraint introduced by the 
+        <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        <code>const C&amp;</code>, <code>A</code> is the deduced type
+        of the parameter <code>a</code> in the the call
+        <code>f(*t)</code> of the following invented function template:
+        <cxx-codeblock>
+template&lt;typename A&gt;
+  void f(const A&amp; a);
+        </cxx-codeblock>
         </cxx-example>
         </p>
       </cxx-section> <!-- dcl.spec.constr -->
