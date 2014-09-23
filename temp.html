@@ -1136,56 +1136,54 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
       </cxx-section> <!-- temp.class.order -->
     </cxx-section> <!-- temp.class.spec -->
 
+
+    <!-- ==================
+         Function templates
+         ================== --> 
+
     <cxx-section id="temp.fct">
       <h1>Function templates</h1>
 
       <cxx-section id="temp.over.link">
         <h1>Function template overloading</h1>
 
-        <p>Modify <cxx-ref in="cxx" to="temp.over.link"></cxx-ref>/6.</p>
+        Modify paragraph 6 to account for constraints on function
+        templates.
 
-        <p>
-        A function template can be overloaded either by (non-template) 
-        functions of its name or by (other) function templates of the 
-        same name. When a call to that name is written (explicitly, or 
-        implicitly using the operator notation), template argument deduction 
-        <cxx-ref to="temp.deduct"></cxx-ref><ins>,</ins> <del>and</del> 
-        checking of any explicit template arguments 
-        <cxx-ref in="cxx" to"temp.arg"></cxx-ref> <ins>, and checking of 
-        associated constraints <cxx-ref to="temp.constr"></cxx-ref></ins>
-        are performed for each function template to find the template 
-        argument values (if any) that can be used with that function 
-        template to instantiate a function template specialization that 
-        can be invoked with the call arguments. 
+        <p number="6" class="quoted">
+        <del> Two function templates are <dfn>equivalent</dfn> if they are 
+        declared in the same scope, have the same name, have identical template 
+        parameter lists, and have return types and parameter lists that are 
+        equivalent using the rules described above to compare expressions 
+        involving template parameters.</del>
+        <br/>
+        <ins>
+        Two function templates are <dfn>equivalent</dfn> if they are:
+        <ul>
+        <li> declared in the same scope,</li>
+        <li> have the same name,</li>
+        <li> have identical template parameter lists,</li>
+        <li> have return types and parameter lists that are equivalent using
+             the rules described above to compare expressions involving 
+             template parameters, and</li>
+        <li> have associated constraints that are equivalent using the rules 
+             described in <cxx-ref to="temp.constr"></cxx-ref>.</li>
+        </ul>
+        </ins>
 
-        For each function template, if the argument deduction and 
-        checking succeeds, the template-arguments (deduced and/or 
-        explicit) are used to synthesize the declaration of a single 
-        function template specialization which is added to the 
-        candidate functions set to be used in overload resolution. If, 
-        for a given function template, argument deduction fails, no 
-        such function is added to the set of candidate functions for 
-        that template.
+        <div class="quoted">
+        Two function templates are <dfn>functionally equivalent</dfn> if they 
+        are equivalent except that one or more expressions that involve 
+        template parameters in the return types and parameter lists are 
+        functionally equivalent using the rules described above to compare 
+        expressions involving template parameters. 
 
-        The complete set of candidate functions includes all the 
-        synthesized declarations and all of the non-template overloaded 
-        functions of the same name. The synthesized declarations are 
-        treated like any other functions in the remainder of overload 
-        resolution, except as explicitly noted in 
-        <cxx-ref in="cxx" to"over.match"></cxx-ref>.
-        </p>
+        If a program contains declarations of function templates that are 
+        functionally equivalent but not equivalent, the program is ill-formed; 
+        no diagnostic is required.
+        </div>
+        <!-- </p> -->
 
-        <p>Modify <cxx-ref in="cxx" to="temp.over.link">/6.</cxx-ref>
-
-        <p>
-        Two function templates are <dfn>equivalent</dfn> if they are 
-        declared in the same scope, have the same name, have identical 
-        template parameter lists, <del>and</del> have return types<ins>,</ins> 
-        <del>and</del> parameter lists, <ins>and constraints 
-        <cxx-ref to="temp.constr"></cxx-ref></ins> that are equivalent 
-        using the rules described above to compare expressions involving 
-        template parameters.
-        </p>
 
       </cxx-section> <!-- temp.over.link -->
 
@@ -1193,8 +1191,10 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
         <h1>Partial ordering of function templates</h1>
 
         <p>Modify <cxx-ref in="cxx" to="temp.func.order"></cxx-ref>/2.</p>
+        Modify paragraph 2 to include constraints in the partial ordering
+        of function templates.
 
-        <p>
+        <p number="2" class="quaoted">
         Partial ordering selects which of two function templates is 
         more specialized than the other by transforming each template 
         in turn (see next paragraph) and performing template argument 
@@ -1203,15 +1203,11 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
         than the other.
 
         If so, the more specialized template is the one chosen by the 
-        partial ordering process. <ins>If the two templates have 
-        identical template parameter lists and equivalent return types 
-        and parameter lists, then partial ordering selects the template 
-        whose associated constraints subsume but are not equivalent to 
-        the associated constraints of the other 
-        <cxx-ref to="temp.constr"></cxx-ref>. 
+        partial ordering process. 
 
-        A constrained template is always selected over an unconstrained 
-        template.</ins>
+        <ins>If both deductions succeed, the partial ordering selects
+        the more constrained template as described by rules in
+        <cxx-ref to="temp.constr"></cxx-ref>.</ins>
         </p>
 
       </cxx-section> <!-- temp.func.order -->
