@@ -932,8 +932,8 @@ template&lt;C1 T&gt;
 
 template&lt;C1 T&gt; template&lt;C2 U&gt; 
   void S&lt;T&gt;::f(U); // <i>OK</i>
-template&lt;C1 T&gt; template&lt;C1 U&gt; 
-  void S&lt;T&gt;::g(U); // <i>error: definition does not match
+template&lt;C1 T&gt; template&lt;typename U&gt; 
+  void S&lt;T&gt;::g(U); // <i>error: definition does not match</i>
       </cxx-codeblock>
       The associated constraints in the definition of <code>g()</code> do not
       match those in of its declaration.
@@ -942,6 +942,11 @@ template&lt;C1 T&gt; template&lt;C1 U&gt;
     </cxx-section> <!-- temp.mem -->
 
 
+    <!-- ============
+         Friends
+         ============ ->
+
+    <!-- TODO: Rewrite friends -->
     <cxx-section id="temp.friend" number="4">
       <h1>Friends</h1>
 
@@ -1011,32 +1016,85 @@ template&lt;typename T&gt;
 
     </cxx-section> <!-- temp.friend -->
 
+
+    <!-- ======================================
+         Class template partial specializations
+         ====================================== -->
+
     <cxx-section id="temp.class.spec">
       <h1>Class template partial specialization</h1>
+
+      After paragraph 3, insert the following, which explains constrained
+      partial specializations.
+
+      <p number="4" class="quoted">
+      A class template partial specialization may be constrained
+      (<cxx-ref to="temp"></cxx-ref>).
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt; concept bool C = requires (T t) { t.f(); };
+template&lt;typename T&gt; concept bool N = N &gt; 0;
+
+template&lt;C T1, C T2, N I&gt; class A&lt;T1, T2, I&gt;;  // <i>#6</i>
+template&lt;C T, N I&gt;        class A&lt;int, T*, I&gt;; // <i>#7</i>
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+      Modify the 3rd item in the list of paragraph 8 to allow 
+      constrained class template partial specializations like #6.
+      Note that all other items in that list are elided.
+
+      <p number="8" class="quoted">
+      Within the argument list of a class template partial specialization, 
+      the following restrictions apply:
+      <ul>
+      <li>...</li>
+      <li><ins>In an unconstrained class template partial specialization,</ins>
+      <del>The</del><ins>the</ins> argument list of the specialization shall
+      not be identical to the implicit argument list of the primary template.
+      <li>...</li>
+      </ul>
+      </p>
+
 
       <cxx-section id="temp.class.spec.match">
         <h1>Matching of class template partial specializations</h1>
 
-        <p>Modify 
-        <cxx-ref in="cxx" to="temp.class.spec.match"></cxx-ref>/2.</p>
+        Modify paragraph 2; constraints must be satisfied in order
+        to match a partial specialization. Add the example given here
+        to the (omitted) example in the original document.
 
-        <p> A partial specialization matches a given actual template 
+        <p number="2" class="quoted"> 
+        A partial specialization matches a given actual template 
         argument list if the template arguments of the partial 
         specialization can be deduced from the actual template argument 
         list (<cxx-ref in="cxx" to="temp.deduct"></cxx-ref>)
         <ins>, and the deduced template arguments satisfy the constraints 
         of the partial specialization, if any 
-        (<cxx-ref to="temp.constr"></cxx-ref>)</ins>.</p>
+        (<cxx-ref to="temp.constr"></cxx-ref>)</ins>.
+        <cxx-example class="inline">
+        <cxx-codeblock>
+struct S { void f(); };
 
+A&lt;S, S, 1&gt;    a6; // <i>uses #6</i>
+A&lt;S, int, 2&gt;  a7; // <i>error: constraints not satisfied</i>
+A&lt;int, S*, 3&gt; a8; // <i>uses #7</i>
+        </cxx-codeblock>
+        </cxx-example>
+        </p>
       </cxx-section> <!-- temp.class.spec.match -->
+
 
       <cxx-section id="temp.class.order">
         <h1>Partial ordering of class template specializations</h1>
 
-        <p>Modify 
-        <cxx-ref in="cxx" to="temp.class.order"></cxx-ref>/1.</p>
+        Modify paragraph 1 so that constraints are considered in the
+        partial ordering of class template specializations. Add the
+        example at the end of this paragraph to the (omitted) example
+        in the original document.
 
-        <p>
+        <p number="1" class="quoted">
         For two class template partial specializations, the first is 
         at least as specialized as the second if, given the following 
         rewrite to two function templates, the first function template 
@@ -1046,34 +1104,33 @@ template&lt;typename T&gt;
         </p>
         <ul>
           <li> the first function template has the same template 
-          parameters <ins>and constraints</ins> as the first partial 
+          parameters <ins>and associated constraints</ins> as the first partial 
           specialization and has a single function parameter whose
           type is a class template specialization with the template 
           arguments of the first partial specialization, and</li>
 
           <li> the second function template has the same template 
-          parameters <ins>and constraints</ins> as the second partial 
+          parameters <ins>and associated constraints</ins> as the second partial 
           specialization and has a single function parameter whose
           type is a class template specialization with the template 
           arguments of the second partial specialization.</li>
         </ul>
         <cxx-example class="inline">
         <cxx-codeblock>
-template&lt;typename T&gt;
-  concept bool Integer = is_integral&lt;T&gt;::value;
-template&lt;typename T&gt;
-  concept bool Unsigned_integer = Integer&lt;T&gt; &amp;&amp; is_unsigned&lt;T&gt;::value;
+template&ltl;typename T&gt; concept bool C = requires (T t) { t.f(); };
+template&ltl;typename T&gt; concept bool D = C&ltl;T&gt; &amp;&amp; requires (T t) { t.f(); };
+
 
 template&lt;typename T&gt; class S { };
-template&lt;Integer T&gt; class S&lt;T&gt; { };          // #1
-template&lt;Unsigned_integer T&gt; class S&lt;T&gt; { }; // #2
+template&lt;C T&gt; class S&lt;T&gt; { }; // <i>#1</i>
+template&lt;D T&gt; class S&lt;T&gt; { }; // <i>#2</i>
 
-template&lt;Integer T&gt; void f(S&lt;T&gt;);          // A
-template&lt;Unsigned_integer T&gt; void f(S&lt;T&gt;); // B
+template&lt;C T&gt; void f(S&lt;T&gt;); // <i>A</i>
+template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
         </cxx-codeblock>
         The partial specialization #2 will be more specialized than 
         #1 for template arguments that satisfy both constraints because 
-        <code>B</code> will be more specialized than <code>A</code>.
+        <code>B</code> is more specialized than <code>A</code>.
         </cxx-example>
 
       </cxx-section> <!-- temp.class.order -->
