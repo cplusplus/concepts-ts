@@ -1211,7 +1211,43 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
 
       </cxx-section> <!-- temp.func.order -->
     </cxx-section> <!-- temp.fct -->
+
+
+  <!-- ===============
+       Alias templates
+       =============== -->
+
+    <cxx-section number="7" id="temp.alias">
+      <h1>Alias templates</h1>
+
+      Insert the following after paragraph 2.
+
+      <p number="3" class="quoted">
+      If the alias template is constrained, and all template arguments
+      are non-dependent, the <cxx-grammarterm>template-argument</cxx-grammarterm>s
+      shall satisfy the template's associated constraints 
+      (<cxx-ref to="temp.constr"></cxx-ref>).
+
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template<typename C> = false;
+
+template<C T> using Ptr = T*;
+
+Ptr<int> p; // error: constraints not satisfied.
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+
+    </cxx-section>
+
   </cxx-section> <!-- temp.decls -->
+
+
+  <!-- =========================================
+       Template instantiation and specialization
+       ========================================= -->
 
   <cxx-section id="temp.spec" number="7">
     <h1>Template instantiation and specialization</h1>
@@ -1398,26 +1434,10 @@ template&lt;&gt; void S2&lt;X&gt;::f(T a) requires C&lt;X&gt; { } // Error: extr
   </cxx-section> <!-- temp.spec -->
 
 
-  <cxx-section id="temp.fct.spec" number="8">
-    <h1>Function template specialization</h1>
 
-    <cxx-section id="temp.deduct" number="2">
-      <h1>Template argument deduction</h1>
-
-      After <cxx-ref in="cxx" to="temp.deduct"></cxx-ref>/5, add the following
-      paragraph:
-
-      <!-- TODO: Rewrite in terms of satisfaction. -->
-      <p number="6"> If the template has associated constraints, the template 
-      arguments are substituted into those associated constraints and evaluated.
-      If the substitution results in an invalid type or expression, or
-      if the associated constraints evaluate to <code>false</code>,
-      type deduction fails.</p>
-
-    </cxx-section> <!-- temp.deduct -->
-
-  </cxx-section>
-
+  <!-- ===================
+       Template constraints
+       ==================== -->
 
   <cxx-section id="temp.constr">
     <h1>Template constraints</h1>
