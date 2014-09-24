@@ -21,9 +21,7 @@ ins.local > * {
   background-color: LightSteelBlue; 
 }
 
-p.quoted {
+.quoted {
   margin-left: .25in;
-}
-div.quoted {
-  margin-left: .25in;
+  margin-right: .35in;
 }
