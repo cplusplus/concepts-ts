@@ -60,6 +60,7 @@
   "class.virtual"         : "10.3",
   "class.abstract"        : "10.4",
 
+  "class.ctor"            : "12.1",
   "class.dtor"            : "12.4",
 
   "over"              : "13",

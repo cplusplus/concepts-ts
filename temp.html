@@ -1239,7 +1239,6 @@ Ptr<int> p; // error: constraints not satisfied.
       </cxx-example>
       </p>
 
-
     </cxx-section>
 
   </cxx-section> <!-- temp.decls -->
@@ -1280,12 +1279,12 @@ template&lt;typename T&gt; concept bool C = sizeof(T) &gt; 2;
 template&lt;typename T&gt; concept bool D = C<T> && sizeof(T) &gt; 4;
 
 template&lt;typename T&gt; struct S {
-  S() requires C&lt;T&gt; { }
-  S() requires D&lt;T&gt; { throw 0; }
+  S() requires C&lt;T&gt; { } // <i>#1</i>
+  S() requires D&lt;T&gt; { } // <i>#2</i>
 };
 
-S&lt;char&gt; s1;    // error: no matching constructor
-S&lt;char[8]&gt; s2; // OK: but throws
+S&lt;char&gt; s1;    // <i>error: no matching constructor</i>
+S&lt;char[8]&gt; s2; // <i>OK: calls #2</i>
       </cxx-codeblock>
       The instantiation of <code>S&lt;char&gt;</code> produces a class
       template specialization having the constructors, 
@@ -1293,11 +1292,12 @@ S&lt;char[8]&gt; s2; // OK: but throws
       <code>S&lt;char&gt;::S() requires D&lt;char&gt;</code>.
 
       Even though neither constructor will be selected by overload resolution,
-      they remain a part of the class template specialization, and therefore
-      suppress the generation of a default constructor.
+      they remain a part of the class template specialization. This also
+      has the effect of suppressing the implicit generation of a default 
+      constructor (<cxx-ref in="cxx" to="class.ctor"></cxx-ref>).
 
       The default constructor invoked by the declaration of <code>s2</code>
-      is the more constrained: the constraint
+      is the more constrained because the constraint
       <code>D&lt;char[8]&gt;</code> subsumes <code>C&lt;char[8]&gt;</code>.
       </cxx-example>
       </cxx-note>
@@ -1306,84 +1306,70 @@ S&lt;char[8]&gt; s2; // OK: but throws
     </cxx-section> <!-- temp.inst -->
 
 
+    <!-- ======================
+         Explicit instantiation
+         ====================== -->
+
     <cxx-section id="temp.explicit">
       <h1>Explicit instantiation</h1>
 
-      Add the following paragraph:
+      Add the following paragraphs to this section. These require an explicit
+      instantiation of a constrained template to satisfy the template's
+      associated constraints.
 
-      <p number="14">
-      If the explicit instantiation names a constrained function template, 
-      member function, or member function template, the explicit specialization 
-      shall have associated constraints that are equivalent to those of the 
-      template declaration (<cxx-ref to="temp"></cxx-ref>) after substituting the
-      specified or deduced template arguments into the template's associated 
-      constraints.
-
-      Explicit instantiations of class templates and variable templates
-      cannot be constrained; such declarations simply refer to their 
-      respective template declarations as if the templates were unconstrained.
-
-      The template arguments of an explicit specialization shall satisfy
-      the associated constraints of the template declaration, if any
+      <p number="14" class="quoted">
+      If the explicit instantiation names a class template specialization
+      or variable template specialization of a constrained template, then
+      the <cxx-grammarterm>template-arguments</cxx-grammarterm> in the
+      <cxx-grammarterm>template-id</cxx-grammarterm> of the explicit
+      instantiation shall satisfy the template's associated constraints
       (<cxx-ref to="temp.constr"></cxx-ref>).
-
       <cxx-example class="inline">
       <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = requires (T t) { t.f(); };
+template&lt;typename T&gt; concept bool C = sizeof(T) == 1;
 
-void f(C) { }
-struct X { void f(); };
+template&lt;C T&gt; struct S { };
 
-template void f(double);              // <i>error: no matching declaration</i>
-template void f(X) requires C&lt;X&gt;;     // <i>OK</i>
-template void f(int) requires C&lt;int&gt;; // <i>error: constraints not satisfied</i>
-
-template&lt;C T&gt; struct Vec { };
-
-template struct Vec&lt;X&gt;;   // <i>OK</i>
-template struct Vec&lt;int&gt;; // <i>error: constraints not satisfied</i>
+template S&lt;char[2]&gt;; // <i>OK</i>
+template S&lt;char&gt;;    // <i>error: constraints not satisfied</i>
       </cxx-codeblock>
       </cxx-example>
+
+      <p class="quoted">
+      An explicit instantiation that names a function template specialization
+      refers to a (possibly singleton) set of overloaded function templates.
       
+      Each constrained function template in that set whose constraints are not 
+      satisfied by the template arguments of the explicit instantiation are 
+      removed from the set.
+
+      The partial ordering of the remaining function templates determines the 
+      template to which the specialization refers
+      (<cxx-ref to="temp.func.order"></cxx-ref>).
+      
+      If no function template is found, or if multiple function templates
+      are found, the program is ill-formed.
       <cxx-example class="inline">
       <cxx-codeblock>
-template&lt;typename T&gt;
-  struct S {
-    void f();               // <i>#1</i>
-    void f() requires C&lt;T&gt;; // <i>#2</i>
-  };
+template&lt;typename T&gt; concept bool C = requires (T t) { -t; };
 
-template void S&lt;int&gt;::f();               // <i>OK: explicit specialization of #1</i>
-template void S&lt;int&gt;::f() requires C&lt;T&gt;; // <i>OK: explicit specialization of #2</i>
-      </cxx-codeblock>
-      In the last declaration, the <cxx-grammarterm>requires-clause</cxx-grammarterm> 
-      is needed to determine which declaration is being explicitly instantiated.
-      </cxx-example>
-      </p>
+template&lt;C T&gt;        void f(T) { } // <i>#1</i>
+template&lt;typename T&gt; void g(T) { } // <i>#2</i>
+template&lt;C T&gt;        void g(T) { } // <i>#3</i>
 
-      <!--
-      <p>An explicit instantiation of constrained template declaration
-      (<cxx-ref to="temp"></cxx-ref>)
-      or constrained member function declaration 
-      (<cxx-ref to="temp.mem.func"></cxx-ref>)
-      shall satsify the associated constraints of that declaration
-      (<cxx-ref to="temp.constr"></cxx-ref>).
-      <cxx-example class="inline">
-      <cxx-codeblock>
-template&lt;typname T&gt;
-  concept bool C = requires(T t) { t.c(); };
-
-template&lt;typenane T&gt;
-  requires C&lt;T&gt;
-    struct X { }
-
-template struct X&lt;int&gt;; // Error: int does not satisfy C.
+template void f(int);   // <i>OK: refers to #1</i>
+template void f(void*); // <i>error: no matching template</i>
+template void g(int);   // <i>OK: refers to #3</i>
+template void g(void*); // <i>OK: refers to #2</i>
       </cxx-codeblock>
       </cxx-example>
       </p>
-
-      -->
     </cxx-section> <!-- temp.explicit -->
+
+
+    <!-- =======================
+         Explicit specialization
+         ======================= -->
 
     <cxx-section id="temp.expl.spec">
       <h1>Explicit specialization</h1>
