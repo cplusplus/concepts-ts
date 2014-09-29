@@ -632,7 +632,8 @@ template&lt;D* N&gt; void f2();      // <i>error:</i> N <i>declares a pointer-to
     define the meaning of a constrained template parameter.
 
 
-    <p>A constrained template parameter declares a template parameter whose
+    <p number="9" class="quoted">
+    A constrained template parameter declares a template parameter whose
     type and form match that of the prototype parameter of the concept 
     designated by its <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
     The designated concept is found using the rules in
@@ -671,6 +672,7 @@ template&lt;D* N&gt; void f2();      // <i>error:</i> N <i>declares a pointer-to
     <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.</li>
     </ul>
 
+    <div class="quoted">
     <cxx-example class="inline">
     <cxx-codeblock>
 template&lt;typename T&gt; concept bool C1 = true;
@@ -687,7 +689,7 @@ template&lt;C4 Ts&gt; void f5();    // <i>error: parameter pack declared without
 template&lt;C5... Cx&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter pack of</i> char<i>s</i>
     </cxx-codeblock>
     </cxx-example>
-    </p>
+    </div>
   </cxx-section> <!-- temp.param -->
 
 
@@ -699,39 +701,48 @@ template&lt;C5... Cx&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter 
   <cxx-section id="temp.names">
     <h1>Template names</h1>
 
-    Insert the following paragraphs after 
-    <cxx-ref in="cxx" to="temp.names"></cxx-ref>/7.</p>
 
-    <p>If a <cxx-grammarterm>template-id</cxx-grammarterm> refers to a
-    specialization of a constrained template declaration, the template's
-    associated constraints are checked by substituting the
-    <cxx-grammarterm>template-arguments</cxx-grammarterm> into the
-    constraints and evaluating the resulting expression. If the substitution 
-    results in an invalid type or expression, or if the associated constraints 
-    evaluate to <code>false</code>, then the program is ill-formed.
-    <cxx-example>
+    Add the following paragraph to require the implicit instantiation
+    of default template arguments for non-function templates.
+
+    <p number="8" class="quoted">
+    When a <cxx-grammarterm>simple-template-id</cxx-grammarterm> does 
+    not name a function, a default 
+    <cxx-grammarterm>template-argument</cxx-grammarterm> is implicitly
+    instantiated (<cxx-ref to="temp.inst"></cxx-ref>) in a context that 
+    requires the value of the default argument.
+
+    <cxx-example class="inline">
     <cxx-codeblock>
-template&lt;typename T&gt; concept bool True = true;
-template&lt;typename T&gt; concept bool False = false;
+template&lt;typename T, typename U = int&gt; struct S { };
 
-template&lt;False T&gt; struct S;
-template&lt;True T&gt; using Ptr = T*;
-
-S&lt;int&gt;* x;   // Error: int does not satisfy the constraints of False.
-Ptr&lt;int&gt; z;  // Ok: z has type int*
+S&lt;bool&gt; p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;
     </cxx-codeblock>
     </cxx-example>
-    <cxx-note>
-    Checking the constraints of a constrained class template does not 
-    require its instantiation. 
-    This guarantees that a partial specialization cannot be less 
-    specialized than a primary template. This requirement is enforced
-    during name lookup, not when the partial specialization is declared.
-    </cxx-note>
     </p>
 
-    </cxx-note>
+    Add this paragraph to require the satisfaction of associated constraints
+    on the formation of the <cxx-grammarterm>simple-template-id</cxx-grammarterm>.
+
+    <p number="9" class="quoted">
+    When a <cxx-grammarterm>simple-template-id</cxx-grammarterm> names
+    a constrained class template, variable template or alias template,
+    and all <cxx-grammarterm>template-argument</cxx-grammarterm>s in the
+    <cxx-grammarterm>template-id</cxx-grammarterm> are non-dependent,
+    (<cxx-ref to="temp.nondep"></cxx-ref>), the associated constraints
+    of the named template shall be satisfied by those
+    <cxx-grammarterm>template-argument</cxx-grammarterm>s.
+
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;typename T&gt; requires false struct S { };
+
+S&lt;int&gt;* p; // error: constraints not satisfied.
+    </cxx-codeblock>
+    </cxx-example>
+
     </p>
+
   </cxx-section> <!-- temp.names -->
 
 
