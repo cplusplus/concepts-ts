@@ -266,7 +266,8 @@ template&lt;typename T&gt;
     and <code>false</code> otherwise. The semantics of each kind of 
     requirement are described in the following sections.</p>
 
-    <cxx-section id="expr.req.simple">
+
+    <cxx-section id="expr.prim.req.simple">
       <h1>Simple requirements</h1>
       <p>A <cxx-grammarterm>simple-requirement</cxx-grammarterm> introduces a
       valid expression constraint for its 
@@ -296,10 +297,11 @@ requires () {
       </cxx-codeblock>
       </cxx-example>
       </p>
-    </cxx-section> <!-- expr.req.simple -->
+    </cxx-section> <!-- expr.prim.req.simple -->
 
 
-    <cxx-section id="expr.req.type">
+
+    <cxx-section id="expr.prim.req.type">
       <h1>Type requirements</h1>
       <p>A <cxx-grammarterm>type-requirement</cxx-grammarterm> introduces 
       valid type constraint for its 
@@ -333,10 +335,11 @@ requires () {
       </cxx-codeblock>
       </cxx-example>
       </p>
-    </cxx-section> <!-- expr.req.type -->
+    </cxx-section> <!-- expr.prim.req.type -->
 
 
-    <cxx-section id="expr.req.nested">
+
+    <cxx-section id="expr.prim.req.nested">
       <h1>Nested requirements</h1>
       <p>A <cxx-grammarterm>nested-requirement</cxx-grammarterm> introduces
       an additional constraint expression <cxx-ref to="temp.constr"></cxx-ref> 
@@ -359,17 +362,11 @@ requires () {
       <code>C&lt;X&lt;T&gt;&gt;()</code> evaluates to <code>true</code>.
       </cxx-example>
       </p>
-    </cxx-section> <!-- expr.re.nested -->
+    </cxx-section> <!-- expr.prim.req.nested -->
 
 
 
-    <!-- TODO: {e}->cv void is ill-formed.
-
-         For two reasons. First, we can't actually form an invented
-         function template that takes cv void as an argumnet (oops).
-         Second, even if we could, no expression converts to void. -->
-
-    <cxx-section id="expr.req.compound">
+    <cxx-section id="expr.prim.req.compound">
       <h1>Compound requirements</h1>
       <p>A <cxx-grammarterm>compound-requirement</cxx-grammarterm> introduces 
       a conjunction of one or more constraints pertaining to its
@@ -469,7 +466,7 @@ template&lt;class T&gt;
       The valid expression must also be a constant expression.
       </cxx-example>
       </p>
-    </cxx-section> <!-- expr.req.compound -->
+    </cxx-section> <!-- expr.prim.req.compound -->
  
-  </cxx-section> <!-- expr.req -->
+  </cxx-section> <!-- expr.prim.req -->
 </cxx-clause> <!-- expr -->
