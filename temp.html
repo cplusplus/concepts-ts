@@ -18,284 +18,49 @@
         declaration
       </bnf-alt>
       <ins>
-      <bnf-alt>
-        <bnf-opt>nested-name-specifier</bnf-opt> 
-        concept-name
-        <bnf-terminal>{</bnf-terminal>
-        introduction-list
-        <bnf-terminal>}</bnf-terminal>
-        declaration
-      </bnf-alt>
+      <bnf-alt>introduction-clause declaration</bnf-alt>
       </ins>
 
     <ins>
     <bnf-rule>requires-clause</bnf-rule>
       <bnf-alt><bnf-terminal>requires</bnf-terminal> constraint-expression</bnf-alt>
-
-    <bnf-rule>introduction-list</bnf-rule>
-      <bnf-alt>introduced-parameter</bnf-alt>
-      <bnf-alt>introduction-list<bnf-terminal>,</bnf-terminal> introduced-parameter</bnf-alt>
-
-      <bnf-rule>introduced-parameter</bnf-rule>
-        <bnf-alt><bnf-opt><bnf-terminal>...</bnf-terminal></bnf-opt> identifier</bnf-alt>
     </ins>
   </bnf-grammar>
   </p>
   
-  Add the following paragraphs after 
-  <cxx-ref in="cxx" to="temp"></cxx-ref>/6.
+  Add the following paragraphs after paragraph 6.
 
-  <p> A <cxx-grammarterm>template-declaration</cxx-grammarterm> is written in
+  <p number="7" class="quoted"> 
+  A <cxx-grammarterm>template-declaration</cxx-grammarterm> is written in
   terms of its template parameters. These
   parameters are declared explicitly in a
   <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
   (<cxx-ref to="temp.param"></cxx-ref>), or they are
-  introduced by a <dfn>concept introduction</dfn>, a
-  <cxx-grammarterm>concept-name</cxx-grammarterm> and following
-  <cxx-grammarterm>introduction-list</cxx-grammarterm>.</p>
-
-  <p> The concept designated by the <cxx-grammarterm>concept-name</cxx-grammarterm>
-  is determined by the <cxx-grammarterm>introduction-list</cxx-grammarterm>.
-  Let <code>C</code> be a <cxx-grammarterm>concept-name</cxx-grammarterm>
-  and <code>I1</code>, <code>I2</code>, ..., <code>I<i>n</i></code> be a 
-  sequence of <cxx-grammarterm>identifiers</cxx-grammarterm> in the
-  <cxx-grammarterm>introduced-parameter</cxx-grammarterm>s of
-  an <cxx-grammarterm>introduction-list</cxx-grammarterm>.
-
-  If the <cxx-grammarterm>template-id</cxx-grammarterm>,
-  <code>C&lt;I1, I2, ..., I<i>n</i>&gt;</code>, refers to a single
-  concept declaration, then that concept is the one designated by
-  <code>C</code>. Otherwise, the program is ill-formed.
-
-  <cxx-example class="inline">
-  <cxx-codeblock>
-template&lt;typename T&gt; concept bool Eq() { return true; }             // <i>#1</i>
-template&lt;typename T, typename U&gt; concept bool Eq() { return true; } // <i>#2</i>
-
-Eq{T} void f1(T, T);    // <i>OK:</i> Eq{T} <i>designates #1</i>
-Eq{A, B} void f2(A, B); // <i>OK:</i> Eq{A, B} <i>designates #2</i>
-  </cxx-codeblock>
-  It is possible to overload function concepts in such a way that a
-  <cxx-grammarterm>concept-name</cxx-grammarterm> can designate multiple
-  concepts.
-  <cxx-codeblock>
-template&lt;typename T&gt; concept bool C() { return true; }
-template&lt;int N&gt; concept bool C() { return true; }
-
-C{X} void f(); // <i>error: resolution of</i> C{X} <i>is ambiguous</i>
-  </cxx-codeblock>
-  </cxx-example>
+  introduced by a template introduction
+  (<cxx-ref to="temp.intro"></cxx-ref>).
   </p>
 
-  <p>Each <cxx-grammarterm>identifier</cxx-grammarterm>, <code>I</code>,
-  in the <cxx-grammarterm>introduced-parameter</cxx-grammarterm>s
-  of the <cxx-grammarterm>introduction-list</cxx-grammarterm> 
-  is declared to be a template parameter that matches the 
-  corresponding template parameter, <code>P</code>, in the 
-  <cxx-grammarterm>template-parameter-list</cxx-grammarterm> 
-  of the concept designated by the 
-  <cxx-grammarterm>concept-name</cxx-grammarterm>.
-  <cxx-grammarterm>
-  <ul>
-  
-  <li> If <code>P</code> is a template 
-  <cxx-grammarterm>type-parameter</cxx-grammarterm> declared with either 
-  the <code>class</code> or <code>typename</code> keyword, 
-  <code>I</code> is declared as a template 
-  <cxx-grammarterm>type-parameter</cxx-grammarterm> using the same keyword;</li>
-  
-  <li> if <code>P</code> is a template <cxx-grammarterm>type-parameter</cxx-grammarterm> 
-  that declares a class template, <code>I</code> is declared as a
-  class template with the template parameters of <code>P</code>;</li>
-  
-  <li> if <code>P</code> is a non-type 
-  <cxx-grammarterm>template-parameter</cxx-grammarterm>, <code>I</code> is
-  declared as a non-type <cxx-grammarterm>template-parameter</cxx-grammarterm> 
-  having the same type as <code>P</code>;</li>
-  
-  <li> if <code>P</code> is a template parameter pack, 
-  the <cxx-grammarterm>identifier</cxx-grammarterm>, <code>I</code>,
-  shall be preceded by an ellipsis, and is declared as a template parameter 
-  pack.</li>
-  </ul>
-  
-  An <cxx-grammarterm>introduced-parameter</cxx-grammarterm> shall not contain
-  an ellipsis if its corresponding template parameter does not declare
-  a template parameter pack.
 
-  <cxx-example class="inline">
-  <cxx-codeblock>
-template&lt;typename T, int N, typename... Xs&gt; concept bool Inscrutable = true;
-template&lt;template&lt;typename&gt; class X&gt; concept bool Unary_template = true;
-
-Inscrutable{A, B, ...C} // <i>OK:</i> A <i>is declared as</i> typename A
-  struct s;             // B <i>is declared as</i> int B
-                        // C <i>is declared as</i> typename... C
-
-Inscrutable{X, Y, Z} // <i>error:</i> Z <i>must be preceded by an ellipsis</i>
-  struct t;
-
-Unary_template{T} // <i>OK:</i> T <i>is declared as</i> template&lt;typename&gt; class T
-  void foo();
-
-Unary_template{...X} // <i>error: the corresponding parameter is not a</i> 
-  void bar();        // <i>template parameter pack</i>
-  </cxx-codeblock>
-  </cxx-example>
-  </p>
-
+  <div class="quoted">
   <p>
-  <cxx-note>
-  A concept referred to by a <cxx-grammarterm>concept-name</cxx-grammarterm> 
-  may have template parameters with default template arguments. An
-  <cxx-grammarterm>introduction-list</cxx-grammarterm> may omit 
-  <cxx-grammarterm>identifier</cxx-grammarterm>s for a corresponding template
-  parameter if it has a default argument. However, only the
-  <cxx-grammarterm>introduced-parameter</cxx-grammarterm>s are declared
-  as template parameters. 
-  
-  <cxx-example class="inline">
-  <cxx-codeblock>
-template&lt;typename A, typename B = bool&gt; 
-  concept bool Ineffable() { return true; }
-
-Ineffable{T} void f(T); // <i>OK:</i> f(T) <i>is a function template with</i>
-                        // <i>a single template type parameter</i> T
-  </cxx-codeblock>
-There is no <cxx-grammarterm>introduced-parameter</cxx-grammarterm> 
-that corresponds to the template parameter <code>B</code> in the
-<code>Ineffable</code> concept, so <code>f(T)</code> is declared with only
-one template parameter.
-  </cxx-example>
-  </cxx-note>
+  The <dfn>associated constraints</dfn> of a 
+  <cxx-grammarterm>template-declaration</cxx-grammarterm> are the conjunction
+  of all constraints introduced by:
   </p>
-
-  <p> The <cxx-grammarterm>introduction-list</cxx-grammarterm> shall not
-  be empty.</p>
-
-  <p> An introduced template parameter does not have a default template 
-  argument, even if its corresponding template parameter does.
-
-  <cxx-example class="inline">
-  <cxx-codeblock>
-template&lt;typename T, int N = -1&gt; concept bool P() { return true; }
-
-P{T, N} struct Array { };
-
-Array&lt;double, 0&gt; s1; // <i>OK</i>
-Array&lt;double&gt; s2;    // <i>error:</i> Array <i>takes two template arguments</i>
-  </cxx-codeblock>
-  </cxx-example>
-  </p>
-
-  <!-- FIXME: Does this belong here or in member functions? -->
-  <p>
-  <cxx-note>
-  A constrained member function template of a constrained class template
-  can be defined outside of its class definition by nested introductions.
-  <cxx-example class="inline">
-  <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = true;
-template&lt;typename T&gt; concept bool D = true;
-
-C{T} struct X {
-  D{U} void f();
-};
-
-C{T} D{U} void X&lt;T&gt;::f() { } // <i>OK: definition of</i> f()
-  </cxx-codeblock>
-  </cxx-example>
-  </cxx-note>
-  </p>
-
-  <p> A <cxx-grammarterm>template-declaration</cxx-grammarterm> declared
-  by a concept introduction can also be an abbreviated function
-  (<cxx-ref to="dcl.fct"></cxx-ref>).
-
-  The invented template parameters introduced by the presence of
-  <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>s or
-  <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s in
-  the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
-  are added to the list of template parameters introduced by the the
-  <cxx-grammarterm>introduction-list</cxx-grammarterm>.
-
-  <cxx-example class="inline">
-  <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = true;
-template&lt;typename T&gt; concept bool D = true;
-
-C{T} void f(T, D);
-
-template&lt;C T, D __D&gt; void f(T, __D); // <i>OK: redeclaration of</i> f(T, D)
-  </cxx-codeblock>
-  </cxx-example>
-  
-  <cxx-example class="inline">
-  <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = true;
-template&lt;typename T&gt; concept bool D = true;
-
-C{T} struct X {
-  void f(D);
-  D{U} void g(U, C);
-};
-
-C{T} void X&lt;T&gt;::f(D) { } // <i>OK: definition of</i> X&lt;T&gt;::f(D);
-                         // f <i>is a function template with one invented</i>
-                         // <i>template type-parameter</i>
-
-C{T} D{U} void X&lt;T&gt;::g(U, C) { } // <i>OK: definition of</i> X&lt;T&gt;::g(U, C);
-                                 // g <i>is a function template with two template</i>
-                                 // <i>type parameters: one introduced (</i>U<i>) and</i>
-                                 // <i>one invented</i>
-  </cxx-codeblock>
-  </cxx-example>
-  </p>
-
-  <p> The introduction of a sequence of template parameters,
-  <code>T1, T2, ..., T<i>n</i></code>, by a 
-  <cxx-grammarterm>concept-name</cxx-grammarterm>, <code>C</code>,
-  associates a constraint with the 
-  <cxx-grammarterm>template-declaration</cxx-grammarterm>. That constraint is
-  <code>C&lt;T1, T2, ..., T<i>n</i>&gt;</code> when <code>C</code> designates
-  a variable concept and
-  <code>C&lt;T1, T2, ..., T<i>n</i>&gt;()</code> when <code>C</code> designates
-  a function concept. If an <cxx-grammarterm>introduced-parameter</cxx-grammarterm>
-  declares a template parameter pack, its corresponding template argument in the
-  associated constraint is a pack expansion 
-  (<cxx-ref in="cxx" to="temp.variadic"></cxx-ref>).
-
-  <cxx-example>
-  <cxx-codeblock>
-template&lt;typename A, typename B, int C&gt; concept bool C = true;
-template&lt;typename A, typename... Args&gt; concept bool D = true;
-
-C{X, Y, Z} struct S;  // <i>associates</i> C&lt;X, Y, Z&gt; <i>with</i> S
-D{P, ...Qs} struct T; // <i>associates</i> D&lt;P, Qs...&gt; <i>with</i> T
-  </cxx-codeblock>
-  </cxx-example>
-  </p>
-
-
-  <!-- FIXME: This should move to a separate section? -->
-
-
-  <p>A <cxx-grammarterm>template-declaration</cxx-grammarterm>'s 
-  <dfn>associated constraints</dfn> are a conjunction of all constraints 
-  introduced by
   <ul>
-  <li> a concept introduction,
+  <li> a concept introduction, and</li>
 
   <li> a <cxx-grammarterm>requires-clause</cxx-grammarterm> following a
-  <cxx-grammarterm>template-parameter-list</cxx-grammarterm>,</li>
+  <cxx-grammarterm>template-parameter-list</cxx-grammarterm>, and</li>
 
   <li> any constrained template parameters (<cxx-ref to="temp.param"></cxx-ref>)
-  in the declaration's <cxx-grammarterm>template-parameter-list</cxx-grammarterm>,</li>
+  in the declaration's <cxx-grammarterm>template-parameter-list</cxx-grammarterm>,
+  and </li>
 
   <li> any <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
   in the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of
   a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> in a function
-  declaration or definition (<cxx-ref to="dcl.spec.constr"></cxx-ref>),</li>
+  declaration or definition (<cxx-ref to="dcl.spec.constr"></cxx-ref>), and</li>
 
   <li> a <cxx-grammarterm>requires-clause</cxx-grammarterm> appearing after
   the <cxx-grammarterm>declarator</cxx-grammarterm> of an
@@ -304,24 +69,22 @@ D{P, ...Qs} struct T; // <i>associates</i> D&lt;P, Qs...&gt; <i>with</i> T
   <cxx-grammarterm>function-definition</cxx-grammarterm>
   (<cxx-ref to="dcl.fct.def.general"></cxx-ref>), or
   <cxx-grammarterm>member-declarator</cxx-grammarterm>
-  (<cxx-ref to="class.mem"></cxx-ref>), or</li>
-
-  <li>some combination these.</li>
+  (<cxx-ref to="class.mem"></cxx-ref>).</li>
   </ul>
 
-  A <cxx-grammarterm>template-declaration</cxx-grammarterm>, <code>T</code>, 
-  whose constraints are introduced using any combination of these mechanisms is 
-  equivalent to another <cxx-grammarterm>template-declaration</cxx-grammarterm>,
-  <code>E</code>, whose template parameters are declared explicitly and as
-  unconstrained template parameters, and <code>E</code> has a single 
+  Let <code>T</code> be a <cxx-grammarterm>template-declaration</cxx-grammarterm>
+  with associated constraints. <code>T</code> is equivalent to another
+  <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>E</code>) 
+  whose template parameters are declared explicitly as unconstrained template 
+  parameters, and <code>E</code> has a single
   <cxx-grammarterm>requires-clause</cxx-grammarterm> whose 
   <cxx-grammarterm>constraint-expression</cxx-grammarterm> is equivalent to 
   the associated constraints of <code>T</code> 
-  (<cxx-ref to="temp.over.link"></cxx-ref>).
+  (<cxx-ref to="temp.constr.expr"></cxx-ref>).
 
-  <cxx-note> This section describes how constrained template declarations can 
-  be equivalently written using alternative syntax in order to generate
-  a canonical spelling of a template's associated constraints. 
+  <cxx-note> The following paragraphs describes how constrained template 
+  declarations can be equivalently written using alternative syntax in order 
+  to generate a canonical spelling of a template's associated constraints.
   <cxx-example class="inline">
   <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = true;
@@ -340,17 +103,42 @@ template&lt;typename T&gt; requires C&lt;T&gt; void g(T);
   The paragraphs below define the rules that make these declarations
   equivalent.
   </cxx-note>
-  <p>
+  </div>
 
-  <p> When <cxx-grammarterm>template-declaration</cxx-grammarterm> is
-  declared by a concept introduction, it is equivalent to a
+  <p class="quoted" number="8"> 
+  When a <cxx-grammarterm>template-declaration</cxx-grammarterm> is
+  declared by a template introduction (<cxx-ref to="temp.intro"></cxx-ref>), 
+  it is equivalent to a
   <cxx-grammarterm>template-declaration</cxx-grammarterm> whose
   <cxx-grammarterm>template-parameter-list</cxx-grammarterm> is defined 
-  according to the rules for introducing template parameters above, and the 
+  according to the rules for introducing template parameters in
+  <cxx-ref to="temp.intro"></cxx-ref>, and the 
   equivalent declaration has a <cxx-grammarterm>requires-clause</cxx-grammarterm> 
   whose <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
-  equivalent to constraint associated by the concept introduction.
+  formed as follows.
+
+  Let <code>TT</code> be a <cxx-grammarterm>template-id</cxx-grammarterm>
+  formed as 
+  <code>C&lt;I<i>1</i>, I<i>2</i>, ..., I<i>n</i>, D<i>1</i>, D<i>2</i>, ..., D<i>n</i>&gt;</code>
+  where <code>C</code> is the name of the designated concept,
+  <code>I<i>1</i>, I<i>2</i>, ..., I<i>n</i></code> is the sequence
+  of introduced template parameters, and
+  <code>D<i>1</i>, D<i>2</i>, ..., D<i>n</i></code> is the (possibly empty)
+  sequence of instantiated default template arguments needed to form the
+  <cxx-grammarterm>template-id</cxx-grammarterm> that refers to <code>C</code>.
+
+  If an introduced parameter declares a template parameter pack, the
+  corresponding template argument in the <code>TT</code> is a pack
+  expansion (<cxx-ref to="temp.variadic"></cxx-ref>).
   
+  If <code>C</code> is a variable concept, then the
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
+  the <cxx-grammarterm>id-expression</cxx-grammarterm> <code>TT</code>.
+  
+  If <code>C</code> is a function concept, then the
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
+  the function call <code>TT()</code>.
+
   <cxx-example class="inline">
   <cxx-codeblock>
 template&lt;typename T, typename U&gt; concept bool C1 = true;
@@ -383,10 +171,11 @@ template&lt;typename... Qs&gt;
   </p>
 
   <!-- TODO: Update based on rewrite of temp.param -->
-  <p>When a <cxx-grammarterm>template-declaration</cxx-grammarterm>, <code>T</code>, is
+  <p class="quoted">
+  When a <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>T</code>) is
   explicitly declared with <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
   that has constrained template parameters (<cxx-ref to="temp.param"></cxx-ref>), it
-  is equivalent to a <cxx-grammarterm>template-declaration</cxx-grammarterm>, <code>E</code>,
+  is equivalent to a <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>E</code>)
   with the same template parameters,
   except that all constrained parameters are replaced by unconstrained
   parameters matching the corresponding prototype parameter designated
@@ -400,12 +189,9 @@ template&lt;typename... Qs&gt;
 
   The order in which the introduced constraints are evaluated is 
   the same as the order in which the constrained template 
-  parameters are declared. If the constraints of a redeclaration are
-  functionally equivalent, but not equivalent to, those of the original,
-  the program is ill-formed; no diagnostic is required
-  (<cxx-ref to="temp.over.link"></cxx-ref>).
+  parameters are declared.
 
-  If the original declaration, <code>T</code>, includes a 
+  If the original declaration <code>T</code> includes a 
   <cxx-grammarterm>requires-clause</cxx-grammarterm>, its
   <cxx-grammarterm>constraint-expression</cxx-grammarterm> is evaluated after 
   the constraints associated by the constrained template parameters in
@@ -423,11 +209,6 @@ template&lt;typename X, int Y&gt;
   requires C1&lt;X&gt; &amp;&amp; C2&lt;Y&gt;
     struct S; // <i>OK: redeclaration of</i> S
 
-template&lt;typename X, int Y&gt; 
-  requires C2&lt;Y&gt; &amp;&amp; C1&lt;X&gt;
-    struct S; // <i>error: constraints are functionally equivalent but not</i>
-              // <i>equivalent to those of</i> R<i>; no diagnostic required</i>
-
 template&lt;typename T&gt; 
   requires C1&lt;T&gt; &amp;&amp; C2&lt;sizeof(T)&gt;
     void f(T); // <i>OK: redeclaration of</i> f(T)
@@ -435,7 +216,8 @@ template&lt;typename T&gt;
   </cxx-example>
   </p>
 
-  <p> When the declaration is an abbreviated function, it is 
+  <p class="quoted"> 
+  When the declaration is an abbreviated function, it is 
   equivalent to a <cxx-grammarterm>template-declaration</cxx-grammarterm>
   whose template parameters are declared according to the rules in
   <cxx-ref to="dcl.fct"></cxx-ref>. The associated constraints of the
@@ -454,16 +236,12 @@ template&lt;C T, D U&gt;
 template&lt;typename T, typename U&gt;
   requires C&lt;T&gt; &amp;&amp; D&lt;U&gt;()
     void f(T, T, U): // <i>OK: also a redeclaration of</i> f(C, C, D)
-
-template&lt;typename T, typename U&gt;
-  requires D&lt;U&gt;() &amp;&amp; C&lt;T&gt;  
-    void f(T, T, U): // <i>error: constraints are functionally equivalent</i>
-                     // <i>but not equivalent to those of</i> f(C, C, D)</i>;
-                     // <i>no diagnostic required</i></cxx-codeblock>
+  </cxx-codeblock>
   </cxx-example>
   </p>
 
-  <p> An abbreviated function can also be declared as a
+  <p class="quoted"> 
+  An abbreviated function can also be declared as a
   <cxx-grammarterm>template-declaration</cxx-grammarterm>. The constraints
   associated by <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
   in the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> of
@@ -487,19 +265,13 @@ template&lt;typename T, typename U&gt;
   requires C&lt;T&gt; &amp;&amp; P&lt;T&gt; &amp;&amp; D&lt;U&gt;()
     void g1(T, U);      // <i>OK: redeclaration of</i> g1(T, D)
 
-template&lt;C T, D U&gt;
-  requires P&lt;T&gt;     // <i>associated constraints are</i> C&lt;T&gt; &amp;&amp; D&lt;U&gt;() &amp;&amp; P&lt;T&gt; 
-    void g1(T, U);  // <i>error: ill-formed, no diagnostic required</i>;
-  
 C{T} void g2(T, D); // <i>OK: redeclaration of</i> g2(T, D)
   </cxx-codeblock>
-  The second declaration of <code>g1(T, U)</code> is ill-formed (no diagnostic
-  required) because it is functionally equivalent to the first declaration, 
-  but not equivalent.
   </cxx-example>
+  </p>
 
-
-  <p> A <dfn>trailing <cxx-grammarterm>requires-clause</cxx-grammarterm></dfn> 
+  <p class="quoted"> 
+  A <dfn>trailing <cxx-grammarterm>requires-clause</cxx-grammarterm></dfn> 
   is a <cxx-grammarterm>requires-clause</cxx-grammarterm> that appears after
   the <cxx-grammarterm>declarator</cxx-grammarterm> in an
   <cxx-grammarterm>init-declarator</cxx-grammarterm>
@@ -509,9 +281,9 @@ C{T} void g2(T, D); // <i>OK: redeclaration of</i> g2(T, D)
   <cxx-grammarterm>member-declarator</cxx-grammarterm>
   (<cxx-ref to="class.mem"></cxx-ref>).
 
-  When a constrained function template or member function template 
+  When a constrained function template or member function template is
   declared with a trailing <cxx-grammarterm>requires-clause</cxx-grammarterm>
-  is equivalent to a declaration in which the 
+  it is equivalent to a declaration in which the 
   <cxx-grammarterm>constraint-expression</cxx-grammarterm> of the
   trailing <cxx-grammarterm>requires-clause</cxx-grammarterm> is evaluated
   after all other associated constraints.
@@ -526,14 +298,13 @@ template&lt;C T&gt; template&lt;typename U&gt;
     requires D&lt;U&gt; &amp;&amp; D&lt;T&gt;
       void S&lt;T&gt;::f(U) { } <i>// OK: definition of</i> S&lt;T&gt;::f(U)
 
-template&lt;C T&gt; template&lt;typename U, typename __P&gt;
+template&lt;C T&gt; template&lt;typename U&gt;
     void S&lt;T&gt;::f(U) requires D&lt;U&gt; &amp;&amp; D&lt;T&gt; { } // <i>error: redefinition of</i> S&lt;T&gt;::f(U)
   </cxx-codeblock>
   The second definition if <code>S&lt;T&gt;::f(U)</code> is an error 
   because its declaration is equivalent to the first.
   </cxx-example>
   </p>
-
 
   <!-- =================== 
        Template Parameters 
@@ -631,48 +402,44 @@ template&lt;D* N&gt; void f2();      // <i>error:</i> N <i>declares a pointer-to
     Insert the following paragraphs after paragraph 8. These paragraphs
     define the meaning of a constrained template parameter.
 
-
-    <p number="9" class="quoted">
+    <div class="quoted">
+    <p number="9">
     A constrained template parameter declares a template parameter whose
     type and form match that of the prototype parameter of the concept 
     designated by its <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
     The designated concept is found using the rules in
     <cxx-ref to="dcl.spec.constr"></cxx-ref>. 
 
-    In particular, when 
-    <code>T</code> is a template parameter declared as 
-    <cxx-grammarterm>non-type-or-constrained-parameter</cxx-grammarterm>,
-    and <code>P</code> is its corresponding prototype parameter, then
-    <code>T</code> is declared as follows:
+    Let <code>I</code> be the <cxx-grammarterm>declarator-id</cxx-grammarterm>
+    of the <cxx-grammarterm>basic-parameter-declaration</cxx-grammarterm>,
+    and let <code>P</code> be the prototype parameter of the designated
+    concept. The declared template parameter is determined by the type
+    and form of <code>P</code> and the <cxx-grammarterm>identifier</cxx-grammarterm>
+    and optional ellipsis in <code>I</code>.
+    </p>
     
     <ul>
     <li> If <code>P</code> is a type 
     <cxx-grammarterm>template-parameter</cxx-grammarterm> declared with
-    the <code>code</code> or <code>typename</code>, <code>T</code> is also 
-    type <cxx-grammarterm>template-parameter</cxx-grammarterm> . It is 
-    unspecified whether <code>T</code> is declared with <code>class</code>
-    or <code>typename</code>.</li>
+    the <code>class</code> or <code>typename</code>, the declared parameter is 
+    a type <cxx-grammarterm>template-parameter</cxx-grammarterm>. </li>
 
     <li> If <code>P</code> is a non-type 
-    <cxx-grammarterm>template-parameter</cxx-grammarterm>, <code>T</code> is 
-    also a non-type <cxx-grammarterm>template-parameter</cxx-grammarterm>
-    having the same type as <code>P</code>.</li>
+    <cxx-grammarterm>template-parameter</cxx-grammarterm>, the declared
+    parameter is a non-type <cxx-grammarterm>template-parameter</cxx-grammarterm>
+    having the same type as <code>P</code>. </li>
 
-    <!-- TODO: A template template parameter can be declared with
-         typename in addition to class. -->
     <li> If <code>P</code> is a template 
-    <cxx-grammarterm>template-parameter</cxx-grammarterm>, <code>T</code> is
-    also a template <cxx-grammarterm>template-parameter</cxx-grammarterm>
+    <cxx-grammarterm>template-parameter</cxx-grammarterm>, the declared
+    parameter is a template <cxx-grammarterm>template-parameter</cxx-grammarterm>
     having the same <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
-    <code>P</code>.</li>
+    as <code>P</code>. </li>
 
     <li> If <code>P</code> declares a template parameter pack,
-    <code>T</code> also declares a template parameter pack. In such cases,
-    <code>T</code> shall be declared with <code>...</code> following its
-    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.</li>
+    <code>I</code> shall include an ellipsis, and the declared parameter
+    is a template parameter pack. </li>
     </ul>
 
-    <div class="quoted">
     <cxx-example class="inline">
     <cxx-codeblock>
 template&lt;typename T&gt; concept bool C1 = true;
@@ -685,12 +452,262 @@ template&lt;C1 T&gt; void f1();     // <i>OK:</i> T <i>is a type template-parame
 template&lt;C2 X&gt; void f2();     // <i>OK:</i> X <i>is a template with one type-parameter</i>
 template&lt;C3 N&gt; void f3();     // <i>OK:</i> N <i>has type int</i>
 template&lt;C4... Ts&gt; void f4(); // <i>OK:</i> Ts <i>is a template parameter pack of types</i>
-template&lt;C4 Ts&gt; void f5();    // <i>error: parameter pack declared without</i> ...
+template&lt;C4 Ts&gt; void f5();    // <i>error:</i> Ts <i>must be preceded by an ellipsis</i>
 template&lt;C5... Cx&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter pack of</i> char<i>s</i>
     </cxx-codeblock>
     </cxx-example>
     </div>
   </cxx-section> <!-- temp.param -->
+
+
+  <!-- ===================================
+       Introduction of template parameters
+       =================================== -->
+
+  <cxx-section id="temp.intro" number="2">
+    <h1>Introduction of template parameters</h1>
+
+    Add this new section after <cxx-ref to="temp.param"></cxx-ref>.
+
+    <p>
+    A <dfn>template introduction</dfn> provides a convenient way of declaring
+    different templates that have the same template parameters and constraints.
+
+    <bnf-grammar>
+      <bnf-rule>introduction-clause</bnf-rule>
+        <bnf-alt>
+          <bnf-opt>nested-name-specifier</bnf-opt>
+          concept-name
+          introduction-list
+        </bnf-alt>
+
+      <bnf-rule>introduction-list</bnf-rule>
+        <bnf-alt>introduced-parameter</bnf-alt>
+        <bnf-alt>introduction-list<bnf-terminal>,</bnf-terminal> introduced-parameter</bnf-alt>
+
+        <bnf-rule>introduced-parameter</bnf-rule>
+          <bnf-alt><bnf-opt><bnf-terminal>...</bnf-terminal></bnf-opt> identifier</bnf-alt>
+      </ins>
+    </bnf-grammar>
+
+    A template introduction declares a sequence of 
+    <cxx-grammarterm>template-parameter</cxx-grammarterm>s, which are derived 
+    from a <cxx-grammarterm>concept-name</cxx-grammarterm>
+    and the sequence of <cxx-grammarterm>identifier</cxx-grammarterm>s in 
+    its <cxx-grammarterm>introduction-list</cxx-grammarterm>.
+
+
+    <!-- FIXME: Rewrite this -->
+    <p> The concept designated by the <cxx-grammarterm>concept-name</cxx-grammarterm>
+    (call it <code>C</code>) is determined by the 
+    <cxx-grammarterm>introduction-list</cxx-grammarterm>.
+
+    The set of concept definitions named by <code>C</code> is called the
+    candidate concept set. A concept <code>CC</code> is viable if
+    <code>CC</code> declares at least as many template parameters as there are
+    <cxx-grammarterm>identifier</cxx-grammarterm>s in the 
+    <cxx-grammarterm>introduction-list</cxx-grammarterm>, and
+    all excess template parameters are declared with default template 
+    arguments.
+
+    If only one concept in that set is viable, that is the concept
+    designated by <code>C</code>. Otherwise, the program is ill-formed.
+
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;typename T&gt; concept bool Eq() { return true; }             // <i>#1</i>
+template&lt;typename T, typename U&gt; concept bool Eq() { return true; } // <i>#2</i>
+
+Eq{T} void f1(T, T);    // <i>OK:</i> Eq{T} <i>designates #1</i>
+Eq{A, B} void f2(A, B); // <i>OK:</i> Eq{A, B} <i>designates #2</i>
+  </cxx-codeblock>
+  It is possible to overload function concepts in such a way that a
+  <cxx-grammarterm>concept-name</cxx-grammarterm> can designate multiple
+  concepts.
+  <cxx-codeblock>
+template&lt;typename T&gt; concept bool C() { return true; }
+template&lt;int N&gt; concept bool C() { return true; }
+
+C{X} void f(); // <i>error: resolution of</i> C{X} <i>is ambiguous</i>
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
+    <p>
+    For each 
+    <cxx-grammarterm>introduced-parameter</cxx-grammarterm> <code>I</code> in an
+    <cxx-grammarterm>introduction-list</cxx-grammarterm>,
+    and for its corresponding template parameter in the 
+    <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
+    of the designated concept (call it <code>P</code>), declare a new template 
+    parameter using the rules for declaring a constrained parameter
+    (<cxx-ref to="temp.param"></cxx-ref>) by using <code>I</code> as a
+    <cxx-grammarterm>declarator-id</cxx-grammarterm> and <code>P</code>
+    as the prototype parameter.
+
+    However, if <code>I</code> contains an ellipsis, <code>P</code> shall
+    declare a template parameter pack.
+
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;typename T, int N, typename... Xs&gt; concept bool C1 = true;
+template&lt;template&lt;typename&gt; class X&gt; concept bool C2 = true;
+
+C1{A, B, ...C} // <i>OK:</i> A <i>is declared as</i> typename A
+  struct s;    // B <i>is declared as</i> int B
+               // C <i>is declared as</i> typename... C
+
+C1{X, Y, Z} // <i>error:</i> Z <i>must be preceded by an ellipsis</i>
+  struct t;
+
+C2{T} // <i>OK:</i> T <i>is declared as</i> template&lt;typename&gt; class T
+  void foo();
+
+C2{...X}      // <i>error: the corresponding parameter is not a</i> 
+  void bar(); // <i>template parameter pack</i>
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
+
+    <p>
+    <cxx-note>
+    A concept referred to by a <cxx-grammarterm>concept-name</cxx-grammarterm> 
+    may have template parameters with default template arguments. An
+    <cxx-grammarterm>introduction-list</cxx-grammarterm> may omit 
+    <cxx-grammarterm>identifier</cxx-grammarterm>s for a corresponding template
+    parameter if it has a default argument. However, only the
+    <cxx-grammarterm>introduced-parameter</cxx-grammarterm>s are declared
+    as template parameters. 
+    
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;typename A, typename B = bool&gt; 
+  concept bool C() { return true; }
+
+C{T} void f(T); // <i>OK:</i> f(T) <i>is a function template with</i>
+                // <i>a single template type parameter</i> T
+  </cxx-codeblock>
+  There is no <cxx-grammarterm>introduced-parameter</cxx-grammarterm> 
+  that corresponds to the template parameter <code>B</code> in the
+  <code>C</code> concept, so <code>f(T)</code> is declared with only
+  one template parameter.
+    </cxx-example>
+    </cxx-note>
+    </p>
+
+
+    <p> An introduced template parameter does not have a default template 
+    argument, even if its corresponding template parameter does.
+
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;typename T, int N = -1&gt; concept bool P() { return true; }
+
+P{T, N} struct Array { };
+
+Array&lt;double, 0&gt; s1; // <i>OK</i>
+Array&lt;double&gt; s2;    // <i>error:</i> Array <i>takes two template arguments</i>
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
+    <!--
+    <p>
+    <cxx-note>
+    A constrained member function template of a constrained class template
+    can be defined outside of its class definition by nested introductions.
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;typename T&gt; concept bool C = true;
+template&lt;typename T&gt; concept bool D = true;
+
+C{T} struct X {
+  D{U} void f();
+};
+
+C{T} D{U} void X&lt;T&gt;::f() { } // <i>OK: definition of</i> f()
+    </cxx-codeblock>
+    </cxx-example>
+    </cxx-note>
+    </p>
+    -->
+
+    <p> A <cxx-grammarterm>template-declaration</cxx-grammarterm> declared
+    by a concept introduction can also be an abbreviated function
+    (<cxx-ref to="dcl.fct"></cxx-ref>).
+
+    The invented template parameters introduced by the presence of
+    <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>s or
+    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s in
+    the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
+    are appended to the list of template parameters introduced by the the
+    <cxx-grammarterm>introduction-list</cxx-grammarterm>.
+
+    <!-- FIXME: Redundant? -->
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;typename T&gt; concept bool C = true;
+template&lt;typename T&gt; concept bool D = true;
+
+C{T} void f(T, D);
+
+template&lt;typename T, typename U&gt; 
+  requires C&lt;T&gt; && D&lt;U&gt;
+void f(T, U); // <i>OK: redeclaration of</i> f(T, D)
+    </cxx-codeblock>
+    </cxx-example>
+    
+    <cxx-example class="inline">
+    <cxx-codeblock>
+template&lt;typename T&gt; concept bool C = true;
+template&lt;typename T&gt; concept bool D = true;
+
+C{T} struct X {
+  void f(D);
+  D{U} void g(U, C);
+};
+
+template&lt;typename T&gt; requires C&lt;T&gt;
+  template&lt;typename U&gt; requires D&lt;U&gt;
+    void X&lt;T&gt;::f(U) { } // <i>OK: definition of</i> X&lt;T&gt;::f(D)
+
+template&lt;typename T&gt; requires C&lt;T&gt;
+  template&lt;typename U, typename V&gt; requires D&lt;U&gt; && C&lt;V&gt;
+    void X&lt;T&gt;::g(U, V) { } // <i>OK: definition of</i> X&lt;T&gt;::g(U, C)
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
+  <!-- FIXME: This might be redundant w.r.t 14pxxx -->
+
+  <p class="quoted"> 
+  The introduction of a sequence of template parameters,
+  <code>T1, T2, ..., T<i>n</i></code>, by a 
+  <cxx-grammarterm>concept-name</cxx-grammarterm>, <code>C</code>,
+  associates a constraint with the 
+  <cxx-grammarterm>template-declaration</cxx-grammarterm>. That constraint is
+  <code>C&lt;T1, T2, ..., T<i>n</i>&gt;</code> when <code>C</code> designates
+  a variable concept and
+  <code>C&lt;T1, T2, ..., T<i>n</i>&gt;()</code> when <code>C</code> designates
+  a function concept. If an <cxx-grammarterm>introduced-parameter</cxx-grammarterm>
+  declares a template parameter pack, its corresponding template argument in the
+  associated constraint is a pack expansion 
+  (<cxx-ref in="cxx" to="temp.variadic"></cxx-ref>).
+
+  <cxx-example>
+  <cxx-codeblock>
+template&lt;typename A, typename B, int C&gt; concept bool C = true;
+template&lt;typename A, typename... Args&gt; concept bool D = true;
+
+C{X, Y, Z} struct S;  // <i>associates</i> C&lt;X, Y, Z&gt; <i>with</i> S
+D{P, ...Qs} struct T; // <i>associates</i> D&lt;P, Qs...&gt; <i>with</i> T
+  </cxx-codeblock>
+  </cxx-example>
+  </p>
+
+
+  </cxx-section> <!-- temp.intro -->
 
 
   <!-- ==============
