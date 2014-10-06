@@ -35,10 +35,7 @@ cxx-titlepage { page: title; page-break-after: always; }
 }
 
 @media print {
-    html { 
-        font-size: 9pt; 
-        /*text-align: justify; */
-    }
+    html { font-size: 9pt; text-align: justify; }
     * /deep/ code { font-size: 80%; }
     /* Note that only Prince generates clickable links. */
     * /deep/ a[href] { text-decoration:none; }
@@ -49,7 +46,7 @@ cxx-titlepage { page: title; page-break-after: always; }
        For print see the <cxx-titlepage> definition. */
     html, body {
         height: 100%;
-        /*text-align: justify; */
+        text-align: justify; 
     }
 }
 

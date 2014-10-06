@@ -306,6 +306,30 @@ template&lt;C T&gt; template&lt;typename U&gt;
   </cxx-example>
   </p>
 
+  <!-- FIXME: Does this need to go somewhere? Notes refer to it as 
+       redundant. -->
+  <!--  
+  <p>
+  <cxx-note>
+  A constrained member function template of a constrained class template
+  can be defined outside of its class definition by nested introductions.
+  <cxx-example class="inline">
+  <cxx-codeblock>
+template&lt;typename T&gt; concept bool C = true;
+template&lt;typename T&gt; concept bool D = true;
+
+C{T} struct X {
+  D{U} void f();
+};
+
+C{T} D{U} void X&lt;T&gt;::f() { } // <i>OK: definition of</i> f()
+  </cxx-codeblock>
+  </cxx-example>
+  </cxx-note>
+  </p> 
+  -->
+
+
   <!-- =================== 
        Template Parameters 
        =================== -->
@@ -398,12 +422,10 @@ template&lt;D* N&gt; void f2();      // <i>error:</i> N <i>declares a pointer-to
     </cxx-example>
     </p>
 
-
     Insert the following paragraphs after paragraph 8. These paragraphs
     define the meaning of a constrained template parameter.
 
-    <div class="quoted">
-    <p number="9">
+    <p number="9" class="quoted">
     A constrained template parameter declares a template parameter whose
     type and form match that of the prototype parameter of the concept 
     designated by its <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
@@ -418,6 +440,7 @@ template&lt;D* N&gt; void f2();      // <i>error:</i> N <i>declares a pointer-to
     and optional ellipsis in <code>I</code>.
     </p>
     
+    <div class="quoted">
     <ul>
     <li> If <code>P</code> is a type 
     <cxx-grammarterm>template-parameter</cxx-grammarterm> declared with
@@ -467,7 +490,7 @@ template&lt;C5... Cx&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter 
   <cxx-section id="temp.intro" number="2">
     <h1>Introduction of template parameters</h1>
 
-    Add this new section after <cxx-ref to="temp.param"></cxx-ref>.
+    Add this section after <cxx-ref to="temp.param"></cxx-ref>.
 
     <p>
     A <dfn>template introduction</dfn> provides a convenient way of declaring
@@ -514,6 +537,9 @@ template&lt;C5... Cx&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter 
     designated by <code>C</code>. Otherwise, the program is ill-formed.
 
     <cxx-example class="inline">
+    It is possible to overload function concepts in such a way that a
+    <cxx-grammarterm>concept-name</cxx-grammarterm> can designate multiple
+    concepts.
     <cxx-codeblock>
 template&lt;typename T&gt; concept bool Eq() { return true; }             // <i>#1</i>
 template&lt;typename T, typename U&gt; concept bool Eq() { return true; } // <i>#2</i>
@@ -521,9 +547,6 @@ template&lt;typename T, typename U&gt; concept bool Eq() { return true; } // <i>
 Eq{T} void f1(T, T);    // <i>OK:</i> Eq{T} <i>designates #1</i>
 Eq{A, B} void f2(A, B); // <i>OK:</i> Eq{A, B} <i>designates #2</i>
   </cxx-codeblock>
-  It is possible to overload function concepts in such a way that a
-  <cxx-grammarterm>concept-name</cxx-grammarterm> can designate multiple
-  concepts.
   <cxx-codeblock>
 template&lt;typename T&gt; concept bool C() { return true; }
 template&lt;int N&gt; concept bool C() { return true; }
@@ -569,7 +592,6 @@ C2{...X}      // <i>error: the corresponding parameter is not a</i>
     </cxx-example>
     </p>
 
-
     <p>
     <cxx-note>
     A concept referred to by a <cxx-grammarterm>concept-name</cxx-grammarterm> 
@@ -612,111 +634,25 @@ Array&lt;double&gt; s2;    // <i>error:</i> Array <i>takes two template argument
     </cxx-example>
     </p>
 
-    <!--
-    <p>
+    <!-- Necessary? I don't know -->
+    <p> 
     <cxx-note>
-    A constrained member function template of a constrained class template
-    can be defined outside of its class definition by nested introductions.
-    <cxx-example class="inline">
-    <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = true;
-template&lt;typename T&gt; concept bool D = true;
-
-C{T} struct X {
-  D{U} void f();
-};
-
-C{T} D{U} void X&lt;T&gt;::f() { } // <i>OK: definition of</i> f()
-    </cxx-codeblock>
-    </cxx-example>
+    The introduction of a sequence of template parameters by a
+    <cxx-grammarterm>concept-name</cxx-grammarterm> associates a constraint 
+    with the <cxx-grammarterm>template-declaration</cxx-grammarterm>
+    according to the rules describe in <cxx-ref to="temp"></cxx-ref>.
     </cxx-note>
     </p>
-    -->
-
-    <p> A <cxx-grammarterm>template-declaration</cxx-grammarterm> declared
-    by a concept introduction can also be an abbreviated function
-    (<cxx-ref to="dcl.fct"></cxx-ref>).
-
-    The invented template parameters introduced by the presence of
-    <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>s or
-    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s in
-    the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
-    are appended to the list of template parameters introduced by the the
-    <cxx-grammarterm>introduction-list</cxx-grammarterm>.
-
-    <!-- FIXME: Redundant? -->
-    <cxx-example class="inline">
-    <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = true;
-template&lt;typename T&gt; concept bool D = true;
-
-C{T} void f(T, D);
-
-template&lt;typename T, typename U&gt; 
-  requires C&lt;T&gt; && D&lt;U&gt;
-void f(T, U); // <i>OK: redeclaration of</i> f(T, D)
-    </cxx-codeblock>
-    </cxx-example>
-    
-    <cxx-example class="inline">
-    <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = true;
-template&lt;typename T&gt; concept bool D = true;
-
-C{T} struct X {
-  void f(D);
-  D{U} void g(U, C);
-};
-
-template&lt;typename T&gt; requires C&lt;T&gt;
-  template&lt;typename U&gt; requires D&lt;U&gt;
-    void X&lt;T&gt;::f(U) { } // <i>OK: definition of</i> X&lt;T&gt;::f(D)
-
-template&lt;typename T&gt; requires C&lt;T&gt;
-  template&lt;typename U, typename V&gt; requires D&lt;U&gt; && C&lt;V&gt;
-    void X&lt;T&gt;::g(U, V) { } // <i>OK: definition of</i> X&lt;T&gt;::g(U, C)
-    </cxx-codeblock>
-    </cxx-example>
-    </p>
-
-  <!-- FIXME: This might be redundant w.r.t 14pxxx -->
-
-  <p class="quoted"> 
-  The introduction of a sequence of template parameters,
-  <code>T1, T2, ..., T<i>n</i></code>, by a 
-  <cxx-grammarterm>concept-name</cxx-grammarterm>, <code>C</code>,
-  associates a constraint with the 
-  <cxx-grammarterm>template-declaration</cxx-grammarterm>. That constraint is
-  <code>C&lt;T1, T2, ..., T<i>n</i>&gt;</code> when <code>C</code> designates
-  a variable concept and
-  <code>C&lt;T1, T2, ..., T<i>n</i>&gt;()</code> when <code>C</code> designates
-  a function concept. If an <cxx-grammarterm>introduced-parameter</cxx-grammarterm>
-  declares a template parameter pack, its corresponding template argument in the
-  associated constraint is a pack expansion 
-  (<cxx-ref in="cxx" to="temp.variadic"></cxx-ref>).
-
-  <cxx-example>
-  <cxx-codeblock>
-template&lt;typename A, typename B, int C&gt; concept bool C = true;
-template&lt;typename A, typename... Args&gt; concept bool D = true;
-
-C{X, Y, Z} struct S;  // <i>associates</i> C&lt;X, Y, Z&gt; <i>with</i> S
-D{P, ...Qs} struct T; // <i>associates</i> D&lt;P, Qs...&gt; <i>with</i> T
-  </cxx-codeblock>
-  </cxx-example>
-  </p>
-
 
   </cxx-section> <!-- temp.intro -->
 
 
-  <!-- ==============
-       Template Names 
-       ============== -->
+  <!-- =================================
+       Names of template specializations
+       ================================= -->
 
-  <!-- FIXME: Check that this is in an appropriate place. -->
   <cxx-section id="temp.names">
-    <h1>Template names</h1>
+    <h1>Names of template specializations</h1>
 
 
     Add the following paragraph to require the implicit instantiation
@@ -727,38 +663,45 @@ D{P, ...Qs} struct T; // <i>associates</i> D&lt;P, Qs...&gt; <i>with</i> T
     not name a function, a default 
     <cxx-grammarterm>template-argument</cxx-grammarterm> is implicitly
     instantiated (<cxx-ref to="temp.inst"></cxx-ref>) in a context that 
-    requires the value of the default argument.
+    requires the value of that default argument.
 
     <cxx-example class="inline">
     <cxx-codeblock>
 template&lt;typename T, typename U = int&gt; struct S { };
 
-S&lt;bool&gt; p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;
+S&lt;bool&gt;* p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;*
     </cxx-codeblock>
+    The default argument for <code>U</code> is instantiated to form
+    the type <code>S&lt;bool, int&gt;*</code>, but the definition of that
+    class template specialization is not implicitly instantiated
+    (<cxx-ref in="cxx" to="temp.inst"></cxx-ref>); it is not used in a 
+    context that requires a complete type.
     </cxx-example>
     </p>
 
     Add this paragraph to require the satisfaction of associated constraints
     on the formation of the <cxx-grammarterm>simple-template-id</cxx-grammarterm>.
 
-    <p number="9" class="quoted">
+    <p class="quoted">
     When a <cxx-grammarterm>simple-template-id</cxx-grammarterm> names
     a constrained class template, variable template or alias template,
     and all <cxx-grammarterm>template-argument</cxx-grammarterm>s in the
     <cxx-grammarterm>template-id</cxx-grammarterm> are non-dependent,
     (<cxx-ref to="temp.nondep"></cxx-ref>), the associated constraints
-    of the named template shall be satisfied by those
-    <cxx-grammarterm>template-argument</cxx-grammarterm>s.
+    are checked against those
+    <cxx-grammarterm>template-argument</cxx-grammarterm>s
+    (<cxx-ref to="temp.constr"></cxx-ref>). If, as a result of checking,
+    the associated constraints are not satisfied, the program is ill-formed.
 
     <cxx-example class="inline">
     <cxx-codeblock>
 template&lt;typename T&gt; requires false struct S { };
 
-S&lt;int&gt;* p; // error: constraints not satisfied.
+S&lt;int&gt;* p; // <i>error: constraints not satisfied</i>.
     </cxx-codeblock>
     </cxx-example>
-
     </p>
+
 
   </cxx-section> <!-- temp.names -->
 
@@ -812,7 +755,8 @@ S&lt;int&gt;* p; // error: constraints not satisfied.
       examples given in the original document.
 
       <p number="3" class="quoted">
-      <cxx-example class="inline">
+      <div class="quoted">
+      <cxx-example>
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = requires (T t) { t.f(); };
 template&lt;typename T&gt; concept bool D = C&lt;T&gt; && requires (T t) { t.g(); };
@@ -829,7 +773,7 @@ S&lt;Y&gt; s2; // <i>error: the constraints of</i> P <i>do not subsume those of<
 S&lt;Z&gt; s3; // OK: <i>the constraints of P subsume those of</i> Z
       </cxx-codeblock>
       </cxx-example>
-      </p>
+      </div>
 
     </cxx-section> <!-- temp.arg.template -->
   </cxx-section> <!-- tmep.arg -->
@@ -872,7 +816,7 @@ S&lt;Z&gt; s3; // OK: <i>the constraints of P subsume those of</i> Z
       Each template parameter pack shall be expanded with an ellipsis in the 
       template argument list.
 
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = true;
 template&lt;typename T&gt; concept bool D = true;
@@ -947,10 +891,10 @@ template&lt;typename T&gt;
       <ins>and associated constraints</ins>
       of the member template.
 
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C1 = true;
-template&lt;typename T&gt; concept bool C2 = sizeof(T) <= 4;
+template&lt;typename T&gt; concept bool C2 = sizeof(T) &lt;= 4;
 
 template&lt;C1 T&gt;
   struct S {
@@ -1045,6 +989,7 @@ template&lt;typename T&gt;
     </cxx-section> <!-- temp.friend -->
 
 
+
     <!-- ======================================
          Class template partial specializations
          ====================================== -->
@@ -1130,6 +1075,7 @@ A&lt;int, S*, 3&gt; a8; // <i>uses #7</i>
         rules for function templates 
         (<cxx-ref in="cxx" to="temp.func.order"></cxx-ref>):
         </p>
+        <div class="quoted">
         <ul>
           <li> the first function template has the same template 
           parameters <ins>and associated constraints</ins> as the first partial 
@@ -1160,6 +1106,7 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
         #1 for template arguments that satisfy both constraints because 
         <code>B</code> is more specialized than <code>A</code>.
         </cxx-example>
+        </div>
 
       </cxx-section> <!-- temp.class.order -->
     </cxx-section> <!-- temp.class.spec -->
@@ -1184,7 +1131,8 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
         parameter lists, and have return types and parameter lists that are 
         equivalent using the rules described above to compare expressions 
         involving template parameters.</del>
-        <br/>
+        </p>
+        <div class="quoted">
         <ins>
         Two function templates are <dfn>equivalent</dfn> if they are:
         <ul>
@@ -1199,6 +1147,7 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
              compare constraints.</li>
         </ul>
         </ins>
+        </div>
 
         <div class="quoted">
         Two function templates are <dfn>functionally equivalent</dfn> if they 
@@ -1539,8 +1488,9 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
     </p>
 
     <p>
-    Constraint checking is the processing of substituting non-dependent template
-    arguments into a constraint for the purpose of determining if the constraint
+    <dfn>Constraint checking</dfn> is the processing of substituting 
+    non-dependent template arguments (<cxx-ref in="cxx" to="temp.nondep"></cxx-ref>) 
+    into a constraint for the purpose of determining if the constraint
     is satisfied.
 
     After substitution, a constraint is <dfn>satisfied</dfn> if and only if 
@@ -1556,13 +1506,16 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
     </cxx-note>
     </p>
 
-    <p> The logical <code>||</code> operator denotes a logical disjunction 
-    of two constraints. A disjunction is satisfied if and only if either 
-    operand is satisfied or both operands are satisfied. </p>
+    <p> <dfn>Disjunction</dfn> is a logical operator taking two operands.
+    A disjunction of constraints is satisfied if and only if either operand is 
+    satisfied or both operands are satisfied. </p>
 
-    <p> The logical <code>&amp;&amp;</code> operator denotes a logical
-    conjunction of two constraints. A conjunction of constraints is satisfied
-    if and only if both operands are satisfied.</p>
+    <p> <dfn>Conjunction</dfn> is a logical operator taking two operands.
+    A conjunction of constraints is satisfied if and only if both operands 
+    are satisfied. </p>
+
+    <p> The precedence of logical operators in a constraint is, from highest
+    to lowest, conjunction followed by disjunction. </p>
 
     <p> Any constraint that is not a disjunction or conjunction is an
     <dfn>atomic constraint</dfn>. The atomic constraints are defined in the 
@@ -1818,18 +1771,19 @@ template&lt;typename T, int N&gt; concept bool C =
       the normalization of <code>P</code>.</li>
 
       <li> The normalization of an expression of the form <code>P || Q</code> is
-      the constraint <code>P' || Q'</code> where <code>P'</code> is the
-      normalization of <code>P</code>, and <code>Q'</code> is the normalization
-      of <code>Q</code>. If, in the expression <code>P || Q</code>, lookup of
-      <code>operator||</code> finds a user-defined function, the program is
-      ill-formed.</li>
+      the disjunction of the normalization of <code>P</code> and the
+      normalization of <code>Q</code>. 
+
+      If, in the expression <code>P || Q</code>, lookup of <code>operator||</code> 
+      finds a user-defined function, the program is ill-formed.</li>
 
       <li> The normalization of an expression of the form <code>P &amp;&amp; Q</code> is
-      the constraint <code>P' &amp;&amp; Q'</code> where <code>P'</code> is the
-      normalization of <code>P</code>, and <code>Q'</code> is the normalization
-      of <code>Q</code>. If, in the expression <code>P &amp;&amp; Q</code>, lookup of
-      <code>operator&amp;&amp;</code> finds a user-defined function, the program is
-      ill-formed.</li>
+      the conjunction of the normalization of <code>P</code> and the
+      normalization of <code>Q</code>. 
+
+      If, in the expression <code>P &amp;&amp; Q</code>, lookup of
+      <code>operator&amp;&amp;</code> finds a user-defined function, the 
+      program is ill-formed.</li>
 
       <li> The normalization of a function call of the form
       <code>C&lt;A<sub><i>1</i></sub>, A<sub><i>2</i></sub>, ..., A<sub><i>n</i></sub>&gt;()</code>
