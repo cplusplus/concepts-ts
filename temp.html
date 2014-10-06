@@ -1544,14 +1544,14 @@ constraints required by the concept, <code>C</code>.
     </p>
 
 
-    <p> A <dfn>valid expression constraint</dfn> is a requirement on an
+    <p> An <dfn>expression constraint</dfn> is a requirement on an
     expression, <code>E</code>. It is satisfied if <code>E</code> is 
     non-dependent, meaning that a substitution yielding <code>E</code> 
-    did not fail. Within a valid expression constraint, <code>E</code> is an 
+    did not fail. Within an expression constraint, <code>E</code> is an 
     unevaluated operand (<cxx-ref to="expr"></cxx-ref>).
 
     <cxx-note>
-    A valid expression constraint is introduced by the 
+    An expression constraint is introduced by the 
     <cxx-grammarterm>expression</cxx-grammarterm> in either a
     <cxx-grammarterm>simple-requirement</cxx-grammarterm> 
     (<cxx-ref to="expr.prim.req.simple"></cxx-ref>)
@@ -1563,25 +1563,30 @@ constraints required by the concept, <code>C</code>.
     </cxx-note>
 
     <cxx-example example="inline">
-    The concept <code>C</code> introduces a valid expression constraint for 
+    The concept <code>C</code> introduces a expression constraint for 
     the expression <code>++t</code>.
     <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = requires (T t) { ++t; };
     </cxx-codeblock>
-The type <code>int</code> satisfies this constraint because the
+The type argument <code>int</code> satisfies this constraint because the
 the expression <code>++t</code> is valid after substituting <code>int</code>
 for <code>T</code>.
     </cxx-example>
     </p>
 
 
-    <!-- FIXME: Update the grammar terms in the note. -->
-    <p> A <dfn>valid type constraint</dfn> is a requirement on a type,
-    <code>T</code>. It is satisfied if <code>T</code> is non-dependent, 
-    meaning that a substitution yielding <code>T</code> did not fail.
+    <p> A <dfn>type constraint</dfn> is a requirement on the existence of
+    a type name, <code>T</code>. It is satisfied if and only <code>T</code> is 
+    non-dependent, meaning that a substitution yielding <code>T</code> did not 
+    fail.
+
+    A type reqiurement that names a class template specialization does 
+    not require the completeness of that type; class templates are not 
+    instantiated when the constraint is checked 
+    (<cxx-ref to="temp.inst"></cxx-ref>).
 
     <cxx-note>
-    A valid type constraint is introduced by the 
+    A type constraint is introduced by the 
     <cxx-grammarterm>type-id</cxx-grammarterm> in a
     <cxx-grammarterm>type-requirement</cxx-grammarterm> of a
     <cxx-grammarterm>requires-expression</cxx-grammarterm>
@@ -1589,10 +1594,13 @@ for <code>T</code>.
     </cxx-note>
 
     <cxx-example example="inline">
-    The concept <code>C</code> introduces a valid type constraint for the 
+    The concept <code>C</code> introduces a type constraint for the 
     type name <code>T::type</code>.
     <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = requires (T t) { typename T::type };
+template&lt;typename T&gt; concept bool C = 
+  requires (T t) { 
+    typename T::type;
+  };
     </cxx-codeblock>
 The type <code>int</code> does not satisfies this constraint because 
 substitution of that type into the constraint results in a substitution
@@ -1624,7 +1632,7 @@ template&lt;typename T&gt; concept bool C =
     </cxx-codeblock>
     The <cxx-grammarterm>compound-requirement</cxx-grammarterm> in the
     <cxx-grammarterm>requires-expression</cxx-grammarterm> of <code>C</code>
-    introduces two atomic constraints: a valid expression constraint
+    introduces two atomic constraints: an expression constraint
     for <code>a == b</code> and the conversion constraint that the
     expression <code>a == b</code> is implicitly convertible to 
     <code>bool</code>.
