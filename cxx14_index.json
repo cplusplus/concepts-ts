@@ -5,6 +5,7 @@
 
   "basic.def.odr"           : "3.2",
   "basic.scope.namespace"   : "3.3.6",
+  "basic.lookup"            : "3.4",
   "basic.fundamental"       : "3.9.1",
   "basic.compound"          : "3.9.2",
 
