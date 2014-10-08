@@ -1883,7 +1883,7 @@ requires (T t) {
           <p> A type requirement <code>P</code> subsumes another type
           requirement <code>Q</code> if and only if the types in <code>P</code>
           and <code>Q</code> are equivalent 
-          (<cxx-ref to="temp.type"></cxx-ref>). </p>
+          (<cxx-ref in="cxx" to="temp.type"></cxx-ref>). </p>
 
         </cxx-section> <!-- temp.constr.atom.type -->
 
@@ -1939,7 +1939,7 @@ requires (T a, T b) {
           <code>P</code> and <code>Q</code> are equivalent
           (<cxx-ref to="temp.over.link"></cxx-ref>) and the types
           of <code>P</code> and <code>Q</code> are equivalent
-          (<cxx-ref to="temp.type"></cxx-ref>).</p>
+          (<cxx-ref in="cxx" to="temp.type"></cxx-ref>).</p>
 
         </cxx-section> <!-- temp.constr.atom.conv -->
 
@@ -1961,7 +1961,7 @@ requires (T a, T b) {
 
           The constraint is satisfied if and only if <code>F</code>
           is selected by overload resolution for the call <code>F(E)</code>
-          (<cxx-ref to="over.match").
+          (<cxx-ref to="over.match"></cxx-ref>).
 
           <cxx-note>
           Overload resolution selects <code>F</code> only when template 
@@ -2005,7 +2005,7 @@ template&lt;typename T&gt; requires C&lt;T&gt; void g(const T&amp;);
           <code>P</code> and <code>Q</code> are equivalent
           (<cxx-ref to="temp.over.link"></cxx-ref>), and the types
           of <code>P</code> and <code>Q</code> are equivalent
-          (<cxx-ref to="temp.type"></cxx-ref>).
+          (<cxx-ref in="cxx" to="temp.type"></cxx-ref>). </p>
 
         </cxx-section> <!-- temp.constr.atom.deduct -->
 
@@ -2132,20 +2132,20 @@ requires() {
 
       <p>
       <cxx-example>
-template<typename T> concept bool C1 = requires(T t) { ++t; };
-template<typename T> concept bool C2 = C1<T> && requires(T t) { *t; };
+      <cxx-codeblock>
+template&lt;typename T&gt; concept bool C1 = requires(T t) { ++t; };
+template&lt;typename T&gt; concept bool C2 = C1&lt;T&gt; &amp;&amp; requires(T t) { *t; };
 
-template<typename T> void f(T); // #1
-template<C1 T> void f(T);       // #2
-template<C2 T> void f(T);       // #3
+template&lt;C1 T&gt; void f(T);       // <i>#1</i>
+template&lt;C2 T&gt; void f(T);       // <i>#2</i>
 
 f(0);       // selects #1
 f((int*)0); // selects #2
-f(true);    // selects #3
+      </cxx-codeblock>
+      When both candidates are viable, overload resolution will selects #1 
+      because the constraints of <code>C2</code> subsumes those of
+      <code>C1</code>, 
       </cxx-example>
-Because the constraints of <code>C2</code> subsumes those of <code>C1</code>,
-when both candidates are viable, overload resolution will select always
-select #1.
       </p>
 
     </cxx-section> <!-- temp.cosntr.order -->
