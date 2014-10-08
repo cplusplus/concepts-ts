@@ -297,8 +297,8 @@ template&lt;typenamne T&gt; concept bool C =
       <cxx-grammarterm>typename-specifier</cxx-grammarterm>.
       
       <cxx-note>
-      A type requirement requests the validity of an associated
-      type, either as a nested type name, a class template specialization,
+      A type requirement asserts the validity of an associated
+      type, either as a member type, a class template specialization,
       or an alias template. It is not used to specify requirements for
       arbitrary <cxx-grammarterm>type-specifiers</cxx-grammarterm>.
       </cxx-note>
@@ -408,12 +408,15 @@ template&lt;typename T&gt; concept bool D =
       The second is a conversion constraint from <code>E</code> to <code>T</code>.
 
       Otherwise, if <code>T</code> does contain placeholders,
-      a deduction constraint (<cxx-ref to="temp.constr"></cxx-ref>) is
-      appended to the conjunction of constraints.
+      an argument deduction constraint (<cxx-ref to="temp.constr"></cxx-ref>) is
+      appended to the conjunction of constraints. In this constraint,
+      deduction is performed against an invented function template 
+      whose declaration is formed according to the rules in
+      <cxx-ref to="dcl.fct"></cxx-ref> where <code>T</code> is the type
+      of the invented function's only parameter.
 
 
       <!-- FIXME: This is hard to read. Consider braking them up. -->
-
       <p>
       <cxx-example>
       <cxx-codeblock>
@@ -470,12 +473,13 @@ template&lt;typename T&gt; requires C&lt;T&gt;() void i(const T&amp;);
         </bnf-grammar>
 
       <p> A <cxx-grammarterm>nested-requirement</cxx-grammarterm> can be used
-      to defined additional constraints on a type name required by a
+      to specify additional constraints on a type declared by a
       <cxx-grammarterm>type-requirement</cxx-grammarterm> 
       (<cxx-ref to="expr.prim.req.type"></cxx-ref>).
 
-      It appends a normalization of the <cxx-grammarterm>constraint-expression</cxx-grammarterm>
-      of the <cxx-grammarterm>requires-clause</cxx-grammarterm> to the
+      It appends a normalization of the 
+      <cxx-grammarterm>constraint-expression</cxx-grammarterm>
+      of its <cxx-grammarterm>requires-clause</cxx-grammarterm> to the
       conjunction of constraints. </p>
 
       <cxx-example class="inline"> 
@@ -489,8 +493,8 @@ template&lt;typename T&gt; concept bool D =
   };
       </cxx-codeblock>
       The <cxx-grammarterm>nested-requirement</cxx-grammarterm> appends
-      the predicate constraint <code>sizeof(T) == 1</code> to the
-      conjunction of constraints.
+      the predicate constraint <code>sizeof(T) == 1</code>
+      (<cxx-ref to="temp.constr.atomic.pred"></cxx-ref>).
       </cxx-example>
     </cxx-section> <!-- expr.prim.req.nested -->
 

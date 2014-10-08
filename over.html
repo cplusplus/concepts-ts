@@ -130,39 +130,32 @@
     is ill-formed. 
     </p>
 
-    Replace the existing paragraph 4 with this paragraph.
+    Modify paragraph 4 (paragraph 5 in this document) to incorporate 
+    constraints in the selection of an overloaded function when its address is 
+    taken. Also add the following example after that in the original document 
+    (not shown here).
 
-    <!-- FIXME: This algorithm is going to be a common theme. It should
-         be called out somewhere in overload resolution. -->
-    <p class="quote" number="5">
-    If more than one function, any function or function template specialization
-    in that set are eliminated if their associated constraint (if any) are not 
-    satisfied (<cxx-ref to="temp.constr"></cxx-ref>). Among the remaining
-    functions, the following rules are used to choose the  the best function. 
+    <p number="5" class="quoted">
+    If more than one function is selected, any function template 
+    specializations in the set are eliminated if the set also contains a 
+    function that is not a function template 
+    specialization<del>, and</del><ins>. 
 
-    A selected function <code>F1</code> is a better choice another selected 
-    function <code>F2</code> if:
-    <ul>
-    <li><code>F1</code> is not a function template specialization and
-    <code>F2</code>is a function template specialization, or if not that,</li>
+    Any given non-template function
+    <code>F0</code> is eliminated if the set contains a second non-template
+    function that is more constrained than <code>F0</code> according to
+    the partial ordering rules of 
+    <cxx-ref to="temp.constr.order"></cxx-ref>.</ins>
     
-    <li><code>F1</code> and <code>F2</code> are function template 
-    specializations, and the function template for <code>F1</code> is more 
-    specialized than the template for <code>F2</code> according to the partial 
-    ordering rules described in <cxx-ref to="temp.func.order"></cxx-ref>,
-    or if not that, </li>
+    <ins>Furthermore,</ins> any given function template specialization
+    <code>F1</code> is eliminated if the set contains a second function 
+    template specialization whose function template is more specialized than 
+    the function template of <code>F1</code> according to the partial ordering 
+    rules of <cxx-ref to="temp.func.order"></cxx-ref>.
 
-    <li><code>F1</code> is more constrained than <code>F2</code> according
-    to the partial ordering rules described in 
-    <cxx-ref to="temp.constr"></cxx-ref>.
-    </ul>
-    If there is exactly one function that is better than all others, then
-    that is the selected function. Otherwise, the program is ill-formed.
+    After such eliminations, if any, there shall remain exactly one 
+    selected function.
 
-    Include the following examples in paragraph 5 (paragraph 6 in this
-    document):
-
-    <p class="quote" number="6">
     <cxx-example>
     <cxx-codeblock>
 void f() { }                // <i>#1</i>
