@@ -166,9 +166,14 @@ struct Fun {
     <p> A <cxx-grammarterm>requires-expression</cxx-grammarterm> has type
     <code>bool</code>.</p>
 
+    <p> A <cxx-grammarterm>requires-expression</cxx-grammarterm> evaluates
+    to <code>true</code> when all of its introduced constraints are
+    satisfied (<cxx-ref to="temp.constr"></cxx-ref>), and <code>false</code> 
+    otherwise. </p>
+
     <p >A <cxx-grammarterm>requires-expression</cxx-grammarterm> shall not appear
     outside of a concept definition (<cxx-ref to="dcl.spec.concept"></cxx-ref>) or a
-    <cxx-grammarterm>requires-clause</cxx-grammarterm>. </p>
+    <cxx-grammarterm>requires-clause</cxx-grammarterm>. 
 
     <cxx-example class="inline">
     The most common use of 
@@ -208,11 +213,7 @@ introduces the <cxx-grammarterm>requires-expression</cxx-grammarterm>.
     of its declaration until the closing brace of the
     <cxx-grammarterm>requirement-body</cxx-grammarterm>.
 
-    These parameters have no linkage, storage, or lifetime, and are always
-    unevaluated operands.
-
-    The local parameters introduced by a 
-    <cxx-grammarterm>requires-clause</cxx-grammarterm> are used only
+    These parameters have no linkage, storage, or lifetime; they are only used
     as notation for the purpose of defining requirements. 
     </p>
 
@@ -230,7 +231,7 @@ introduces the <cxx-grammarterm>requires-expression</cxx-grammarterm>.
     enclosing context. 
 
     Each <cxx-grammarterm>requirement</cxx-grammarterm> 
-    introduces appends conjunction of one or more atomic constraints 
+    appends one or more atomic constraints 
     (<cxx-ref to="temp.constr"></cxx-ref>) to the conjunction of constraints
     defined by the <cxx-grammarterm>requires-expressions</cxx-grammarterm>.
     </p>
@@ -491,7 +492,6 @@ template&lt;typename T&gt; concept bool D =
       the predicate constraint <code>sizeof(T) == 1</code> to the
       conjunction of constraints.
       </cxx-example>
-      </p>
     </cxx-section> <!-- expr.prim.req.nested -->
 
 
