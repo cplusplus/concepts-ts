@@ -1544,7 +1544,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
              Conjunction
              =========== -->
 
-        <cxx-section id="temp.constr.conj">
+        <cxx-section id="temp.constr.op.conj">
           <h1>Conjunction</h1>
 
           <p> A <dfn>conjunction</dfn> is a logical operator taking two 
@@ -1564,7 +1564,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
              Disjunction
              =========== -->
 
-        <cxx-section id="temp.constr.disj">
+        <cxx-section id="temp.constr.op.disj">
           <h1>Disjunction</h1>
 
           <p> A <dfn>disjunction</dfn> is a logical operator taking two 
@@ -1604,7 +1604,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
              Predicate constraints
              ===================== -->
 
-        <cxx-section id="temp.constr.pred">
+        <cxx-section id="temp.constr.atom.pred">
           <h1>Predicate constraints</h1>
 
           <p> A <dfn>predicate constraint</dfn> is an atomic constraint
@@ -1650,7 +1650,7 @@ template&lt;typename T&gt; concept bool C = sizeof(T) == 4 &amp;&amp; !true;
              Expression constraints
              ====================== -->
 
-        <cxx-section id="temp.constr.expr">
+        <cxx-section id="temp.constr.atom.expr">
           <h1>Expression constraints</h1>
 
           <p> An <dfn>expression constraint</dfn> is an atomic constraint
@@ -1699,7 +1699,7 @@ template&lt;typename T&gt; concept bool C = requires (T t) { ++t; };
              Expression constraints
              ====================== -->
 
-        <cxx-section id="temp.constr.type">
+        <cxx-section id="temp.constr.atom.type">
           <h1>Type constraints</h1>
 
           <p> A <dfn>type constraint</dfn> is an atomic constraint that
@@ -1748,7 +1748,7 @@ requires (T t) {
              Implicit conversion constraints
              =============================== -->
 
-        <cxx-section id="temp.constr.conv">
+        <cxx-section id="temp.constr.atom.conv">
           <h1>Implicit conversion constraints</h1>
 
           <p> A <dfn>implicit conversion constraint</dfn> is an atomic
@@ -1804,7 +1804,7 @@ requires (T a, T b) {
              Argument deduction constraints
              ============================== -->
 
-        <cxx-section id="temp.constr.deduct">
+        <cxx-section id="temp.constr.atom.deduct">
           <h1>Argument deduction constraints</h1>
 
           <p> An <dfn>argument deduction constraint</dfn> is an atomic
@@ -1833,7 +1833,7 @@ requires (T a, T b) {
           contains at least one placeholder
           (<cxx-ref to="expr.prim.req.compound"></cxx-ref>).
           </cxx-note>
-          
+
           <cxx-example>
           The concept <code>D</code> introduces an argument deduction 
           constraint for the expression <code>*t</code>.
@@ -1870,7 +1870,7 @@ template&lt;typename T&gt; requires C&lt;T&gt; void g(const T&amp;);
              Constant expression constraints
              =============================== -->
 
-        <cxx-section id="temp.constr.constexpr">
+        <cxx-section id="temp.constr.atom.constexpr">
           <h1>Constant expression constraints</h1>
 
           <p> A <dfn>constant expression constraint</dfn> is an atomic
@@ -1916,7 +1916,7 @@ requires() {
              Exception constraints
              =============================== -->
 
-        <cxx-section id="temp.constr.noexcept">
+        <cxx-section id="temp.constr.atom.noexcept">
           <h1>Exception constraints</h1>
 
           <p> An <dfn>exception constraint</dfn> is an atomic constraint
