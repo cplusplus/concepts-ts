@@ -35,8 +35,8 @@
       <cxx-section id="dcl.spec.auto" number="4">
         <h1><code>auto</code> specifier</h1>
 
-        Modify <cxx-ref in="cxx" to="dcl.spec.auto"></cxx-ref>/1 as
-        follows:
+        Modify paragraph 1 to extend the use of <code>auto</code> to
+        designate abbreviated functions.
 
         <p number="1" class="quoted">
         The <code>auto</code> and <code>decltype(auto)</code> 
@@ -51,7 +51,7 @@
         <cxx-note>
         The use of the <code>auto</code> 
         <cxx-grammarterm>type-specifier</cxx-grammarterm> in a non-deduced 
-        context (<cxx-ref in="c++" to="temp.deduct.type"></cxx-ref>) will cause the 
+        context (<cxx-ref in="cxx" to="temp.deduct.type"></cxx-ref>) will cause the 
         deduction of a value for that placeholder type to fail, resulting
         in an ill-formed program.
         </cxx-note>
@@ -79,7 +79,8 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce valu
         </cxx-example>
         </p>
 
-        Modify <cxx-ref in="cxx" to="dcl.spec.auto"></cxx-ref>/2 to read:
+        Modfify paragraph 2, allowing multiple occurrences of <code>auto</code>
+        in those contexts where it is valid.
 
         <p number="2" class="quoted">
         <del>The</del><ins>A</ins> placeholder type can appear with a function 
@@ -95,17 +96,13 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce valu
         (<cxx-ref to="dcl.fct"></cxx-ref>),
         that specifies the declared return type of the function.
 
-        The <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
-        can also appear in the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm>
-        of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> of a
-        function declarator.
-
         If the declared return type of the function contains a placeholder 
         type, the return type of the function is deduced from return 
         statements in the body of the function, if any.
         </p>
 
-        Modify <cxx-ref in="cxx" to="dcl.spec.auto"></cxx-ref>/3 as follows:
+        Modify paragraph 3 to allow the use of <code>auto</code> within the 
+        parameter type of a lambda or function.
 
         <p number="3" class="quoted">
         If the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
@@ -137,31 +134,37 @@ void f(const auto&amp;, int); // <i>OK: an abbreviated function</i>
         </ins>
         </p>
 
-        Add the following paragraph after 
-        <cxx-ref in="cxx" to="dcl.spec.auto"></cxx-ref>/3.
+        Add the following after paragraph 3 to allow the use of 
+        <code>auto</code> in the 
+        <cxx-grammarterm>trailing-return-type</cxx-grammarterm> of a 
+        <cxx-grammarterm>compound-requirement</cxx-grammarterm>.
 
         <p class="quoted">
         If the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm> 
         appears in the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> 
         of a <cxx-grammarterm>compound-requirement</cxx-grammarterm> in
-        a <cxx-grammarterm>requires-expression</cxx-grammarterm>, that
-        return type introduces a deduction constraint
-        (<cxx-ref to="expr.req.compound"></cxx-ref>).
+        a <cxx-grammarterm>requires-expression</cxx-grammarterm>
+        (<cxx-ref to="expr.prim.req.compound"></cxx-ref>), that
+        return type introduces an argument deduction constraint
+        (<cxx-ref to="temp.constr.atom.deduct"></cxx-ref>).
         
         <cxx-example class="inline">
         <cxx-codeblock>
 template&lt;typename T&gt; concept bool C() {
   return requires (T i) { 
-    {*i} -> const auto&amp;; // <i>OK</i>
+    {*i} -> const auto&amp;; // <i>OK: introduces an argument deduction constraint</i>
   };
 }
         </cxx-codeblock>
         </cxx-example>
-
         </p>
 
-        Modify <cxx-ref in="cxx" to="dcl.spec.auto"></cxx-ref>/4. The examples
-        in the original text are unchanged and therefore omitted.
+        Modify paragraph 4 to allow multiple uses of <code>auto</code> within
+        certain declarations. Note that the examples in the original text are 
+        unchanged and therefore omitted.
+
+        <!-- FIXE: This probably doesn't allow things like int '(*)(auto)', 
+             but it should. -->
 
         <p number="4" class="quoted">
         The type of a variable declared using <code>auto</code> or 
@@ -200,8 +203,8 @@ template&lt;typename T&gt; concept bool C() {
         single <cxx-grammarterm>assignment-expression</cxx-grammarterm>.
         </p>
 
-
-        Modify <cxx-ref in="cxx" to="dcl.spec.auto"></cxx-ref>/7.
+        Update the rules in paragraph 7 to allow deduction of multiple
+        occurrences of <code>auto</code> in a declaration.
 
         <p class="quoted">
         When a variable declared using a placeholder type is initialized, or 
@@ -237,6 +240,7 @@ template&lt;typename T&gt; concept bool C() {
 
         <ins>
         Otherwise, obtain <code>P</code> from <code>T</code> as follows:
+        <div class="quoted">
         <ul>
         <li> replace each occurrence of <code>auto</code> in the variable type 
         with a new invented type template parameter, or </li>
@@ -249,21 +253,6 @@ template&lt;typename T&gt; concept bool C() {
         where <code>U</code> is an invented template type parameter.</li>
         </ul>
         </ins>
-
-<!--        
-        Otherwise, obtain <code>P</code> from <code>T</code> by replacing 
-        <del>the occurrences</del>
-        <ins>each occurrence</ins>
-        of <code>auto</code> with <del>either</del> a new invented type
-        template parameter <del><code>U</code></del> or, 
-
-        if the initializer is a <cxx-grammarterm>braced-init-list</cxx-grammarterm>
-        <ins>and <code>auto</code> is a <cxx-grammarterm>decl-specifier</cxx-grammarterm>
-        in the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of
-        the variable declaration, replace that single occurrence of
-        <code>auto</code></ins><del>,</del> with <code>std::initializer_list&lt;U&gt;</code>
-        <ins>where <code>U</code> is an invented template type parameter</ins>.
- -->
 
         Deduce a value for 
         <del><code>U</code></del>
@@ -324,10 +313,11 @@ is the deduced type of the parameter <code>x</code> in the call of
 template:
         <cxx-codeblock>
 template&lt;class T1, class T2, class T2, class T3, class T4, class T5, class T6&gt; 
-  void g(Pair&lt; T1(*)(T2, T3), T4 (T5::*)(T6));
+  void g(Pair&lt; T1(*)(T2, T3), T4 (T5::*)(T6)&gt;);
         </cxx-codeblock>
         </cxx-example>
-        <!-- </p> -->
+        </div>
+
       </cxx-section> <!-- dcl.spec.auto -->
 
 
