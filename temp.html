@@ -921,69 +921,69 @@ template&lt;C1 T&gt; template&lt;typename U&gt;
     <cxx-section id="temp.friend" number="4">
       <h1>Friends</h1>
 
-      <p>Add the following paragraphs after
-      <cxx-ref in="cxx" to="temp.friend"></cxx-ref>/9.
 
-      <p> 
-      A <dfn>constrained friend</dfn> of a class or class template is
-      a constrained class template, constrained function template, a 
-      constrained ordinary or generic (non-member) function definition.
-      
-      <cxx-example class="inline">
-      When <code>C</code> is a type concept, all of the following are valid 
-      constrained friend declarations.
-      <cxx-codeblock>
-template&lt;typename T&gt;
-  struct X {
-    template&lt;C U&gt;         
-      friend void f(X x, U u) { }    // Constrained function template
+      Add the following paragraphs to explain the meaning of constrained
+      friend declarations. 
 
-    template&lt;C W&gt;         
-      friend struct Z { };           // Constrained class template
-
-    friend bool operator==(X a, X b) // Constrained ordinary function
-      requires C&lt;T&gt;() { return true; }
-
-    friend void g(X a, C b) { }      // Constrained generic function
-  };
-      </cxx-codeblock>
-      Note that <code>g</code> is a generic function because the the
-      parameter <code>b</code> has a
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
-      </cxx-example>
+      <p number="10" class="quoted">
+      A friend function template may be constrained, except:
       </p>
+      <div class="quoted">
+      <ul>
+      <li> if the friend declares, but does not define, a non-template
+      function to be a friend of a class template, the associated constraints
+      of that friend function declaration shall be non-dependent
+      (<cxx-ref to="temp.nondep"></cxx-ref>); </li>
 
-      <p>
-      A non-template friend function shall not be constrained unless 
-      the function's parameter or result type depends on a template 
-      parameter.
+      <li> if the friend declares a function template specialization to
+      be a friend of a class template, the declaration shall not have
+      associated constraints, and the template arguments of that specialization
+      shall satisfy the associated constraints of the template referred to
+      by the friend declarations 
+      (<cxx-ref to="temp.deduct.decl"></cxx-ref>). </li>
+      </ul>
+
       <cxx-example class="inline">
       <cxx-codeblock>
+template&lt;typename T&gt; concept bool C1 = true;
+template&lt;typename T&gt; concept bool C2 = false;
+
+template&lt;C1 T&gt; g1(T);
+template&lt;C2 T&gt; g2(T);
+
 template&lt;typename T&gt;
   struct S {
-    friend void f(int n) requires C&lt;T&gt;(); // Error: cannot be constrained
+    void f1() requires true;  // <i>OK</i>
+    void f2() requires C1&lt;T&gt;; // <i>error: constraints refer to</i> T
+    void g1&lt;T&gt;(T);            // <i>OK</i>
+    void g2&lt;T&gt;(T);            // <i>error: constraints not satisfied</i>
   };
       </cxx-codeblock>
       </cxx-example>
-      </p>
+      </div>
 
       <p>
-      A constrained non-template friend function shall not declare 
-      a specialization.
+      <cxx-note>
+      Within a class template, a friend may define a non-template function
+      whose constraints specify requirements on the template arguments of
+      that class.
       <cxx-example class="inline">
       <cxx-codeblock>
-template&lt;typename T&gt;
-  struct S {
-    friend void f&lt;&gt;(T x) requires C&lt;T&gt;(); // Error: declares a specialization
+template&lt;typename T&gt; concept bool Eq = requires (T t) { t == t; };
 
-    friend void g(T x) requires C&lt;T&gt;() { } // OK: does not declare a specialization
+template&lt;typename T&gt;
+  strut S {
+    bool operator==(S a, S b) requires Eq&lt;T&gt; { return a == b; } // OK
   };
       </cxx-codeblock>
       </cxx-example>
+      In the instantiation of such a class template, the template
+      arguments are substituted into the constraints but not evaluated.
+      Constraints are checked (<cxx-ref to="temp.constr"></cxx-ref>) only when
+      that function is considered as a viable candidate for overload resolution
+      (<cxx-ref to="over.match.viable"></cxx-ref>).
+      </cxx-note>
       </p>
-
-      <p>As with constrained member functions, constraints on non-template friend
-      functions are not instantiated during class template instantiation.</p>
 
     </cxx-section> <!-- temp.friend -->
 
@@ -1325,23 +1325,11 @@ template S&lt;char[2]&gt;; // <i>error: constraints not satisfied</i>
       </cxx-example>
 
       <p class="quoted">
-      An explicit instantiation whose <cxx-grammarterm>template-name</cxx-grammarterm>
-      names a set of overloaded function template refers to exactly one
-      in that set.
+      When an explicit instantiation refers to a specialization of a
+      function template (<cxx-ref to="temp.deduct.decl"></cxx-ref>), that 
+      template's associated constraints shall be satisfied by the template 
+      arguments of the explicit instantiation.
 
-      Remove from that set all function templates for which the
-      template arguments of the explicit instantiation
-      do not match (<cxx-ref to="temp.arg"></cxx-ref>), 
-      cannot be deduced (<cxx-ref to="temp.deduct.type"></cxx-ref>), 
-      have different parameter-type-lists,
-      and whose constraints are not satisfied by the template arguments.
-
-      The partial ordering of the remaining function templates determines the 
-      template to which the specialization refers
-      (<cxx-ref to="temp.func.order"></cxx-ref>).
-      
-      If no function template is found, or if multiple function templates
-      are found, the program is ill-formed.
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = requires (T t) { -t; };
@@ -1376,7 +1364,7 @@ template void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
       <cxx-grammarterm>template-id</cxx-grammarterm> of an explicit 
       specialization of a constrained class template or
       constrained variable template shall satisfy the associated constraints
-      of that template (<cxx-ref to="temp.constr"></cxx-ref>).
+      of that template, if any (<cxx-ref to="temp.constr"></cxx-ref>).
 
       <cxx-example class="inline">
       <cxx-codeblock>
@@ -1391,26 +1379,18 @@ template&lt;&gt; S&lt;char[2]&gt; { }; // <i>error: constraints not satisfied</i
       </p>
 
       <p class="quoted">
-      An explicit specialization whose <cxx-grammarterm>template-name</cxx-grammarterm>
-      names a set of overloaded function template refers to exactly one
-      in that set.
-
-      The function template referred to by an explicit specialization is the 
-      same function template as an explicit instantiation
-      with the same <cxx-grammarterm>template-name</cxx-grammarterm>
-      <cxx-grammarterm>template-arguments</cxx-grammarterm>
-      (<cxx-ref to="temp.explicit"></cxx-ref>).
-      <cxx-note>
-      An explicit specialization cannot refer to a constrained function
-      template whose associated constraints are not satisfied
-      (<cxx-ref to="temp.constr"></cxx-ref>).
-      </cxx-note>
+      When determining the function template referred to by an explicit 
+      specialization of a function template 
+      (<cxx-ref to="temp.deduct.decl"></cxx-ref>),
+      the associated constraints of that template (if any) shall be satisfied 
+      (<cxx-ref to="temp.constr"></cxx-ref>) by the
+      template arguments of the explicit specialization. </p>
 
       <cxx-example class="inline">
       <cxx-codeblock>
-template<C T>        void f(T); // <i>#1</i>
-template<typename T> void g(T); // <i>#2</i>
-template<C T>        void g(T); // <i>#3</i>
+template&lt;C T&gt;        void f(T); // <i>#1</i>
+template&lt;typename T&gt; void g(T); // <i>#2</i>
+template&lt;C T&gt;        void g(T); // <i>#3</i>
 
 template&lt;&gt; void f(int);   // <i>OK: refers to #1</i>
 template&lt;&gt; void f(void*); // <i>error: no matching template</i>
@@ -1448,7 +1428,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
       deduction fails.
 
       <ins>
-      Additionally, if the function template has associated constraints
+      If the function template has associated constraints
       (<cxx-ref to="temp"></cxx-ref>),
       substitute the template arguments into the constraints without evaluating
       the result. If this substitution results in an invalid type, then
@@ -1459,26 +1439,53 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
 
       <cxx-note>
       The constraints associated with the function template specialization
-      are evaluated in order to determine if the specialization is a viable
-      candidate (<cxx-ref to="over.match.viable"></cxx-ref>).
+      are checked (<cxx-ref to="temp.constr"></cxx-ref>) in order to determine 
+      if the specialization is a viable candidate 
+      (<cxx-ref to="over.match.viable"></cxx-ref>), and not at the point
+      of substitution.
       </cxx-note>
       </ins>
       </p>
-    </cxx-section> <!-- temp.fct.spec -->
-  </cxx-section> <!-- temp.deduct -->
+
+      <cxx-section id="temp.deduct.decl" number="6">
+        <h1>Deducing template arguments from a function declaration</h1>
+
+        Add the following after paragraph 1 in order to require the
+        satisfaction of constraints when matching a specialization to a
+        template.
+
+        <p number="2" class="quoted">
+        Remove, from the set of function templates considered, all those
+        whose associated constraints (if any) are not satisfied by the deduced
+        template arguments (<cxx-ref to="temp.constr"></cxx-ref>).
+        </p>
+
+        Update paragraph 2 (now paragraph 3) to accommodate the new
+        wording.
+
+        <p class="quoted">
+        If, 
+        <del>for the set of function templates so considered</del>
+        <ins>for the remaining function templates</ins>,
+        there is either no match or more than one match after partial ordering 
+        has been considered (<cxx-ref to="temp.func.order"></cxx-ref>), deduction fails 
+        and, in the declaration cases, the program is ill-formed.
+        </p>
+      </cxx-section> <!-- temp.deduct.decl -->
+
+    </cxx-section> <!-- temp.deduct -->
+
+  </cxx-section> <!-- temp.fct.spec -->
 
 
   <!-- ====================
        Template constraints
        ==================== -->
 
-  Add the following section after 14.8. This section defines
-  <cxx-grammarterm>constraint-expression</cxx-grammarterm>s, their
-  normalization and composition, the equivalence of constraints,
-  and their partial ordering.
-
   <cxx-section id="temp.constr">
     <h1>Template constraints</h1>
+
+    Add this following section after 14.8.
 
     <p>
     <cxx-note>
@@ -1945,7 +1952,7 @@ requires() {
          =============================== -->
 
     <cxx-section id="temp.constr.order">
-      <h1>Partial ordering of constraints</h1>
+      <h1>Partial ordering by constraints</h1>
 
       <p>The subsumption relation defines a partial ordering on constraints. 
       This partial ordering is used to determine </p>
@@ -1965,21 +1972,19 @@ requires() {
            (<cxx-ref to="temp.arg.template"></cxx-ref>).</li>
       </ul>
 
-      With the exception of matching template template arguments, the
-      partial ordering applies to declarations. In each case, several
-      declarations may have equivalent conversion sequences, signatures,
-      or types. These declarations can be partially ordered by their
-      constrains.
+      <p> When two declarations <code>D1</code> and <code>D2</code> are
+      partially ordered by their constraints, <code>D1</code> is more
+      constrained than <code>D2</code> if
 
-      <p> A constrained declaration <code>D1</code> is <dfn>more constrained</dfn> 
-      than another constrained declaration <code>D2</code> if <code>D1</code>'s
-      associated constraints subsume, but are not subsumed by those of 
-      <code>D2</code>.
+      <ul>
+      <li> <code>D1</code> and <code>D2</code> are both constrained
+      declarations and <code>D1</code>'s associated constraints subsume, but 
+      are not subsumed by those of <code>D2</code>, or if not that, </li>
 
-      A constrained declaration is more constrained than an unconstrained
-      declaration. </p>
+      <li> <code>D1</code> is constrained and <code>D2</code> is
+      unconstrained. </li>
+      </ul>
 
-      <p>
       <cxx-example>
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C1 = requires(T t) { ++t; };
@@ -1995,7 +2000,9 @@ f((int*)0); // selects #2
       because the constraints of <code>C2</code> subsumes those of
       <code>C1</code>, 
       </cxx-example>
-      </p>
+
+    </cxx-section> <!-- temp.constr.order -->
+
 
 
     <!-- ======================
@@ -2148,8 +2155,6 @@ void f() requires true || (1 == 2); // <i>not equivalent but functionally equiva
       </cxx-codeblock>
       </cxx-example>
     </cxx-section> <!-- temp.constr.expr -->
-
-    </cxx-section> <!-- temp.cosntr.order -->
 
   </cxx-section> <!-- temp.constr -->
 
