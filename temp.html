@@ -617,7 +617,7 @@ C{T} void f(T); // <i>OK:</i> f(T) <i>is a function template with</i>
 
 
     <p> An introduced template parameter does not have a default template 
-    argument, even if its corresponding template parameter does.
+    argument even if its corresponding template parameter does.
 
     <cxx-example class="inline">
     <cxx-codeblock>
@@ -1982,7 +1982,7 @@ template&lt;C1 T&gt; void g();        // <i>#4</i>
 
 f(0);       // <i>selects #1</i>
 f((int*)0); // <i>selects #2</i>
-g(true);    // <i>selects #3 because</i> C1<bool> <i>is not satisfied</i>
+g(true);    // <i>selects #3 because</i> C1&lt;bool&gt; <i>is not satisfied</i>
 g(0);       // <i>selects #4</i>
       </cxx-codeblock>
       </cxx-example>
