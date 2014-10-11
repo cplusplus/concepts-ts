@@ -1949,14 +1949,12 @@ requires() {
            (<cxx-ref to="over.match.best"></cxx-ref>), </li>
       <li> the address of a non-template function
            (<cxx-ref to="over.over"></cxx-ref>), </li>
-      <li> to determine which of a set of non-template functions are defined
-           (<cxx-ref to="dcl.fct"></cxx-ref>), </li>
+      <li> the matching of template template arguments
+           (<cxx-ref to="temp.arg.template"></cxx-ref>).</li>
       <li> the partial ordering of class template specializations
            (<cxx-ref to="temp.class.order"></cxx-ref>), </li>
       <li> the partial ordering of function templates
            (<cxx-ref to="temp.func.order"></cxx-ref>), and </li>
-      <li> the matching of template template arguments
-           (<cxx-ref to="temp.arg.template"></cxx-ref>).</li>
       </ul>
 
       <p> When two declarations <code>D1</code> and <code>D2</code> are
@@ -1965,7 +1963,7 @@ requires() {
 
       <ul>
       <li> <code>D1</code> and <code>D2</code> are both constrained
-      declarations and <code>D1</code>'s associated constraints subsume, but 
+      declarations and <code>D1</code>'s associated constraints subsume but 
       are not subsumed by those of <code>D2</code>, or if not that, </li>
 
       <li> <code>D1</code> is constrained and <code>D2</code> is
@@ -1979,13 +1977,14 @@ template&lt;typename T&gt; concept bool C2 = C1&lt;T&gt; &amp;&amp; requires(T t
 
 template&lt;C1 T&gt; void f(T);       // <i>#1</i>
 template&lt;C2 T&gt; void f(T);       // <i>#2</i>
+template&lt;typename T&gt; void g(T); // <i>#3</i>
+template&lt;C1 T&gt; void g();        // <i>#4</i>
 
-f(0);       // selects #1
-f((int*)0); // selects #2
+f(0);       // <i>selects #1</i>
+f((int*)0); // <i>selects #2</i>
+g(true);    // <i>selects #3 because</i> C1<bool> <i>is not satisfied</i>
+g(0);       // <i>selects #4</i>
       </cxx-codeblock>
-      When both candidates are viable, overload resolution will selects #1 
-      because the constraints of <code>C2</code> subsumes those of
-      <code>C1</code>, 
       </cxx-example>
 
     </cxx-section> <!-- temp.constr.order -->
@@ -2077,22 +2076,30 @@ f((int*)0); // selects #2
       order constraints (<cxx-ref to="temp.constr.order"></cxx-ref>).
       </cxx-note>
 
-      <cxx-example>
+      <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C1() { return sizeof(T) == 1; }
 template&lt;typename T&gt; concept bool C2 = C1&lt;T&gt;() &amp;&amp; 1 == 2; }
 template&lt;typename T&gt; concept bool C3 = requires () { typename T::type; };
 
-// <i>Expression</i>      // <i>Constraint</i>
-C2&lt;char&gt;           sizeof(char) == 1 &amp;&amp; 1 == 2
-C3&lt;int&gt;            /* <i>valid-type for</i> int::type */
+// <i>Expression</i>      // <i>Constraints</i>
+C2&lt;char&gt;           sizeof(char) == 1 /* <i>and</i> */ 1 == 2
+C3&lt;int&gt;            /* <i>type constraint for</i> int::type */
 3 + 4              // <i>error: not a constraint</i>
+(bool)(3 + 4)      (bool)(3 + 4)
       </cxx-codeblock>
       In the normalized constraints, the expressions <code>sizeof(char) == 1</code>, 
-      and <code>1 == 2</code> are predicate constraints. The concept
-      <code>C4</code> is normalized to a single type constraint
+      <code>1 == 2</code>, and <code>(bool)(3 + 4)</code> are predicate 
+      constraints (<cxx-ref to="temp.constr.atom.pred"></cxx-ref>). 
+
+      The concept <code>C4</code> is normalized to a single type constraint
       (<cxx-ref to="temp.constr.atom.type"></cxx-ref>) for the (ill-formed) 
       type <code>int::type</code>.
+
+      The expression <code>3 + 4</code> is not a 
+      <cxx-grammarterm>constraint-expression</cxx-grammarterm> because it does
+      not satisfy the requirements for being normalized into a predicate 
+      constraint.
       </cxx-example>
 
 
@@ -2102,7 +2109,7 @@ C3&lt;int&gt;            /* <i>valid-type for</i> int::type */
       <p> Two <cxx-grammarterm>constraint-expression</cxx-grammarterm>s are 
       considered equivalent if two function definitions containing the 
       expressions would satisfy the one definition rule 
-      (<cxx-ref to="basic.def.odr"></cxx-ref>), except that
+      (<cxx-ref in="cxx" to="basic.def.odr"></cxx-ref>), except that
       the tokens used to name template parameters may differ as long as a 
       token used to name a template parameter in one expression is replaced by 
       another token that names the same template parameter in the other 
@@ -2130,7 +2137,8 @@ template&lt;typename T&gt; requires C2&lt;T&gt; void h();     // <i>OK: redeclar
 
       Two <cxx-grammarterm>constraint-expressions</cxx-grammarterm> that are not 
       equivalent are functionally equivalent if, for any given set of template 
-      arguments, the evaluation of the expression results in the same value.
+      arguments, the satisfaction of their normalized constraints yields the
+      same result.
 
       A <cxx-grammarterm>constraint-expression</cxx-grammarterm> or
       subexpression thereof of the form <code>(E)</code> is not equivalent to
