@@ -35,6 +35,7 @@
 
   "dcl.dcl"           : "7",
   "dcl.spec"          : "7.1",
+  "dcl.fct.spec"      : "7.1.2",
   "dcl.constexpr"     : "7.1.5",
   "dcl.type"          : "7.1.6",
   "dcl.type.cv"       : "7.1.6.1",
