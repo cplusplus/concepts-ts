@@ -473,7 +473,7 @@ template&lt;C2 X&gt; void f2();     // <i>OK:</i> X <i>is a template with one ty
 template&lt;C3 N&gt; void f3();     // <i>OK:</i> N <i>has type int</i>
 template&lt;C4... Ts&gt; void f4(); // <i>OK:</i> Ts <i>is a template parameter pack of types</i>
 template&lt;C4 Ts&gt; void f5();    // <i>error:</i> Ts <i>must be preceded by an ellipsis</i>
-template&lt;C5... Cx&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter pack of</i> char<i>s</i>
+template&lt;C5... Cs&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter pack of</i> char<i>s</i>
     </cxx-codeblock>
     </cxx-example>
     </div>
@@ -516,18 +516,19 @@ template&lt;C5... Cx&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter 
     its <cxx-grammarterm>introduction-list</cxx-grammarterm>.
 
 
-    <!-- FIXME: Rewrite this -->
+    <!-- FIXME: This is grorss... -->
     <p> The concept designated by the <cxx-grammarterm>concept-name</cxx-grammarterm>
     (call it <code>C</code>) is determined by the 
     <cxx-grammarterm>introduction-list</cxx-grammarterm>.
 
-    The set of concept definitions named by <code>C</code> is called the
-    candidate concept set. A concept <code>CC</code> is viable if
-    <code>CC</code> declares at least as many template parameters as there are
-    <cxx-grammarterm>identifier</cxx-grammarterm>s in the 
-    <cxx-grammarterm>introduction-list</cxx-grammarterm>, and
-    all excess template parameters are declared with default template 
-    arguments.
+    The <cxx-grammarterm>concept-name</cxx-grammarterm> <code>C</code> 
+    refers to a set of concept definitions. A concept <code>CC</code> in
+    that set is viable if <code>CC</code> declares at least as many template 
+    parameters as there are <cxx-grammarterm>identifier</cxx-grammarterm>s in 
+    the <cxx-grammarterm>introduction-list</cxx-grammarterm>, and
+    all template parameters in excess of the number of 
+    <cxx-grammarterm>identifier</cxx-grammarterm>s are declared with default 
+    template arguments.
 
     If only one concept in that set is viable, that is the concept
     designated by <code>C</code>. Otherwise, the program is ill-formed.
@@ -559,8 +560,8 @@ C{X} void f(); // <i>error: resolution of</i> C{X} <i>is ambiguous</i>
     and for its corresponding template parameter in the 
     <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
     of the designated concept (call it <code>P</code>), declare a new template 
-    parameter using the rules for declaring a constrained parameter
-    (<cxx-ref to="temp.param"></cxx-ref>) by using <code>I</code> as a
+    parameter using the rules for declaring a constrained parameter in
+    <cxx-ref to="temp.param"></cxx-ref> by using <code>I</code> as a
     <cxx-grammarterm>declarator-id</cxx-grammarterm> and <code>P</code>
     as the prototype parameter.
 
@@ -630,7 +631,6 @@ Array&lt;double&gt; s2;    // <i>error:</i> Array <i>takes two template argument
     </cxx-example>
     </p>
 
-    <!-- Necessary? I don't know -->
     <p> 
     <cxx-note>
     The introduction of a sequence of template parameters by a
@@ -670,7 +670,7 @@ S&lt;bool&gt;* p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;*
     The default argument for <code>U</code> is instantiated to form
     the type <code>S&lt;bool, int&gt;*</code>, but the definition of that
     class template specialization is not implicitly instantiated
-    (<cxx-ref in="cxx" to="temp.inst"></cxx-ref>); it is not used in a 
+    (<cxx-ref to="temp.inst"></cxx-ref>); it is not used in a 
     context that requires a complete type.
     </cxx-example>
     </p>
@@ -683,7 +683,7 @@ S&lt;bool&gt;* p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;*
     a constrained class template, variable template or alias template,
     and all <cxx-grammarterm>template-argument</cxx-grammarterm>s in the
     <cxx-grammarterm>template-id</cxx-grammarterm> are non-dependent,
-    (<cxx-ref to="temp.nondep"></cxx-ref>), the associated constraints
+    (<cxx-ref in="cxx" to="temp.nondep"></cxx-ref>), the associated constraints
     are checked against those
     <cxx-grammarterm>template-argument</cxx-grammarterm>s
     (<cxx-ref to="temp.constr"></cxx-ref>). If, as a result of checking,
@@ -691,9 +691,13 @@ S&lt;bool&gt;* p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;*
 
     <cxx-example class="inline">
     <cxx-codeblock>
-template&lt;typename T&gt; requires false struct S { };
+template&lt;typename C&gt; = false;
 
-S&lt;int&gt;* p; // <i>error: constraints not satisfied</i>.
+template&lt;C T&gt; struct S { };
+template&lt; T&gt; using Ptr = T*;
+
+S&lt;int&gt;* p;  // <i>error: constraints not satisfied</i>
+Ptr&lt;int&gt; p; // <i>error: constraints not satisfied</i>
     </cxx-codeblock>
     </cxx-example>
     </p>
@@ -713,7 +717,8 @@ S&lt;int&gt;* p; // <i>error: constraints not satisfied</i>.
       <h1>Template template arguments</h1>
 
       Modify paragraph 3 to include rules for matching constrained template 
-      template parameters. Note that the examples following this paragraph in
+      <cxx-grammarterm>template parameter</cxx-grammarterm>s. Note that the 
+      examples following this paragraph in
       the original document are omitted.
 
       <p number="3" class="quoted">
@@ -725,9 +730,9 @@ S&lt;int&gt;* p; // <i>error: constraints not satisfied</i>.
       corresponding class template or alias template (call it 
       <code>A</code>) matches the corresponding template parameter in 
       the <cxx-grammarterm>template-parameter-list</cxx-grammarterm> of 
-      <code>P</code><ins>, and the associated constraints of <code>P</code> 
-      subsume the associated constraints of <code>A</code>
-      (<cxx-ref to="temp.constr"></cxx-ref>)</ins>.
+      <code>P</code><ins>, and <code>P</code> is more constrained than
+       <code>A</code> according to the rules in 
+       <cxx-ref to="temp.constr"></cxx-ref></ins>.
 
       Two template parameters match if they are of the same kind 
       (type, non-type, template), 
@@ -855,13 +860,16 @@ template&lt;typename T&gt; struct S {
 template&lt;typename T&gt; 
   void S&lt;T&gt;::f() requires true { } // <i>OK</i>
 template&lt;typename T&gt; 
-  void S&lt;T&gt;::g()                   // <i>error: no matching function in</i> S&lt;T&gt;
+  void S&lt;T&gt;::g() { }               // <i>error: no matching function in</i> S&lt;T&gt;
         </cxx-codeblock>
         </cxx-example>
         </p>
       </cxx-section> <!-- temp.mem.func -->
     </cxx-section> <!-- temp.class -->
 
+    <!-- ================
+         Member templates
+         ================ -->
 
     <cxx-section id="temp.mem">
       <h1>Member templates</h1>
@@ -899,9 +907,9 @@ template&lt;C1 T&gt;
   };
 
 template&lt;C1 T&gt; template&lt;C2 U&gt; 
-  void S&lt;T&gt;::f(U); // <i>OK</i>
+  void S&lt;T&gt;::f(U) { } // <i>OK</i>
 template&lt;C1 T&gt; template&lt;typename U&gt; 
-  void S&lt;T&gt;::g(U); // <i>error: definition does not match</i>
+  void S&lt;T&gt;::g(U) { } // <i>error: no matching function in</i> S&lt;T&gt;
       </cxx-codeblock>
       The associated constraints in the definition of <code>g()</code> do not
       match those in of its declaration.
@@ -929,14 +937,13 @@ template&lt;C1 T&gt; template&lt;typename U&gt;
       <li> if the friend declares, but does not define, a non-template
       function to be a friend of a class template, the associated constraints
       of that friend function declaration shall be non-dependent
-      (<cxx-ref to="temp.nondep"></cxx-ref>); </li>
+      (<cxx-ref in="cxx" to="temp.nondep"></cxx-ref>); </li>
 
       <li> if the friend declares a function template specialization to
       be a friend of a class template, the declaration shall not have
       associated constraints, and the template arguments of that specialization
       shall satisfy the associated constraints of the template referred to
-      by the friend declarations 
-      (<cxx-ref to="temp.deduct.decl"></cxx-ref>). </li>
+      by the friend declaration (<cxx-ref to="temp.deduct.decl"></cxx-ref>). </li>
       </ul>
 
       <cxx-example class="inline">
@@ -961,8 +968,7 @@ template&lt;typename T&gt;
       <p>
       <cxx-note>
       Within a class template, a friend may define a non-template function
-      whose constraints specify requirements on the template arguments of
-      that class.
+      whose constraints specify requirements on template arguments.
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool Eq = requires (T t) { t == t; };
@@ -1011,7 +1017,7 @@ template&lt;C T, N I&gt;        class A&lt;int, T*, I&gt;; // <i>#7</i>
 
       Modify the 3rd item in the list of paragraph 8 to allow 
       constrained class template partial specializations like #6.
-      Note that all other items in that list are elided.
+      Note that all other items in that list are elided. 
 
       <p number="8" class="quoted">
       Within the argument list of a class template partial specialization, 
@@ -1023,7 +1029,6 @@ template&lt;C T, N I&gt;        class A&lt;int, T*, I&gt;; // <i>#7</i>
       not be identical to the implicit argument list of the primary template.
       <li>...</li>
       </ul>
-      </p>
 
 
       <cxx-section id="temp.class.spec.match">
@@ -1138,8 +1143,8 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
              the rules described above to compare expressions involving 
              template parameters, and</li>
         <li> have associated constraints that are equivalent using the rules 
-             described in <cxx-ref to="temp.constr.eq"></cxx-ref> to
-             compare constraints.</li>
+             in <cxx-ref to="temp.constr.expr"></cxx-ref> to
+             compare <cxx-grammarterm>constraint-expression</cxx-grammarterm>s.</li>
         </ul>
         </ins>
         </div>
@@ -1157,10 +1162,10 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
         the rules described above to compare expressions involving template 
         parameters, or if not that, </li>
 
-        <li> the two function templates have constraints that are
-        functionally equivalent but not equivalent, using the rules described
-        in <cxx-ref to="temp.constr.eq"></cxx-ref> to describe the comparison
-        of constraints.</li>
+        <li> both function templates have associated constraints that are
+        functionally equivalent but not equivalent, using the rules in 
+        <cxx-ref to="temp.constr.expr"></cxx-ref> to compare 
+        <cxx-grammarterm>constraint-expression</cxx-grammarterm>s.</li>
         </ul>
         </ins>
         If a program contains declarations of function templates that are 
@@ -1195,36 +1200,8 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
         </p>
 
       </cxx-section> <!-- temp.func.order -->
+
     </cxx-section> <!-- temp.fct -->
-
-
-  <!-- ===============
-       Alias templates
-       =============== -->
-
-    <cxx-section number="7" id="temp.alias">
-      <h1>Alias templates</h1>
-
-      Insert the following after paragraph 2.
-
-      <p number="3" class="quoted">
-      If the alias template is constrained, and all template arguments
-      are non-dependent, the <cxx-grammarterm>template-argument</cxx-grammarterm>s
-      shall satisfy the template's associated constraints 
-      (<cxx-ref to="temp.constr"></cxx-ref>).
-
-      <cxx-example class="inline">
-      <cxx-codeblock>
-template<typename C> = false;
-
-template<C T> using Ptr = T*;
-
-Ptr<int> p; // error: constraints not satisfied.
-      </cxx-codeblock>
-      </cxx-example>
-      </p>
-
-    </cxx-section>
 
   </cxx-section> <!-- temp.decls -->
 
@@ -1258,6 +1235,7 @@ Ptr<int> p; // error: constraints not satisfied.
       to be partially ordered by those constraints according to the rules
       in <cxx-ref to="temp.constr"></cxx-ref>.
       </cxx-note>
+
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = sizeof(T) &gt; 2;
@@ -1270,6 +1248,7 @@ template&lt;typename T&gt; struct S {
 
 S&lt;char&gt; s1;    // <i>error: no matching constructor</i>
 S&lt;char[8]&gt; s2; // <i>OK: calls #2</i>
+
       </cxx-codeblock>
       The instantiation of <code>S&lt;char&gt;</code> produces a class
       template specialization having the constructors, 
@@ -1281,11 +1260,14 @@ S&lt;char[8]&gt; s2; // <i>OK: calls #2</i>
       has the effect of suppressing the implicit generation of a default 
       constructor (<cxx-ref in="cxx" to="class.ctor"></cxx-ref>).
 
-      The default constructor invoked by the declaration of <code>s2</code>
-      is the more constrained because the constraint
-      <code>D&lt;char[8]&gt;</code> subsumes <code>C&lt;char[8]&gt;</code>.
+      <cxx-codeblock>
+template&lt;typename T&gt; struct S2 {
+    void f() requires T::value == 1;
+  };
+
+S2&lt;int&gt; s; // <i>error: substitution failure in definition of</i> S2&lt;int&gt;
+      </cxx-codeblock>
       </cxx-example>
-      </cxx-note>
       </p>
 
     </cxx-section> <!-- temp.inst -->
@@ -1380,7 +1362,7 @@ template&lt;&gt; S&lt;char[2]&gt; { }; // <i>error: constraints not satisfied</i
       (<cxx-ref to="temp.deduct.decl"></cxx-ref>),
       the associated constraints of that template (if any) shall be satisfied 
       (<cxx-ref to="temp.constr"></cxx-ref>) by the
-      template arguments of the explicit specialization. </p>
+      template arguments of the explicit specialization.
 
       <cxx-example class="inline">
       <cxx-codeblock>
@@ -1426,9 +1408,10 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
       <ins>
       If the function template has associated constraints
       (<cxx-ref to="temp"></cxx-ref>),
-      substitute the template arguments into the constraints without evaluating
-      the result. If this substitution results in an invalid type, then
-      the resulting expression is defined to be <code>false</code>.
+      the template arguments are substituted into the constraints without 
+      evaluating the resulting expression. If this substitution results in an 
+      invalid type, then the resulting expression is defined to be 
+      <code>false</code>.
 
       The resulting constraints are associated with the function template
       specialization.
