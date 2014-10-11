@@ -1464,19 +1464,20 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
   <cxx-section id="temp.constr">
     <h1>Template constraints</h1>
 
-    Add this following section after 14.8.
+    Add this section after 14.8.
 
     <p>
     <cxx-note>
     The defines the meaning of constraints on template arguments, including
     the translation of <cxx-grammarterm>constraint-expression</cxx-grammarterm>s
     into constraints by normalization (<cxx-ref to="temp.constr.expr"></cxx-ref>),
-    and the abstract syntax, satisfaction, and subsumption of those constraints.
+    and the abstract syntax, satisfaction, and subsumption of those constraints
+    (<cxx-ref to="temp.constr.op"></cxx-ref>, <cxx-ref to="temp.constr.atom"></cxx-ref>).
     </cxx-note>
     </p>
 
     <p> A <dfn>constraint</dfn> is a sequence of logical operators and 
-    operands that specify requirements on template arguments. </p>
+    operands that specifies requirements on template arguments. </p>
 
     <p>
     <dfn>Constraint checking</dfn> is the processing of substituting 
@@ -1486,7 +1487,9 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
 
     After substitution, a constraint is <dfn>satisfied</dfn> if and only if 
     all of its sub-constraints are satisfied according to the evaluation 
-    rules described in this section.
+    rules described in
+    <cxx-ref to="temp.constr.op"></cxx-ref> and
+    <cxx-ref to="temp.constr.atom"></cxx-ref>.
 
     If the substitution of template arguments into a constraint fails, 
     that constraint is not satisfied.
@@ -1510,6 +1513,10 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
     <code>N % 2 == 1</code> subsumes <code>N &amp; 1</code> for 
     some integral template argument, <code>N</code>. 
     </cxx-note>
+    The rules defining the subsumption relation are given for each kind
+    of constraint in
+    <cxx-ref to="temp.constr.op"></cxx-ref> and
+    <cxx-ref to="temp.constr.atom"></cxx-ref>.
     </p>
 
     <cxx-section id="temp.constr.op">
@@ -1596,8 +1603,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
           Predicate constraints allow the definition of template requirements
           in terms of constant expressions. This enables constraints on non-type
           arguments, template template arguments, and also the definition of
-          constraints as metaprograms on type arguments and template argument 
-          packs.
+          constraints as metaprograms on template arguments.
           </cxx-note>
 
           <cxx-example class="inline">
@@ -1615,7 +1621,7 @@ template&lt;typename T&gt; concept bool C = sizeof(T) == 4 &amp;&amp; !true;
           <cxx-grammarterm>constraint-expression</cxx-grammarterm>s
           (<cxx-ref to="temp.constr.expr"></cxx-ref>).
 
-          <cxx-example>
+          <cxx-example class="inline">
           The predicate <code>M >= 0</code> does not subsume the predicate
           <code>M > 0</code> because they are not equivalent
           <cxx-grammarterm>constraint-expressions</cxx-grammarterm>.
@@ -1633,13 +1639,14 @@ template&lt;typename T&gt; concept bool C = sizeof(T) == 4 &amp;&amp; !true;
           <h1>Expression constraints</h1>
 
           <p> An <dfn>expression constraint</dfn> is an atomic constraint
-          that specifies a requirement the formation of a an
-          <cxx-grammarterm>expression</cxx-grammarterm>, <code>E</code>. 
+          that specifies a requirement on the formation of an
+          <cxx-grammarterm>expression</cxx-grammarterm> (call it <code>E</code>)
+          through substitution of template arguments.
 
-          It is satisfied if <code>E</code> is non-dependent, meaning that 
-          the substitution yielding <code>E</code> did not fail. Within an 
-          expression constraint, <code>E</code> is an unevaluated operand 
-          (<cxx-ref to="expr"></cxx-ref>).
+          An expression constraint is satisfied if <code>E</code> is non-dependent, 
+          meaning that the substitution yielding <code>E</code> did not fail. 
+          Within an expression constraint, <code>E</code> is an unevaluated 
+          operand (<cxx-ref to="expr"></cxx-ref>).
 
           <cxx-note>
           An expression constraint is introduced by the 
@@ -1653,8 +1660,8 @@ template&lt;typename T&gt; concept bool C = sizeof(T) == 4 &amp;&amp; !true;
           <cxx-grammarterm>requires-expression</cxx-grammarterm>.
           </cxx-note>
 
-          <cxx-example example="inline">
-          The concept <code>C</code> introduces a expression constraint for 
+          <cxx-example class="inline">
+          The concept <code>C</code> introduces an expression constraint for 
           the expression <code>++t</code>.
           <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = requires (T t) { ++t; };
@@ -1667,29 +1674,32 @@ template&lt;typename T&gt; concept bool C = requires (T t) { ++t; };
 
           <p> An expression constraint <code>P</code> subsumes another
           expression constraint <code>Q</code> if and only if
-          The <cxx-grammarterm>expression</cxx-grammarterm>s of <code>P</code>
+          the <cxx-grammarterm>expression</cxx-grammarterm>s of <code>P</code>
           and <code>Q</code> are equivalent 
           (<cxx-ref to="temp.over.link"></cxx-ref>). </p>
 
         </cxx-section> <!-- temp.constr.atom.expr -->
 
 
-        <!-- ======================
-             Expression constraints
-             ====================== -->
+        <!-- ================
+             Type constraints
+             ================ -->
 
         <cxx-section id="temp.constr.atom.type">
           <h1>Type constraints</h1>
 
           <p> A <dfn>type constraint</dfn> is an atomic constraint that
           specifies a requirement on the formation 
-          of a type, <code>T</code>. It is satisfied if and only 
+          of a type (call it <code>T</code>) through the substitution of
+          template arguments
+
+          A type constraint is satisfied if and only 
           <code>T</code> is non-dependent, meaning that the substitution 
           yielding <code>T</code> did not fail.
 
           <cxx-note>
           A type constraint is introduced by the 
-          <cxx-grammarterm>type-id</cxx-grammarterm> in a
+          <cxx-grammarterm>typename-specifier</cxx-grammarterm> in a
           <cxx-grammarterm>type-requirement</cxx-grammarterm> of a
           <cxx-grammarterm>requires-expression</cxx-grammarterm>
           (<cxx-ref to="expr.prim.req.type"></cxx-ref>).
@@ -1706,14 +1716,13 @@ requires (T t) {
           </cxx-codeblock>
           The type <code>int</code> does not satisfies this constraint 
           because substitution of that type into the constraint results in a
-          substitution failure because <code>int::type</code> is ill-formed.
+          substitution failure; <code>int::type</code> is ill-formed.
           </cxx-example>
           </p>
 
           <p> A type requirement that names a class template specialization 
-          does not require the completeness of that type; class templates 
-          are not instantiated when the constraint is checked
-          (<cxx-ref to="temp.inst"></cxx-ref>). </p>
+          does not require that type to be complete 
+          (<cxx-ref in="cxx" to="basic.types"></cxx-ref>). </p>
 
           <p> A type requirement <code>P</code> subsumes another type
           requirement <code>Q</code> if and only if the types in <code>P</code>
@@ -1742,13 +1751,12 @@ requires (T t) {
           <cxx-note>
           A conversion constraint is introduced by a
           <cxx-grammarterm>trailing-return-type</cxx-grammarterm> in a
-          <cxx-grammarterm>compound-requirement</cxx-grammarterm> when the
-          <cxx-grammarterm>trailing-type-specifier-seq</cxx-grammarterm>
-          contains no placeholders
+          <cxx-grammarterm>compound-requirement</cxx-grammarterm> when
+          its type contains no placeholders
           (<cxx-ref to="expr.prim.req.compound"></cxx-ref>).
           </cxx-note>
 
-          <cxx-example>
+          <cxx-example class="inline">
           <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = 
 requires (T a, T b) {
@@ -1758,8 +1766,8 @@ requires (T a, T b) {
           The <cxx-grammarterm>compound-requirement</cxx-grammarterm> in the
           <cxx-grammarterm>requires-expression</cxx-grammarterm> of <code>C</code>
           introduces two atomic constraints: an expression constraint
-          for <code>a == b</code> and the conversion constraint that the
-          expression <code>a == b</code> is implicitly convertible to 
+          for <code>a == b</code> and the implicit conversion constraint that 
+          the expression <code>a == b</code> is implicitly convertible to
           <code>bool</code>.
           </cxx-example>
           </p>
@@ -1769,7 +1777,7 @@ requires (T a, T b) {
           T1 is convertible to T2. -->
 
           <p> An implicit conversion constraint <code>P</code> subsumes 
-          another conversion constraint <code>Q</code> if and only if
+          another implicit conversion constraint <code>Q</code> if and only if
           the <cxx-grammarterm>expression</cxx-grammarterm>s of 
           <code>P</code> and <code>Q</code> are equivalent
           (<cxx-ref to="temp.over.link"></cxx-ref>) and the types
@@ -1792,7 +1800,7 @@ requires (T a, T b) {
           (call it <code>E</code>) as an argument to an invented 
           function template (call it <code>F</code>) that has a single 
           parameter whose type (call it <code>T</code>) is
-          written in terms of the function's template parameters.
+          written in terms of <code>F</code>'s template parameters.
 
           The constraint is satisfied if and only if <code>F</code>
           is selected by overload resolution for the call <code>F(E)</code>
