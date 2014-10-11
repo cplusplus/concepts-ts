@@ -18,7 +18,7 @@
         declaration
       </bnf-alt>
       <ins>
-      <bnf-alt>introduction-clause declaration</bnf-alt>
+      <bnf-alt>template-introduction declaration</bnf-alt>
       </ins>
 
     <ins>
@@ -36,17 +36,19 @@
   parameters are declared explicitly in a
   <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
   (<cxx-ref to="temp.param"></cxx-ref>), or they are
-  introduced by a template introduction
+  introduced by a <cxx-grammarterm>template-introduction</cxx-grammarterm>
   (<cxx-ref to="temp.intro"></cxx-ref>).
   </p>
 
 
-  <div class="quoted">
-  <p>
+  <p class="quoted">
   The <dfn>associated constraints</dfn> of a 
-  <cxx-grammarterm>template-declaration</cxx-grammarterm> are the conjunction
-  of all constraints introduced by:
+  <cxx-grammarterm>template-declaration</cxx-grammarterm> are the 
+  logical <code>&&</code> of all 
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm>s introduced by:
   </p>
+  
+  <div class="quoted">
   <ul>
   <li> a concept introduction, and</li>
 
@@ -72,19 +74,18 @@
   (<cxx-ref to="class.mem"></cxx-ref>).</li>
   </ul>
 
-  Let <code>T</code> be a <cxx-grammarterm>template-declaration</cxx-grammarterm>
-  with associated constraints. <code>T</code> is equivalent to another
-  <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>E</code>) 
+  Let <code>T1</code> be a <cxx-grammarterm>template-declaration</cxx-grammarterm>
+  with associated constraints. <code>T1</code> is equivalent to another
+  <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>T2</code>) 
   whose template parameters are declared explicitly as unconstrained template 
-  parameters, and <code>E</code> has a single
+  parameters, and <code>T2</code> has a single
   <cxx-grammarterm>requires-clause</cxx-grammarterm> whose 
   <cxx-grammarterm>constraint-expression</cxx-grammarterm> is equivalent to 
-  the associated constraints of <code>T</code> 
-  (<cxx-ref to="temp.constr.expr"></cxx-ref>).
+  the associated constraints of <code>T1</code> 
+  (<cxx-ref to="temp.constr.expr"></cxx-ref>). <code>T2</code> is said
+  to be the <dfn>canonical declaration</dfn> of all declarations that are 
+  equivalent to it according to the rules below.
 
-  <cxx-note> The following paragraphs describes how constrained template 
-  declarations can be equivalently written using alternative syntax in order 
-  to generate a canonical spelling of a template's associated constraints.
   <cxx-example class="inline">
   <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = true;
@@ -95,20 +96,15 @@ template&lt;C T&gt; void g(T);
 C{T} void g(T);
 template&lt;typename T&gt; requires C&lt;T&gt; void g(T);
   </cxx-codeblock>
-  The last declaration includes the canonical spelling of the associated 
-  constraints for all declarations of <code>g(T)</code> as the
-  <cxx-grammarterm>constraint-expression</cxx-grammarterm> of its
-  <cxx-grammarterm>requires-clause</cxx-grammarterm>.
+  The last declaration is the canonical declaration of <code>g(T)</code>.
   </cxx-example>
-  The paragraphs below define the rules that make these declarations
-  equivalent.
   </cxx-note>
   </div>
 
   <p class="quoted" number="8"> 
   When a <cxx-grammarterm>template-declaration</cxx-grammarterm> is
   declared by a template introduction (<cxx-ref to="temp.intro"></cxx-ref>), 
-  it is equivalent to a
+  its canonical declaration is a
   <cxx-grammarterm>template-declaration</cxx-grammarterm> whose
   <cxx-grammarterm>template-parameter-list</cxx-grammarterm> is defined 
   according to the rules for introducing template parameters in
@@ -129,7 +125,7 @@ template&lt;typename T&gt; requires C&lt;T&gt; void g(T);
 
   If an introduced parameter declares a template parameter pack, the
   corresponding template argument in the <code>TT</code> is a pack
-  expansion (<cxx-ref to="temp.variadic"></cxx-ref>).
+  expansion (<cxx-ref in="cxx" to="temp.variadic"></cxx-ref>).
   
   If <code>C</code> is a variable concept, then the
   <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
@@ -172,30 +168,31 @@ template&lt;typename... Qs&gt;
 
   <!-- TODO: Update based on rewrite of temp.param -->
   <p class="quoted">
-  When a <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>T</code>) is
+  When a <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>T1</code>) is
   explicitly declared with <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
-  that has constrained template parameters (<cxx-ref to="temp.param"></cxx-ref>), it
-  is equivalent to a <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>E</code>)
+  that has constrained template parameters (<cxx-ref to="temp.param"></cxx-ref>), 
+  its canonical declaration is a 
+  <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>T2</code>)
   with the same template parameters,
   except that all constrained parameters are replaced by unconstrained
   parameters matching the corresponding prototype parameter designated
   by the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> 
   (<cxx-ref to="dcl.spec.constr"></cxx-ref>).
   
-  The declaration, <code>E</code>, has a <cxx-grammarterm>requires-clause</cxx-grammarterm>
+  The declaration, <code>T2</code>, has a <cxx-grammarterm>requires-clause</cxx-grammarterm>
   whose <cxx-grammarterm>constraint-expression</cxx-grammarterm> is the
-  conjunction of the constraints associated by the constrained template 
-  parameters in <code>T</code>.
+  conjunction of the <cxx-grammarterm>constraint-expressoin</cxx-grammarterm>s 
+  associated by the constrained template parameters in <code>T1</code>.
 
   The order in which the introduced constraints are evaluated is 
   the same as the order in which the constrained template 
   parameters are declared.
 
-  If the original declaration <code>T</code> includes a 
+  If the original declaration <code>T1</code> includes a 
   <cxx-grammarterm>requires-clause</cxx-grammarterm>, its
   <cxx-grammarterm>constraint-expression</cxx-grammarterm> is evaluated after 
   the constraints associated by the constrained template parameters in
-  <code>E</code>.
+  <code>T2</code>.
 
   <cxx-example class="inline">
   <cxx-codeblock>
@@ -492,12 +489,11 @@ template&lt;C5... Cx&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter 
 
     Add this section after <cxx-ref to="temp.param"></cxx-ref>.
 
-    <p>
-    A <dfn>template introduction</dfn> provides a convenient way of declaring
+    <p> A <dfn>template introduction</dfn> provides a convenient way of declaring
     different templates that have the same template parameters and constraints.
 
     <bnf-grammar>
-      <bnf-rule>introduction-clause</bnf-rule>
+      <bnf-rule>template-introduction</bnf-rule>
         <bnf-alt>
           <bnf-opt>nested-name-specifier</bnf-opt>
           concept-name
