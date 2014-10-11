@@ -690,6 +690,13 @@ template&lt;C T&gt; struct s1; // <i>associates</i> C&lt;T&gt; <i>with</i> s1
         Likewise, <code>M</code> is an invented non-type template parameter
         corresponding to the prototype parameter of <code>Num</code>.
         </p>
+
+        <p>Two <cxx-grammarterm>constrained-type-specifiers</cxx-grammarterm>
+        are said to be equivalent if their associated
+        <cxx-grammarterm>constraint-expression</cxx-grammarterm>s are
+        equivalent according to the rules in 
+        <cxx-ref to="temp.constr.expr"></cxx-ref>.</p>
+
       </cxx-section> <!-- dcl.spec.constr -->
 
     </cxx-section> <!-- dcl.type -->
