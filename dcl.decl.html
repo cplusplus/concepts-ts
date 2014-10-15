@@ -55,8 +55,18 @@ void g(int n) requires sizeof(n) == 4;
   </cxx-example>
   </p>
 
+
+  <!-- ======================
+       Meaning of declarators
+       ====================== -->
+
   <cxx-section id="dcl.meaning" number="3">
     <h1>Meaning of declarators</h1>
+
+
+    <!-- =========
+         Functions
+         ========= -->
 
     <cxx-section id="dcl.fct" number="5">
       <h1>Functions</h1>
@@ -70,13 +80,43 @@ void g(int n) requires sizeof(n) == 4;
       <p class="quoted" number="3">
       <bnf-grammar>
         <bnf-rule>parameter-declaration</bnf-rule>
+          <del>
+          <bnf-alt>
+            <bnf-opt>attribute-specifier-seq</bnf-opt> 
+            decl-specifier-seq declarator
+          </bnf-alt>
+          
+          <bnf-alt>
+            <bnf-opt>attribute-specifier-seq</bnf-opt> 
+            decl-specifier-seq declarator 
+            <bnf-terminal>=</bnf-terminal> 
+            initializer-clause
+          </bnf-alt>
+          
+          <bnf-alt>
+            <bnf-opt>attribute-specifier-seq</bnf-opt> 
+            decl-specifier-seq 
+            <bnf-opt>abstract-declarator</bnf-opt>
+          </bnf-alt>
+          
+          <bnf-alt>
+            <bnf-opt>attribute-specifier-seq</bnf-opt> 
+            decl-specifier-seq 
+            <bnf-opt>abstract-declarator</bnf-opt> 
+            <bnf-terminal>=</bnf-terminal> 
+            initializer-clause</bnf-alt>
+          </del>
+
+          <ins>
           <bnf-alt>
             basic-parameter-declaration
           </bnf-alt>
           <bnf-alt>
             basic-parameter-declaration <bnf-terminal>=</bnf-terminal> initializer
           </bnf-alt>
+          </ins>
 
+        <ins>
         <bnf-rule>basic-parameter-declaration</bnf-rule>
           <bnf-alt>
             <bnf-opt>attribute-specifier-seq</bnf-opt>
@@ -88,6 +128,7 @@ void g(int n) requires sizeof(n) == 4;
             decl-specifier-seq 
             <bnf-opt>abstract-declarator</bnf-opt>
           </bnf-alt>
+        </ins>
       </p>
 
       Modify the second sentence of paragraph 5. The remainder of this
@@ -215,8 +256,10 @@ template&lt;int N&gt; void h(N*); // <i>error: invalid type</i>
       </cxx-example>
       </p>
 
-      <p> All placeholders introduced using the same 
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> have the 
+      <p> All placeholders introduced
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> 
+      that are equivalent according to the definition in
+      <cxx-ref to="dcl.spec.constr"></cxx-ref> have the
       same invented template parameter.
       <cxx-example class="inline">
       <cxx-codeblock>
@@ -250,10 +293,11 @@ void f3(D&lt;0&gt; a, D&lt;1&gt; b);
 void f4(E a, E&lt;&gt; b, E&lt;0&gt; c);
       </cxx-codeblock>
       The types of <code>a</code>, <code>b</code>, and <code>c</code> are
-      distinct invented template type parameters even though the constraints 
-      associated by the each of the 
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
-      (<cxx-ref to="dcl.spec.constr"></cxx-ref>) are equivalent.
+      the same since <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
+      <code>E</code>, <code>E&lt;&gt;</code>, and <code>E&lt;0&gt;</code>
+      all associate the <cxx-grammarterm>constraint-expression</cxx-grammarterm>,
+      <code>E&lt;T, 0&gt;</code>, where <code>T</code> is an invented
+      template type parameter.
       </p>
 
       <!-- TODO: Move into temp.fct? -->
@@ -273,10 +317,21 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
       </p>
 
     </cxx-section> <!-- dcl.fct -->
+  
   </cxx-section> <!-- dcl.meaning -->
+
+
+  <!-- ====================
+       Function definitions
+       ==================== -->
 
   <cxx-section id="dcl.fct.def">
     <h1>Function definitions</h1>
+
+
+    <!-- ==========
+         In general
+         ========== -->
 
     <cxx-section id="dcl.fct.def.general">
       <h1>In general</h1>

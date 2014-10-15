@@ -909,10 +909,6 @@ pre {
         
       </li>
             
-              <li><span class="marker">14.5.7</span><a href="#temp.alias">Alias templates</a>
-        
-      </li>
-            
           </ol>
         
       </li>
@@ -1869,6 +1865,7 @@ template&lt;typename T&gt; concept bool D =
   </cxx-section>
     </section>
   </cxx-clause>
+
 <cxx-clause id="dcl.dcl" number="7">
     
 
@@ -1876,6 +1873,10 @@ template&lt;typename T&gt; concept bool D =
       <header><span class="section-number">7</span> <h1 data-bookmark-label="7 Declarations">Declarations</h1> <span style="float:right"><a href="#dcl.dcl">[dcl.dcl]</a></span></header>
       
   
+
+  <!-- ==========
+       Specifiers
+       ========== -->
 
   <cxx-section id="dcl.spec">
     
@@ -1904,6 +1905,11 @@ template&lt;typename T&gt; concept bool D =
   </bnf-grammar>
     </p>
 
+
+    <!-- ===============
+         Type specifiers
+         =============== -->
+
     <cxx-section id="dcl.type" number="6">
     
 
@@ -1911,6 +1917,11 @@ template&lt;typename T&gt; concept bool D =
       <header><span class="section-number">7.1.6</span> <h1 data-bookmark-label="7.1.6 Type specifiers">Type specifiers</h1> <span style="float:right"><a href="#dcl.type">[dcl.type]</a></span></header>
       
       
+
+
+      <!-- ======================
+           Simple type specifiers
+           ====================== -->
 
       <cxx-section id="dcl.type.simple" number="2">
     
@@ -1942,6 +1953,10 @@ template&lt;typename T&gt; concept bool D =
     </section>
   </cxx-section> <!-- dcl.type.simple -->
 
+
+      <!-- ==============
+           auto specifier
+           ============== -->
 
       <cxx-section id="dcl.spec.auto" number="4">
     
@@ -2288,6 +2303,10 @@ template:
   </cxx-section> <!-- dcl.spec.auto -->
 
 
+      <!-- ===========================
+           Constrained type specifiers
+           =========================== -->
+
       <cxx-section id="dcl.spec.constr">
     
 
@@ -2364,11 +2383,6 @@ template:
         A <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
         may also designate placeholders for deduced non-type and template 
         template arguments.
-
-        Deduction of a placeholder from a template argument succeeds only when 
-        the deduced value satisfies the constraints associated by the
-        <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
-
         <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
@@ -2385,15 +2399,8 @@ template&lt;typename T&gt; class Alloc { };
 
 void f1(C1 c);            // C1 <i>designates a placeholder type</i>
 void f2(Array&lt;auto, C2&gt;); // C2 <i>designates a placeholder for an integer value</i>
-void f3(Stack&lt;auto, C3&gt;); // C3 <i>designates a placeholder for a class template</i>
-
-f1(0);                    // <i>error</i>
-f2(Array&lt;int, 3&gt;{});      // <i>error</i>
-f3(Stack&lt;char, Alloc&gt;{}); // <i>error</i></code></pre>
+void f3(Stack&lt;auto, C3&gt;); // C3 <i>designates a placeholder for a class template</i></code></pre>
   
-In each of these function calls, the deduction of the placeholder designated 
-by the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
-fails because the associated constraints are not satisfied.
         
     <span class="nowrap">— <em>end example</em> ]</span>
   
@@ -2414,8 +2421,10 @@ fails because the associated constraints are not satisfied.
         <li> the parameter type of a template parameter, signifying a
              constrained template parameter (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>);</li>
         <li> the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> of
-             a <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm>,
-             signifying a deduction constraint (<cxx-ref to="expr.req.compound"><a title="expr.req.compound" href="#expr.req.compound"></a></cxx-ref>). </li>
+             a <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm>
+             (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>),
+             signifying an argument deduction constraint 
+             (<cxx-ref to="temp.constr.atom.deduct"><a title="temp.constr.atom.deduct" href="#temp.constr.atom.deduct">14.9.2.5</a></cxx-ref>). </li>
         </ul>
         A program that includes a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
         in any other contexts is ill-formed.
@@ -2448,7 +2457,7 @@ void f4(C1::Wrap&lt;C2&lt;1&gt;&gt;); // <i>OK: but deduction of</i> C1 <i>will 
 
 template&lt;typename T&gt; concept bool Iter() {
   return requires(T i) {
-    {*i} -&gt; const C1&amp;; // <i>OK: a deduction constraint</i>
+    {*i} -&gt; const C1&amp;; // <i>OK: an argument deduction constraint</i>
   };
 }</code></pre>
   </cxx-codeblock>
@@ -2463,16 +2472,19 @@ However, a value may be explicitly given as a template argument in a
         <!-- </p> -->
 
         <p para_num="3" id="dcl.spec.constr.3">
-        <cxx-example class="inline">
+        <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+        Unlike <code>auto</code>, a 
+        <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> cannot 
+        be used in the type of a variable declaration or the return type of
+        a function.
+        <cxx-example>
     
     <span class="nowrap">[ <em>Example:</em></span>
     
-Unlike <code>auto</code>, a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> 
-cannot be used in the type of a variable declaration or the return type of 
-a function.
         <cxx-codeblock>
     
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C = true;
+    </cxx-codeblock></cxx-example></cxx-note></p><pre><code>template&lt;typename T&gt; concept bool C = true;
 template&lt;typename T, int N&gt; concept bool D = true;
 
 const C* x = 0;  // <i>error:</i> C <i>used in a variable type</i>
@@ -2480,6 +2492,9 @@ D&lt;0&gt; fn(int x);  // <i>error:</i> D&lt;0&gt; <i>used as a return type</i><
   
         
     <span class="nowrap">— <em>end example</em> ]</span>
+  
+        
+    <span class="nowrap">— <em>end note</em> ]</span>
   
         <p></p>
 
@@ -2609,30 +2624,37 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
 
         <p para_num="7" id="dcl.spec.constr.7">The use of a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
         in the type of a <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm>
-        associates a constraint (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>) with the 
+        associates a <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> 
+        (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>) with the 
         entity for which that parameter is declared. 
 
-        In the case of a generic lambda, the constraint is associated with
+        In the case of a generic lambda, the association is with
         the member function call operator of the closure type 
         (<cxx-ref to="expr.prim.lambda"><a title="expr.prim.lambda" href="#expr.prim.lambda">5.1.2</a></cxx-ref>).
 
-        For an abbreviated function declaration, the constraint is associated
+        For an abbreviated function declaration, the association is with
         with that function (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>).
 
-        The use of a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
-        in the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> of
-        a <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> includes
-        an associated constraint in the conjunction of constraints introduced
-        by that requirement (<cxx-ref to="expr.req.compound"><a title="expr.req.compound" href="#expr.req.compound"></a></cxx-ref>).
+        When a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+        appears in the 
+        <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> of a 
+        <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> it
+        associates a <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> 
+        with the invented function template of the introduced argument 
+        deduction constraint (<cxx-ref to="temp.constr.atom.deduct"><a title="temp.constr.atom.deduct" href="#temp.constr.atom.deduct">14.9.2.5</a></cxx-ref>).
 
         When a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
         is used in a <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>,
-        the constrained it associated with the 
-        <cxx-grammarter>template-declaration</cxx-grammarter> in which the
+        the constrained it associates a 
+        <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> with the
+        <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> in which the
         <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> is declared.
         </p>
 
-        <p para_num="8" id="dcl.spec.constr.8"> The constraint associated by a
+        <!-- FIXME: This is practically unreadable -->
+
+        <p para_num="8" id="dcl.spec.constr.8"> The <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> 
+        associated by a
         <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
         is derived from the <cxx-grammarterm><i>template-id</i></cxx-grammarterm> 
         (called <code>TT</code> above) used to determine the viability of
@@ -2645,18 +2667,17 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
         </p><ul>
         <li> when the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
         appears in the type of a <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm>
-        of a function declaration, <code>A</code> is the name of the
-        invented template parameter corresponding to the 
-        <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
-        (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>);</li>
+        of a function or lambda, 
 
-        <li> when the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+        or when the when the 
+        <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
         appears in the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm>
         of a <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm>,
-        <code>A</code> is the type deduced for that
-        <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
-        from the expression <cxx-grammarterm><i>expression</i></cxx-grammarterm> in the
-        requirement (<cxx-ref to="expr.prim.req"><a title="expr.prim.req" href="#expr.prim.req">5.1.3</a></cxx-ref>);</li>
+
+        <code>A</code> is the name of the
+        invented template parameter corresponding to the 
+        placeholder in that (possibly invented) function template 
+        (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>) ;</li>
 
         <li> when the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
         appears in a <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>
@@ -2667,10 +2688,11 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
         Let <code>TT2</code> be a <cxx-grammarterm><i>template-id</i></cxx-grammarterm>
         formed as follows. 
 
-        If <code>A</code> is a template parameter (possibly invented) that 
-        declares a template parameter pack, and <code>D</code>
-        is a variadic concept (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">7.1.7</a></cxx-ref>),
-        <code>TT2</code> is formed by replacing <code>X</code> in 
+        If the template parameter <code>A</code> declares a template parameter 
+        pack, and <code>D</code> is a variadic concept 
+        (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">7.1.7</a></cxx-ref>),
+        <code>TT2</code> is formed by replacing the deduced concept
+        argument <code>X</code> in 
         <code>TT</code> with the pack expansion <code>A...</code>.
 
         Otherwise <code>TT2</code> is formed by replacing <code>X</code>
@@ -2681,10 +2703,10 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
         the function call <code>TT2()</code> when the <code>D</code> is a 
         function concept.
 
-        If <code>A</code> is a template parameter that declares a template
+        If the template parameter <code>A</code> declares a template
         parameter pack, and <code>D</code> is not a variadic concept,
         then the associated constraint is the fold expression 
-        <code>(... &amp;&amp; E)</code>
+        <code>(E &amp;&amp; ...)</code>
         (<cxx-ref in="cxx" to="expr.prim.fold">C++ <span title="expr.prim.fold">§5.1.4</span></cxx-ref>).
         
         Otherwise, the associated constraint is the expression <code>E</code>.
@@ -2701,39 +2723,27 @@ template&lt;int N&gt; concept bool Num = true;
 
 template&lt;int&gt; struct X { };
 
-void f(C&amp;);             // <i>associates</i> C&lt;T1&gt; <i>with</i> f
-void g(D&lt;int&gt;);         // <i>associates</i> D&lt;T2, int&gt;() <i>with</i> g
+void f(C&amp;);              // <i>associates</i> C&lt;T1&gt; <i>with</i> f
+void g(D&lt;int&gt;);          // <i>associates</i> D&lt;T2, int&gt;() <i>with</i> g
 void h(X&lt;Num&gt;);          // <i>associates</i> Num&lt;M&gt; <i>with</i> h
 template&lt;C T&gt; struct s1; // <i>associates</i> C&lt;T&gt; <i>with</i> s1</code></pre>
   </cxx-codeblock>
-        In the associated constraints, <code>T1</code> and <code>T2</code> 
-        are invented type template parameters corresponding to the
+        Here, <code>T1</code> and <code>T2</code> are invented type template 
+        parameters corresponding to the
         prototype parameter of their respective designated concepts.
-        Likewise, <code>M</code> is a non-type template parameter
+        Likewise, <code>M</code> is an invented non-type template parameter
         corresponding to the prototype parameter of <code>Num</code>.
-        <cxx-codeblock>
-    
-    <pre><code>template&lt;typename T&gt;
-  concept bool Req = 
-    requires (T t) {
-      {*t} -&gt; const C&amp;; // <i>adds the constraint</i> C&lt;A&gt; <i>to</i> Req
-    };</code></pre>
-  </cxx-codeblock>
-        In the constraint introduced by the 
-        <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
-        <code>const C&amp;</code>, <code>A</code> is the deduced type
-        of the parameter <code>a</code> in the the call
-        <code>f(*t)</code> of the following invented function template:
-        <cxx-codeblock>
-    
-    <pre><code>template&lt;typename A&gt;
-  void f(const A&amp; a);</code></pre>
-  </cxx-codeblock>
-        
+        <p></p>
+
+        <p>Two <cxx-grammarterm><i>constrained-type-specifiers</i></cxx-grammarterm>
+        are said to be equivalent if their associated
+        <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s are
+        equivalent according to the rules in 
+        <cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>.</p>
+
+      
     <span class="nowrap">— <em>end example</em> ]</span>
   </cxx-example>
-        <p para_num="9" id="dcl.spec.constr.9"></p>
-      
     </section>
   </cxx-section> <!-- dcl.spec.constr -->
 
@@ -2742,6 +2752,9 @@ template&lt;C T&gt; struct s1; // <i>associates</i> C&lt;T&gt; <i>with</i> s1</c
   </cxx-section> <!-- dcl.type -->
 
 
+    <!-- =================
+         concept specifier
+         ================= --> 
 
     <cxx-section id="dcl.spec.concept">
     
@@ -2790,13 +2803,14 @@ struct S {
   
       <p></p>
 
-      <p para_num="2" id="dcl.spec.concept.2"> No storage specifiers shall appear in a declaration with the 
+      <p para_num="2" id="dcl.spec.concept.2"> Every concept definition is implicitly defined to be a 
+      <code>constexpr</code> declaration 
+      (<cxx-ref in="cxx" to="dcl.constexpr">C++ <span title="dcl.constexpr">§7.1.5</span></cxx-ref>). </p>
+
+      <p para_num="3" id="dcl.spec.concept.3"> No storage specifiers shall appear in a declaration with the 
       <code>concept</code> specifier. Additionally, a concept definition
       shall not include the <code>friend</code> or <code>constexpr</code>
       specifiers. </p>
-
-      <p para_num="3" id="dcl.spec.concept.3"> Every concept definition is also a <code>constexpr</code> declaration
-      (<cxx-ref in="cxx" to="dcl.constexpr">C++ <span title="dcl.constexpr">§7.1.5</span></cxx-ref>). </p>
 
       <p para_num="4" id="dcl.spec.concept.4">A concept definition shall be unconstrained.
       <cxx-note><span class="nowrap">[ <em>Note:</em></span>
@@ -2818,8 +2832,8 @@ struct S {
       <p para_num="6" id="dcl.spec.concept.6">A function concept has the following restrictions:
       </p><ul>
         <li> No <cxx-grammarterm><i>function-specifier</i></cxx-grammarterm>s shall
-             appear in the declaration. </li>
-        <li> The return type shall be <code>bool</code>. </li>
+             appear in its declaration (<cxx-ref to="dcl.fct.spec"><a title="dcl.fct.spec" href="#dcl.fct.spec"></a></cxx-ref>). </li>
+        <li> The declared return type shall be the non-deduced type <code>bool</code>. </li>
         <li> The declaration shall have a 
         <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>
         equivalent to <code>()</code>. </li>
@@ -2827,9 +2841,19 @@ struct S {
         <li> The function body shall consist of a single <code>return</code> 
         statement whose <cxx-grammarterm><i>expression</i></cxx-grammarterm> shall be a
         <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>
-        (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>).
+        (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>).
         </li>
       </ul>
+
+      <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+      Return type deduction requires the instantiation of the function 
+      definition, but concept definitions are not instantiated; they
+      are normalized (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>).
+      
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+
       <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
@@ -2838,6 +2862,8 @@ struct S {
     
     <pre><code>template&lt;typename T&gt; 
   concept int F1() { return 0; }      // <i>error: return type is not</i> bool
+template&lt;typename T&gt; 
+  concept auto F3(T) { return true; } // <i>error: return type is deduced</i>
 template&lt;typename T&gt; 
   concept bool F2(T) { return true; } // <i>error: must have no parameters</i></code></pre>
   </cxx-codeblock>
@@ -2848,8 +2874,8 @@ template&lt;typename T&gt;
 
       <p para_num="7" id="dcl.spec.concept.7">A variable concept has the following restrictions:
       </p><ul>
-        <li> The declared type sall be <code>bool</code>. </li>
-        <li> The declaration sall have an initializer. </li>
+        <li> The declared type shall be <code>bool</code>. </li>
+        <li> The declaration shall have an initializer. </li>
         <li> The initializer shall be a 
         <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>. </li>
       </ul>
@@ -2870,29 +2896,11 @@ concept bool V4 = 0;       // <i>error: not a template</i></code></pre>
   </cxx-example>
       <!-- </p> -->
 
-      <p para_num="8" id="dcl.spec.concept.8">A program that declares an explicit instantiation, an explicit 
-      specialization, or a partial specialization of a concept
-      definition is ill-formed.
-      <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
-      <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C = false;
+      <p para_num="8" id="dcl.spec.concept.8">A program that declares an explicit instantiation
+      (<cxx-ref to="temp.explicit"><a title="temp.explicit" href="#temp.explicit">14.7.2</a></cxx-ref>), an explicit specialization 
+      (<cxx-ref to="temp.expl.spec"><a title="temp.expl.spec" href="#temp.expl.spec">14.7.3</a></cxx-ref>), or a partial specialization 
+      of a concept definition is ill-formed.
 
-template concept bool C&lt;char&gt;; // <i>error: explicit instantiation of a concept</i>
-template&lt;&gt; 
-  concept bool C&lt;int&gt; = true;  // <i>error: explicit specialization of a concept</i>
-template&lt;typename T&gt; 
-  concept bool C&lt;T*&gt; = true;   // <i>error: partial specialization of a concept</i></code></pre>
-  
-      
-    <span class="nowrap">— <em>end example</em> ]</span>
-  
-      <p></p>
-
-      <p para_num="9" id="dcl.spec.concept.9">
       <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
       The prohibitions against overloading and specialization prevent
@@ -2999,6 +3007,11 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
   
   <p></p>
 
+
+  <!-- ======================
+       Meaning of declarators
+       ====================== -->
+
   <cxx-section id="dcl.meaning" number="3">
     
 
@@ -3006,6 +3019,11 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
       <header><span class="section-number">8.3</span> <h1 data-bookmark-label="8.3 Meaning of declarators">Meaning of declarators</h1> <span style="float:right"><a href="#dcl.meaning">[dcl.meaning]</a></span></header>
       
     
+
+
+    <!-- =========
+         Functions
+         ========= -->
 
     <cxx-section id="dcl.fct" number="5">
     
@@ -3029,6 +3047,46 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
     
     parameter-declaration:
   </bnf-rule>
+          <del>
+          <bnf-alt>
+    
+    
+            <bnf-opt>attribute-specifier-seq<sub>opt</sub></bnf-opt> 
+            decl-specifier-seq declarator
+          
+  </bnf-alt>
+          
+          <bnf-alt>
+    
+    
+            <bnf-opt>attribute-specifier-seq<sub>opt</sub></bnf-opt> 
+            decl-specifier-seq declarator 
+            <bnf-terminal><code>=</code></bnf-terminal> 
+            initializer-clause
+          
+  </bnf-alt>
+          
+          <bnf-alt>
+    
+    
+            <bnf-opt>attribute-specifier-seq<sub>opt</sub></bnf-opt> 
+            decl-specifier-seq 
+            <bnf-opt>abstract-declarator<sub>opt</sub></bnf-opt>
+          
+  </bnf-alt>
+          
+          <bnf-alt>
+    
+    
+            <bnf-opt>attribute-specifier-seq<sub>opt</sub></bnf-opt> 
+            decl-specifier-seq 
+            <bnf-opt>abstract-declarator<sub>opt</sub></bnf-opt> 
+            <bnf-terminal><code>=</code></bnf-terminal> 
+            initializer-clause
+  </bnf-alt>
+          </del>
+
+          <ins>
           <bnf-alt>
     
     
@@ -3041,7 +3099,9 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
             basic-parameter-declaration <bnf-terminal><code>=</code></bnf-terminal> initializer
           
   </bnf-alt>
+          </ins>
 
+        <ins>
         <bnf-rule>
     
     basic-parameter-declaration:
@@ -3062,6 +3122,7 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
             <bnf-opt>abstract-declarator<sub>opt</sub></bnf-opt>
           
   </bnf-alt>
+        </ins>
       
   </bnf-grammar></p>
 
@@ -3203,8 +3264,10 @@ The equivalent and erroneous declaration would have this form:
   </cxx-example>
       <p></p>
 
-      <p para_num="17" id="dcl.fct.17"> All placeholders introduced using the same 
-      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> have the 
+      <p para_num="17" id="dcl.fct.17"> All placeholders introduced
+      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> 
+      that are equivalent according to the definition in
+      <cxx-ref to="dcl.spec.constr"><a title="dcl.spec.constr" href="#dcl.spec.constr">7.1.6.5</a></cxx-ref> have the
       same invented template parameter.
       <cxx-example class="inline">
     
@@ -3245,10 +3308,11 @@ void f3(D&lt;0&gt; a, D&lt;1&gt; b);</code></pre>
     <pre><code>void f4(E a, E&lt;&gt; b, E&lt;0&gt; c);</code></pre>
   </cxx-codeblock>
       The types of <code>a</code>, <code>b</code>, and <code>c</code> are
-      distinct invented template type parameters even though the constraints 
-      associated by the each of the 
-      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s
-      (<cxx-ref to="dcl.spec.constr"><a title="dcl.spec.constr" href="#dcl.spec.constr">7.1.6.5</a></cxx-ref>) are equivalent.
+      the same since <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s
+      <code>E</code>, <code>E&lt;&gt;</code>, and <code>E&lt;0&gt;</code>
+      all associate the <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>,
+      <code>E&lt;T, 0&gt;</code>, where <code>T</code> is an invented
+      template type parameter.
       
     <span class="nowrap">— <em>end example</em> ]</span>
   <p></p>
@@ -3279,8 +3343,14 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
     </section>
   </cxx-section> <!-- dcl.fct -->
   
+  
     </section>
   </cxx-section> <!-- dcl.meaning -->
+
+
+  <!-- ====================
+       Function definitions
+       ==================== -->
 
   <cxx-section id="dcl.fct.def">
     
@@ -3289,6 +3359,11 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
       <header><span class="section-number">8.4</span> <h1 data-bookmark-label="8.4 Function definitions">Function definitions</h1> <span style="float:right"><a href="#dcl.fct.def">[dcl.fct.def]</a></span></header>
       
     
+
+
+    <!-- ==========
+         In general
+         ========== -->
 
     <cxx-section id="dcl.fct.def.general">
     
@@ -3352,6 +3427,10 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
       
   
 
+  <!-- =============
+       Class members
+       ============= -->
+
   <cxx-section id="class.mem" number="2">
     
 
@@ -3360,8 +3439,8 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
       
     
 
-    In <cxx-ref in="cxx" to="class.mem">C++ <span title="class.mem">§9.2</span></cxx-ref>, modify the
-    <cxx-grammarterm><i>member-declarator</i></cxx-grammarterm> syntax.
+    Modify the grammar in 9.2 to allow a 
+    <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> for member declarations.
 
     <p para_num="1" id="class.mem.1" class="quoted">
     <bnf-grammar>
@@ -3384,7 +3463,10 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
   </bnf-grammar>
     </p>
 
-    Insert the following paragraphs after <cxx-ref in="cxx" to="class.mem">C++ <span title="class.mem">§9.2</span></cxx-ref>/8.
+    Insert the following after paragraph 8, explaining where a
+    <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> can appear
+    and that its <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>
+    can refer to parameters.
 
     <p para_num="9" id="class.mem.9" class="quoted" number="9">
     A <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> shall only appear
@@ -3561,8 +3643,7 @@ struct D : B {
       
 
       Update paragraph 1 to require the checking of a candidate's associated
-      constraints when determining if that candidate is a viable candidate
-      for a function call.
+      constraints when determining if that candidate is viable.
 
       <p para_num="1" id="over.match.viable.1" class="quoted">
       From the set of candidate functions constructed for a given context 
@@ -3610,9 +3691,8 @@ struct D : B {
 
       Modify the last item in the list in paragraph 1 and extend it with
       a final comparison based on the associated constraints of those
-      functions. This applies to both normal functions and specializations
-      of function templates. Note that the preceding (unmodified) items
-      in the original document are elided in this document.
+      functions. Note that the preceding (unmodified) items in the original 
+      document are elided in this document.
 
       <p para_num="1" id="over.match.best.1" class="quoted">
       Define ICS<i>i</i>(<code>F</code>) as follows:
@@ -3746,7 +3826,7 @@ void (*pg)() = &amp;g;         // <i>error: g() cannot be selected</i></code></p
       <ins>
       <bnf-alt>
     
-    introduction-clause declaration
+    template-introduction declaration
   </bnf-alt>
       </ins>
 
@@ -3772,17 +3852,19 @@ void (*pg)() = &amp;g;         // <i>error: g() cannot be selected</i></code></p
   parameters are declared explicitly in a
   <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
   (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>), or they are
-  introduced by a template introduction
+  introduced by a <cxx-grammarterm><i>template-introduction</i></cxx-grammarterm>
   (<cxx-ref to="temp.intro"><a title="temp.intro" href="#temp.intro">14.2</a></cxx-ref>).
   </p>
 
 
-  <div class="quoted">
-  <p>
+  <p para_num="8" id="temp.8" class="quoted">
   The <dfn>associated constraints</dfn> of a 
-  <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> are the conjunction
-  of all constraints introduced by:
+  <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> are the 
+  logical <code>&amp;&amp;</code> of all 
+  <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s introduced by:
   </p>
+  
+  <div class="quoted">
   <ul>
   <li> a concept introduction, and</li>
 
@@ -3808,20 +3890,18 @@ void (*pg)() = &amp;g;         // <i>error: g() cannot be selected</i></code></p
   (<cxx-ref to="class.mem"><a title="class.mem" href="#class.mem">9.2</a></cxx-ref>).</li>
   </ul>
 
-  Let <code>T</code> be a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>
-  with associated constraints. <code>T</code> is equivalent to another
-  <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> (call it <code>E</code>) 
+  Let <code>T1</code> be a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>
+  with associated constraints. <code>T1</code> is equivalent to another
+  <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> (call it <code>T2</code>) 
   whose template parameters are declared explicitly as unconstrained template 
-  parameters, and <code>E</code> has a single
+  parameters, and <code>T2</code> has a single
   <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> whose 
   <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is equivalent to 
-  the associated constraints of <code>T</code> 
-  (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>).
+  the associated constraints of <code>T1</code> 
+  (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>). <code>T2</code> is said
+  to be the <dfn>canonical declaration</dfn> of all declarations that are 
+  equivalent to it according to the rules below.
 
-  <cxx-note><span class="nowrap">[ <em>Note:</em></span>
-     The following paragraphs describes how constrained template 
-  declarations can be equivalently written using alternative syntax in order 
-  to generate a canonical spelling of a template's associated constraints.
   <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
@@ -3836,24 +3916,17 @@ template&lt;C T&gt; void g(T);
 C{T} void g(T);
 template&lt;typename T&gt; requires C&lt;T&gt; void g(T);</code></pre>
   </cxx-codeblock>
-  The last declaration includes the canonical spelling of the associated 
-  constraints for all declarations of <code>g(T)</code> as the
-  <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> of its
-  <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>.
+  The last declaration is the canonical declaration of <code>g(T)</code>.
   
     <span class="nowrap">— <em>end example</em> ]</span>
   </cxx-example>
-  The paragraphs below define the rules that make these declarations
-  equivalent.
   
-    <span class="nowrap">— <em>end note</em> ]</span>
-  </cxx-note>
   </div>
 
   <p para_num="8" id="temp.8" class="quoted" number="8"> 
   When a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> is
   declared by a template introduction (<cxx-ref to="temp.intro"><a title="temp.intro" href="#temp.intro">14.2</a></cxx-ref>), 
-  it is equivalent to a
+  its canonical declaration is a
   <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> whose
   <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> is defined 
   according to the rules for introducing template parameters in
@@ -3874,7 +3947,7 @@ template&lt;typename T&gt; requires C&lt;T&gt; void g(T);</code></pre>
 
   If an introduced parameter declares a template parameter pack, the
   corresponding template argument in the <code>TT</code> is a pack
-  expansion (<cxx-ref to="temp.variadic"><a title="temp.variadic" href="#temp.variadic"></a></cxx-ref>).
+  expansion (<cxx-ref in="cxx" to="temp.variadic">C++ <span title="temp.variadic">§14.5.3</span></cxx-ref>).
   
   If <code>C</code> is a variable concept, then the
   <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is
@@ -3923,30 +3996,31 @@ template&lt;typename... Qs&gt;
 
   <!-- TODO: Update based on rewrite of temp.param -->
   <p para_num="9" id="temp.9" class="quoted">
-  When a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> (call it <code>T</code>) is
+  When a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> (call it <code>T1</code>) is
   explicitly declared with <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
-  that has constrained template parameters (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>), it
-  is equivalent to a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> (call it <code>E</code>)
+  that has constrained template parameters (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>), 
+  its canonical declaration is a 
+  <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> (call it <code>T2</code>)
   with the same template parameters,
   except that all constrained parameters are replaced by unconstrained
   parameters matching the corresponding prototype parameter designated
   by the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> 
   (<cxx-ref to="dcl.spec.constr"><a title="dcl.spec.constr" href="#dcl.spec.constr">7.1.6.5</a></cxx-ref>).
   
-  The declaration, <code>E</code>, has a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>
+  The declaration, <code>T2</code>, has a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>
   whose <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is the
-  conjunction of the constraints associated by the constrained template 
-  parameters in <code>T</code>.
+  conjunction of the <cxx-grammarterm><i>constraint-expressoin</i></cxx-grammarterm>s 
+  associated by the constrained template parameters in <code>T1</code>.
 
   The order in which the introduced constraints are evaluated is 
   the same as the order in which the constrained template 
   parameters are declared.
 
-  If the original declaration <code>T</code> includes a 
+  If the original declaration <code>T1</code> includes a 
   <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>, its
   <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is evaluated after 
   the constraints associated by the constrained template parameters in
-  <code>E</code>.
+  <code>T2</code>.
 
   <cxx-example class="inline">
     
@@ -4299,7 +4373,7 @@ template&lt;C2 X&gt; void f2();     // <i>OK:</i> X <i>is a template with one ty
 template&lt;C3 N&gt; void f3();     // <i>OK:</i> N <i>has type int</i>
 template&lt;C4... Ts&gt; void f4(); // <i>OK:</i> Ts <i>is a template parameter pack of types</i>
 template&lt;C4 Ts&gt; void f5();    // <i>error:</i> Ts <i>must be preceded by an ellipsis</i>
-template&lt;C5... Cx&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter pack of</i> char<i>s</i></code></pre>
+template&lt;C5... Cs&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter pack of</i> char<i>s</i></code></pre>
   </cxx-codeblock>
     
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -4324,8 +4398,7 @@ template&lt;C5... Cx&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter 
 
     Add this section after <cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>.
 
-    <p para_num="1" id="temp.intro.1">
-    A <dfn>template introduction</dfn> provides a convenient way of declaring
+    <p para_num="1" id="temp.intro.1"> A <dfn>template introduction</dfn> provides a convenient way of declaring
     different templates that have the same template parameters and constraints.
 
     <bnf-grammar>
@@ -4333,7 +4406,7 @@ template&lt;C5... Cx&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter 
     
       <bnf-rule>
     
-    introduction-clause:
+    template-introduction:
   </bnf-rule>
         <bnf-alt>
     
@@ -4376,18 +4449,19 @@ template&lt;C5... Cx&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter 
     its <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm>.
 
 
-    <!-- FIXME: Rewrite this -->
+    <!-- FIXME: This is grorss... -->
     </p><p para_num="2" id="temp.intro.2"> The concept designated by the <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>
     (call it <code>C</code>) is determined by the 
     <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm>.
 
-    The set of concept definitions named by <code>C</code> is called the
-    candidate concept set. A concept <code>CC</code> is viable if
-    <code>CC</code> declares at least as many template parameters as there are
-    <cxx-grammarterm><i>identifier</i></cxx-grammarterm>s in the 
-    <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm>, and
-    all excess template parameters are declared with default template 
-    arguments.
+    The <cxx-grammarterm><i>concept-name</i></cxx-grammarterm> <code>C</code> 
+    refers to a set of concept definitions. A concept <code>CC</code> in
+    that set is viable if <code>CC</code> declares at least as many template 
+    parameters as there are <cxx-grammarterm><i>identifier</i></cxx-grammarterm>s in 
+    the <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm>, and
+    all template parameters in excess of the number of 
+    <cxx-grammarterm><i>identifier</i></cxx-grammarterm>s are declared with default 
+    template arguments.
 
     If only one concept in that set is viable, that is the concept
     designated by <code>C</code>. Otherwise, the program is ill-formed.
@@ -4426,8 +4500,8 @@ C{X} void f(); // <i>error: resolution of</i> C{X} <i>is ambiguous</i></code></p
     and for its corresponding template parameter in the 
     <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
     of the designated concept (call it <code>P</code>), declare a new template 
-    parameter using the rules for declaring a constrained parameter
-    (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>) by using <code>I</code> as a
+    parameter using the rules for declaring a constrained parameter in
+    <cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref> by using <code>I</code> as a
     <cxx-grammarterm><i>declarator-id</i></cxx-grammarterm> and <code>P</code>
     as the prototype parameter.
 
@@ -4518,7 +4592,6 @@ Array&lt;double&gt; s2;    // <i>error:</i> Array <i>takes two template argument
   
     <p></p>
 
-    <!-- Necessary? I don't know -->
     <p para_num="6" id="temp.intro.6"> 
     <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
@@ -4572,7 +4645,7 @@ S&lt;bool&gt;* p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;*</code></
     The default argument for <code>U</code> is instantiated to form
     the type <code>S&lt;bool, int&gt;*</code>, but the definition of that
     class template specialization is not implicitly instantiated
-    (<cxx-ref in="cxx" to="temp.inst">C++ <span title="temp.inst">§14.7.1</span></cxx-ref>); it is not used in a 
+    (<cxx-ref to="temp.inst"><a title="temp.inst" href="#temp.inst">14.7.1</a></cxx-ref>); it is not used in a 
     context that requires a complete type.
     
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -4587,7 +4660,7 @@ S&lt;bool&gt;* p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;*</code></
     a constrained class template, variable template or alias template,
     and all <cxx-grammarterm><i>template-argument</i></cxx-grammarterm>s in the
     <cxx-grammarterm><i>template-id</i></cxx-grammarterm> are non-dependent,
-    (<cxx-ref to="temp.nondep"><a title="temp.nondep" href="#temp.nondep"></a></cxx-ref>), the associated constraints
+    (<cxx-ref in="cxx" to="temp.nondep">C++ <span title="temp.nondep">§14.6.2</span></cxx-ref>), the associated constraints
     are checked against those
     <cxx-grammarterm><i>template-argument</i></cxx-grammarterm>s
     (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>). If, as a result of checking,
@@ -4599,9 +4672,13 @@ S&lt;bool&gt;* p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;*</code></
     
     <cxx-codeblock>
     
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; requires false struct S { };
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename C&gt; = false;
 
-S&lt;int&gt;* p; // <i>error: constraints not satisfied</i>.</code></pre>
+template&lt;C T&gt; struct S { };
+template&lt; T&gt; using Ptr = T*;
+
+S&lt;int&gt;* p;  // <i>error: constraints not satisfied</i>
+Ptr&lt;int&gt; p; // <i>error: constraints not satisfied</i></code></pre>
   
     
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -4635,7 +4712,8 @@ S&lt;int&gt;* p; // <i>error: constraints not satisfied</i>.</code></pre>
       
 
       Modify paragraph 3 to include rules for matching constrained template 
-      template parameters. Note that the examples following this paragraph in
+      <cxx-grammarterm><i>template parameter</i></cxx-grammarterm>s. Note that the 
+      examples following this paragraph in
       the original document are omitted.
 
       <p para_num="3" id="temp.arg.template.3" number="3" class="quoted">
@@ -4647,9 +4725,9 @@ S&lt;int&gt;* p; // <i>error: constraints not satisfied</i>.</code></pre>
       corresponding class template or alias template (call it 
       <code>A</code>) matches the corresponding template parameter in 
       the <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> of 
-      <code>P</code><ins>, and the associated constraints of <code>P</code> 
-      subsume the associated constraints of <code>A</code>
-      (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>)</ins>.
+      <code>P</code><ins>, and <code>P</code> is more constrained than
+       <code>A</code> according to the rules in 
+       <cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref></ins>.
 
       Two template parameters match if they are of the same kind 
       (type, non-type, template), 
@@ -4812,7 +4890,7 @@ template&lt;C T&gt;
 template&lt;typename T&gt; 
   void S&lt;T&gt;::f() requires true { } // <i>OK</i>
 template&lt;typename T&gt; 
-  void S&lt;T&gt;::g()                   // <i>error: no matching function in</i> S&lt;T&gt;</code></pre>
+  void S&lt;T&gt;::g() { }               // <i>error: no matching function in</i> S&lt;T&gt;</code></pre>
   
         
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -4825,6 +4903,9 @@ template&lt;typename T&gt;
     </section>
   </cxx-section> <!-- temp.class -->
 
+    <!-- ================
+         Member templates
+         ================ -->
 
     <cxx-section id="temp.mem">
     
@@ -4871,9 +4952,9 @@ template&lt;C1 T&gt;
   };
 
 template&lt;C1 T&gt; template&lt;C2 U&gt; 
-  void S&lt;T&gt;::f(U); // <i>OK</i>
+  void S&lt;T&gt;::f(U) { } // <i>OK</i>
 template&lt;C1 T&gt; template&lt;typename U&gt; 
-  void S&lt;T&gt;::g(U); // <i>error: definition does not match</i></code></pre>
+  void S&lt;T&gt;::g(U) { } // <i>error: no matching function in</i> S&lt;T&gt;</code></pre>
   
       The associated constraints in the definition of <code>g()</code> do not
       match those in of its declaration.
@@ -4910,14 +4991,13 @@ template&lt;C1 T&gt; template&lt;typename U&gt;
       <li> if the friend declares, but does not define, a non-template
       function to be a friend of a class template, the associated constraints
       of that friend function declaration shall be non-dependent
-      (<cxx-ref to="temp.nondep"><a title="temp.nondep" href="#temp.nondep"></a></cxx-ref>); </li>
+      (<cxx-ref in="cxx" to="temp.nondep">C++ <span title="temp.nondep">§14.6.2</span></cxx-ref>); </li>
 
       <li> if the friend declares a function template specialization to
       be a friend of a class template, the declaration shall not have
       associated constraints, and the template arguments of that specialization
       shall satisfy the associated constraints of the template referred to
-      by the friend declarations 
-      (<cxx-ref to="temp.deduct.decl"><a title="temp.deduct.decl" href="#temp.deduct.decl">14.8.2.6</a></cxx-ref>). </li>
+      by the friend declaration (<cxx-ref to="temp.deduct.decl"><a title="temp.deduct.decl" href="#temp.deduct.decl">14.8.2.6</a></cxx-ref>). </li>
       </ul>
 
       <cxx-example class="inline">
@@ -4949,8 +5029,7 @@ template&lt;typename T&gt;
       <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
       Within a class template, a friend may define a non-template function
-      whose constraints specify requirements on the template arguments of
-      that class.
+      whose constraints specify requirements on template arguments.
       <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
@@ -5020,7 +5099,7 @@ template&lt;C T, N I&gt;        class A&lt;int, T*, I&gt;; // <i>#7</i></code></
 
       Modify the 3rd item in the list of paragraph 8 to allow 
       constrained class template partial specializations like #6.
-      Note that all other items in that list are elided.
+      Note that all other items in that list are elided. 
 
       <p para_num="8" id="temp.class.spec.8" number="8" class="quoted">
       Within the argument list of a class template partial specialization, 
@@ -5032,7 +5111,6 @@ template&lt;C T, N I&gt;        class A&lt;int, T*, I&gt;; // <i>#7</i></code></
       not be identical to the implicit argument list of the primary template.
       </li><li>...</li>
       </ul>
-      <p para_num="9" id="temp.class.spec.9"></p>
 
 
       <cxx-section id="temp.class.spec.match">
@@ -5185,8 +5263,8 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i></code></pre>
              the rules described above to compare expressions involving 
              template parameters, and</li>
         <li> have associated constraints that are equivalent using the rules 
-             described in <cxx-ref to="temp.constr.eq"><a title="temp.constr.eq" href="#temp.constr.eq"></a></cxx-ref> to
-             compare constraints.</li>
+             in <cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref> to
+             compare <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s.</li>
         </ul>
         </ins>
         </div>
@@ -5204,10 +5282,10 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i></code></pre>
         the rules described above to compare expressions involving template 
         parameters, or if not that, </li>
 
-        <li> the two function templates have constraints that are
-        functionally equivalent but not equivalent, using the rules described
-        in <cxx-ref to="temp.constr.eq"><a title="temp.constr.eq" href="#temp.constr.eq"></a></cxx-ref> to describe the comparison
-        of constraints.</li>
+        <li> both function templates have associated constraints that are
+        functionally equivalent but not equivalent, using the rules in 
+        <cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref> to compare 
+        <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s.</li>
         </ul>
         </ins>
         If a program contains declarations of function templates that are 
@@ -5251,52 +5329,10 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i></code></pre>
       
     </section>
   </cxx-section> <!-- temp.func.order -->
+
     
     </section>
   </cxx-section> <!-- temp.fct -->
-
-
-  <!-- ===============
-       Alias templates
-       =============== -->
-
-    <cxx-section number="7" id="temp.alias">
-    
-
-    <section>
-      <header><span class="section-number">14.5.7</span> <h1 data-bookmark-label="14.5.7 Alias templates">Alias templates</h1> <span style="float:right"><a href="#temp.alias">[temp.alias]</a></span></header>
-      
-      
-
-      Insert the following after paragraph 2.
-
-      <p para_num="3" id="temp.alias.3" number="3" class="quoted">
-      If the alias template is constrained, and all template arguments
-      are non-dependent, the <cxx-grammarterm><i>template-argument</i></cxx-grammarterm>s
-      shall satisfy the template's associated constraints 
-      (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>).
-
-      <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
-      <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></p><pre><code>template<typename c=""> = false;
-
-template<c t=""> using Ptr = T*;
-
-Ptr<int> p; // error: constraints not satisfied.
-      </int></c></typename></code></pre>
-  
-      
-    <span class="nowrap">— <em>end example</em> ]</span>
-  
-      <p></p>
-
-    
-    </section>
-  </cxx-section>
 
   
     </section>
@@ -5345,6 +5381,7 @@ Ptr<int> p; // error: constraints not satisfied.
       
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
+
       <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
@@ -5361,6 +5398,7 @@ template&lt;typename T&gt; struct S {
 
 S&lt;char&gt; s1;    // <i>error: no matching constructor</i>
 S&lt;char[8]&gt; s2; // <i>OK: calls #2</i>
+
       </t></code></pre>
   
       The instantiation of <code>S&lt;char&gt;</code> produces a class
@@ -5373,13 +5411,17 @@ S&lt;char[8]&gt; s2; // <i>OK: calls #2</i>
       has the effect of suppressing the implicit generation of a default 
       constructor (<cxx-ref in="cxx" to="class.ctor">C++ <span title="class.ctor">§12.1</span></cxx-ref>).
 
-      The default constructor invoked by the declaration of <code>s2</code>
-      is the more constrained because the constraint
-      <code>D&lt;char[8]&gt;</code> subsumes <code>C&lt;char[8]&gt;</code>.
+      <cxx-codeblock>
+    
+    <pre><code>template&lt;typename T&gt; struct S2 {
+    void f() requires T::value == 1;
+  };
+
+S2&lt;int&gt; s; // <i>error: substitution failure in definition of</i> S2&lt;int&gt;</code></pre>
+  </cxx-codeblock>
       
     <span class="nowrap">— <em>end example</em> ]</span>
   
-      
       <p></p>
 
     
@@ -5507,7 +5549,7 @@ template&lt;&gt; S&lt;char[2]&gt; { }; // <i>error: constraints not satisfied</i
       (<cxx-ref to="temp.deduct.decl"><a title="temp.deduct.decl" href="#temp.deduct.decl">14.8.2.6</a></cxx-ref>),
       the associated constraints of that template (if any) shall be satisfied 
       (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>) by the
-      template arguments of the explicit specialization. </p>
+      template arguments of the explicit specialization.
 
       <cxx-example class="inline">
     
@@ -5515,7 +5557,7 @@ template&lt;&gt; S&lt;char[2]&gt; { }; // <i>error: constraints not satisfied</i
     
       <cxx-codeblock>
     
-    <pre><code>template&lt;C T&gt;        void f(T); // <i>#1</i>
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;C T&gt;        void f(T); // <i>#1</i>
 template&lt;typename T&gt; void g(T); // <i>#2</i>
 template&lt;C T&gt;        void g(T); // <i>#3</i>
 
@@ -5523,11 +5565,11 @@ template&lt;&gt; void f(int);   // <i>OK: refers to #1</i>
 template&lt;&gt; void f(void*); // <i>error: no matching template</i>
 template&lt;&gt; void g(int);   // <i>OK: refers to #3</i>
 template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
-  </cxx-codeblock>
+  
       
     <span class="nowrap">— <em>end example</em> ]</span>
-  </cxx-example>
-      <p para_num="14" id="temp.expl.spec.14"></p>
+  
+      <p></p>
 
     
     </section>
@@ -5574,9 +5616,10 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
       <ins>
       If the function template has associated constraints
       (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>),
-      substitute the template arguments into the constraints without evaluating
-      the result. If this substitution results in an invalid type, then
-      the resulting expression is defined to be <code>false</code>.
+      the template arguments are substituted into the constraints without 
+      evaluating the resulting expression. If this substitution results in an 
+      invalid type, then the resulting expression is defined to be 
+      <code>false</code>.
 
       The resulting constraints are associated with the function template
       specialization.
@@ -5648,7 +5691,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
       
     
 
-    Add this following section after 14.8.
+    Add this section after 14.8.
 
     <p para_num="1" id="temp.constr.1">
     <cxx-note><span class="nowrap">[ <em>Note:</em></span>
@@ -5656,14 +5699,15 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
     The defines the meaning of constraints on template arguments, including
     the translation of <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s
     into constraints by normalization (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>),
-    and the abstract syntax, satisfaction, and subsumption of those constraints.
+    and the abstract syntax, satisfaction, and subsumption of those constraints
+    (<cxx-ref to="temp.constr.op"><a title="temp.constr.op" href="#temp.constr.op">14.9.1</a></cxx-ref>, <cxx-ref to="temp.constr.atom"><a title="temp.constr.atom" href="#temp.constr.atom">14.9.2</a></cxx-ref>).
     
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
     </p>
 
     <p para_num="2" id="temp.constr.2"> A <dfn>constraint</dfn> is a sequence of logical operators and 
-    operands that specify requirements on template arguments. </p>
+    operands that specifies requirements on template arguments. </p>
 
     <p para_num="3" id="temp.constr.3">
     <dfn>Constraint checking</dfn> is the processing of substituting 
@@ -5673,7 +5717,9 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
 
     After substitution, a constraint is <dfn>satisfied</dfn> if and only if 
     all of its sub-constraints are satisfied according to the evaluation 
-    rules described in this section.
+    rules described in
+    <cxx-ref to="temp.constr.op"><a title="temp.constr.op" href="#temp.constr.op">14.9.1</a></cxx-ref> and
+    <cxx-ref to="temp.constr.atom"><a title="temp.constr.atom" href="#temp.constr.atom">14.9.2</a></cxx-ref>.
 
     If the substitution of template arguments into a constraint fails, 
     that constraint is not satisfied.
@@ -5703,6 +5749,10 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
     
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
+    The rules defining the subsumption relation are given for each kind
+    of constraint in
+    <cxx-ref to="temp.constr.op"><a title="temp.constr.op" href="#temp.constr.op">14.9.1</a></cxx-ref> and
+    <cxx-ref to="temp.constr.atom"><a title="temp.constr.atom" href="#temp.constr.atom">14.9.2</a></cxx-ref>.
     </p>
 
     <cxx-section id="temp.constr.op">
@@ -5821,8 +5871,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
           Predicate constraints allow the definition of template requirements
           in terms of constant expressions. This enables constraints on non-type
           arguments, template template arguments, and also the definition of
-          constraints as metaprograms on type arguments and template argument 
-          packs.
+          constraints as metaprograms on template arguments.
           
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
@@ -5848,7 +5897,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
           <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s
           (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>).
 
-          <cxx-example>
+          <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
     
@@ -5878,13 +5927,14 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
           
 
           <p para_num="1" id="temp.constr.atom.expr.1"> An <dfn>expression constraint</dfn> is an atomic constraint
-          that specifies a requirement the formation of a an
-          <cxx-grammarterm><i>expression</i></cxx-grammarterm>, <code>E</code>. 
+          that specifies a requirement on the formation of an
+          <cxx-grammarterm><i>expression</i></cxx-grammarterm> (call it <code>E</code>)
+          through substitution of template arguments.
 
-          It is satisfied if <code>E</code> is non-dependent, meaning that 
-          the substitution yielding <code>E</code> did not fail. Within an 
-          expression constraint, <code>E</code> is an unevaluated operand 
-          (<cxx-ref to="expr"><a title="expr" href="#expr">5</a></cxx-ref>).
+          An expression constraint is satisfied if <code>E</code> is non-dependent, 
+          meaning that the substitution yielding <code>E</code> did not fail. 
+          Within an expression constraint, <code>E</code> is an unevaluated 
+          operand (<cxx-ref to="expr"><a title="expr" href="#expr">5</a></cxx-ref>).
 
           <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
@@ -5901,11 +5951,11 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
 
-          <cxx-example example="inline">
+          <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
     
-          The concept <code>C</code> introduces a expression constraint for 
+          The concept <code>C</code> introduces an expression constraint for 
           the expression <code>++t</code>.
           <cxx-codeblock>
     
@@ -5921,7 +5971,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
 
           <p para_num="2" id="temp.constr.atom.expr.2"> An expression constraint <code>P</code> subsumes another
           expression constraint <code>Q</code> if and only if
-          The <cxx-grammarterm><i>expression</i></cxx-grammarterm>s of <code>P</code>
+          the <cxx-grammarterm><i>expression</i></cxx-grammarterm>s of <code>P</code>
           and <code>Q</code> are equivalent 
           (<cxx-ref to="temp.over.link"><a title="temp.over.link" href="#temp.over.link">14.5.6.1</a></cxx-ref>). </p>
 
@@ -5930,9 +5980,9 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
   </cxx-section> <!-- temp.constr.atom.expr -->
 
 
-        <!-- ======================
-             Expression constraints
-             ====================== -->
+        <!-- ================
+             Type constraints
+             ================ -->
 
         <cxx-section id="temp.constr.atom.type">
     
@@ -5944,14 +5994,17 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
 
           <p para_num="1" id="temp.constr.atom.type.1"> A <dfn>type constraint</dfn> is an atomic constraint that
           specifies a requirement on the formation 
-          of a type, <code>T</code>. It is satisfied if and only 
+          of a type (call it <code>T</code>) through the substitution of
+          template arguments
+
+          A type constraint is satisfied if and only 
           <code>T</code> is non-dependent, meaning that the substitution 
           yielding <code>T</code> did not fail.
 
           <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
           A type constraint is introduced by the 
-          <cxx-grammarterm><i>type-id</i></cxx-grammarterm> in a
+          <cxx-grammarterm><i>typename-specifier</i></cxx-grammarterm> in a
           <cxx-grammarterm><i>type-requirement</i></cxx-grammarterm> of a
           <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>
           (<cxx-ref to="expr.prim.req.type"><a title="expr.prim.req.type" href="#expr.prim.req.type">5.1.3.2</a></cxx-ref>).
@@ -5974,16 +6027,15 @@ requires (T t) {
   
           The type <code>int</code> does not satisfies this constraint 
           because substitution of that type into the constraint results in a
-          substitution failure because <code>int::type</code> is ill-formed.
+          substitution failure; <code>int::type</code> is ill-formed.
           
     <span class="nowrap">— <em>end example</em> ]</span>
   
           <p></p>
 
           <p para_num="2" id="temp.constr.atom.type.2"> A type requirement that names a class template specialization 
-          does not require the completeness of that type; class templates 
-          are not instantiated when the constraint is checked
-          (<cxx-ref to="temp.inst"><a title="temp.inst" href="#temp.inst">14.7.1</a></cxx-ref>). </p>
+          does not require that type to be complete 
+          (<cxx-ref in="cxx" to="basic.types">C++ <span title="basic.types">§3.9</span></cxx-ref>). </p>
 
           <p para_num="3" id="temp.constr.atom.type.3"> A type requirement <code>P</code> subsumes another type
           requirement <code>Q</code> if and only if the types in <code>P</code>
@@ -6020,15 +6072,14 @@ requires (T t) {
     
           A conversion constraint is introduced by a
           <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> in a
-          <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> when the
-          <cxx-grammarterm><i>trailing-type-specifier-seq</i></cxx-grammarterm>
-          contains no placeholders
+          <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> when
+          its type contains no placeholders
           (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>).
           
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
 
-          <cxx-example>
+          <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
     
@@ -6042,8 +6093,8 @@ requires (T a, T b) {
           The <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> in the
           <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> of <code>C</code>
           introduces two atomic constraints: an expression constraint
-          for <code>a == b</code> and the conversion constraint that the
-          expression <code>a == b</code> is implicitly convertible to 
+          for <code>a == b</code> and the implicit conversion constraint that 
+          the expression <code>a == b</code> is implicitly convertible to
           <code>bool</code>.
           
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -6055,7 +6106,7 @@ requires (T a, T b) {
           T1 is convertible to T2. -->
 
           <p para_num="2" id="temp.constr.atom.conv.2"> An implicit conversion constraint <code>P</code> subsumes 
-          another conversion constraint <code>Q</code> if and only if
+          another implicit conversion constraint <code>Q</code> if and only if
           the <cxx-grammarterm><i>expression</i></cxx-grammarterm>s of 
           <code>P</code> and <code>Q</code> are equivalent
           (<cxx-ref to="temp.over.link"><a title="temp.over.link" href="#temp.over.link">14.5.6.1</a></cxx-ref>) and the types
@@ -6085,7 +6136,7 @@ requires (T a, T b) {
           (call it <code>E</code>) as an argument to an invented 
           function template (call it <code>F</code>) that has a single 
           parameter whose type (call it <code>T</code>) is
-          written in terms of the function's template parameters.
+          written in terms of <code>F</code>'s template parameters.
 
           The constraint is satisfied if and only if <code>F</code>
           is selected by overload resolution for the call <code>F(E)</code>
@@ -6285,14 +6336,12 @@ requires() {
            (<cxx-ref to="over.match.best"><a title="over.match.best" href="#over.match.best">13.3.2</a></cxx-ref>), </li>
       <li> the address of a non-template function
            (<cxx-ref to="over.over"><a title="over.over" href="#over.over">13.4</a></cxx-ref>), </li>
-      <li> to determine which of a set of non-template functions are defined
-           (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>), </li>
+      <li> the matching of template template arguments
+           (<cxx-ref to="temp.arg.template"><a title="temp.arg.template" href="#temp.arg.template">14.4.1</a></cxx-ref>).</li>
       <li> the partial ordering of class template specializations
            (<cxx-ref to="temp.class.order"><a title="temp.class.order" href="#temp.class.order">14.5.5.2</a></cxx-ref>), </li>
       <li> the partial ordering of function templates
            (<cxx-ref to="temp.func.order"><a title="temp.func.order" href="#temp.func.order">14.5.6.2</a></cxx-ref>), and </li>
-      <li> the matching of template template arguments
-           (<cxx-ref to="temp.arg.template"><a title="temp.arg.template" href="#temp.arg.template">14.4.1</a></cxx-ref>).</li>
       </ul>
 
       <p para_num="2" id="temp.constr.order.2"> When two declarations <code>D1</code> and <code>D2</code> are
@@ -6301,7 +6350,7 @@ requires() {
 
       </p><ul>
       <li> <code>D1</code> and <code>D2</code> are both constrained
-      declarations and <code>D1</code>'s associated constraints subsume, but 
+      declarations and <code>D1</code>'s associated constraints subsume but 
       are not subsumed by those of <code>D2</code>, or if not that, </li>
 
       <li> <code>D1</code> is constrained and <code>D2</code> is
@@ -6319,13 +6368,14 @@ template&lt;typename T&gt; concept bool C2 = C1&lt;T&gt; &amp;&amp; requires(T t
 
 template&lt;C1 T&gt; void f(T);       // <i>#1</i>
 template&lt;C2 T&gt; void f(T);       // <i>#2</i>
+template&lt;typename T&gt; void g(T); // <i>#3</i>
+template&lt;C1 T&gt; void g();        // <i>#4</i>
 
-f(0);       // selects #1
-f((int*)0); // selects #2</code></pre>
+f(0);       // <i>selects #1</i>
+f((int*)0); // <i>selects #2</i>
+g(true);    // <i>selects #3 because</i> C1&lt;bool&gt; <i>is not satisfied</i>
+g(0);       // <i>selects #4</i></code></pre>
   </cxx-codeblock>
-      When both candidates are viable, overload resolution will selects #1 
-      because the constraints of <code>C2</code> subsumes those of
-      <code>C1</code>, 
       
     <span class="nowrap">— <em>end example</em> ]</span>
   </cxx-example>
@@ -6438,7 +6488,7 @@ f((int*)0); // selects #2</code></pre>
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
 
-      <cxx-example>
+      <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
     
@@ -6448,16 +6498,24 @@ f((int*)0); // selects #2</code></pre>
 template&lt;typename T&gt; concept bool C2 = C1&lt;T&gt;() &amp;&amp; 1 == 2; }
 template&lt;typename T&gt; concept bool C3 = requires () { typename T::type; };
 
-// <i>Expression</i>      // <i>Constraint</i>
-C2&lt;char&gt;           sizeof(char) == 1 &amp;&amp; 1 == 2
-C3&lt;int&gt;            /* <i>valid-type for</i> int::type */
-3 + 4              // <i>error: not a constraint</i></code></pre>
+// <i>Expression</i>      // <i>Constraints</i>
+C2&lt;char&gt;           sizeof(char) == 1 /* <i>and</i> */ 1 == 2
+C3&lt;int&gt;            /* <i>type constraint for</i> int::type */
+3 + 4              // <i>error: not a constraint</i>
+(bool)(3 + 4)      (bool)(3 + 4)</code></pre>
   </cxx-codeblock>
       In the normalized constraints, the expressions <code>sizeof(char) == 1</code>, 
-      and <code>1 == 2</code> are predicate constraints. The concept
-      <code>C4</code> is normalized to a single type constraint
+      <code>1 == 2</code>, and <code>(bool)(3 + 4)</code> are predicate 
+      constraints (<cxx-ref to="temp.constr.atom.pred"><a title="temp.constr.atom.pred" href="#temp.constr.atom.pred">14.9.2.1</a></cxx-ref>). 
+
+      The concept <code>C4</code> is normalized to a single type constraint
       (<cxx-ref to="temp.constr.atom.type"><a title="temp.constr.atom.type" href="#temp.constr.atom.type">14.9.2.3</a></cxx-ref>) for the (ill-formed) 
       type <code>int::type</code>.
+
+      The expression <code>3 + 4</code> is not a 
+      <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> because it does
+      not satisfy the requirements for being normalized into a predicate 
+      constraint.
       
     <span class="nowrap">— <em>end example</em> ]</span>
   </cxx-example>
@@ -6469,7 +6527,7 @@ C3&lt;int&gt;            /* <i>valid-type for</i> int::type */
       <p para_num="3" id="temp.constr.expr.3"> Two <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s are 
       considered equivalent if two function definitions containing the 
       expressions would satisfy the one definition rule 
-      (<cxx-ref to="basic.def.odr"><a title="basic.def.odr" href="#basic.def.odr"></a></cxx-ref>), except that
+      (<cxx-ref in="cxx" to="basic.def.odr">C++ <span title="basic.def.odr">§3.2</span></cxx-ref>), except that
       the tokens used to name template parameters may differ as long as a 
       token used to name a template parameter in one expression is replaced by 
       another token that names the same template parameter in the other 
@@ -6503,7 +6561,8 @@ template&lt;typename T&gt; requires C2&lt;T&gt; void h();     // <i>OK: redeclar
 
       Two <cxx-grammarterm><i>constraint-expressions</i></cxx-grammarterm> that are not 
       equivalent are functionally equivalent if, for any given set of template 
-      arguments, the evaluation of the expression results in the same value.
+      arguments, the satisfaction of their normalized constraints yields the
+      same result.
 
       A <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> or
       subexpression thereof of the form <code>(E)</code> is not equivalent to

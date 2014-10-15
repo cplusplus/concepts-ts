@@ -2,11 +2,15 @@
 <cxx-clause id="class" number="9">
   <h1>Classes</h1>
 
+  <!-- =============
+       Class members
+       ============= -->
+
   <cxx-section id="class.mem" number="2">
     <h1>Class members</h1>
 
-    In <cxx-ref in="cxx" to="class.mem"></cxx-ref>, modify the
-    <cxx-grammarterm>member-declarator</cxx-grammarterm> syntax.
+    Modify the grammar in 9.2 to allow a 
+    <cxx-grammarterm>requires-clause</cxx-grammarterm> for member declarations.
 
     <p class="quoted">
     <bnf-grammar>
@@ -20,7 +24,10 @@
     </bnf-grammar>
     </p>
 
-    Insert the following paragraphs after <cxx-ref in="cxx" to="class.mem"></cxx-ref>/8.
+    Insert the following after paragraph 8, explaining where a
+    <cxx-grammarterm>requires-clause</cxx-grammarterm> can appear
+    and that its <cxx-grammarterm>constraint-expression</cxx-grammarterm>
+    can refer to parameters.
 
     <p class="quoted" number="9">
     A <cxx-grammarterm>requires-clause</cxx-grammarterm> shall only appear
