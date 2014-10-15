@@ -282,7 +282,7 @@ template&lt;typename T&gt; concept bool C =
       the program is ill-formed.
       <cxx-example class="inline">
       <cxx-codeblock>
-template&lt;typenamne T&gt; concept bool C =
+template&lt;typename T&gt; concept bool C =
   requires () {
     new T[-1];  // <i>error: the expression will never be well-formed</i>
   };
@@ -419,7 +419,7 @@ template&lt;typename T&gt; concept bool C =
       <cxx-codeblock>
 template&lt;typename I&gt; concept bool C() { return true; }
 
-template&lt;typename D&gt; concept bool D = s
+template&lt;typename D&gt; concept bool D =
   requires(T x) {
     {x++};                     // <i>#1</i>
     {*x} -> typename T::inner; // <i>#2</i>
@@ -444,7 +444,7 @@ template&lt;typename D&gt; concept bool D = s
       Requirement #3 also introduces two constraints: an
       expression constraint for <code>f(x)</code>, and a deduction
       constraint requiring that overload resolution succeeds for the
-      call <code>i(f(x))</code> where <code>g</code> is the following
+      call <code>i(f(x))</code> where <code>i</code> is the following
       invented function template.
       <cxx-codeblock>
 template&lt;typename T&gt; requires C&lt;T&gt;() void i(const T&amp;);

@@ -82,7 +82,7 @@
   the associated constraints of <code>T</code> 
   (<cxx-ref to="temp.constr.expr"></cxx-ref>).
 
-  <cxx-note> The following paragraphs describes how constrained template 
+  <cxx-note> The following paragraphs describe how constrained template 
   declarations can be equivalently written using alternative syntax in order 
   to generate a canonical spelling of a template's associated constraints.
   <cxx-example class="inline">
@@ -100,8 +100,6 @@ template&lt;typename T&gt; requires C&lt;T&gt; void g(T);
   <cxx-grammarterm>constraint-expression</cxx-grammarterm> of its
   <cxx-grammarterm>requires-clause</cxx-grammarterm>.
   </cxx-example>
-  The paragraphs below define the rules that make these declarations
-  equivalent.
   </cxx-note>
   </div>
 
@@ -165,7 +163,7 @@ template&lt;class P&gt;
 
 template&lt;typename... Qs&gt;
   requires C4&lt;Qs...&gt;      // <i>constraint associated by</i> C4{...Qs}
-    void void g(Qs&amp;&amp;...); // <i>OK: redeclaration of</i> g(Qs&amp;&amp;...)
+    void g(Qs&amp;&amp;...); // <i>OK: redeclaration of</i> g(Qs&amp;&amp;...)
   </cxx-codeblock>
   </cxx-example>
   </p>
@@ -1090,8 +1088,8 @@ A&lt;int, S*, 3&gt; a8; // <i>uses #7</i>
         </ul>
         <cxx-example class="inline">
         <cxx-codeblock>
-template&ltl;typename T&gt; concept bool C = requires (T t) { t.f(); };
-template&ltl;typename T&gt; concept bool D = C&ltl;T&gt; &amp;&amp; requires (T t) { t.f(); };
+template&lt;typename T&gt; concept bool C = requires (T t) { t.f(); };
+template&lt;typename T&gt; concept bool D = C&lt;T&gt; &amp;&amp; requires (T t) { t.f(); };
 
 
 template&lt;typename T&gt; class S { };
@@ -1219,11 +1217,11 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
 
       <cxx-example class="inline">
       <cxx-codeblock>
-template<typename C> = false;
+template&lt;typename C&gt; = false;
 
-template<C T> using Ptr = T*;
+template&lt;C T&gt; using Ptr = T*;
 
-Ptr<int> p; // error: constraints not satisfied.
+Ptr&lt;int&gt; p; // error: constraints not satisfied.
       </cxx-codeblock>
       </cxx-example>
       </p>
@@ -1489,7 +1487,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
 
     <p>
     <cxx-note>
-    The defines the meaning of constraints on template arguments, including
+    This defines the meaning of constraints on template arguments, including
     the translation of <cxx-grammarterm>constraint-expression</cxx-grammarterm>s
     into constraints by normalization (<cxx-ref to="temp.constr.expr"></cxx-ref>),
     and the abstract syntax, satisfaction, and subsumption of those constraints.
@@ -1654,7 +1652,7 @@ template&lt;typename T&gt; concept bool C = sizeof(T) == 4 &amp;&amp; !true;
           <h1>Expression constraints</h1>
 
           <p> An <dfn>expression constraint</dfn> is an atomic constraint
-          that specifies a requirement the formation of a an
+          that specifies a requirement on the formation of an
           <cxx-grammarterm>expression</cxx-grammarterm>, <code>E</code>. 
 
           It is satisfied if <code>E</code> is non-dependent, meaning that 
@@ -2093,7 +2091,7 @@ f((int*)0); // selects #2
       <cxx-example>
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C1() { return sizeof(T) == 1; }
-template&lt;typename T&gt; concept bool C2 = C1&lt;T&gt;() &amp;&amp; 1 == 2; }
+template&lt;typename T&gt; concept bool C2 = C1&lt;T&gt;() &amp;&amp; 1 == 2;
 template&lt;typename T&gt; concept bool C3 = requires () { typename T::type; };
 
 // <i>Expression</i>      // <i>Constraint</i>
@@ -2103,7 +2101,7 @@ C3&lt;int&gt;            /* <i>valid-type for</i> int::type */
       </cxx-codeblock>
       In the normalized constraints, the expressions <code>sizeof(char) == 1</code>, 
       and <code>1 == 2</code> are predicate constraints. The concept
-      <code>C4</code> is normalized to a single type constraint
+      <code>C3</code> is normalized to a single type constraint
       (<cxx-ref to="temp.constr.atom.type"></cxx-ref>) for the (ill-formed) 
       type <code>int::type</code>.
       </cxx-example>

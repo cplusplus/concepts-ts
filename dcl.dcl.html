@@ -79,7 +79,7 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce valu
         </cxx-example>
         </p>
 
-        Modfify paragraph 2, allowing multiple occurrences of <code>auto</code>
+        Modify paragraph 2, allowing multiple occurrences of <code>auto</code>
         in those contexts where it is valid.
 
         <p number="2" class="quoted">
@@ -274,7 +274,7 @@ template&lt;typename T&gt; concept bool C() {
         <cxx-example class="inline">
         <cxx-codeblock>
 <ins>template&lt;typename T&gt; struct Vec { };
-template&lt;typename T&gt; Vec&lt;T&gt; make_vec(std::initalizer_list&lt;T&gt;) { return Vec&lt;T&gt;{}; } </ins>
+template&lt;typename T&gt; Vec&lt;T&gt; make_vec(std::initializer_list&lt;T&gt;) { return Vec&lt;T&gt;{}; } </ins>
 
 auto x1 = { 1, 2 };                 // <ins><i>OK:</i></ins> decltype(x1) <i>is</i> std::initializer_list&lt;int&gt;
 auto x2 = { 1, 2.0 };               // <i>error: cannot deduce element type</i> <ins>
@@ -586,7 +586,7 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
 
         When a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
         is used in a <cxx-grammarterm>template-parameter</cxx-grammarterm>,
-        the constrained it associated with the 
+        the constraint is associated with the 
         <cxx-grammarter>template-declaration</cxx-grammarter> in which the
         <cxx-grammarterm>template-parameter</cxx-grammarterm> is declared.
         </p>
@@ -614,7 +614,7 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
         of a <cxx-grammarterm>compound-requirement</cxx-grammarterm>,
         <code>A</code> is the type deduced for that
         <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
-        from the expression <cxx-grammarterm>expression</cxx-grammarterm> in the
+        from the <cxx-grammarterm>expression</cxx-grammarterm> in the
         requirement (<cxx-ref to="expr.prim.req"></cxx-ref>);</li>
 
         <li> when the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
