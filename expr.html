@@ -492,12 +492,11 @@ template&lt;typename T&gt; concept bool C() { return sizeof(T) == 1; }
 
 template&lt;typename T&gt; concept bool D =
   requires () {
-    typename X&lt;T&gt;;
-    requires C&lt;X&lt;T&gt;&gt;();
+    requires C&lt;typename T::type&gt;();
   };
       </cxx-codeblock>
       The <cxx-grammarterm>nested-requirement</cxx-grammarterm> appends
-      the predicate constraint <code>sizeof(T) == 1</code>
+      the predicate constraint <code>sizeof(typename T::type) == 1</code>
       (<cxx-ref to="temp.constr.atom.pred"></cxx-ref>).
       </cxx-example>
     </cxx-section> <!-- expr.prim.req.nested -->
