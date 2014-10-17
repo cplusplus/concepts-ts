@@ -327,8 +327,8 @@ template&lt;typename T&gt; using Ref = T&amp;;
 template&lt;typename T&gt; concept bool C =
   requires () {
     typename T::inner; // <i>required nested type name</i>
-    template S&lt;T&gt;;   // <i>required class template specialization</i>
-    typename Ref&lt;T&gt;; // <i>required alias template substitution</i>
+    template S&lt;T&gt;;     // <i>required class template specialization</i>
+    typename Ref&lt;T&gt;;   // <i>required alias template substitution</i>
   };
       </cxx-codeblock>
       </cxx-example>
