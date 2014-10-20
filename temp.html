@@ -1091,8 +1091,8 @@ A&lt;int, S*, 3&gt; a8; // <i>uses #7</i>
         </ul>
         <cxx-example class="inline">
         <cxx-codeblock>
-template&ltl;typename T&gt; concept bool C = requires (T t) { t.f(); };
-template&ltl;typename T&gt; concept bool D = C&ltl;T&gt; &amp;&amp; requires (T t) { t.f(); };
+template&lt;typename T&gt; concept bool C = requires (T t) { t.f(); };
+template&lt;typename T&gt; concept bool D = C&lt;T&gt; &amp;&amp; requires (T t) { t.f(); };
 
 
 template&lt;typename T&gt; class S { };
