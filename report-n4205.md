@@ -207,8 +207,7 @@ a type requirement.
 
 - [dcl.spec.auto] As per discussion in Rapperswil, expanded this section to 
 accommodate the use of `auto` in the type of a parameter. These modifications
-also allow multiple occurrences of `auto` in a single declaration. 
-See [Errata](/variadic placeholders/).
+also allow multiple occurrences of `auto` in a single declaration.
 
 - [dcl.spec.constr] Update the introduction paragraphs to link the use
 of a *constrained-type-specifier* to the `auto` specifier. They can appear
@@ -218,8 +217,7 @@ in some of the same contexts.
 of a *concept-name* and the synthesis of the associated constraint
 expression. In particular, the associated constraint now describes cases
 where either the *constrained-type-specifier* is followed by `...`, or the 
-designated concept is variadic. See [Errata](/concept resolution) for more 
-information.
+designated concept is variadic.
 
 - [dcl.spec.concept] Concepts shall only be defined at namespace scope.
 
