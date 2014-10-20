@@ -159,8 +159,8 @@ template&lt;class P&gt;
     void f(P);   // <i>OK: redeclaration of</i> f(P)
 
 template&lt;typename... Qs&gt;
-  requires C4&lt;Qs...&gt;      // <i>constraint associated by</i> C4{...Qs}
-    void void g(Qs&amp;&amp;...); // <i>OK: redeclaration of</i> g(Qs&amp;&amp;...)
+  requires C4&lt;Qs...&gt; // <i>constraint associated by</i> C4{...Qs}
+    void g(Qs&amp;&amp;...); // <i>OK: redeclaration of</i> g(Qs&amp;&amp;...)
   </cxx-codeblock>
   </cxx-example>
   </p>
