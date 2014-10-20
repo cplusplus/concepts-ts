@@ -1555,7 +1555,7 @@ introduces the <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>.
     
       <cxx-codeblock>
     
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typenamne T&gt; concept bool C =
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C =
   requires () {
     new T[-1];  // <i>error: the expression will never be well-formed</i>
   };</code></pre>
@@ -1625,8 +1625,8 @@ template&lt;typename T&gt; using Ref = T&amp;;
 template&lt;typename T&gt; concept bool C =
   requires () {
     typename T::inner; // <i>required nested type name</i>
-    template S&lt;T&gt;;   // <i>required class template specialization</i>
-    typename Ref&lt;T&gt;; // <i>required alias template substitution</i>
+    template S&lt;T&gt;;     // <i>required class template specialization</i>
+    typename Ref&lt;T&gt;;   // <i>required alias template substitution</i>
   };</code></pre>
   
       
@@ -1745,7 +1745,7 @@ template&lt;typename T&gt; concept bool C =
     
     </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename I&gt; concept bool C() { return true; }
 
-template&lt;typename D&gt; concept bool D = s
+template&lt;typename D&gt; concept bool D =
   requires(T x) {
     {x++};                     // <i>#1</i>
     {*x} -&gt; typename T::inner; // <i>#2</i>
@@ -1770,7 +1770,7 @@ template&lt;typename D&gt; concept bool D = s
       Requirement #3 also introduces two constraints: an
       expression constraint for <code>f(x)</code>, and a deduction
       constraint requiring that overload resolution succeeds for the
-      call <code>i(f(x))</code> where <code>g</code> is the following
+      call <code>i(f(x))</code> where <code>i</code> is the following
       invented function template.
       <cxx-codeblock>
     
@@ -1841,12 +1841,11 @@ template&lt;typename D&gt; concept bool D = s
 
 template&lt;typename T&gt; concept bool D =
   requires () {
-    typename X&lt;T&gt;;
-    requires C&lt;X&lt;T&gt;&gt;();
+    requires C&lt;typename T::type&gt;();
   };</code></pre>
   
       The <cxx-grammarterm><i>nested-requirement</i></cxx-grammarterm> appends
-      the predicate constraint <code>sizeof(T) == 1</code>
+      the predicate constraint <code>sizeof(typename T::type) == 1</code>
       (<cxx-ref to="temp.constr.atom.pred"><a title="temp.constr.atom.pred" href="#temp.constr.atom.pred">14.9.2.1</a></cxx-ref>).
       
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -2020,7 +2019,7 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce valu
   
         <p></p>
 
-        Modfify paragraph 2, allowing multiple occurrences of <code>auto</code>
+        Modify paragraph 2, allowing multiple occurrences of <code>auto</code>
         in those contexts where it is valid.
 
         <p para_num="2" id="dcl.spec.auto.2" number="2" class="quoted">
@@ -2238,7 +2237,7 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce valu
         <cxx-codeblock>
     
     <pre><code><ins>template&lt;typename T&gt; struct Vec { };
-template&lt;typename T&gt; Vec&lt;T&gt; make_vec(std::initalizer_list&lt;T&gt;) { return Vec&lt;T&gt;{}; } </ins>
+template&lt;typename T&gt; Vec&lt;T&gt; make_vec(std::initializer_list&lt;T&gt;) { return Vec&lt;T&gt;{}; } </ins>
 
 auto x1 = { 1, 2 };                 // <ins><i>OK:</i></ins> decltype(x1) <i>is</i> std::initializer_list&lt;int&gt;
 auto x2 = { 1, 2.0 };               // <i>error: cannot deduce element type</i> <ins>
@@ -2478,7 +2477,7 @@ However, a value may be explicitly given as a template argument in a
         <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> cannot 
         be used in the type of a variable declaration or the return type of
         a function.
-        <cxx-example>
+        <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
     
@@ -2645,7 +2644,7 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
 
         When a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
         is used in a <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>,
-        the constrained it associates a 
+        it associates a 
         <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> with the
         <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> in which the
         <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> is declared.
@@ -3135,7 +3134,8 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
 
       All declarations for a function shall agree exactly in <del>both</del> 
       the return type<ins>,</ins> <del>and</del> the parameter-type-list<ins>,
-      and asssociated constraints, if any (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>)</ins>.
+      and asssociated constraints, if any 
+      (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>)</ins>.
       </p>
 
       Modify paragraph 15. Note that the footnote reference has been
@@ -3920,7 +3920,6 @@ template&lt;typename T&gt; requires C&lt;T&gt; void g(T);</code></pre>
   
     <span class="nowrap">— <em>end example</em> ]</span>
   </cxx-example>
-  
   </div>
 
   <p para_num="8" id="temp.8" class="quoted" number="8"> 
@@ -3986,8 +3985,8 @@ template&lt;class P&gt;
     void f(P);   // <i>OK: redeclaration of</i> f(P)
 
 template&lt;typename... Qs&gt;
-  requires C4&lt;Qs...&gt;      // <i>constraint associated by</i> C4{...Qs}
-    void void g(Qs&amp;&amp;...); // <i>OK: redeclaration of</i> g(Qs&amp;&amp;...)</code></pre>
+  requires C4&lt;Qs...&gt; // <i>constraint associated by</i> C4{...Qs}
+    void g(Qs&amp;&amp;...); // <i>OK: redeclaration of</i> g(Qs&amp;&amp;...)</code></pre>
   
   
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -4572,7 +4571,7 @@ C{T} void f(T); // <i>OK:</i> f(T) <i>is a function template with</i>
 
 
     <p para_num="5" id="temp.intro.5"> An introduced template parameter does not have a default template 
-    argument, even if its corresponding template parameter does.
+    argument even if its corresponding template parameter does.
 
     <cxx-example class="inline">
     
@@ -5195,8 +5194,8 @@ A&lt;int, S*, 3&gt; a8; // <i>uses #7</i></code></pre>
     
         <cxx-codeblock>
     
-    <pre><code>template&lt;l;typename T&gt; concept bool C = requires (T t) { t.f(); };
-template&lt;l;typename T&gt; concept bool D = C&lt;l;T&gt; &amp;&amp; requires (T t) { t.f(); };
+    <pre><code>template&lt;typename T&gt; concept bool C = requires (T t) { t.f(); };
+template&lt;typename T&gt; concept bool D = C&lt;T&gt; &amp;&amp; requires (T t) { t.f(); };
 
 
 template&lt;typename T&gt; class S { };
@@ -5696,7 +5695,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
     <p para_num="1" id="temp.constr.1">
     <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
-    The defines the meaning of constraints on template arguments, including
+    This section defines the meaning of constraints on template arguments, including
     the translation of <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s
     into constraints by normalization (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>),
     and the abstract syntax, satisfaction, and subsumption of those constraints
@@ -6508,7 +6507,7 @@ C3&lt;int&gt;            /* <i>type constraint for</i> int::type */
       <code>1 == 2</code>, and <code>(bool)(3 + 4)</code> are predicate 
       constraints (<cxx-ref to="temp.constr.atom.pred"><a title="temp.constr.atom.pred" href="#temp.constr.atom.pred">14.9.2.1</a></cxx-ref>). 
 
-      The concept <code>C4</code> is normalized to a single type constraint
+      The concept <code>C3</code> is normalized to a single type constraint
       (<cxx-ref to="temp.constr.atom.type"><a title="temp.constr.atom.type" href="#temp.constr.atom.type">14.9.2.3</a></cxx-ref>) for the (ill-formed) 
       type <code>int::type</code>.
 
