@@ -293,7 +293,7 @@ template&lt;typename T&gt; concept bool C() {
         <cxx-example class="inline">
         <cxx-codeblock>
 <ins>template&lt;typename T&gt; struct Vec { };
-template&lt;typename T&gt; Vec&lt;T&gt; make_vec(std::initalizer_list&lt;T&gt;) { return Vec&lt;T&gt;{}; } </ins>
+template&lt;typename T&gt; Vec&lt;T&gt; make_vec(std::initializer_list&lt;T&gt;) { return Vec&lt;T&gt;{}; } </ins>
 
 auto x1 = { 1, 2 };                 // <ins><i>OK:</i></ins> decltype(x1) <i>is</i> std::initializer_list&lt;int&gt;
 auto x2 = { 1, 2.0 };               // <i>error: cannot deduce element type</i> <ins>
