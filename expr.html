@@ -444,7 +444,7 @@ template&lt;typename D&gt; concept bool D =
       Requirement #3 also introduces two constraints: an
       expression constraint for <code>f(x)</code>, and a deduction
       constraint requiring that overload resolution succeeds for the
-      call <code>i(f(x))</code> where <code>g</code> is the following
+      call <code>i(f(x))</code> where <code>i</code> is the following
       invented function template.
       <cxx-codeblock>
 template&lt;typename T&gt; requires C&lt;T&gt;() void i(const T&amp;);
