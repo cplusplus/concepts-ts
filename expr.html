@@ -419,7 +419,7 @@ template&lt;typename T&gt; concept bool C =
       <cxx-codeblock>
 template&lt;typename I&gt; concept bool C() { return true; }
 
-template&lt;typename D&gt; concept bool D = s
+template&lt;typename D&gt; concept bool D =
   requires(T x) {
     {x++};                     // <i>#1</i>
     {*x} -> typename T::inner; // <i>#2</i>
