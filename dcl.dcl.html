@@ -80,13 +80,13 @@
         <cxx-codeblock>
 struct N {
   template&lt;typename T&gt; struct Wrap;
-  template&lt;typename T&gt; static Wrap<T> make_wrap(T);
+  template&lt;typename T&gt; static Wrap&lt;T&gt; make_wrap(T);
 };
 template&lt;typename T, typename U&gt; struct Pair;
 template&lt;typename T, typename U&gt; Pair&lt;T, U&gt; make_pair(T, U);
 
 template&lt;int N&gt; struct Size { void f(int) { }  };
-Size<0> s;
+Size&lt;0&gt; s;
 bool g(char, double);
 
 void (auto::*)(auto) p = &amp;Size&lt;0&gt;::f;   // <i>OK</i>
