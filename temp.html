@@ -1238,7 +1238,7 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = sizeof(T) &gt; 2;
-template&lt;typename T&gt; concept bool D = C<T> && sizeof(T) &gt; 4;
+template&lt;typename T&gt; concept bool D = C&lt;T&gt; && sizeof(T) &gt; 4;
 
 template&lt;typename T&gt; struct S {
   S() requires C&lt;T&gt; { } // <i>#1</i>
