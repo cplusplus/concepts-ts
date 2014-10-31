@@ -1998,7 +1998,7 @@ template&lt;typename T&gt; concept bool D =
     
     </cxx-codeblock></cxx-example></ins></p><pre><code>struct N {
   template&lt;typename T&gt; struct Wrap;
-  template&lt;typename T&gt; static Wrap<t> make_wrap(T);
+  template&lt;typename T&gt; static Wrap&lt;T&gt; make_wrap(T);
 };
 template&lt;typename T, typename U&gt; struct Pair;
 template&lt;typename T, typename U&gt; Pair&lt;T, U&gt; make_pair(T, U);
@@ -2011,8 +2011,7 @@ void (auto::*)(auto) p = &amp;Size&lt;0&gt;::f;   // <i>OK</i>
 N::Wrap&lt;auto&gt; a = N::make_wrap(0.0);    // <i>OK</i>
 Pair&lt;auto, auto&gt; p = make_pair(0, 'a'); // <i>OK</i>
 auto::Wrap&lt;int&gt; x = N::make_wrap(0);    // <i>error: failed to deduce value for</i> auto
-Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce value for</i> auto
-        </t></code></pre>
+Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce value for</i> auto</code></pre>
   
         
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -2632,7 +2631,7 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
         (<cxx-ref to="expr.prim.lambda"><a title="expr.prim.lambda" href="#expr.prim.lambda">5.1.2</a></cxx-ref>).
 
         For an abbreviated function declaration, the association is with
-        with that function (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>).
+        that function (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>).
 
         When a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
         appears in the 
@@ -4412,7 +4411,7 @@ template&lt;C5... Cs&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter 
     
           <bnf-opt>nested-name-specifier<sub>opt</sub></bnf-opt>
           concept-name
-          introduction-list
+          <bnf-terminal><code>{</code></bnf-terminal> introduction-list <bnf-terminal><code>}</code></bnf-terminal>
         
   </bnf-alt>
 
@@ -5388,7 +5387,7 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i></code></pre>
       <cxx-codeblock>
     
     </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C = sizeof(T) &gt; 2;
-template&lt;typename T&gt; concept bool D = C<t> &amp;&amp; sizeof(T) &gt; 4;
+template&lt;typename T&gt; concept bool D = C&lt;T&gt; &amp;&amp; sizeof(T) &gt; 4;
 
 template&lt;typename T&gt; struct S {
   S() requires C&lt;T&gt; { } // <i>#1</i>
@@ -5396,9 +5395,7 @@ template&lt;typename T&gt; struct S {
 };
 
 S&lt;char&gt; s1;    // <i>error: no matching constructor</i>
-S&lt;char[8]&gt; s2; // <i>OK: calls #2</i>
-
-      </t></code></pre>
+S&lt;char[8]&gt; s2; // <i>OK: calls #2</i></code></pre>
   
       The instantiation of <code>S&lt;char&gt;</code> produces a class
       template specialization having the constructors, 
