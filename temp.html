@@ -1368,9 +1368,9 @@ template&lt;C T&gt;        void f(T); // <i>#1</i>
 template&lt;typename T&gt; void g(T); // <i>#2</i>
 template&lt;C T&gt;        void g(T); // <i>#3</i>
 
-template&lt;&gt; void f(int);   // <i>OK: refers to #1</i>
+template&lt;&gt; void f(char);  // <i>OK: refers to #1</i>
 template&lt;&gt; void f(void*); // <i>error: no matching template</i>
-template&lt;&gt; void g(int);   // <i>OK: refers to #3</i>
+template&lt;&gt; void g(char);  // <i>OK: refers to #3</i>
 template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
       </cxx-example>
       </p>
