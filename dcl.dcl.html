@@ -754,7 +754,8 @@ struct S {
       shall not include the <code>friend</code> or <code>constexpr</code>
       specifiers. </p>
 
-      <p>A concept definition shall be unconstrained.
+      <p>A concept definition shall not have associated constraints
+      (<cxx-ref to="temp">).
       <cxx-note>
       A concept defines a total mapping from its template arguments to the 
       values <code>true</code> and <code>false</code>.
