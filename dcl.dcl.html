@@ -319,22 +319,22 @@ template &lt;class U&gt; void f(const U&amp; u);
         </cxx-example>
 
         <cxx-example class="inline">
-        Similarly, the type of <code>p</code> in the following program
+        <ins>Similarly, the type of <code>p</code> in the following program</ins>
         <cxx-codeblock>
-template&lt;typename F, typename S&gt; struct Pair;
+<ins>template&lt;typename F, typename S&gt; struct Pair;
 template&lt;typename T, typename U&gt; Pair&lt;T, U&gt; make_pair(T, U);
 
 struct S { void mfn(bool); } s;
 int fn(char, double);
 
-Pair&lt;auto (*)(auto, auto), auto (auto::*)(auto)&gt; p = make_pair(fn, &amp;S::mfn);
+Pair&lt;auto (*)(auto, auto), auto (auto::*)(auto)&gt; p = make_pair(fn, &amp;S::mfn);</ins>
         </cxx-codeblock>
-is the deduced type of the parameter <code>x</code> in the call of 
+<ins>is the deduced type of the parameter <code>x</code> in the call of
 <code>g(make_pair(fn, &amp;S::mfn))</code> of the following invented function 
-template:
+template:</ins>
         <cxx-codeblock>
-template&lt;class T1, class T2, class T2, class T3, class T4, class T5, class T6&gt; 
-  void g(Pair&lt; T1(*)(T2, T3), T4 (T5::*)(T6)&gt;);
+<ins>template&lt;class T1, class T2, class T2, class T3, class T4, class T5, class T6&gt;</ins>
+  <ins>void g(Pair&lt; T1(*)(T2, T3), T4 (T5::*)(T6)&gt; x);</ins>
         </cxx-codeblock>
         </cxx-example>
         </div>
