@@ -47,7 +47,7 @@
   <cxx-section id="over.match">
     <h1>Overload resolution</h1>
 
-    <cxx-section id="over.match.viable">
+    <cxx-section id="over.match.viable" number="2">
       <h1>Viable functions</h1>
 
       Update paragraph 1 to require the checking of a candidate's associated
@@ -61,24 +61,22 @@
       for the best fit (<cxx-ref to="over.match.best"></cxx-ref>).
 
       The selection of viable functions considers 
-      <ins>their associated constraints, if any (<cxx-ref to="temp"></cxx-ref>), and</ins>
-      their relationships between arguments and function parameters other 
+      <ins>associated constraints, if any (<cxx-ref to="temp"></cxx-ref>), and</ins>
+      relationships between arguments and function parameters other 
       than the ranking of conversion sequences.
       </p>
 
-      Insert the following paragraph after paragraph 1; this introduces
+      Insert a new paragraph after paragraph 2; this introduces
       new a criterion for determining if a candidate is viable. Also, update
       the beginning of the subsequent paragraphs to account for the
       insertion.
 
-      <p class="quoted" number="2">
-      First, for <code>F</code> to be a viable function, if <code>F</code> has 
+      <p class="quoted" number="3">
+      <ins>
+      Second, for a function to be viable, if it has 
       associated constraints (<cxx-ref to="temp"></cxx-ref>), those 
       constraints shall be satisfied (<cxx-ref to="temp.constr"></cxx-ref>).
-      </p>
-
-      <p class="quoted" number="3">
-      <del>First</del><ins>Second</ins>, to be a viable function ...
+      </ins>
       </p>
 
       <p class="quoted" number="4">
@@ -107,10 +105,10 @@
       if not that,</ins> </li>
       
       <li><ins>
-      The parameter-type-lists of <code>F1</code> and <code>F2</code> are
-      the same and <code>F1</code> is more constrained than <code>F2</code> 
-      according to the partial ordering of constraints described in
-      <cxx-ref to="temp.constr.order"></cxx-ref>.
+      <code>F1</code> and <code>F2</code> are non-template functions with the
+      same parameter-type-lists, and  <code>F1</code> is more constrained than 
+      <code>F2</code> according to the partial ordering of constraints 
+      described in <cxx-ref to="temp.constr.order"></cxx-ref>.
       </ins></li>
       </ul>
       <!-- </p> -->
