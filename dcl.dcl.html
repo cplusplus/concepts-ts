@@ -78,7 +78,7 @@
         <ins class"local">
         <cxx-example class="inline">
         <cxx-codeblock>
-struct N {
+<ins>struct N {
   template&lt;typename T&gt; struct Wrap;
   template&lt;typename T&gt; static Wrap&lt;T&gt; make_wrap(T);
 };
@@ -93,7 +93,7 @@ void (auto::*)(auto) p = &amp;Size&lt;0&gt;::f;   // <i>OK</i>
 N::Wrap&lt;auto&gt; a = N::make_wrap(0.0);    // <i>OK</i>
 Pair&lt;auto, auto&gt; p = make_pair(0, 'a'); // <i>OK</i>
 auto::Wrap&lt;int&gt; x = N::make_wrap(0);    // <i>error: failed to deduce value for</i> auto
-Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce value for</i> auto
+Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce value for</i> auto</ins>
         </cxx-codeblock>
         </cxx-example>
         </p>
