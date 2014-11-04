@@ -183,9 +183,6 @@ template&lt;typename T&gt; concept bool C() {
         certain declarations. Note that the examples in the original text are 
         unchanged and therefore omitted.
 
-        <!-- FIXE: This probably doesn't allow things like int '(*)(auto)', 
-             but it should. -->
-
         <p number="4" class="quoted">
         The type of a variable declared using <code>auto</code> or 
         <code>decltype(auto)</code> is deduced from its initializer. This use 
@@ -204,9 +201,9 @@ template&lt;typename T&gt; concept bool C() {
         </del>
 
         <ins>
-        Either <code>auto</code> shall appear in the 
-        <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm>, or
-        <code>decltype(auto)</code> shall appear as one of the
+        <code>auto</code> can appear anywhere in the declared type
+        of the variable, but <code>decltype(auto)</code>
+        shall appear only as one of the
         <cxx-grammarterm>decl-specifier</cxx-grammarterm>s of the
         <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm>.
         </ins>
