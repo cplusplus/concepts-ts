@@ -142,7 +142,8 @@ auto glambda = [](int i, auto a) { return i; }; // <i>OK: a generic lambda</i>
 
         <ins>
         Similarly, if the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
-        appears in a parameter type of a function declarator, that is an 
+        appears in a parameter type of a function declaration, the function
+	declaration declares an
         abbreviated function template (<cxx-ref to="dcl.fct"></cxx-ref>).
 
         <cxx-example class="inline">
