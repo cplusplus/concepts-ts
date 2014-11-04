@@ -12,9 +12,7 @@
 
     <p class="quoted" number="6">
     If a virtual function has associated constraints 
-    (<cxx-ref to="temp"></cxx-ref>), the program is ill-formed. If
-    a constrained member function overrides a virtual function in any
-    base class, the program is ill-formed.
+    (<cxx-ref to="temp"></cxx-ref>), the program is ill-formed.
     <cxx-example class="inline">
     <cxx-codeblock>
 struct A {
@@ -27,7 +25,7 @@ struct B {
 
 struct D : B {
   void f() requires true; // <i>error: constrained override</i>
-}
+};
     </cxx-codeblock>
     </cxx-example>
     </p>

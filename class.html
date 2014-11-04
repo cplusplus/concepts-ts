@@ -30,7 +30,8 @@
     can refer to parameters.
 
     <p class="quoted" number="9">
-    A <cxx-grammarterm>requires-clause</cxx-grammarterm> shall only appear
+    A <cxx-grammarterm>requires-clause</cxx-grammarterm> 
+    (<cxx-ref to="temp"></cxx-ref>) shall only appear
     in a <cxx-grammarterm>member-declarator</cxx-grammarterm> if its
     <cxx-grammarterm>declarator</cxx-grammarterm> is a function declarator.
 
@@ -44,7 +45,7 @@
     A(int*) requires true;  // <i>OK: constrained constructor</i>
     ~A() requires true;     // <i>OK: constrained destructor</i>
     void f() requires true; // <i>OK: constrained member function</i>
-    int x requires true;    // <i>error: constrained member variable</i>
+    int x requires true;    // <i>error: constrained non-static data member</i>
   };
     </cxx-codeblock>
     </cxx-example>

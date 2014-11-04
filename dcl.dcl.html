@@ -712,6 +712,9 @@ template&lt;C T&gt; struct s1; // <i>associates</i> C&lt;T&gt; <i>with</i> s1
       specifier is called a <dfn>function concept</dfn>. A function
       concept is a non-throwing function 
       (<cxx-ref in="cxx" to="except.spec"></cxx-ref>).
+
+      When a function is declared to be a concept, it shall be the only
+      declaration of that function.
       
       A variable template definition having the <code>concept</code> 
       specifier is called a <dfn>variable concept</dfn>.
@@ -725,6 +728,9 @@ template&lt;typename T&gt;
   concept bool F1() { return true; } // <i>OK: declares a function concept</i>
 template&lt;typename T&gt; 
   concept bool F2();                 // <i>error: function concept is not a definition</i>
+template&lt;typename T&gt; constexpr bool F3();
+template&lt;typename T&gt;
+  concept bool F3() { return true; } // <i>error: redeclaration of a function as a concept</i>
 template&lt;typename T&gt; 
   concept bool V1 = true;            // <i>OK: declares a variable concept</i>
 template&lt;typename T&gt; 
@@ -741,16 +747,24 @@ struct S {
       <code>constexpr</code> declaration 
       (<cxx-ref in="cxx" to="dcl.constexpr"></cxx-ref>). </p>
 
-      <p> No storage specifiers shall appear in a declaration with the 
-      <code>concept</code> specifier. Additionally, a concept definition
-      shall not include the <code>friend</code> or <code>constexpr</code>
-      specifiers. </p>
+      <p> A concept definition shall not be declared with the 
+      <code>friend</code> or <code>constexpr</code> specifiers. 
 
-      <p>A concept definition shall be unconstrained.
-      <cxx-note>
-      A concept defines a total mapping from its template arguments to the 
-      values <code>true</code> and <code>false</code>.
-      </cxx-note>
+      Additionally, a concept definition shall not have associated constraints
+      (<cxx-ref to="temp"></cxx-ref>). </p>
+
+      <p>The definition of a function concept or the initializer of
+      a variable concept shall not include a reference to the concept being
+      declared.
+
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt;
+	concept bool F() { return F&lt;typename T::type&gt;(); } // error
+template&lt;typename T&gt;
+	concept bool V = V&lt;T*&gt;;                            // error
+      </cxx-codeblock>
+      </cxx-example>
       </p>
 
       <p> The first declared template parameter of a concept definition is its
@@ -763,12 +777,11 @@ struct S {
       <p>A function concept has the following restrictions:
       <ul>
         <li> No <cxx-grammarterm>function-specifier</cxx-grammarterm>s shall
-             appear in its declaration (<cxx-ref to="dcl.fct.spec"></cxx-ref>). </li>
+             appear in its declaration (<cxx-ref in="cxx" to="dcl.fct.spec"></cxx-ref>). </li>
         <li> The declared return type shall be the non-deduced type <code>bool</code>. </li>
         <li> The declaration shall have a 
         <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
         equivalent to <code>()</code>. </li>
-        <li> The function shall not be recursive. </li>
         <li> The function body shall consist of a single <code>return</code> 
         statement whose <cxx-grammarterm>expression</cxx-grammarterm> shall be a
         <cxx-grammarterm>constraint-expression</cxx-grammarterm>
@@ -804,24 +817,25 @@ template&lt;typename T&gt;
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; 
-  concept bool V2 = 3 + 4; // <i>error: initializer is not a constraint-expression</i>
-template&lt;Integral T&gt; 
-  concept bool V3 = true;  // <i>error: constrained template declared as a concept</i>
-concept bool V4 = 0;       // <i>error: not a template</i>
+  concept bool V1 = 3 + 4; // <i>error: initializer is not a constraint-expression</i>
+concept bool V3 = 0;       // <i>error: not a template</i>
+
+template&lt;typename T&gt; concept bool C = true;
+
+template&lt;C T&gt; 
+  concept bool V2 = true;  // <i>error: constrained template declared as a concept</i>
       </cxx-codeblock>
       </cxx-example>
       <!-- </p> -->
 
-      <p>A program that declares an explicit instantiation
+      <p>A program shall not declares an explicit instantiation
       (<cxx-ref to="temp.explicit"></cxx-ref>), an explicit specialization 
       (<cxx-ref to="temp.expl.spec"></cxx-ref>), or a partial specialization 
       of a concept definition is ill-formed.
 
       <cxx-note>
-      The prohibitions against overloading and specialization prevent
-      users from subverting the constraint system by providing a meaning 
-      for a concept that differs from the one computed by evaluating its 
-      constraints.
+      This prevents users from subverting the constraint system by providing a 
+      meaning for a concept that differs from its original definition.
       </cxx-note>
       </p>
 
