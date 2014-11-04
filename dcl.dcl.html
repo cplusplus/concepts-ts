@@ -812,10 +812,13 @@ template&lt;typename T&gt;
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; 
-  concept bool V2 = 3 + 4; // <i>error: initializer is not a constraint-expression</i>
-template&lt;Integral T&gt; 
-  concept bool V3 = true;  // <i>error: constrained template declared as a concept</i>
-concept bool V4 = 0;       // <i>error: not a template</i>
+  concept bool V1 = 3 + 4; // <i>error: initializer is not a constraint-expression</i>
+concept bool V3 = 0;       // <i>error: not a template</i>
+
+template&lt;typename T&gt; concept bool C = true;
+
+template&lt;C T&gt; 
+  concept bool V2 = true;  // <i>error: constrained template declared as a concept</i>
       </cxx-codeblock>
       </cxx-example>
       <!-- </p> -->
