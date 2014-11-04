@@ -158,7 +158,7 @@ struct Fun {
       </bnf-alt>
 
     <bnf-rule>requirement-list</bnf-rule>
-      <bnf-alt>requirement <bnf-terminal>;</bnf-terminal></bnf-alt>
+      <bnf-alt>requirement</bnf-alt>
       <bnf-alt>requirement-list requirement</bnf-alt>
 
     <bnf-rule>requirement</bnf-rule>
@@ -169,9 +169,8 @@ struct Fun {
     </bnf-grammar>
 
     A <cxx-grammarterm>requires-expression</cxx-grammarterm> defines
-    a conjunction of the constraints (<cxx-ref to="temp.constr"></cxx-ref>),
-    which are introduced by its 
-    <cxx-grammarterm>requirement</cxx-grammarterm>s.
+    a conjunction of the constraints (<cxx-ref to="temp.constr"></cxx-ref>)
+    introduced by its <cxx-grammarterm>requirement</cxx-grammarterm>s.
 
     </p>
 
@@ -268,6 +267,21 @@ template&lt;typename T&gt; requires C&lt;T&gt;
     defined by the <cxx-grammarterm>requires-expression</cxx-grammarterm>s.
     </p>
 
+    <p>If the substitution of template arguments into an expression or type 
+    in a <cxx-grammarterm>requirement</cxx-grammarterm> would always result in
+    a substitution failure, the program is ill-formed; no diagnostic
+    required.
+
+    <cxx-example>
+    <cxx-codeblock>
+  template&lt;typename T&gt; concept bool C =
+  requires () {
+    new int[-sizeof(T)]; // <i>error</i>
+  };
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
 
   <!-- ====================
        Simple requirements
@@ -278,7 +292,7 @@ template&lt;typename T&gt; requires C&lt;T&gt;
 
       <bnf-grammar>
         <bnf-rule>simple-requirement</bnf-rule>
-          <bnf-alt>expression</bnf-alt>
+          <bnf-alt>expression <bnf-terminal>;</bnf-terminal></bnf-alt>
       </bnf-grammar>
 
       <p>A <cxx-grammarterm>simple-requirement</cxx-grammarterm> introduces 
@@ -301,18 +315,6 @@ template&lt;typename T&gt; concept bool C =
       in an ill-formed expression. However, the resulting program is not 
       ill-formed. </p>
 
-      <p> If the expression would always result in a substitution failure, 
-      the program is ill-formed.
-      <cxx-example class="inline">
-      <cxx-codeblock>
-template&lt;typename T&gt; concept bool C =
-  requires () {
-    new T[-1];  // <i>error: the expression will never be well-formed</i>
-  };
-      </cxx-codeblock>
-      </cxx-example>
-      </p>
-
     </cxx-section> <!-- expr.prim.req.simple -->
 
 
@@ -326,7 +328,7 @@ template&lt;typename T&gt; concept bool C =
       <bnf-grammar>
         <bnf-rule>type-requirement</bnf-rule>
           <bnf-alt>
-            typename-specifier
+            typename-specifier <bnf-terminal>;</bnf-terminal>
           </bnf-alt>
       </bnf-grammar>
 
@@ -362,18 +364,6 @@ template&lt;typename T&gt; concept bool C =
       <cxx-grammarterm>type-requirement</cxx-grammarterm> may result
       in an ill-formed type. However, the resulting program is not 
       ill-formed. </p>
-
-      <p> If the required type would always result in a substitution failure,
-      then the program is ill-formed.
-      <cxx-example class="inline">
-      <cxx-codeblock>
-template&lt;typename T&gt; concept bool C =
-  requires () {
-    typename int::X;  // <i>error: int does not have class type</i>
-  };
-      </cxx-codeblock>
-      </cxx-example>
-      </p>
 
     </cxx-section> <!-- expr.prim.req.type -->
 
