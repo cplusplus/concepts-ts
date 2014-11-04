@@ -1408,13 +1408,9 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
       <ins>
       If the function template has associated constraints
       (Clause <cxx-ref to="temp"></cxx-ref>),
-      the template arguments are substituted into the constraints without 
-      evaluating the resulting expression. If this substitution succeeds,
-      the resulting constraint-expression is associated with the function
-      template specialization.  If the substitution results in an
-      invalid expression, then the constraint-expression <code>false</code>
-      is associated with the function template
-      specialization.
+      the template arguments are substituted into the associated constraints
+      without evaluating the resulting expression. If this substitution
+      results in an invalid expression, type deduction fails.
 
       <cxx-note>
       The constraints associated with the function template specialization
