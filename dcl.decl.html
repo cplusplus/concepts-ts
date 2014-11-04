@@ -2,60 +2,47 @@
 <cxx-clause id="dcl.decl" number="8">
   <h1>Declarators</h1>
 
-  Modify the definition of the <cxx-grammarterm>init-declarator</cxx-grammarterm>
-  production in <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>/1 as follows:
+  Factor the grammar of <cxx-grammarterm>declarator</cxx-grammarterm>s to
+  allow the specification of constraints on function declarations.
 
-  <p class="quoted">
-  A declarator declares a single variable, function, or type within a 
-  declaration. The <cxx-grammarterm>init-declarator-list</cxx-grammarterm>
-  appearing in a declaration is a comma-separated sequence of declarators, 
-  each of which may
-  <del>have an initializer</del>
-  <ins>have constraints, an initializer, or both</ins>.
+  <p number="4" class="quoted">
   <bnf-grammar>
-    <bnf-rule>init-declarator</bnf-rule>
-      <bnf-alt>
-        declarator
-        <ins><bnf-opt>requires-clause</bnf-opt></ins>
-        <bnf-opt>initializer</bnf-opt>
-      </bnf-alt>
+  <bnf-rule>declarator</bnf-rule>
+    <del>
+    <bnf-alt>ptr-declarator</bnf-alt>
+    <bnf-alt>noptr-declarator parameters-and-qualifiers trailing-return-type</bnf-alt>
+    </del>
+    <ins>
+    <bnf-alt>basic-declarator <bnf-opt>requires-clause</bnf-opt></bnf-alt>
+    </ins>
+
+  <ins>
+  <bnf-rule>basic-declarator</bnf-rule>
+    <bnf-alt>ptr-declarator</bnf-alt>
+    <bnf-alt>noptr-declarator parameters-and-qualifiers trailing-return-type</bnf-alt>
+  </ins>
   </bnf-grammar>
   </p>
 
-  Insert the following paragraphs.
+  Add the following paragraph at the end of this section.
 
-  <p class="quoted">
-  A <cxx-grammarterm>requires-clause</cxx-grammarterm> 
-  (<cxx-ref to="temp"></cxx-ref>) in an
-  <cxx-grammarterm>init-declarator</cxx-grammarterm> shall only appear
-  with the declarator of a function declaration (<cxx-ref to="dcl.fct"></cxx-ref>).
+  <p number="6" class="quoted">
+  The optional <cxx-grammarterm>requires-clause</cxx-grammarterm>
+  (<cxx-ref to="temp"></cxx-ref>) in a
+  <cxx-grammarterm>declarator</cxx-grammarterm> shall be present only when
+  the declarator declares a function.
 
-  If present, the <cxx-grammarterm>requires-clause</cxx-grammarterm> associates 
-  its <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the declared
-  function.
   <cxx-example class="inline">
   <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = true;
-
-void f1(int x) requires C&lt;int&gt;;       // <i>OK</i>
-auto n requires C&lt;decltype(n)&gt; = 'a'; // <i>error: constrained variable declaration</i></cxx-codeblock>
-  </cxx-example>
-  </p>
-
-  <p class="quoted">
-  The names of parameters in a function declarator are visible in the
-  <cxx-grammarterm>constraint-expression</cxx-grammarterm> of the
-  <cxx-grammarterm>requires-clause</cxx-grammarterm>.
-  <cxx-example class="inline">
-  <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = true;
-
-void f(auto x) requires C&lt;decltype(x)&gt;;
-void g(int n) requires sizeof(n) == 4;
+void f1(int a) requires true;         // <i>OK</i>
+auto f2(int a) -> bool requires true; // <i>OK</i>
+void (*pf)() requires true;           // <i>error: constraint on a variable</i>
+void g(int (*)() requires true);      // <i>error: constraint on a parameter</i>
+  
+auto* p = new void(*[3])(char) requires true; // <i>error: not a function declaration</i>
   </cxx-codeblock>
   </cxx-example>
   </p>
-
 
   <!-- ======================
        Meaning of declarators
