@@ -213,11 +213,11 @@ template&lt;typename T&gt;
   </p>
 
   <p class="quoted"> 
-  When the declaration is an abbreviated function, it is 
+  When the declaration is an abbreviated function template, it is
   equivalent to a <cxx-grammarterm>template-declaration</cxx-grammarterm>
   whose template parameters are declared according to the rules in
   <cxx-ref to="dcl.fct"></cxx-ref>. The associated constraints of the
-  abbreviated function are evaluated in the order in which they appear.
+  abbreviated function template are evaluated in the order in which they appear.
 
   <cxx-example class="inline">
   <cxx-codeblock>
@@ -237,7 +237,7 @@ template&lt;typename T, typename U&gt;
   </p>
 
   <p class="quoted"> 
-  An abbreviated function can also be declared as a
+  An abbreviated function template can also be declared as a
   <cxx-grammarterm>template-declaration</cxx-grammarterm>. The constraints
   associated by <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
   in the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> of
@@ -245,7 +245,7 @@ template&lt;typename T, typename U&gt;
   <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s in the
   <cxx-grammarterm>template-parameter-list</cxx-grammarterm> and the
   following <cxx-grammarterm>requires-clause</cxx-grammarterm>, if present.
-  This is also the case for an abbreviated function that is declared
+  This is also the case for an abbreviated function template that
   is declared with a concept introduction.
 
   <cxx-example class="inline">

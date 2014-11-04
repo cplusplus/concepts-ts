@@ -163,12 +163,12 @@ void g(int n) requires sizeof(n) == 4;
       <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>/15.
 
       <p class="quoted" number="16">
-      An <dfn>abbreviated function</dfn> is a function whose
+      An <dfn>abbreviated function template</dfn> is a function declaration whose
       parameter-type-list inclues one or more placeholders 
       (<cxx-ref to="dcl.spec.auto"></cxx-ref>,
       <cxx-ref to="dcl.spec.constr"></cxx-ref>).
 
-      An abbreviated function is equivalent to a function template 
+      An abbreviated function template is equivalent to a function template
       (<cxx-ref to="temp.fct"></cxx-ref>) whose
       <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
       includes one invented <cxx-grammarterm>template-parameter</cxx-grammarterm>
@@ -202,7 +202,7 @@ void g(int n) requires sizeof(n) == 4;
       parameter pack containing more than one placeholder, the program
       is ill-formed.
 
-      The adjusted function parameters of an abbreviated function are derived 
+      The adjusted function parameters of an abbreviated function template are derived
       from the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> 
       by replacing each occurrence of a placeholder with the name of the 
       corresponding invented <cxx-grammarterm>template-parameter</cxx-grammarterm>.
@@ -302,7 +302,7 @@ void f4(E a, E&lt;&gt; b, E&lt;0&gt; c);
       </p>
 
       <!-- TODO: Move into temp.fct? -->
-      <p> A function template can be an abbreviated function. The
+      <p> A function template can be an abbreviated function template. The
       invented <cxx-grammarterm>template-parameter</cxx-grammarterm>s are
       added to the <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
       after the explicitly declared <cxx-grammarterm>template-parameter</cxx-grammarterm>s.
