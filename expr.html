@@ -164,9 +164,9 @@ struct Fun {
     </p>
 
     <p> A <cxx-grammarterm>requires-expression</cxx-grammarterm> has type
-    <code>bool</code>.</p>
+    <code>bool</code>. 
 
-    <p> A <cxx-grammarterm>requires-expression</cxx-grammarterm> evaluates
+    A <cxx-grammarterm>requires-expression</cxx-grammarterm> evaluates
     to <code>true</code> when all of its introduced constraints are
     satisfied (<cxx-ref to="temp.constr"></cxx-ref>), and <code>false</code> 
     otherwise. </p>
@@ -216,6 +216,9 @@ introduces the <cxx-grammarterm>requires-expression</cxx-grammarterm>.
     local parameters using a 
     <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>
     (<cxx-ref to="dcl.fct"></cxx-ref>). 
+
+    A local parameter of a <cxx-grammarterm>requires-expression</cxx-grammarterm> 
+    shall not have a default argument.
   
     Each name introduced by a local parameter is in scope from the point
     of its declaration until the closing brace of the
@@ -223,17 +226,14 @@ introduces the <cxx-grammarterm>requires-expression</cxx-grammarterm>.
 
     These parameters have no linkage, storage, or lifetime; they are only used
     as notation for the purpose of defining 
-    <cxx-grammarterm>requirements</cxx-grammarterm>. 
+    <cxx-grammarterm>requirement</cxx-grammarterm>s. 
+
+    The <cxx-grammarterm>requirement-parameter-list</cxx-grammarterm> shall
+    not include an ellipsis.
     </p>
 
-    <p>A local parameter shall not have a default argument.</p>
-
-    <p>The <cxx-grammarterm>requirement-parameter-list</cxx-grammarterm> shall
-    not include an ellipsis.</p>
-
-    <p>The <cxx-grammarterm>requirement-body</cxx-grammarterm> defines a
-    block scope, and is comprised of a sequence of 
-    <cxx-grammarterm>requirement</cxx-grammarterm>s.
+    <p>The <cxx-grammarterm>requirement-body</cxx-grammarterm> is comprised of 
+    a sequence of <cxx-grammarterm>requirement</cxx-grammarterm>s.
 
     These <cxx-grammarterm>requirement</cxx-grammarterm>s may refer to local 
     parameters, template parameters, and any other declarations visible from the 
@@ -242,7 +242,7 @@ introduces the <cxx-grammarterm>requires-expression</cxx-grammarterm>.
     Each <cxx-grammarterm>requirement</cxx-grammarterm> 
     appends one or more atomic constraints 
     (<cxx-ref to="temp.constr"></cxx-ref>) to the conjunction of constraints
-    defined by the <cxx-grammarterm>requires-expressions</cxx-grammarterm>.
+    defined by the <cxx-grammarterm>requires-expression</cxx-grammarterm>s.
     </p>
 
 
