@@ -2003,64 +2003,64 @@ g(0);       // <i>selects #4</i>
       </p>
 
       <p> A <cxx-grammarterm>constraint-expression</cxx-grammarterm>
-      <code>E</code> is <dfn>normalized</dfn> by forming a constraint 
-      (<cxx-ref to="temp.constr"></cxx-ref>) from
-      <code>E</code> and its subexpressions.
-      
-      That transformation is defined as follows:
+      is <dfn>normalized</dfn> by forming a constraint
+      as follows.
 
       <ul>
-      <li> The normalization of an expression of the form <code>(P)</code> is
-      the normalization of <code>P</code>.</li>
+      <li> The normalized form of <code>(P)</code> is the normalized form of 
+      <code>P</code>.</li>
 
-      <li> The normalization of an expression of the form <code>P || Q</code> is
-      the disjunction of the normalization of <code>P</code> and the
-      normalization of <code>Q</code>. 
+      <li> The normalized form of <code>P || Q</code> is
+      the disjunction (<cxx-ref to="temp.constr.op.disj"></cxx-ref>) of the 
+      normalized form of <code>P</code> and the normalized form of 
+      <code>Q</code>.</li>
 
-      If, in the expression <code>P || Q</code>, lookup of <code>operator||</code> 
-      finds a user-defined function, the program is ill-formed.</li>
+      If, after substitution, overload resolution 
+      (<cxx-ref to="over.match"></cxx-ref>) selects a user-declared 
+      <code>operator||</code>, the program is ill-formed.</li>
 
-      <li> The normalization of an expression of the form <code>P &amp;&amp; Q</code> is
-      the conjunction of the normalization of <code>P</code> and the
-      normalization of <code>Q</code>. 
+      <li> The normalized form of <code>P &amp;&amp; Q</code> is
+      the conjunction (<cxx-ref to="temp.constr.op.conj"></cxx-ref>) of the 
+      normalized form of <code>P</code> and the normalized form of
+      <code>Q</code>.
 
-      If, in the expression <code>P &amp;&amp; Q</code>, lookup of
-      <code>operator&amp;&amp;</code> finds a user-defined function, the 
-      program is ill-formed.</li>
+      If, after substitution, overload resolution 
+      (<cxx-ref to="over.match"></cxx-ref>) selects a user-declared 
+      <code>operator&amp;&amp;</code>, the program is ill-formed.</li>
 
-      <li> The normalization of a function call of the form
+      <li> The normalized form of a function call of the form
       <code>C&lt;A<sub><i>1</i></sub>, A<sub><i>2</i></sub>, ..., A<sub><i>n</i></sub>&gt;()</code>,
       where <code>A<sub><i>1</i></sub>, A<sub><i>2</i></sub>, ..., A<sub><i>n</i></sub></code>
       is a sequence of template arguments and <code>C</code> names a function
-      concept (<cxx-ref to="dcl.spec.concept"></cxx-ref>), is defined as follows:
+      concept (<cxx-ref to="dcl.spec.concept"></cxx-ref>), is the result of 
+      substituting the template arguments into the expression
+      returned by <code>C</code>.</li>
 
-      Let <code>E</code> be the expression returned by the function concept 
-      <code>C</code>, and let <code>S</code> be the result of substituting the
-      template arguments into that expression. The resulting constraint is
-      the normalization of <code>S</code>.</li>
-
-      <li> The normalization of a <cxx-grammarterm>id-expression</cxx-grammarterm>
+      <li> The normalized form of an <cxx-grammarterm>id-expression</cxx-grammarterm>
       of the form <code>C&lt;A<sub><i>1</i></sub>, A<sub><i>2</i></sub>, ..., A<sub><i>n</i></sub>&gt;</code>
       where <code>A<sub><i>1</i></sub>, A<sub><i>2</i></sub>, ..., A<sub><i>n</i></sub></code>
       is a sequence of template arguments and <code>C</code> names a variable
-      concept (<cxx-ref to="dcl.spec.concept"></cxx-ref>) is defined as follows:
+      concept (<cxx-ref to="dcl.spec.concept"></cxx-ref>) is the result of 
+      substituting the template arguments into the initializer
+      of <code>C</code>.</li>
 
-      Let <code>E</code> be the initializer of the variable concept
-      <code>C</code>, and let <code>S</code> be the result of substituting the
-      template arguments into that expression. The resulting constraint is
-      the normalization of <code>S</code>.</li>
-
-      <li> The normalization of a 
-      <cxx-grammarterm>requires-expression</cxx-grammarterm> is 
-      defined to be the conjunction of constraints introduced by
-      the body of that expression (<cxx-ref to="expr.prim.req"></cxx-ref>).
+      <li> The normalized form of a 
+      <cxx-grammarterm>requires-expression</cxx-grammarterm> 
+      (<cxx-ref to="expr.prim.req"></cxx-ref>) is
+      the conjunction of constraints (<cxx-ref to="temp.constr.op.conj"></cxx-ref>) 
+      introduced by the body of that expression.
       </li>
 
-      <li> Otherwise, <code>E</code> shall be a prvalue constant
-      expression of type <code>bool</code>, and it denotes a
-      predicate constraint (<cxx-ref to="temp.constr.atom.pred"></cxx-ref>).
+      <li> Otherwise, <code>E</code> is a predicate constraint 
+      (<cxx-ref to="temp.constr.atom.pred"></cxx-ref>). 
+
+      After substitution, <code>E</code> shall be a converted constant 
+      expression of type <code>bool</code>.
       </li>
       </ul>
+
+      <!-- TODO: Do we need a top-level conversion requirement for
+           constraint expressions? -->
 
       <cxx-note>
       A <cxx-grammarterm>constraint-expression</cxx-grammarterm> 
@@ -2068,7 +2068,7 @@ g(0);       // <i>selects #4</i>
       logical implications can be deduced during translation.
 
       The prohibition against user-defined logical operators is intended to
-      prevent the subversion of the underlying logic necessary to partially
+      prevent the subversion of the logic used to partially
       order constraints (<cxx-ref to="temp.constr.order"></cxx-ref>).
       </cxx-note>
 
