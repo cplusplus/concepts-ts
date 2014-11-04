@@ -55,7 +55,7 @@
         <h1><code>auto</code> specifier</h1>
 
         Modify paragraph 1 to extend the use of <code>auto</code> to
-        designate abbreviated functions.
+        designate abbreviated function templates.
 
         <p number="1" class="quoted">
         The <code>auto</code> and <code>decltype(auto)</code> 
@@ -65,7 +65,7 @@
         <cxx-grammarterm>trailing-return-type</cxx-grammarterm>. The 
         <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
         is also used to signify that a lambda is a generic lambda<ins> or
-        that a function declaration is an abbreviated function</ins>.
+        that a function declaration is an abbreviated function template</ins>.
 
         <cxx-note>
         The use of the <code>auto</code> 
@@ -143,11 +143,11 @@ auto glambda = [](int i, auto a) { return i; }; // <i>OK: a generic lambda</i>
         <ins>
         Similarly, if the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
         appears in a parameter type of a function declarator, that is an 
-        abbreviated function (<cxx-ref to="dcl.fct"></cxx-ref>).
+        abbreviated function template (<cxx-ref to="dcl.fct"></cxx-ref>).
 
         <cxx-example class="inline">
         <cxx-codeblock>
-void f(const auto&amp;, int); // <i>OK: an abbreviated function</i>
+void f(const auto&amp;, int); // <i>OK: an abbreviated function template</i>
         </cxx-codeblock>
         </cxx-example>
         </ins>
@@ -261,15 +261,17 @@ template&lt;typename T&gt; concept bool C() {
         Otherwise, obtain <code>P</code> from <code>T</code> as follows:
         <div class="quoted">
         <ul>
-        <li> replace each occurrence of <code>auto</code> in the variable type 
-        with a new invented type template parameter, or </li>
+        <li><ins> replace each occurrence of <code>auto</code> in the
+        variable type with a new invented type template parameter,
+        or </ins></li>
 
-        <li> when the initializer is a <cxx-grammarterm>braced-init-list</cxx-grammarterm>
+        <li><ins> when the initializer is
+        a <cxx-grammarterm>braced-init-list</cxx-grammarterm>
         and <code>auto</code> is a <cxx-grammarterm>decl-specifier</cxx-grammarterm>
         of the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of
         the variable declaration, replace that occurrence of <code>auto</code> 
         with <code>std::initializer_list&lt;U&gt;</code>
-        where <code>U</code> is an invented template type parameter.</li>
+        where <code>U</code> is an invented template type parameter.</ins></li>
         </ul>
         </ins>
 
@@ -306,7 +308,7 @@ Vec&lt;auto&gt; v2 = {1, 2, 3};           // <i>error: cannot deduce element typ
 
         <cxx-example class="inline">
         <cxx-codeblock>
-const auto<ins>&amp;</ins><del> &amp;</del>i = expr;
+const auto &amp;i = expr;
         </cxx-codeblock>
         The type of <code>i</code> is the deduced type of the parameter 
         <code>u</code> in the call <code>f(expr)</code> of the following 
@@ -411,7 +413,7 @@ void f3(Stack&lt;auto, C3&gt;); // C3 <i>designates a placeholder for a class te
         can appear in the following contexts with the given meaning:
         <ul>
         <li> a parameter type of a function declaration, signifying an 
-             abbreviated function (<cxx-ref to="dcl.fct"></cxx-ref>);</li>
+             abbreviated function template (<cxx-ref to="dcl.fct"></cxx-ref>);</li>
         <li> a parameter of a lambda, signifying a generic lambda 
              (<cxx-ref to="expr.prim.lambda"></cxx-ref>);</li>
         <li> the parameter type of a template parameter, signifying a
@@ -440,7 +442,7 @@ template&lt;typename T, typename U&gt; struct Pair;
 template&lt;bool (*)(int)&gt; struct Pred;
 
 auto gl = [](C1&amp; a, C1* b) { a = *b; }; // <i>OK: a generic lambda</i>
-void af(const Vec&lt;C1&gt;&amp; x);              // <i>OK: an abbreviated function</i>
+void af(const Vec&lt;C1&gt;&amp; x);              // <i>OK: an abbreviated function template</i>
 
 void f1(N::Wrap&lt;C1&gt;);     // <i>OK</i>
 void f2(Pair&lt;C1, C2&lt;0&gt;&gt;); // <i>OK</i>
@@ -592,8 +594,9 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
         the member function call operator of the closure type 
         (<cxx-ref to="expr.prim.lambda"></cxx-ref>).
 
-        For an abbreviated function declaration, the association is with
-        that function (<cxx-ref to="dcl.fct"></cxx-ref>).
+        For an abbreviated function template declaration
+        (<cxx-ref to="dcl.fct"></cxx-ref>), the association is with that
+        function template.
 
         When a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
         appears in the 
