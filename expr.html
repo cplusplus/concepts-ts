@@ -18,6 +18,7 @@
 
   <cxx-section id="expr.prim">
     <h1>Primary expressions</h1>
+  
   <cxx-section id="expr.prim.general">
     <h1>General</h1>
 
@@ -40,17 +41,39 @@
       <bnf-alt>decltype-specifier <bnf-terminal>::</bnf-terminal></bnf-alt>
       <bnf-alt><ins><bnf-terminal>auto</bnf-terminal> <bnf-terminal>::</bnf-terminal></ins></bnf-alt>
       <bnf-alt>nested-name-specifier identifier <bnf-terminal>::</bnf-terminal></bnf-alt>
-      <bnf-alt>nested-name-specifier templateopt simple-template-id <bnf-terminal>::</bnf-terminal></bnf-alt>
+      <bnf-alt>nested-name-specifier <bnf-opt>template</bnf-opt> simple-template-id <bnf-terminal>::</bnf-terminal></bnf-alt>
     </bnf-grammar>
 
     Add a new paragraph after paragraph 11:
 
-    <p number="12">
+    <p number="12" class="quoted">
       In a <cxx-grammarterm>nested-name-specifier</cxx-grammarterm> of the
       form <code>auto::</code>, the <code>auto</code> specifier is a
       placeholder for a type to be deduced
       (<cxx-ref to="dcl.spec.auto"></cxx-ref>).
     </p>
+
+    Add the following paragraph 13 in the original
+    document.
+
+    <p number="14" class="quoted">
+    If an <cxx-grammarterm>id-expression</cxx-grammarterm> denotes a
+    function declaration that was declared with a 
+    <cxx-grammarterm>requires-clause</cxx-grammarterm> 
+    (<cxx-ref to="dcl.fct"></cxx-ref>),
+    its associated constraints shall be satisfied 
+    (<cxx-ref to="temp.constr"></cxx-ref>).
+
+    <cxx-example class="inline">
+    <cxx-codeblock>
+void f(int) requires false;
+
+f(0);               // <i>error: constraints not satisfied</i>
+void (*p)(int) = f; // <i>error: constraints not satisfied</i>
+    </cxx-codeblock>
+    </cxx-example>
+    </p>
+
   </cxx-section>
 
   <!-- ==================
@@ -96,7 +119,7 @@
       <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>, in order 
       of appearance.
 
-      The invented type <cxx-grammarter>template-parameter</cxx-grammarter> is 
+      The invented type <cxx-grammarterm>template-parameter</cxx-grammarterm> is 
       a parameter pack if the corresponding 
       <cxx-grammarterm>parameter-declaration declares</cxx-grammarterm> a 
       function parameter pack (<cxx-ref to="dcl.fct"></cxx-ref>). 
