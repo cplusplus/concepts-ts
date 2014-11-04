@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- Sources at https://github.com/cplusplus/concepts-ts -->
 <html><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8"><!--[if lte IE 8]><script>document.createElement("nav");document.createElement("section");document.createElement("time");document.createElement("CXX-TITLEPAGE");document.createElement("CXX-DOCNUM");document.createElement("CXX-REVISES");document.createElement("CXX-EDITOR");document.createElement("CXX-EMAIL");document.createElement("CXX-TOC");document.createElement("CXX-CLAUSE");document.createElement("CXX-SECTION");document.createElement("CXX-REF");document.createElement("CXX-FOREIGN-INDEX");document.createElement("CXX-NOTE");document.createElement("CXX-GRAMMARTERM");document.createElement("BNF-GRAMMAR");document.createElement("BNF-RULE");document.createElement("BNF-ALT");document.createElement("CXX-GRAMMARTER");document.createElement("CXX-EXAMPLE");document.createElement("CXX-CODEBLOCK");document.createElement("BNF-TERMINAL");document.createElement("BNF-OPT");document.createElement("CXX-PUBLISH-BUTTON");</script><![endif]--><style>template {display: none !important;} /* injected by platform.js */</style><style>body {transition: opacity ease-in 0.2s; } 
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><!--[if lte IE 8]><script>document.createElement("nav");document.createElement("section");document.createElement("time");document.createElement("CXX-TITLEPAGE");document.createElement("CXX-DOCNUM");document.createElement("CXX-REVISES");document.createElement("CXX-EDITOR");document.createElement("CXX-EMAIL");document.createElement("CXX-TOC");document.createElement("CXX-CLAUSE");document.createElement("CXX-SECTION");document.createElement("CXX-REF");document.createElement("CXX-FOREIGN-INDEX");document.createElement("CXX-NOTE");document.createElement("CXX-GRAMMARTERM");document.createElement("BNF-GRAMMAR");document.createElement("BNF-RULE");document.createElement("BNF-ALT");document.createElement("BNF-TERMINAL");document.createElement("CXX-GRAMMARTER");document.createElement("CXX-EXAMPLE");document.createElement("CXX-CODEBLOCK");document.createElement("BNF-OPT");document.createElement("CXX-PUBLISH-BUTTON");</script><![endif]--><style>template {display: none !important;} /* injected by platform.js */</style><style>body {transition: opacity ease-in 0.2s; } 
 body[unresolved] {opacity: 0; display: block; overflow: hidden; } 
 </style><style shim-shadowdom-css="">style { display: none !important; }
 cxx-function {
@@ -661,27 +661,163 @@ pre {
         
           <ol>
             
-              <li><span class="marker">5.1.2</span><a href="#expr.prim.lambda">Lambda expressions</a>
-        
-      </li>
-            
-              <li><span class="marker">5.1.3</span><a href="#expr.prim.req">Requires expressions</a>
+              <li><span class="marker">5.1.1</span><a href="#expr.prim.general">General</a>
         
           <ol>
             
-              <li><span class="marker">5.1.3.1</span><a href="#expr.prim.req.simple">Simple requirements</a>
+              <li><span class="marker">5.1.1.1</span><a href="#expr.prim.lambda">Lambda expressions</a>
         
       </li>
             
-              <li><span class="marker">5.1.3.2</span><a href="#expr.prim.req.type">Type requirements</a>
+              <li><span class="marker">5.1.1.2</span><a href="#expr.prim.req">Requires expressions</a>
+        
+          <ol>
+            
+              <li><span class="marker">5.1.1.2.1</span><a href="#expr.prim.req.simple">Simple requirements</a>
         
       </li>
             
-              <li><span class="marker">5.1.3.3</span><a href="#expr.prim.req.compound">Compound requirements</a>
+              <li><span class="marker">5.1.1.2.2</span><a href="#expr.prim.req.type">Type requirements</a>
         
       </li>
             
-              <li><span class="marker">5.1.3.4</span><a href="#expr.prim.req.nested">Nested requirements</a>
+              <li><span class="marker">5.1.1.2.3</span><a href="#expr.prim.req.compound">Compound requirements</a>
+        
+      </li>
+            
+              <li><span class="marker">5.1.1.2.4</span><a href="#expr.prim.req.nested">Nested requirements</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">7</span><a href="#dcl.dcl">Declarations</a>
+        
+          <ol>
+            
+              <li><span class="marker">7.1</span><a href="#dcl.spec">Specifiers</a>
+        
+          <ol>
+            
+              <li><span class="marker">7.1.6</span><a href="#dcl.type">Type specifiers</a>
+        
+          <ol>
+            
+              <li><span class="marker">7.1.6.2</span><a href="#dcl.type.simple">Simple type specifiers</a>
+        
+      </li>
+            
+              <li><span class="marker">7.1.6.4</span><a href="#dcl.spec.auto">auto specifier</a>
+        
+      </li>
+            
+              <li><span class="marker">7.1.6.5</span><a href="#dcl.spec.constr">Constrained type specifiers</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">7.1.7</span><a href="#dcl.spec.concept">concept specifier</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">1</span><a href="#intro">General</a>
+        
+          <ol>
+            
+              <li><span class="marker">1.1</span><a href="#intro.scope">Scope</a>
+        
+      </li>
+            
+              <li><span class="marker">1.2</span><a href="#intro.refs">Normative references</a>
+        
+      </li>
+            
+              <li><span class="marker">1.3</span><a href="#intro.compliance">Implementation compliance</a>
+        
+      </li>
+            
+              <li><span class="marker">1.4</span><a href="#intro.ack">Acknowledgments</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">2</span><a href="#lex">Lexical conventions</a>
+        
+          <ol>
+            
+              <li><span class="marker">2.1</span><a href="#lex.key">Keywords</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+              <li><span class="marker">5</span><a href="#expr">Expressions</a>
+        
+          <ol>
+            
+              <li><span class="marker">5.1</span><a href="#expr.prim">Primary expressions</a>
+        
+          <ol>
+            
+              <li><span class="marker">5.1.1</span><a href="#expr.prim.general">General</a>
+        
+          <ol>
+            
+              <li><span class="marker">5.1.1.1</span><a href="#expr.prim.lambda">Lambda expressions</a>
+        
+      </li>
+            
+              <li><span class="marker">5.1.1.2</span><a href="#expr.prim.req">Requires expressions</a>
+        
+          <ol>
+            
+              <li><span class="marker">5.1.1.2.1</span><a href="#expr.prim.req.simple">Simple requirements</a>
+        
+      </li>
+            
+              <li><span class="marker">5.1.1.2.2</span><a href="#expr.prim.req.type">Type requirements</a>
+        
+      </li>
+            
+              <li><span class="marker">5.1.1.2.3</span><a href="#expr.prim.req.compound">Compound requirements</a>
+        
+      </li>
+            
+              <li><span class="marker">5.1.1.2.4</span><a href="#expr.prim.req.nested">Nested requirements</a>
+        
+      </li>
+            
+          </ol>
         
       </li>
             
@@ -1188,6 +1324,13 @@ pre {
       <header><span class="section-number">5.1</span> <h1 data-bookmark-label="5.1 Primary expressions">Primary expressions</h1> <span style="float:right"><a href="#expr.prim">[expr.prim]</a></span></header>
       
     
+  <cxx-section id="expr.prim.general">
+    
+
+    <section>
+      <header><span class="section-number">5.1.1</span> <h1 data-bookmark-label="5.1.1 General">General</h1> <span style="float:right"><a href="#expr.prim.general">[expr.prim.general]</a></span></header>
+      
+    
 
     In this section, add the 
     <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> to the rule for 
@@ -1207,16 +1350,64 @@ pre {
     
   </bnf-grammar>
 
+    <br>
+    Add <code>auto</code> to <cxx-grammarterm><i>nested-name-specifier</i></cxx-grammarterm>:
+    <bnf-grammar>
+    
+    
+      <bnf-rule>
+    
+    nested-name-specifier:
+  </bnf-rule>
+      <bnf-alt>
+    
+    <bnf-terminal><code>::</code></bnf-terminal>
+  </bnf-alt>
+      <bnf-alt>
+    
+    type-name <bnf-terminal><code>::</code></bnf-terminal>
+  </bnf-alt>
+      <bnf-alt>
+    
+    namespace-name <bnf-terminal><code>::</code></bnf-terminal>
+  </bnf-alt>
+      <bnf-alt>
+    
+    decltype-specifier <bnf-terminal><code>::</code></bnf-terminal>
+  </bnf-alt>
+      <bnf-alt>
+    
+    <ins><bnf-terminal><code>auto</code></bnf-terminal> <bnf-terminal><code>::</code></bnf-terminal></ins>
+  </bnf-alt>
+      <bnf-alt>
+    
+    nested-name-specifier identifier <bnf-terminal><code>::</code></bnf-terminal>
+  </bnf-alt>
+      <bnf-alt>
+    
+    nested-name-specifier templateopt simple-template-id <bnf-terminal><code>::</code></bnf-terminal>
+  </bnf-alt>
+    
+  </bnf-grammar>
+
+    Add a new paragraph after paragraph 11:
+
+    <p para_num="12" id="expr.prim.general.12" number="12">
+      In a <cxx-grammarterm><i>nested-name-specifier</i></cxx-grammarterm> of the
+      form <code>auto::</code>, the <code>auto</code> specifier is a
+      placeholder for a type to be deduced
+      (<cxx-ref to="dcl.spec.auto"><a title="dcl.spec.auto" href="#dcl.spec.auto">7.1.6.4</a></cxx-ref>).
+    </p>
 
   <!-- ==================
        Lambda expressions
        ================== -->
 
-    <cxx-section id="expr.prim.lambda" number="2">
+    <cxx-section id="expr.prim.lambda">
     
 
     <section>
-      <header><span class="section-number">5.1.2</span> <h1 data-bookmark-label="5.1.2 Lambda expressions">Lambda expressions</h1> <span style="float:right"><a href="#expr.prim.lambda">[expr.prim.lambda]</a></span></header>
+      <header><span class="section-number">5.1.1.1</span> <h1 data-bookmark-label="5.1.1.1 Lambda expressions">Lambda expressions</h1> <span style="float:right"><a href="#expr.prim.lambda">[expr.prim.lambda]</a></span></header>
       
       
 
@@ -1324,7 +1515,7 @@ struct Fun {
     
 
     <section>
-      <header><span class="section-number">5.1.3</span> <h1 data-bookmark-label="5.1.3 Requires expressions">Requires expressions</h1> <span style="float:right"><a href="#expr.prim.req">[expr.prim.req]</a></span></header>
+      <header><span class="section-number">5.1.1.2</span> <h1 data-bookmark-label="5.1.1.2 Requires expressions">Requires expressions</h1> <span style="float:right"><a href="#expr.prim.req">[expr.prim.req]</a></span></header>
       
     
 
@@ -1550,7 +1741,7 @@ template&lt;typename T&gt; requires C&lt;T&gt;
     
 
     <section>
-      <header><span class="section-number">5.1.3.1</span> <h1 data-bookmark-label="5.1.3.1 Simple requirements">Simple requirements</h1> <span style="float:right"><a href="#expr.prim.req.simple">[expr.prim.req.simple]</a></span></header>
+      <header><span class="section-number">5.1.1.2.1</span> <h1 data-bookmark-label="5.1.1.2.1 Simple requirements">Simple requirements</h1> <span style="float:right"><a href="#expr.prim.req.simple">[expr.prim.req.simple]</a></span></header>
       
       
 
@@ -1607,7 +1798,7 @@ template&lt;typename T&gt; requires C&lt;T&gt;
     
 
     <section>
-      <header><span class="section-number">5.1.3.2</span> <h1 data-bookmark-label="5.1.3.2 Type requirements">Type requirements</h1> <span style="float:right"><a href="#expr.prim.req.type">[expr.prim.req.type]</a></span></header>
+      <header><span class="section-number">5.1.1.2.2</span> <h1 data-bookmark-label="5.1.1.2.2 Type requirements">Type requirements</h1> <span style="float:right"><a href="#expr.prim.req.type">[expr.prim.req.type]</a></span></header>
       
       
 
@@ -1683,7 +1874,7 @@ template&lt;typename T&gt; concept bool C =
     
 
     <section>
-      <header><span class="section-number">5.1.3.3</span> <h1 data-bookmark-label="5.1.3.3 Compound requirements">Compound requirements</h1> <span style="float:right"><a href="#expr.prim.req.compound">[expr.prim.req.compound]</a></span></header>
+      <header><span class="section-number">5.1.1.2.3</span> <h1 data-bookmark-label="5.1.1.2.3 Compound requirements">Compound requirements</h1> <span style="float:right"><a href="#expr.prim.req.compound">[expr.prim.req.compound]</a></span></header>
       
       
       
@@ -1840,7 +2031,7 @@ template&lt;typename T&gt; concept bool C5 =
     
 
     <section>
-      <header><span class="section-number">5.1.3.4</span> <h1 data-bookmark-label="5.1.3.4 Nested requirements">Nested requirements</h1> <span style="float:right"><a href="#expr.prim.req.nested">[expr.prim.req.nested]</a></span></header>
+      <header><span class="section-number">5.1.1.2.4</span> <h1 data-bookmark-label="5.1.1.2.4 Nested requirements">Nested requirements</h1> <span style="float:right"><a href="#expr.prim.req.nested">[expr.prim.req.nested]</a></span></header>
       
       
 
@@ -1861,7 +2052,7 @@ template&lt;typename T&gt; concept bool C5 =
       <p para_num="1" id="expr.prim.req.nested.1"> A <cxx-grammarterm><i>nested-requirement</i></cxx-grammarterm> can be used
       to specify additional constraints on a type declared by a
       <cxx-grammarterm><i>type-requirement</i></cxx-grammarterm> 
-      (<cxx-ref to="expr.prim.req.type"><a title="expr.prim.req.type" href="#expr.prim.req.type">5.1.3.2</a></cxx-ref>).
+      (<cxx-ref to="expr.prim.req.type"><a title="expr.prim.req.type" href="#expr.prim.req.type">5.1.1.2.2</a></cxx-ref>).
 
       It appends a normalization of the 
       <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>
@@ -1893,6 +2084,8 @@ template&lt;typename T&gt; concept bool D =
 
  <!-- expr -->
 <p></p>
+    </section>
+  </cxx-section>
     </section>
   </cxx-section>
     </section>
@@ -2007,24 +2200,16 @@ template&lt;typename T&gt; concept bool D =
 
         <p para_num="1" id="dcl.spec.auto.1" number="1" class="quoted">
         The <code>auto</code> and <code>decltype(auto)</code> 
-        <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm>s designate a 
-        placeholder type that will be replaced later, either by deduction from 
+        <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm>s <ins>(as well
+        as <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s,
+	<cxx-ref to="dcl.spec.constr"><a title="dcl.spec.constr" href="#dcl.spec.constr">7.1.6.5</a></cxx-ref>)</ins> designate <del>a</del>
+        placeholder <del>type</del><ins>types</ins> that will be replaced 
+	later, either by deduction from 
         an initializer or by explicit specification with a 
         <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm>. The 
         <code>auto</code> <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm>
         is also used to signify that a lambda is a generic lambda<ins> or
         that a function declaration is an abbreviated function template</ins>.
-
-        <cxx-note><span class="nowrap">[ <em>Note:</em></span>
-    
-        The use of the <code>auto</code> 
-        <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm> in a non-deduced 
-        context (<cxx-ref in="cxx" to="temp.deduct.type"><span title="temp.deduct.type">§14.8.2.5</span></cxx-ref>) will cause the 
-        deduction of a value for that placeholder type to fail, resulting
-        in an ill-formed program.
-        
-    <span class="nowrap">— <em>end note</em> ]</span>
-  </cxx-note>
 
         <ins class"local"="">
         <cxx-example class="inline">
@@ -2033,7 +2218,7 @@ template&lt;typename T&gt; concept bool D =
     
         <cxx-codeblock>
     
-    </cxx-codeblock></cxx-example></ins></p><pre><code>struct N {
+    </cxx-codeblock></cxx-example></ins></p><pre><code><ins>struct N {
   template&lt;typename T&gt; struct Wrap;
   template&lt;typename T&gt; static Wrap&lt;T&gt; make_wrap(T);
 };
@@ -2048,7 +2233,7 @@ void (auto::*)(auto) p = &amp;Size&lt;0&gt;::f;   // <i>OK</i>
 N::Wrap&lt;auto&gt; a = N::make_wrap(0.0);    // <i>OK</i>
 Pair&lt;auto, auto&gt; p = make_pair(0, 'a'); // <i>OK</i>
 auto::Wrap&lt;int&gt; x = N::make_wrap(0);    // <i>error: failed to deduce value for</i> auto
-Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce value for</i> auto</code></pre>
+Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce value for</i> auto</ins></code></pre>
   
         
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -2089,7 +2274,7 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce valu
         <ins>in a parameter type</ins> 
         of a
         <cxx-grammarterm><i>lambda-expression</i></cxx-grammarterm>, the lambda is
-        a generic lambda (<cxx-ref to="expr.prim.lambda"><a title="expr.prim.lambda" href="#expr.prim.lambda">5.1.2</a></cxx-ref>).
+        a generic lambda (<cxx-ref to="expr.prim.lambda"><a title="expr.prim.lambda" href="#expr.prim.lambda">5.1.1.1</a></cxx-ref>).
 
         <cxx-example class="inline">
     
@@ -2105,7 +2290,8 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce valu
 
         <ins>
         Similarly, if the <code>auto</code> <cxx-grammarterm><i>type-specifier</i></cxx-grammarterm>
-        appears in a parameter type of a function declarator, that is an 
+        appears in a parameter type of a function declaration, the function
+	declaration declares an
         abbreviated function template (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>).
 
         <cxx-example class="inline">
@@ -2132,7 +2318,7 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce valu
         appears in the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> 
         of a <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> in
         a <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>
-        (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>), that
+        (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.1.2.3</a></cxx-ref>), that
         return type introduces an argument deduction constraint
         (<cxx-ref to="temp.constr.atom.deduct"><a title="temp.constr.atom.deduct" href="#temp.constr.atom.deduct">14.9.2.5</a></cxx-ref>).
         
@@ -2157,9 +2343,6 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce valu
         certain declarations. Note that the examples in the original text are 
         unchanged and therefore omitted.
 
-        <!-- FIXE: This probably doesn't allow things like int '(*)(auto)', 
-             but it should. -->
-
         <p para_num="4" id="dcl.spec.auto.4" number="4" class="quoted">
         The type of a variable declared using <code>auto</code> or 
         <code>decltype(auto)</code> is deduced from its initializer. This use 
@@ -2178,9 +2361,9 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce valu
         </del>
 
         <ins>
-        Either <code>auto</code> shall appear in the 
-        <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm>, or
-        <code>decltype(auto)</code> shall appear as one of the
+        <code>auto</code> can appear anywhere in the declared type
+        of the variable, but <code>decltype(auto)</code>
+        shall appear only as one of the
         <cxx-grammarterm><i>decl-specifier</i></cxx-grammarterm>s of the
         <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm>.
         </ins>
@@ -2311,24 +2494,24 @@ Vec&lt;auto&gt; v2 = {1, 2, 3};           // <i>error: cannot deduce element typ
     
     <span class="nowrap">[ <em>Example:</em></span>
     
-        Similarly, the type of <code>p</code> in the following program
+        <ins>Similarly, the type of <code>p</code> in the following program</ins>
         <cxx-codeblock>
     
-    <pre><code>template&lt;typename F, typename S&gt; struct Pair;
+    <pre><code><ins>template&lt;typename F, typename S&gt; struct Pair;
 template&lt;typename T, typename U&gt; Pair&lt;T, U&gt; make_pair(T, U);
 
 struct S { void mfn(bool); } s;
 int fn(char, double);
 
-Pair&lt;auto (*)(auto, auto), auto (auto::*)(auto)&gt; p = make_pair(fn, &amp;S::mfn);</code></pre>
+Pair&lt;auto (*)(auto, auto), auto (auto::*)(auto)&gt; p = make_pair(fn, &amp;S::mfn);</ins></code></pre>
   </cxx-codeblock>
-is the deduced type of the parameter <code>x</code> in the call of 
+<ins>is the deduced type of the parameter <code>x</code> in the call of
 <code>g(make_pair(fn, &amp;S::mfn))</code> of the following invented function 
-template:
+template:</ins>
         <cxx-codeblock>
     
-    <pre><code>template&lt;class T1, class T2, class T2, class T3, class T4, class T5, class T6&gt; 
-  void g(Pair&lt; T1(*)(T2, T3), T4 (T5::*)(T6)&gt;);</code></pre>
+    <pre><code><ins>template&lt;class T1, class T2, class T2, class T3, class T4, class T5, class T6&gt;</ins>
+  <ins>void g(Pair&lt; T1(*)(T2, T3), T4 (T5::*)(T6)&gt; x);</ins></code></pre>
   </cxx-codeblock>
         
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -2454,12 +2637,12 @@ void f3(Stack&lt;auto, C3&gt;); // C3 <i>designates a placeholder for a class te
         <li> a parameter type of a function declaration, signifying an 
              abbreviated function template (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>);</li>
         <li> a parameter of a lambda, signifying a generic lambda 
-             (<cxx-ref to="expr.prim.lambda"><a title="expr.prim.lambda" href="#expr.prim.lambda">5.1.2</a></cxx-ref>);</li>
+             (<cxx-ref to="expr.prim.lambda"><a title="expr.prim.lambda" href="#expr.prim.lambda">5.1.1.1</a></cxx-ref>);</li>
         <li> the parameter type of a template parameter, signifying a
              constrained template parameter (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>);</li>
         <li> the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> of
              a <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm>
-             (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>),
+             (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.1.2.3</a></cxx-ref>),
              signifying an argument deduction constraint 
              (<cxx-ref to="temp.constr.atom.deduct"><a title="temp.constr.atom.deduct" href="#temp.constr.atom.deduct">14.9.2.5</a></cxx-ref>). </li>
         </ul>
@@ -2490,7 +2673,6 @@ void af(const Vec&lt;C1&gt;&amp; x);              // <i>OK: an abbreviated funct
 void f1(N::Wrap&lt;C1&gt;);     // <i>OK</i>
 void f2(Pair&lt;C1, C2&lt;0&gt;&gt;); // <i>OK</i>
 void f3(Pred&lt;C3&gt;);        // <i>OK</i>
-void f4(C1::Wrap&lt;C2&lt;1&gt;&gt;); // <i>OK: but deduction of</i> C1 <i>will always fail</i>
 
 template&lt;typename T&gt; concept bool Iter() {
   return requires(T i) {
@@ -2667,7 +2849,7 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
 
         In the case of a generic lambda, the association is with
         the member function call operator of the closure type 
-        (<cxx-ref to="expr.prim.lambda"><a title="expr.prim.lambda" href="#expr.prim.lambda">5.1.2</a></cxx-ref>).
+        (<cxx-ref to="expr.prim.lambda"><a title="expr.prim.lambda" href="#expr.prim.lambda">5.1.1.1</a></cxx-ref>).
 
         For an abbreviated function template declaration
         (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>), the association is with that
@@ -5985,10 +6167,10 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
           An expression constraint is introduced by the 
           <cxx-grammarterm><i>expression</i></cxx-grammarterm> in either a
           <cxx-grammarterm><i>simple-requirement</i></cxx-grammarterm> 
-          (<cxx-ref to="expr.prim.req.simple"><a title="expr.prim.req.simple" href="#expr.prim.req.simple">5.1.3.1</a></cxx-ref>)
+          (<cxx-ref to="expr.prim.req.simple"><a title="expr.prim.req.simple" href="#expr.prim.req.simple">5.1.1.2.1</a></cxx-ref>)
           or
           <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm>
-          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>)
+          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.1.2.3</a></cxx-ref>)
           of a
           <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>.
           
@@ -6051,7 +6233,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
           <cxx-grammarterm><i>typename-specifier</i></cxx-grammarterm> in a
           <cxx-grammarterm><i>type-requirement</i></cxx-grammarterm> of a
           <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>
-          (<cxx-ref to="expr.prim.req.type"><a title="expr.prim.req.type" href="#expr.prim.req.type">5.1.3.2</a></cxx-ref>).
+          (<cxx-ref to="expr.prim.req.type"><a title="expr.prim.req.type" href="#expr.prim.req.type">5.1.1.2.2</a></cxx-ref>).
           
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
@@ -6118,7 +6300,7 @@ requires (T t) {
           <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> in a
           <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> when
           its type contains no placeholders
-          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>).
+          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.1.2.3</a></cxx-ref>).
           
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
@@ -6202,7 +6384,7 @@ requires (T a, T b) {
           <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> when the
           <cxx-grammarterm><i>trailing-type-specifier-seq</i></cxx-grammarterm>
           contains at least one placeholder
-          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>).
+          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.1.2.3</a></cxx-ref>).
           
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
@@ -6282,7 +6464,7 @@ template&lt;typename T&gt; concept bool D = requires (T t) { *t -&gt; const C&am
           Constant expression constraints are introduced by a
           <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> that
           includes the <code>constexpr</code> specifier
-          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>).
+          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.1.2.3</a></cxx-ref>).
           
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
@@ -6339,7 +6521,7 @@ requires() {
           Constant expression constraints are introduced by a
           <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> that
           includes the <code>noexcept</code> specifier
-          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>).
+          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.1.2.3</a></cxx-ref>).
           
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
@@ -6510,7 +6692,7 @@ g(0);       // <i>selects #4</i></code></pre>
       <li> The normalization of a 
       <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> is 
       defined to be the conjunction of constraints introduced by
-      the body of that expression (<cxx-ref to="expr.prim.req"><a title="expr.prim.req" href="#expr.prim.req">5.1.3</a></cxx-ref>).
+      the body of that expression (<cxx-ref to="expr.prim.req"><a title="expr.prim.req" href="#expr.prim.req">5.1.1.2</a></cxx-ref>).
       </li>
 
       <li> Otherwise, <code>E</code> shall be a prvalue constant

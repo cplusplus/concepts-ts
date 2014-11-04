@@ -1166,6 +1166,7 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
         <cxx-grammarterm>constraint-expression</cxx-grammarterm>s.</li>
         </ul>
         </ins>
+
         If a program contains declarations of function templates that are 
         functionally equivalent but not equivalent, the program is ill-formed; 
         no diagnostic is required.
@@ -2071,6 +2072,7 @@ g(0);       // <i>selects #4</i>
       order constraints (<cxx-ref to="temp.constr.order"></cxx-ref>).
       </cxx-note>
 
+      <!-- TODO: Make this a table -->
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C1() { return sizeof(T) == 1; }
@@ -2097,53 +2099,6 @@ C3&lt;int&gt;            /* <i>type constraint for</i> int::type */
       constraint.
       </cxx-example>
 
-
-      <!-- TODO: What about constraint expressions that refer to local
-      parameters of the same type? It's okay to say no. -->
-
-      <p> Two <cxx-grammarterm>constraint-expression</cxx-grammarterm>s are 
-      considered equivalent if two function definitions containing the 
-      expressions would satisfy the one definition rule 
-      (<cxx-ref in="cxx" to="basic.def.odr"></cxx-ref>), except that
-      the tokens used to name template parameters may differ as long as a 
-      token used to name a template parameter in one expression is replaced by 
-      another token that names the same template parameter in the other 
-      expression, and the tokens used to name names of other entities may 
-      differ only if those names refer to the same set of declarations.
-      </ul>
-      <cxx-example class="inline">
-      <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = sizeof(T) == 1;
-
-template&lt;typename T&gt; requires C&lt;T&gt; void f(); // <i>#1</i>
-template&lt;typename U&gt; requires C&lt;U&gt; void f(); // <i>OK: redeclaration of #1</i>
-
-namespace N1 { template&lt;typename T&gt; concept bool C1 = true; }
-namespace N2 { template&lt;typename T&gt; concept bool C2 = true; }
-
-template&lt;typename T&gt; requires N1::C1&lt;T&gt; void g(); // #2
-template&lt;typename T&gt; requires N1::C1&lt;T&gt; void h(); // #3
-using N1::C1;
-template&lt;typename T&gt; requires C1&lt;T&gt; void g();     // <i>OK: redeclaration of #2</i>
-using namespace N2;
-template&lt;typename T&gt; requires C2&lt;T&gt; void h();     // <i>OK: redeclaration of #3</i>
-      </cxx-codeblock>
-      </cxx-example>
-
-      Two <cxx-grammarterm>constraint-expressions</cxx-grammarterm> that are not 
-      equivalent are functionally equivalent if, for any given set of template 
-      arguments, the satisfaction of their normalized constraints yields the
-      same result.
-
-      A <cxx-grammarterm>constraint-expression</cxx-grammarterm> or
-      subexpression thereof of the form <code>(E)</code> is not equivalent to
-      <code>E</code>, but the two expressions are functionally equivalent. </p>
-      <cxx-example class="inline">
-      <cxx-codeblock>
-void f() requires true || 1 == 2;   // <i>#1</i>
-void f() requires true || (1 == 2); // <i>not equivalent but functionally equivalent</i>
-      </cxx-codeblock>
-      </cxx-example>
     </cxx-section> <!-- temp.constr.expr -->
 
   </cxx-section> <!-- temp.constr -->
