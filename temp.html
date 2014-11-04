@@ -1820,14 +1820,14 @@ requires (T a, T b) {
           The concept <code>D</code> introduces an argument deduction 
           constraint for the expression <code>*t</code>.
           <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = requires (T t) { ++t; }
-template&lt;typename T&gt; concept bool D = requires (T t) { *t -> const C&amp;; }
+template&lt;typename T&gt; concept bool C = requires (T t) { ++t; };
+template&lt;typename T&gt; concept bool D = requires (T t) { *t -> const C&amp;; };
           </cxx-codeblock>
           When determining if <code>D</code> is satisfied, overload resolution
           is performed for the call <code>g(*t)</code> against the following 
-          invented function:
+          invented abbreviated function template:
           <cxx-codeblock>
-template&lt;typename T&gt; requires C&lt;T&gt; void g(const T&amp;);
+void g(const C&);
           </cxx-codeblock>
           </cxx-example>
           </p>
