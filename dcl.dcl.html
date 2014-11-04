@@ -59,26 +59,21 @@
 
         <p number="1" class="quoted">
         The <code>auto</code> and <code>decltype(auto)</code> 
-        <cxx-grammarterm>type-specifier</cxx-grammarterm>s designate a 
-        placeholder type that will be replaced later, either by deduction from 
+        <cxx-grammarterm>type-specifier</cxx-grammarterm>s <ins>(as well
+        as <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s,
+	<cxx-ref to="dcl.spec.constr"></cxx-ref>)</ins> designate <del>a</del>
+        placeholder <del>type</del><ins>types</ins> that will be replaced 
+	later, either by deduction from 
         an initializer or by explicit specification with a 
         <cxx-grammarterm>trailing-return-type</cxx-grammarterm>. The 
         <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
         is also used to signify that a lambda is a generic lambda<ins> or
         that a function declaration is an abbreviated function template</ins>.
 
-        <cxx-note>
-        The use of the <code>auto</code> 
-        <cxx-grammarterm>type-specifier</cxx-grammarterm> in a non-deduced 
-        context (<cxx-ref in="cxx" to="temp.deduct.type"></cxx-ref>) will cause the 
-        deduction of a value for that placeholder type to fail, resulting
-        in an ill-formed program.
-        </cxx-note>
-
         <ins class"local">
         <cxx-example class="inline">
         <cxx-codeblock>
-struct N {
+<ins>struct N {
   template&lt;typename T&gt; struct Wrap;
   template&lt;typename T&gt; static Wrap&lt;T&gt; make_wrap(T);
 };
@@ -93,7 +88,7 @@ void (auto::*)(auto) p = &amp;Size&lt;0&gt;::f;   // <i>OK</i>
 N::Wrap&lt;auto&gt; a = N::make_wrap(0.0);    // <i>OK</i>
 Pair&lt;auto, auto&gt; p = make_pair(0, 'a'); // <i>OK</i>
 auto::Wrap&lt;int&gt; x = N::make_wrap(0);    // <i>error: failed to deduce value for</i> auto
-Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce value for</i> auto
+Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce value for</i> auto</ins>
         </cxx-codeblock>
         </cxx-example>
         </p>
@@ -142,7 +137,8 @@ auto glambda = [](int i, auto a) { return i; }; // <i>OK: a generic lambda</i>
 
         <ins>
         Similarly, if the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
-        appears in a parameter type of a function declarator, that is an 
+        appears in a parameter type of a function declaration, the function
+	declaration declares an
         abbreviated function template (<cxx-ref to="dcl.fct"></cxx-ref>).
 
         <cxx-example class="inline">
@@ -182,9 +178,6 @@ template&lt;typename T&gt; concept bool C() {
         certain declarations. Note that the examples in the original text are 
         unchanged and therefore omitted.
 
-        <!-- FIXE: This probably doesn't allow things like int '(*)(auto)', 
-             but it should. -->
-
         <p number="4" class="quoted">
         The type of a variable declared using <code>auto</code> or 
         <code>decltype(auto)</code> is deduced from its initializer. This use 
@@ -203,9 +196,9 @@ template&lt;typename T&gt; concept bool C() {
         </del>
 
         <ins>
-        Either <code>auto</code> shall appear in the 
-        <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm>, or
-        <code>decltype(auto)</code> shall appear as one of the
+        <code>auto</code> can appear anywhere in the declared type
+        of the variable, but <code>decltype(auto)</code>
+        shall appear only as one of the
         <cxx-grammarterm>decl-specifier</cxx-grammarterm>s of the
         <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm>.
         </ins>
@@ -319,22 +312,22 @@ template &lt;class U&gt; void f(const U&amp; u);
         </cxx-example>
 
         <cxx-example class="inline">
-        Similarly, the type of <code>p</code> in the following program
+        <ins>Similarly, the type of <code>p</code> in the following program</ins>
         <cxx-codeblock>
-template&lt;typename F, typename S&gt; struct Pair;
+<ins>template&lt;typename F, typename S&gt; struct Pair;
 template&lt;typename T, typename U&gt; Pair&lt;T, U&gt; make_pair(T, U);
 
 struct S { void mfn(bool); } s;
 int fn(char, double);
 
-Pair&lt;auto (*)(auto, auto), auto (auto::*)(auto)&gt; p = make_pair(fn, &amp;S::mfn);
+Pair&lt;auto (*)(auto, auto), auto (auto::*)(auto)&gt; p = make_pair(fn, &amp;S::mfn);</ins>
         </cxx-codeblock>
-is the deduced type of the parameter <code>x</code> in the call of 
+<ins>is the deduced type of the parameter <code>x</code> in the call of
 <code>g(make_pair(fn, &amp;S::mfn))</code> of the following invented function 
-template:
+template:</ins>
         <cxx-codeblock>
-template&lt;class T1, class T2, class T2, class T3, class T4, class T5, class T6&gt; 
-  void g(Pair&lt; T1(*)(T2, T3), T4 (T5::*)(T6)&gt;);
+<ins>template&lt;class T1, class T2, class T2, class T3, class T4, class T5, class T6&gt;</ins>
+  <ins>void g(Pair&lt; T1(*)(T2, T3), T4 (T5::*)(T6)&gt; x);</ins>
         </cxx-codeblock>
         </cxx-example>
         </div>
@@ -447,7 +440,6 @@ void af(const Vec&lt;C1&gt;&amp; x);              // <i>OK: an abbreviated funct
 void f1(N::Wrap&lt;C1&gt;);     // <i>OK</i>
 void f2(Pair&lt;C1, C2&lt;0&gt;&gt;); // <i>OK</i>
 void f3(Pred&lt;C3&gt;);        // <i>OK</i>
-void f4(C1::Wrap&lt;C2&lt;1&gt;&gt;); // <i>OK: but deduction of</i> C1 <i>will always fail</i>
 
 template&lt;typename T&gt; concept bool Iter() {
   return requires(T i) {

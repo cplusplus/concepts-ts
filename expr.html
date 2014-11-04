@@ -18,6 +18,8 @@
 
   <cxx-section id="expr.prim">
     <h1>Primary expressions</h1>
+  <cxx-section id="expr.prim.general">
+    <h1>General</h1>
 
     In this section, add the 
     <cxx-grammarterm>requires-expression</cxx-grammarterm> to the rule for 
@@ -28,12 +30,33 @@
         <ins><bnf-alt>requires-expression</bnf-alt></ins>
     </bnf-grammar>
 
+    <br/>
+    Add <code>auto</code> to <cxx-grammarterm>nested-name-specifier</cxx-grammarterm>:
+    <bnf-grammar>
+      <bnf-rule>nested-name-specifier</bnf-rule>
+      <bnf-alt><bnf-terminal>::</bnf-terminal></bnf-alt>
+      <bnf-alt>type-name <bnf-terminal>::</bnf-terminal></bnf-alt>
+      <bnf-alt>namespace-name <bnf-terminal>::</bnf-terminal></bnf-alt>
+      <bnf-alt>decltype-specifier <bnf-terminal>::</bnf-terminal></bnf-alt>
+      <bnf-alt><ins><bnf-terminal>auto</bnf-terminal> <bnf-terminal>::</bnf-terminal></ins></bnf-alt>
+      <bnf-alt>nested-name-specifier identifier <bnf-terminal>::</bnf-terminal></bnf-alt>
+      <bnf-alt>nested-name-specifier templateopt simple-template-id <bnf-terminal>::</bnf-terminal></bnf-alt>
+    </bnf-grammar>
+
+    Add a new paragraph after paragraph 11:
+
+    <p number="12">
+      In a <cxx-grammarterm>nested-name-specifier</cxx-grammarterm> of the
+      form <code>auto::</code>, the <code>auto</code> specifier is a
+      placeholder for a type to be deduced
+      (<cxx-ref to="dcl.spec.auto"></cxx-ref>).
+    </p>
 
   <!-- ==================
        Lambda expressions
        ================== -->
 
-    <cxx-section id="expr.prim.lambda" number="2">
+    <cxx-section id="expr.prim.lambda">
       <h1>Lambda expressions</h1>
 
       Insert the following paragraph after paragraph 4 to define the
