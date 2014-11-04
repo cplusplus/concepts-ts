@@ -128,8 +128,23 @@ auto* p = new void(*[3])(char) requires true; // <i>error: not a function declar
 
       All declarations for a function shall agree exactly in <del>both</del> 
       the return type<ins>,</ins> <del>and</del> the parameter-type-list<ins>,
-      and asssociated constraints, if any 
-      (<cxx-ref to="temp.constr.expr"></cxx-ref>)</ins>.
+      and associated constraints, if any 
+      (<cxx-ref to="temp"></cxx-ref>)</ins>.
+      </p>
+
+      Modify paragraph 6 to exclude constraints from the type of a function.
+      Note that the change occurs in the sentence following the example
+      in the original document.
+
+      <p class="quoted" number="6">
+      The return type, the parameter-type-list, the 
+      <cxx-grammarterm>ref-qualifier</cxx-grammarterm>, and the 
+      <cxx-grammarterm>cv-qualifier-seq</cxx-grammarterm>, but not the 
+      default arguments 
+      (<cxx-ref in="cxx" to="dcl.fct.default"></cxx-ref>)<ins>, associated 
+      constraints (<cxx-ref to="temp"></cxx-ref>),</ins> or
+      the exception specification (<cxx-ref in="cxx" to="except.spec"></cxx-ref>), 
+      are part of the function type.
       </p>
 
       Modify paragraph 15. Note that the footnote reference has been
