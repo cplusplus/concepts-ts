@@ -920,46 +920,49 @@ template&lt;C1 T&gt; template&lt;typename U&gt;
       <h1>Friends</h1>
 
 
-      Add the following paragraphs to explain the meaning of constrained
-      friend declarations. 
+      Modify paragraph 10 to restrict constrained friend declarations.
 
-      <p number="10" class="quoted">
-      A friend function template may be constrained, except:
-      </p>
-      <div class="quoted">
-      <ul>
-      <li> if the friend declares, but does not define, a non-template
-      function to be a friend of a class template, the associated constraints
-      of that friend function declaration shall be non-dependent
-      (<cxx-ref in="cxx" to="temp.nondep"></cxx-ref>); </li>
+      <p number="9" class="quoted">
+	When a friend declaration refers to a specialization of a function
+	template, the function parameter declarations shall not include
+	default arguments, <ins>the declaration shall not be
+	constrained,</ins> nor shall the inline specifier be used in such a
+	declaration.</p>
 
-      <li> if the friend declares a function template specialization to
-      be a friend of a class template, the declaration shall not have
-      associated constraints, and the template arguments of that specialization
-      shall satisfy the associated constraints of the template referred to
-      by the friend declaration (<cxx-ref to="temp.deduct.decl"></cxx-ref>). </li>
-      </ul>
-
+	<p class="quoted">
+	<cxx-note>Other friend declarations can be constrained.  In a
+	constrained friend declaration that is not a definition, the
+	constraints are used for declaration
+	matching.</cxx-note>
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C1 = true;
 template&lt;typename T&gt; concept bool C2 = false;
 
+template&lt;C1 T&gt; g0(T);
 template&lt;C1 T&gt; g1(T);
 template&lt;C2 T&gt; g2(T);
 
 template&lt;typename T&gt;
   struct S {
     friend void f1() requires true;  // <i>OK</i>
-    friend void f2() requires C1&lt;T&gt;; // <i>error: constraints refer to</i> T
+    friend void f2() requires C1&lt;T&gt;; // <i>OK</i>
+    friend void g0&lt;T&gt;(T) requires C&lt;T>; // <i>error: constrained friend specialization</i>
     friend void g1&lt;T&gt;(T);            // <i>OK</i>
-    friend void g2&lt;T&gt;(T);            // <i>error: constraints not satisfied</i>
+    friend void g2&lt;T&gt;(T);            // <i>ill-formed, no diagnostic required</i>
   };
-      </cxx-codeblock>
-      </cxx-example>
-      </div>
 
-      <p>
+void f1() requires true; // <i>friend of all S&lt;T></i>
+void f2() requires C1&ltint>; // <i>friend of S&lt;int></i>
+      </cxx-codeblock>
+      The friend declaration of <code>g2</code> is ill-formed, no
+      diagnostic required because no valid instantiation of <code>S</code>
+      is possible: for all <code>T</code> there is no <code>g2&lt;T></code>
+      for which the constraints are satisfied, so template argument
+      deduction (<cxx-ref to="temp.deduct.decl"></cxx-ref>) fails.
+      </cxx-example>
+      </p>
+      <p class="quoted">
       <cxx-note>
       Within a class template, a friend may define a non-template function
       whose constraints specify requirements on template arguments.
