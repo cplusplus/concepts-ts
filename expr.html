@@ -1,6 +1,17 @@
 <cxx-clause id="expr" number="5">
   <h1>Expressions</h1>
 
+  Modify paragraph 8 to include a reference to 
+  <cxx-grammarterm>requires-expression</cxx-grammarterm>s.
+
+  <p number="8" class="quoted">
+  In some contexts, unevaluated operands appear
+  (<cxx-ref in="cxx" to="expr.typeid"></cxx-ref>,
+  <cxx-ref in="cxx" to="expr.sizeof"></cxx-ref>,
+  <cxx-ref in="cxx" to="expr.unary.noexcept"></cxx-ref>,
+  <ins><cxx-ref in="cxx" to="expr.prim.req"></cxx-ref></ins>).
+  </p>
+
   <!-- ===================
        Primary expressions
        =================== -->
@@ -164,12 +175,12 @@ struct Fun {
     </p>
 
     <p> A <cxx-grammarterm>requires-expression</cxx-grammarterm> has type
-    <code>bool</code>. 
+    <code>bool</code> and is an unevaluated operand 
+    (<cxx-ref in="expr"></cxx-ref>).
 
-    A <cxx-grammarterm>requires-expression</cxx-grammarterm> evaluates
-    to <code>true</code> when all of its introduced constraints are
-    satisfied (<cxx-ref to="temp.constr"></cxx-ref>), and <code>false</code> 
-    otherwise. </p>
+    <!-- NOTE: There is a core issue related to determining when something
+    is unevaluated. -->
+    </p>
 
     <p >A <cxx-grammarterm>requires-expression</cxx-grammarterm> shall appear
     only within a concept definition (<cxx-ref to="dcl.spec.concept"></cxx-ref>) 
