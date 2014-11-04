@@ -2066,15 +2066,15 @@ g(0);       // <i>selects #4</i>
       defines a subset of constant expressions over which certain 
       logical implications can be deduced during translation.
 
-      The prohibition against user-defined logical operators in intended to
-      prevent the subversion of the underlying logic necessary partially
+      The prohibition against user-defined logical operators is intended to
+      prevent the subversion of the underlying logic necessary to partially
       order constraints (<cxx-ref to="temp.constr.order"></cxx-ref>).
       </cxx-note>
 
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C1() { return sizeof(T) == 1; }
-template&lt;typename T&gt; concept bool C2 = C1&lt;T&gt;() &amp;&amp; 1 == 2; }
+template&lt;typename T&gt; concept bool C2 = C1&lt;T&gt;() &amp;&amp; 1 == 2;
 template&lt;typename T&gt; concept bool C3 = requires () { typename T::type; };
 
 // <i>Expression</i>      // <i>Constraints</i>
