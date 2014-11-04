@@ -41,7 +41,7 @@
       </p>
 
       Modify paragraph 5 so that the meaning of a generic lambda is defined 
-      in terms of its abbreviated member function call operator.
+      in terms of its abbreviated member function template call operator.
 
       <p number="6" class="quoted">
       The closure type for a non-generic
@@ -79,7 +79,7 @@
 
       <ins>
       For a generic lambda, the function call operator is an abbreviated
-      member function, whose parameters and return type are derived according
+      function template whose parameters and return type are derived according
       to the rules in <cxx-ref to="dcl.fct"></cxx-ref>.
       </ins>
       </p>
@@ -410,7 +410,7 @@ template&lt;typename T&gt; concept bool C =
 
       In this constraint, deduction is performed against an invented function
       template whose declaration is formed according to the rules for
-      abbreviated functions in <cxx-ref to="dcl.fct"></cxx-ref> where 
+      abbreviated function templates in <cxx-ref to="dcl.fct"></cxx-ref> where
       <code>T</code> is the type of the invented function's only parameter.
 
       <!-- FIXME: This is hard to read. Consider braking them up. -->
