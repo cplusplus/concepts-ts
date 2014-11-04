@@ -1295,8 +1295,8 @@ template&lt;typename T&gt; concept bool C = sizeof(T) == 1;
 
 template&lt;C T&gt; struct S { };
 
-template S&lt;char&gt;;    // <i>OK</i>
-template S&lt;char[2]&gt;; // <i>error: constraints not satisfied</i>
+template struct S&lt;char&gt;;    // <i>OK</i>
+template struct S&lt;char[2]&gt;; // <i>error: constraints not satisfied</i>
       </cxx-codeblock>
       </cxx-example>
 
@@ -1348,8 +1348,8 @@ template&lt;typename T&gt; concept bool C = sizeof(T) == 1;
 
 template&lt;C T&gt; struct S { };
 
-template&lt;&gt; S&lt;char&gt; { };    // <i>OK</i>
-template&lt;&gt; S&lt;char[2]&gt; { }; // <i>error: constraints not satisfied</i>
+template&lt;&gt; struct S&lt;char&gt; { };    // <i>OK</i>
+template&lt;&gt; struct S&lt;char[2]&gt; { }; // <i>error: constraints not satisfied</i>
       </cxx-codeblock>
       </cxx-example>
       </p>
@@ -1364,13 +1364,15 @@ template&lt;&gt; S&lt;char[2]&gt; { }; // <i>error: constraints not satisfied</i
 
       <cxx-example class="inline">
       <cxx-codeblock>
+template&lt;typename T&gt; concept bool C = requires (T t) { -t; };
+
 template&lt;C T&gt;        void f(T); // <i>#1</i>
 template&lt;typename T&gt; void g(T); // <i>#2</i>
 template&lt;C T&gt;        void g(T); // <i>#3</i>
 
-template&lt;&gt; void f(char);  // <i>OK: refers to #1</i>
+template&lt;&gt; void f(int);   // <i>OK: refers to #1</i>
 template&lt;&gt; void f(void*); // <i>error: no matching template</i>
-template&lt;&gt; void g(char);  // <i>OK: refers to #3</i>
+template&lt;&gt; void g(int);   // <i>OK: refers to #3</i>
 template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
       </cxx-example>
       </p>
