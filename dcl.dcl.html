@@ -59,8 +59,11 @@
 
         <p number="1" class="quoted">
         The <code>auto</code> and <code>decltype(auto)</code> 
-        <cxx-grammarterm>type-specifier</cxx-grammarterm>s designate a 
-        placeholder type that will be replaced later, either by deduction from 
+        <cxx-grammarterm>type-specifier</cxx-grammarterm>s <ins>(as well
+        as <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s,
+	<cxx-ref to="dcl.spec.constr"></cxx-ref>)</ins> designate <del>a</del>
+        placeholder <del>type</del><ins>types</ins> that will be replaced 
+	later, either by deduction from 
         an initializer or by explicit specification with a 
         <cxx-grammarterm>trailing-return-type</cxx-grammarterm>. The 
         <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
