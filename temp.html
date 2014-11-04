@@ -690,10 +690,10 @@ S&lt;bool&gt;* p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;*
 
     <cxx-example class="inline">
     <cxx-codeblock>
-template&lt;typename C&gt; = false;
+template&lt;typename T&gt; concept bool C = false;
 
 template&lt;C T&gt; struct S { };
-template&lt; T&gt; using Ptr = T*;
+template&lt;C T&gt; using Ptr = T*;
 
 S&lt;int&gt;* p;  // <i>error: constraints not satisfied</i>
 Ptr&lt;int&gt; p; // <i>error: constraints not satisfied</i>
