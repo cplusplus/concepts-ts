@@ -28,7 +28,7 @@
 
   <p number="6" class="quoted">
   The optional <cxx-grammarterm>requires-clause</cxx-grammarterm>
-  (<cxx-ref to="temp"></cxx-ref>) in a
+  (Clause <cxx-ref to="temp"></cxx-ref>) in a
   <cxx-grammarterm>declarator</cxx-grammarterm> shall be present only when
   the declarator declares a function.
 
@@ -44,6 +44,7 @@ auto* p = new void(*[3])(char) requires true; // <i>error: not a function declar
   </cxx-example>
   </p>
 
+
   <!-- ======================
        Meaning of declarators
        ====================== -->
@@ -58,6 +59,38 @@ auto* p = new void(*[3])(char) requires true; // <i>error: not a function declar
 
     <cxx-section id="dcl.fct" number="5">
       <h1>Functions</h1>
+
+      Modify the matching condition in paragraph 1 to accept
+      a <cxx-grammarterm>requires-clause</cxx-grammarterm>.
+      
+      <p number="1" class="quoted">
+      <bnf-grammar>
+      <bnf-terminal>D1</bnf-terminal> 
+      <bnf-terminal>(</bnf-terminal> parameter-declaration-clause <bnf-terminal>)</bnf-terminal>
+      <bnf-opt>cv-qualifier-seq</bnf-opt> <br/>
+      <bnf-opt>ref-qualifier</bnf-opt>
+      <bnf-opt>exception-specification</bnf-opt> 
+      <bnf-opt>attribute-specifier-seq</bnf-opt> 
+      <bnf-opt>requires-clause</bnf-opt>
+      </bnf-grammar>
+      </p>
+
+      Modify the matching condition in paragraph 2 to accept
+      a <cxx-grammarterm>requires-clause</cxx-grammarterm>.
+
+      <p number="1" class="quoted">
+      <bnf-grammar>
+      <bnf-terminal>D1</bnf-terminal> 
+      <bnf-terminal>(</bnf-terminal> parameter-declaration-clause <bnf-terminal>)</bnf-terminal> 
+      <bnf-opt>cv-qualifier-seq</bnf-opt> <br/>
+      <bnf-opt>ref-qualifier</bnf-opt>
+      <bnf-opt>exception-specification</bnf-opt> 
+      <bnf-opt>attribute-specifier-seq</bnf-opt> 
+      trailing-return-type
+      <bnf-opt>requires-clause</bnf-opt>
+      </bnf-grammar>
+      </p>
+
 
       Refactor the grammar for 
       <cxx-grammarterm>parameter-declaration</cxx-grammarterm>s in
@@ -124,12 +157,12 @@ auto* p = new void(*[3])(char) requires true; // <i>error: not a function declar
 
       <p class="quoted" number="5">
       A single name can be used for several different functions in a single 
-      scope; this is function overloading (<cxx-ref to="over"></cxx-ref>). 
+      scope; this is function overloading (Clause <cxx-ref to="over"></cxx-ref>). 
 
       All declarations for a function shall agree exactly in <del>both</del> 
       the return type<ins>,</ins> <del>and</del> the parameter-type-list<ins>,
       and associated constraints, if any 
-      (<cxx-ref to="temp"></cxx-ref>)</ins>.
+      (Clause <cxx-ref to="temp"></cxx-ref>)</ins>.
       </p>
 
       Modify paragraph 6 to exclude constraints from the type of a function.
@@ -141,8 +174,9 @@ auto* p = new void(*[3])(char) requires true; // <i>error: not a function declar
       <cxx-grammarterm>ref-qualifier</cxx-grammarterm>, and the 
       <cxx-grammarterm>cv-qualifier-seq</cxx-grammarterm>, but not the 
       default arguments 
-      (<cxx-ref in="cxx" to="dcl.fct.default"></cxx-ref>)<ins>, associated 
-      constraints (<cxx-ref to="temp"></cxx-ref>),</ins> or
+      (<cxx-ref in="cxx" to="dcl.fct.default"></cxx-ref>)<ins>, constraints 
+      associated by an optional <cxx-grammarterm>requires-clause</cxx-grammarterm> 
+      (Clause <cxx-ref to="temp"></cxx-ref>),</ins> or
       the exception specification (<cxx-ref in="cxx" to="except.spec"></cxx-ref>), 
       are part of the function type.
       </p>
