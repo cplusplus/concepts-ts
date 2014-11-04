@@ -902,7 +902,7 @@ template&lt;C1 T&gt;
     template&lt;C2 U&gt; void g(U);
   };
 
-template&lt;C1 T&gt; template&lt;typename U&gt;
+template&lt;C1 T&gt; template&lt;typename U&gt; 
   void S&lt;T&gt;::f(U) requires C2&lt;U&gt; { } // <i>OK</i>
 template&lt;C1 T&gt; template&lt;typename U&gt; 
   void S&lt;T&gt;::g(U) { } // <i>error: no matching function in</i> S&lt;T&gt;
@@ -950,10 +950,10 @@ template&lt;C2 T&gt; g2(T);
 
 template&lt;typename T&gt;
   struct S {
-    void f1() requires true;  // <i>OK</i>
-    void f2() requires C1&lt;T&gt;; // <i>error: constraints refer to</i> T
-    void g1&lt;T&gt;(T);            // <i>OK</i>
-    void g2&lt;T&gt;(T);            // <i>error: constraints not satisfied</i>
+    friend void f1() requires true;  // <i>OK</i>
+    friend void f2() requires C1&lt;T&gt;; // <i>error: constraints refer to</i> T
+    friend void g1&lt;T&gt;(T);            // <i>OK</i>
+    friend void g2&lt;T&gt;(T);            // <i>error: constraints not satisfied</i>
   };
       </cxx-codeblock>
       </cxx-example>
@@ -968,8 +968,8 @@ template&lt;typename T&gt;
 template&lt;typename T&gt; concept bool Eq = requires (T t) { t == t; };
 
 template&lt;typename T&gt;
-  strut S {
-    bool operator==(S a, S b) requires Eq&lt;T&gt; { return a == b; } // OK
+  struct S {
+    friend bool operator==(S a, S b) requires Eq&lt;T&gt; { return a == b; } // OK
   };
       </cxx-codeblock>
       </cxx-example>
