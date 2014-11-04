@@ -32,7 +32,9 @@ limitations under the License.
       ><cxx-get-element-by-id elemId="{{in}}" elem="{{inElem}}"></cxx-get-element-by-id
       ><template if="{{!in}}"><cxx-get-element-by-id elemId="{{to}}" elem="{{toElem}}"></cxx-get-element-by-id></template
       ><template id="target_num"
-                 ><template if="{{inElem.index}}">{{inElem.name}} <span title="{{to}}">&#xa7;{{inElem.index[to]}}</span></template
+                 ><template if="{{inElem.index}}"
+	                 ><template if="{{inElem.id != 'cxx'}}">{{inElem.name}} </template
+	             ><span title="{{to}}">&#xa7;{{inElem.index[to]}}</span></template
                  ><template if="{{!in}}"><a title="{{to}}" href="#{{to}}"
                    ><template if="{{toElem.sec_num}}">{{toElem.sec_num}}</template
                    ><template if="{{toElem.table_num}}">Table {{toElem.table_num}}</template
