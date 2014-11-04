@@ -447,7 +447,6 @@ void af(const Vec&lt;C1&gt;&amp; x);              // <i>OK: an abbreviated funct
 void f1(N::Wrap&lt;C1&gt;);     // <i>OK</i>
 void f2(Pair&lt;C1, C2&lt;0&gt;&gt;); // <i>OK</i>
 void f3(Pred&lt;C3&gt;);        // <i>OK</i>
-void f4(C1::Wrap&lt;C2&lt;1&gt;&gt;); // <i>OK: but deduction of</i> C1 <i>will always fail</i>
 
 template&lt;typename T&gt; concept bool Iter() {
   return requires(T i) {
