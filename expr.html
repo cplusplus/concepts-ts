@@ -138,11 +138,6 @@ struct Fun {
     (<cxx-ref in="cxx" to="basic.lookup"></cxx-ref>) or by checking
     properties of types and expressions. 
 
-    A <cxx-grammarterm>requires-expression</cxx-grammarterm> defines
-    a conjunction of constraints (<cxx-ref to="temp.constr"></cxx-ref>),
-    which are introduced by its 
-    <cxx-grammarterm>requirement</cxx-grammarterm>s.
-
     <bnf-grammar>
       <bnf-rule>requires-expression</bnf-rule>
         <bnf-alt><bnf-terminal>requires</bnf-terminal> 
@@ -172,6 +167,12 @@ struct Fun {
       <bnf-alt>compound-requirement</bnf-alt>
       <bnf-alt>nested-requirement</bnf-alt>
     </bnf-grammar>
+
+    A <cxx-grammarterm>requires-expression</cxx-grammarterm> defines
+    a conjunction of the constraints (<cxx-ref to="temp.constr"></cxx-ref>),
+    which are introduced by its 
+    <cxx-grammarterm>requirement</cxx-grammarterm>s.
+
     </p>
 
     <p> A <cxx-grammarterm>requires-expression</cxx-grammarterm> has type
