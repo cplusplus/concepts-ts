@@ -540,10 +540,12 @@ void g(const C&amp;);
       <cxx-grammarterm>type-requirement</cxx-grammarterm> 
       (<cxx-ref to="expr.prim.req.type"></cxx-ref>).
 
-      It appends a normalization of the 
-      <cxx-grammarterm>constraint-expression</cxx-grammarterm>
-      of its <cxx-grammarterm>requires-clause</cxx-grammarterm> to the
-      conjunction of constraints (<cxx-ref to="temp.constr.expr"></cxx-ref>).
+      A <cxx-grammarterm>nested-requirement</cxx-grammarterm> appends the 
+      normalized form (<cxx-ref to="temp.constr.expr"></cxx-ref>) of its
+      <cxx-grammarterm>constraint-expression</cxx-grammarterm> to the
+      conjunction (<cxx-ref to="temp.constr.op.conj"></cxx-ref>) of 
+      constraints introduced by its enclosing
+      <cxx-grammarterm>requires-expression</cxx-grammarterm>.
 
       <cxx-example class="inline"> 
       <cxx-codeblock>
