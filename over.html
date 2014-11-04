@@ -120,14 +120,10 @@
   <cxx-section id="over.over">
     <h1>Address of overloaded function</h1>
 
-    The introduction of constraints modifies the rules for determining
-    which function is selected when taking the address of an overloaded
-    function. Insert a new paragraph before paragraph 4.
+    Insert the following after paragraph 3 to remove those functions
+    whose constraints are not satisfied.
 
-    <p class="quoted" number="4">
-    If a single constrained function is selected, and the constraints are
-    not satisfied (<cxx-ref to="temp.constr"></cxx-ref>), the program
-    is ill-formed. 
+    <p number="4" class="quoted">
     </p>
 
     Modify paragraph 4 (paragraph 5 in this document) to incorporate 
@@ -136,9 +132,14 @@
     (not shown here).
 
     <p number="5" class="quoted">
-    If more than one function is selected, any function template 
-    specializations in the set are eliminated if the set also contains a 
-    function that is not a function template 
+    <ins>Eliminate from the set of selected functions all those whose constraints
+    are not satisfied (<cxx-ref to="temp.constr"></cxx-ref>).</ins>
+
+
+    <del>If more than one function is selected</del>
+    <ins>If more than one function in the set remains</ins>, 
+    any function template specializations in the set are eliminated if the 
+    set also contains a function that is not a function template
     specialization<del>, and</del><ins>. 
 
     Any given non-template function
@@ -156,14 +157,15 @@
     After such eliminations, if any, there shall remain exactly one 
     selected function.
 
-    <cxx-example>
+    <cxx-example class="inline">
     <cxx-codeblock>
-void f() { }                // <i>#1</i>
-void f() requires true { }; // <i>#2</i>
+void f();                // <i>#1</i>
+void f() requires true ; // <i>#2</i>
 void g() requires false;
+void g() requires false and true;
 
 void (*pf)() = &amp;f;         // <i>selects #2</i>
-void (*pg)() = &amp;g;         // <i>error: g() cannot be selected</i>
+void (*pg)() = &amp;g;         // <i>error: no matching function</i>
     </cxx-codeblock>
     </cxx-example>
     </p>
