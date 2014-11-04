@@ -753,30 +753,6 @@ pre {
         
       </li>
             
-              <li><span class="marker">8.4</span><a href="#dcl.fct.def">Function definitions</a>
-        
-          <ol>
-            
-              <li><span class="marker">8.4.1</span><a href="#dcl.fct.def.general">In general</a>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-          </ol>
-        
-      </li>
-            
-              <li><span class="marker">9</span><a href="#class">Classes</a>
-        
-          <ol>
-            
-              <li><span class="marker">9.2</span><a href="#class.mem">Class members</a>
-        
-      </li>
-            
           </ol>
         
       </li>
@@ -805,11 +781,11 @@ pre {
         
           <ol>
             
-              <li><span class="marker">13.3.1</span><a href="#over.match.viable">Viable functions</a>
+              <li><span class="marker">13.3.2</span><a href="#over.match.viable">Viable functions</a>
         
       </li>
             
-              <li><span class="marker">13.3.2</span><a href="#over.match.best">Best viable function</a>
+              <li><span class="marker">13.3.3</span><a href="#over.match.best">Best viable function</a>
         
       </li>
             
@@ -1432,9 +1408,9 @@ struct Fun {
     <cxx-grammarterm><i>init-declarator</i></cxx-grammarterm>
     (<cxx-ref to="dcl.decl"><a title="dcl.decl" href="#dcl.decl">8</a></cxx-ref>),
     <cxx-grammarterm><i>function-definition</i></cxx-grammarterm>
-    (<cxx-ref to="dcl.fct.def"><a title="dcl.fct.def" href="#dcl.fct.def">8.4</a></cxx-ref>), or
+    (<cxx-ref to="dcl.fct.def"><a title="dcl.fct.def" href="#dcl.fct.def"></a></cxx-ref>), or
     <cxx-grammarterm><i>member-declarator</i></cxx-grammarterm>
-    (<cxx-ref to="class.mem"><a title="class.mem" href="#class.mem">9.2</a></cxx-ref>).
+    (<cxx-ref to="class.mem"><a title="class.mem" href="#class.mem"></a></cxx-ref>).
 
     <cxx-example class="inline">
     
@@ -2970,76 +2946,72 @@ concept bool V4 = 0;       // <i>error: not a template</i></code></pre>
       
   
 
-  Modify the definition of the <cxx-grammarterm><i>init-declarator</i></cxx-grammarterm>
-  production in <cxx-ref in="cxx" to="dcl.decl"><span title="dcl.decl">§8</span></cxx-ref>/1 as follows:
+  Factor the grammar of <cxx-grammarterm><i>declarator</i></cxx-grammarterm>s to
+  allow the specification of constraints on function declarations.
 
-  <p para_num="1" id="dcl.decl.1" class="quoted">
-  A declarator declares a single variable, function, or type within a 
-  declaration. The <cxx-grammarterm><i>init-declarator-list</i></cxx-grammarterm>
-  appearing in a declaration is a comma-separated sequence of declarators, 
-  each of which may
-  <del>have an initializer</del>
-  <ins>have constraints, an initializer, or both</ins>.
+  <p para_num="4" id="dcl.decl.4" number="4" class="quoted">
   <bnf-grammar>
     
     
-    <bnf-rule>
+  <bnf-rule>
     
-    init-declarator:
+    declarator:
   </bnf-rule>
-      <bnf-alt>
+    <del>
+    <bnf-alt>
     
-    
-        declarator
-        <ins><bnf-opt>requires-clause<sub>opt</sub></bnf-opt></ins>
-        <bnf-opt>initializer<sub>opt</sub></bnf-opt>
-      
+    ptr-declarator
   </bnf-alt>
+    <bnf-alt>
+    
+    noptr-declarator parameters-and-qualifiers trailing-return-type
+  </bnf-alt>
+    </del>
+    <ins>
+    <bnf-alt>
+    
+    basic-declarator <bnf-opt>requires-clause<sub>opt</sub></bnf-opt>
+  </bnf-alt>
+    </ins>
+
+  <ins>
+  <bnf-rule>
+    
+    basic-declarator:
+  </bnf-rule>
+    <bnf-alt>
+    
+    ptr-declarator
+  </bnf-alt>
+    <bnf-alt>
+    
+    noptr-declarator parameters-and-qualifiers trailing-return-type
+  </bnf-alt>
+  </ins>
   
   </bnf-grammar>
   </p>
 
-  Insert the following paragraphs.
+  Add the following paragraph at the end of this section.
 
-  <p para_num="2" id="dcl.decl.2" class="quoted">
-  A <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> 
-  (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>) in an
-  <cxx-grammarterm><i>init-declarator</i></cxx-grammarterm> shall only appear
-  with the declarator of a function declaration (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>).
+  <p para_num="6" id="dcl.decl.6" number="6" class="quoted">
+  The optional <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>
+  (Clause <cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>) in a
+  <cxx-grammarterm><i>declarator</i></cxx-grammarterm> shall be present only when
+  the declarator declares a function (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>).
 
-  If present, the <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> associates 
-  its <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> with the declared
-  function.
   <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
     
   <cxx-codeblock>
     
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C = true;
-
-void f1(int x) requires C&lt;int&gt;;       // <i>OK</i>
-auto n requires C&lt;decltype(n)&gt; = 'a'; // <i>error: constrained variable declaration</i></code></pre>
+    </cxx-codeblock></cxx-example></p><pre><code>void f1(int a) requires true;         // <i>OK</i>
+auto f2(int a) -&gt; bool requires true; // <i>OK</i>
+void (*pf)() requires true;           // <i>error: constraint on a variable</i>
+void g(int (*)() requires true);      // <i>error: constraint on a parameter</i>
   
-  
-    <span class="nowrap">— <em>end example</em> ]</span>
-  
-  <p></p>
-
-  <p para_num="3" id="dcl.decl.3" class="quoted">
-  The names of parameters in a function declarator are visible in the
-  <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> of the
-  <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>.
-  <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
-  <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C = true;
-
-void f(auto x) requires C&lt;decltype(x)&gt;;
-void g(int n) requires sizeof(n) == 4;</code></pre>
+auto* p = new void(*[3])(char) requires true; // <i>error: not a function declaration</i></code></pre>
   
   
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -3072,6 +3044,44 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
       
       
 
+      Modify the matching condition in paragraph 1 to accept
+      a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>.
+      
+      <p para_num="1" id="dcl.fct.1" number="1" class="quoted">
+      <bnf-grammar>
+    
+    
+      <bnf-terminal><code>D1</code></bnf-terminal> 
+      <bnf-terminal><code>(</code></bnf-terminal> parameter-declaration-clause <bnf-terminal><code>)</code></bnf-terminal>
+      <bnf-opt>cv-qualifier-seq<sub>opt</sub></bnf-opt> <br>
+      <bnf-opt>ref-qualifier<sub>opt</sub></bnf-opt>
+      <bnf-opt>exception-specification<sub>opt</sub></bnf-opt> 
+      <bnf-opt>attribute-specifier-seq<sub>opt</sub></bnf-opt> 
+      <bnf-opt>requires-clause<sub>opt</sub></bnf-opt>
+      
+  </bnf-grammar>
+      </p>
+
+      Modify the matching condition in paragraph 2 to accept
+      a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>.
+
+      <p para_num="1" id="dcl.fct.1" number="1" class="quoted">
+      <bnf-grammar>
+    
+    
+      <bnf-terminal><code>D1</code></bnf-terminal> 
+      <bnf-terminal><code>(</code></bnf-terminal> parameter-declaration-clause <bnf-terminal><code>)</code></bnf-terminal> 
+      <bnf-opt>cv-qualifier-seq<sub>opt</sub></bnf-opt> <br>
+      <bnf-opt>ref-qualifier<sub>opt</sub></bnf-opt>
+      <bnf-opt>exception-specification<sub>opt</sub></bnf-opt> 
+      <bnf-opt>attribute-specifier-seq<sub>opt</sub></bnf-opt> 
+      trailing-return-type
+      <bnf-opt>requires-clause<sub>opt</sub></bnf-opt>
+      
+  </bnf-grammar>
+      </p>
+
+
       Refactor the grammar for 
       <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm>s in
       paragraph 3 in order to support the definition of
@@ -3086,7 +3096,7 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
     
     parameter-declaration:
   </bnf-rule>
-          <del><s>
+          <del>
           <bnf-alt>
     
     
@@ -3123,7 +3133,6 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
             <bnf-terminal><code>=</code></bnf-terminal> 
             initializer-clause
   </bnf-alt>
-          </s>
           </del>
 
           <ins>
@@ -3171,12 +3180,28 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
 
       <p para_num="5" id="dcl.fct.5" class="quoted" number="5">
       A single name can be used for several different functions in a single 
-      scope; this is function overloading (<cxx-ref to="over"><a title="over" href="#over">13</a></cxx-ref>). 
+      scope; this is function overloading (Clause <cxx-ref to="over"><a title="over" href="#over">13</a></cxx-ref>). 
 
       All declarations for a function shall agree exactly in <del>both</del> 
       the return type<ins>,</ins> <del>and</del> the parameter-type-list<ins>,
-      and asssociated constraints, if any 
-      (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>)</ins>.
+      and associated constraints, if any 
+      (Clause <cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>)</ins>.
+      </p>
+
+      Modify paragraph 6 to exclude constraints from the type of a function.
+      Note that the change occurs in the sentence following the example
+      in the original document.
+
+      <p para_num="6" id="dcl.fct.6" class="quoted" number="6">
+      The return type, the parameter-type-list, the 
+      <cxx-grammarterm><i>ref-qualifier</i></cxx-grammarterm>, and the 
+      <cxx-grammarterm><i>cv-qualifier-seq</i></cxx-grammarterm>, but not the 
+      default arguments 
+      (<cxx-ref in="cxx" to="dcl.fct.default"><span title="dcl.fct.default">§8.3.6</span></cxx-ref>)<ins>, constraints 
+      associated by an optional <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> 
+      (Clause <cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>),</ins> or
+      the exception specification (<cxx-ref in="cxx" to="except.spec"><span title="except.spec">§15.4</span></cxx-ref>), 
+      are part of the function type.
       </p>
 
       Modify paragraph 15. Note that the footnote reference has been
@@ -3194,12 +3219,11 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
       <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>.
       </p>
 
-      Add the following paragraphs after
-      <cxx-ref in="cxx" to="dcl.fct"><span title="dcl.fct">§8.3.5</span></cxx-ref>/15.
+      Add the following paragraphs after paragraph 15.
 
       <p para_num="16" id="dcl.fct.16" class="quoted" number="16">
       An <dfn>abbreviated function template</dfn> is a function declaration whose
-      parameter-type-list inclues one or more placeholders 
+      parameter-type-list includes one or more placeholders 
       (<cxx-ref to="dcl.spec.auto"><a title="dcl.spec.auto" href="#dcl.spec.auto">7.1.6.4</a></cxx-ref>,
       <cxx-ref to="dcl.spec.constr"><a title="dcl.spec.constr" href="#dcl.spec.constr">7.1.6.5</a></cxx-ref>).
 
@@ -3229,14 +3253,6 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
       declares a function parameter pack and the type of the parameter 
       contains only one placeholder.
 
-      <!-- TODO: This is up for discussion. Striking it should have
-           no serious consequence. Note that there is a corresponding
-           example in this section. Also, I need to modify the previous
-           sentence to remove this restriction. -->
-      If the type of the function parameter that declares a function
-      parameter pack containing more than one placeholder, the program
-      is ill-formed.
-
       The adjusted function parameters of an abbreviated function template are derived
       from the <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm> 
       by replacing each occurrence of a placeholder with the name of the 
@@ -3264,8 +3280,6 @@ template&lt;typename... T&gt;
   void f2(Vec&lt;T*&gt;...);         // <i>redeclaration of</i> f2(Vec&lt;auto*&gt;...)
 template&lt;typename T, typename U, typename V&gt;
   void f3(T (U::*)(V));        // <i>redeclaration of</i> f3(auto (auto::*)(auto))
-
-void foo(Pair&lt;auto, auto&gt;...); // <i>error: multiple placeholder types in a parameter pack</i>
 
 template&lt;typename T&gt; concept bool C1 = true;
 template&lt;typename T&gt; concept bool C2 = true;
@@ -3295,7 +3309,7 @@ template&lt;D&lt;int&gt; T&gt; void g4(Vec&lt;T&gt;);         // <i>redeclaratio
 
 void h(Num*); // <i>error: invalid type in parameter declaration</i></code></pre>
   </cxx-codeblock>
-The equivalent and erroneous declaration would have this form:
+The equivalent declaration would have this form:
       <cxx-codeblock>
     
     <pre><code>template&lt;int N&gt; void h(N*); // <i>error: invalid type</i></code></pre>
@@ -3305,7 +3319,29 @@ The equivalent and erroneous declaration would have this form:
   </cxx-example>
       <p></p>
 
-      <p para_num="17" id="dcl.fct.17"> All placeholders introduced
+      <p para_num="17" id="dcl.fct.17"> A function template can be an abbreviated function template. The
+      invented <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>s are
+      added to the <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
+      after the explicitly declared <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>s.
+
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T, int N&gt; class Array { };
+
+template&lt;int N&gt; void f(Array&lt;auto, N&gt;*);
+template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent to f(Array&lt;auto, N&gt;*)</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
+
+      <p para_num="18" id="dcl.fct.18"> All placeholders introduced by
       <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> 
       that are equivalent according to the definition in
       <cxx-ref to="dcl.spec.constr"><a title="dcl.spec.constr" href="#dcl.spec.constr">7.1.6.5</a></cxx-ref> have the
@@ -3349,36 +3385,14 @@ void f3(D&lt;0&gt; a, D&lt;1&gt; b);</code></pre>
     <pre><code>void f4(E a, E&lt;&gt; b, E&lt;0&gt; c);</code></pre>
   </cxx-codeblock>
       The types of <code>a</code>, <code>b</code>, and <code>c</code> are
-      the same since <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s
+      the same because the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s
       <code>E</code>, <code>E&lt;&gt;</code>, and <code>E&lt;0&gt;</code>
-      all associate the <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>,
+      all associate the <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>
       <code>E&lt;T, 0&gt;</code>, where <code>T</code> is an invented
       template type parameter.
       
     <span class="nowrap">— <em>end example</em> ]</span>
   <p></p>
-
-      <!-- TODO: Move into temp.fct? -->
-      <p para_num="18" id="dcl.fct.18"> A function template can be an abbreviated function template. The
-      invented <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>s are
-      added to the <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
-      after the explicitly declared <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>s.
-
-      <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
-      <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T, int N&gt; class Array { };
-
-template&lt;int N&gt; void f(Array&lt;auto, N&gt;*);
-template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent to f(Array&lt;auto, N&gt;*)</code></pre>
-  
-      
-    <span class="nowrap">— <em>end example</em> ]</span>
-  
-      <p></p>
 
     
     </section>
@@ -3389,164 +3403,8 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
   </cxx-section> <!-- dcl.meaning -->
 
 
-  <!-- ====================
-       Function definitions
-       ==================== -->
-
-  <cxx-section id="dcl.fct.def">
-    
-
-    <section>
-      <header><span class="section-number">8.4</span> <h1 data-bookmark-label="8.4 Function definitions">Function definitions</h1> <span style="float:right"><a href="#dcl.fct.def">[dcl.fct.def]</a></span></header>
-      
-    
-
-
-    <!-- ==========
-         In general
-         ========== -->
-
-    <cxx-section id="dcl.fct.def.general">
-    
-
-    <section>
-      <header><span class="section-number">8.4.1</span> <h1 data-bookmark-label="8.4.1 In general">In general</h1> <span style="float:right"><a href="#dcl.fct.def.general">[dcl.fct.def.general]</a></span></header>
-      
-      
-    
-      Modify the <cxx-grammarterm><i>function-definition</i></cxx-grammarterm>
-      syntax in <cxx-ref in="cxx" to="dcl.fct.def.general"><span title="dcl.fct.def.general">§8.4.1</span></cxx-ref>
-      to include a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>.
-
-      <p para_num="1" id="dcl.fct.def.general.1" class="quoted">
-      <bnf-grammar>
-    
-    
-        <bnf-rule>
-    
-    function-definition:
-  </bnf-rule>
-          <bnf-alt>
-    
-    
-            <bnf-opt>attribute-specifier-seq<sub>opt</sub></bnf-opt>
-            <bnf-opt>decl-specifier-seq<sub>opt</sub></bnf-opt>
-            declarator
-            <bnf-opt>virt-specifier-seq<sub>opt</sub></bnf-opt>
-            <ins><bnf-opt>requires-clause<sub>opt</sub></bnf-opt></ins>
-            function-body
-          
-  </bnf-alt>
-      
-  </bnf-grammar>
-      </p>
-
-      Add the following paragraph.
-
-      <p para_num="9" id="dcl.fct.def.general.9" number="9" class="quoted">
-      <ins> If present, the <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>
-      associates its <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>
-      with the function (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>).
-      </ins></p>
-
-    
-    </section>
-  </cxx-section> <!-- dcl.fct.def.general -->
-  
-    </section>
-  </cxx-section> <!-- dcl.fct.def -->
-
     </section>
   </cxx-clause> <!-- dcl.decl -->
-
-
-<cxx-clause id="class" number="9">
-    
-
-    <section>
-      <header><span class="section-number">9</span> <h1 data-bookmark-label="9 Classes">Classes</h1> <span style="float:right"><a href="#class">[class]</a></span></header>
-      
-  
-
-  <!-- =============
-       Class members
-       ============= -->
-
-  <cxx-section id="class.mem" number="2">
-    
-
-    <section>
-      <header><span class="section-number">9.2</span> <h1 data-bookmark-label="9.2 Class members">Class members</h1> <span style="float:right"><a href="#class.mem">[class.mem]</a></span></header>
-      
-    
-
-    Modify the grammar in 9.2 to allow a 
-    <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> for member declarations.
-
-    <p para_num="1" id="class.mem.1" class="quoted">
-    <bnf-grammar>
-    
-    
-      <bnf-rule>
-    
-    member-declarator:
-  </bnf-rule>
-      <bnf-alt>
-    
-    
-        declarator 
-        <bnf-opt>virt-specifier-seq<sub>opt</sub></bnf-opt>
-        <ins><bnf-opt>requires-clause<sub>opt</sub></bnf-opt></ins>
-        <bnf-opt>pure-specifier-seq<sub>opt</sub></bnf-opt>
-      
-  </bnf-alt>
-    
-  </bnf-grammar>
-    </p>
-
-    Insert the following after paragraph 8, explaining where a
-    <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> can appear
-    and that its <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>
-    can refer to parameters.
-
-    <p para_num="9" id="class.mem.9" class="quoted" number="9">
-    A <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> shall only appear
-    in a <cxx-grammarterm><i>member-declarator</i></cxx-grammarterm> if its
-    <cxx-grammarterm><i>declarator</i></cxx-grammarterm> is a function declarator.
-
-    The <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> associates its 
-    <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> with the 
-    member function.
-
-    <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
-    <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></p><pre><code>struct A {
-    A(int*) requires true;  // <i>OK: constrained constructor</i>
-    ~A() requires true;     // <i>OK: constrained destructor</i>
-    void f() requires true; // <i>OK: constrained member function</i>
-    int x requires true;    // <i>error: constrained member variable</i>
-  };</code></pre>
-  
-    
-    <span class="nowrap">— <em>end example</em> ]</span>
-  
-    <p></p>
-
-    <p para_num="10" id="class.mem.10" class="quoted">
-    The names of parameters in a function declarator are visible in the
-    <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> of the
-    <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>. </p>
-  
-    </section>
-  </cxx-section> <!-- class.mem -->
-
-
-    </section>
-  </cxx-clause>
 
 
 <cxx-clause id="class.derived" number="10">
@@ -3572,9 +3430,7 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
 
     <p para_num="6" id="class.virtual.6" class="quoted" number="6">
     If a virtual function has associated constraints 
-    (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>), the program is ill-formed. If
-    a constrained member function overrides a virtual function in any
-    base class, the program is ill-formed.
+    (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>), the program is ill-formed.
     <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
@@ -3591,7 +3447,7 @@ struct B {
 
 struct D : B {
   void f() requires true; // <i>error: constrained override</i>
-}</code></pre>
+};</code></pre>
   
     
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -3675,11 +3531,11 @@ struct D : B {
       
     
 
-    <cxx-section id="over.match.viable">
+    <cxx-section id="over.match.viable" number="2">
     
 
     <section>
-      <header><span class="section-number">13.3.1</span> <h1 data-bookmark-label="13.3.1 Viable functions">Viable functions</h1> <span style="float:right"><a href="#over.match.viable">[over.match.viable]</a></span></header>
+      <header><span class="section-number">13.3.2</span> <h1 data-bookmark-label="13.3.2 Viable functions">Viable functions</h1> <span style="float:right"><a href="#over.match.viable">[over.match.viable]</a></span></header>
       
       
 
@@ -3691,27 +3547,25 @@ struct D : B {
       (<cxx-ref in="cxx" to="over.match.funcs"><span title="over.match.funcs">§13.3.1</span></cxx-ref>), a set of viable 
       functions is chosen, from which the best function will be selected by 
       comparing argument conversion sequences and associated constraints
-      for the best fit (<cxx-ref to="over.match.best"><a title="over.match.best" href="#over.match.best">13.3.2</a></cxx-ref>).
+      for the best fit (<cxx-ref to="over.match.best"><a title="over.match.best" href="#over.match.best">13.3.3</a></cxx-ref>).
 
       The selection of viable functions considers 
-      <ins>their associated constraints, if any (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>), and</ins>
-      their relationships between arguments and function parameters other 
+      <ins>associated constraints, if any (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>), and</ins>
+      relationships between arguments and function parameters other 
       than the ranking of conversion sequences.
       </p>
 
-      Insert the following paragraph after paragraph 1; this introduces
+      Insert a new paragraph after paragraph 2; this introduces
       new a criterion for determining if a candidate is viable. Also, update
       the beginning of the subsequent paragraphs to account for the
       insertion.
 
-      <p para_num="2" id="over.match.viable.2" class="quoted" number="2">
-      First, for <code>F</code> to be a viable function, if <code>F</code> has 
+      <p para_num="3" id="over.match.viable.3" class="quoted" number="3">
+      <ins>
+      Second, for a function to be viable, if it has 
       associated constraints (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>), those 
       constraints shall be satisfied (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>).
-      </p>
-
-      <p para_num="3" id="over.match.viable.3" class="quoted" number="3">
-      <del>First</del><ins>Second</ins>, to be a viable function ...
+      </ins>
       </p>
 
       <p para_num="4" id="over.match.viable.4" class="quoted" number="4">
@@ -3726,7 +3580,7 @@ struct D : B {
     
 
     <section>
-      <header><span class="section-number">13.3.2</span> <h1 data-bookmark-label="13.3.2 Best viable function">Best viable function</h1> <span style="float:right"><a href="#over.match.best">[over.match.best]</a></span></header>
+      <header><span class="section-number">13.3.3</span> <h1 data-bookmark-label="13.3.3 Best viable function">Best viable function</h1> <span style="float:right"><a href="#over.match.best">[over.match.best]</a></span></header>
       
       
 
@@ -3747,10 +3601,10 @@ struct D : B {
       if not that,</ins> </li>
       
       <li><ins>
-      The parameter-type-lists of <code>F1</code> and <code>F2</code> are
-      the same and <code>F1</code> is more constrained than <code>F2</code> 
-      according to the partial ordering of constraints described in
-      <cxx-ref to="temp.constr.order"><a title="temp.constr.order" href="#temp.constr.order">14.9.3</a></cxx-ref>.
+      <code>F1</code> and <code>F2</code> are non-template functions with the
+      same parameter-type-lists, and  <code>F1</code> is more constrained than 
+      <code>F2</code> according to the partial ordering of constraints 
+      described in <cxx-ref to="temp.constr.order"><a title="temp.constr.order" href="#temp.constr.order">14.9.3</a></cxx-ref>.
       </ins></li>
       </ul>
       <!-- </p> -->
@@ -3771,14 +3625,10 @@ struct D : B {
       
     
 
-    The introduction of constraints modifies the rules for determining
-    which function is selected when taking the address of an overloaded
-    function. Insert a new paragraph before paragraph 4.
+    Insert the following after paragraph 3 to remove those functions
+    whose constraints are not satisfied.
 
-    <p para_num="4" id="over.over.4" class="quoted" number="4">
-    If a single constrained function is selected, and the constraints are
-    not satisfied (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>), the program
-    is ill-formed. 
+    <p para_num="4" id="over.over.4" number="4" class="quoted">
     </p>
 
     Modify paragraph 4 (paragraph 5 in this document) to incorporate 
@@ -3787,9 +3637,14 @@ struct D : B {
     (not shown here).
 
     <p para_num="5" id="over.over.5" number="5" class="quoted">
-    If more than one function is selected, any function template 
-    specializations in the set are eliminated if the set also contains a 
-    function that is not a function template 
+    <ins>Eliminate from the set of selected functions all those whose constraints
+    are not satisfied (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>).</ins>
+
+
+    <del>If more than one function is selected</del>
+    <ins>If more than one function in the set remains</ins>, 
+    any function template specializations in the set are eliminated if the 
+    set also contains a function that is not a function template
     specialization<del>, and</del><ins>. 
 
     Any given non-template function
@@ -3807,18 +3662,19 @@ struct D : B {
     After such eliminations, if any, there shall remain exactly one 
     selected function.
 
-    <cxx-example>
+    <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
     
     <cxx-codeblock>
     
-    </cxx-codeblock></cxx-example></p><pre><code>void f() { }                // <i>#1</i>
-void f() requires true { }; // <i>#2</i>
+    </cxx-codeblock></cxx-example></p><pre><code>void f();                // <i>#1</i>
+void f() requires true ; // <i>#2</i>
 void g() requires false;
+void g() requires false and true;
 
 void (*pf)() = &amp;f;         // <i>selects #2</i>
-void (*pg)() = &amp;g;         // <i>error: g() cannot be selected</i></code></pre>
+void (*pg)() = &amp;g;         // <i>error: no matching function</i></code></pre>
   
     
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -3926,9 +3782,9 @@ void (*pg)() = &amp;g;         // <i>error: g() cannot be selected</i></code></p
   <cxx-grammarterm><i>init-declarator</i></cxx-grammarterm>
   (<cxx-ref to="dcl.decl"><a title="dcl.decl" href="#dcl.decl">8</a></cxx-ref>),
   <cxx-grammarterm><i>function-definition</i></cxx-grammarterm>
-  (<cxx-ref to="dcl.fct.def.general"><a title="dcl.fct.def.general" href="#dcl.fct.def.general">8.4.1</a></cxx-ref>), or
+  (<cxx-ref to="dcl.fct.def.general"><a title="dcl.fct.def.general" href="#dcl.fct.def.general"></a></cxx-ref>), or
   <cxx-grammarterm><i>member-declarator</i></cxx-grammarterm>
-  (<cxx-ref to="class.mem"><a title="class.mem" href="#class.mem">9.2</a></cxx-ref>).</li>
+  (<cxx-ref to="class.mem"><a title="class.mem" href="#class.mem"></a></cxx-ref>).</li>
   </ul>
 
   Let <code>T1</code> be a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>
@@ -4160,9 +4016,9 @@ C{T} void g2(T, D); // <i>OK: redeclaration of</i> g2(T, D)</code></pre>
   <cxx-grammarterm><i>init-declarator</i></cxx-grammarterm>
   (<cxx-ref to="dcl.decl"><a title="dcl.decl" href="#dcl.decl">8</a></cxx-ref>),
   <cxx-grammarterm><i>function-definition</i></cxx-grammarterm>
-  (<cxx-ref to="dcl.fct.def.general"><a title="dcl.fct.def.general" href="#dcl.fct.def.general">8.4.1</a></cxx-ref>), or
+  (<cxx-ref to="dcl.fct.def.general"><a title="dcl.fct.def.general" href="#dcl.fct.def.general"></a></cxx-ref>), or
   <cxx-grammarterm><i>member-declarator</i></cxx-grammarterm>
-  (<cxx-ref to="class.mem"><a title="class.mem" href="#class.mem">9.2</a></cxx-ref>).
+  (<cxx-ref to="class.mem"><a title="class.mem" href="#class.mem"></a></cxx-ref>).
 
   When a constrained function template or member function template is
   declared with a trailing <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>
@@ -5090,7 +4946,7 @@ template&lt;typename T&gt;
       arguments are substituted into the constraints but not evaluated.
       Constraints are checked (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>) only when
       that function is considered as a viable candidate for overload resolution
-      (<cxx-ref to="over.match.viable"><a title="over.match.viable" href="#over.match.viable">13.3.1</a></cxx-ref>).
+      (<cxx-ref to="over.match.viable"><a title="over.match.viable" href="#over.match.viable">13.3.2</a></cxx-ref>).
       
     <span class="nowrap">— <em>end note</em> ]</span>
   
@@ -5667,7 +5523,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
       The constraints associated with the function template specialization
       are checked (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>) in order to determine 
       if the specialization is a viable candidate 
-      (<cxx-ref to="over.match.viable"><a title="over.match.viable" href="#over.match.viable">13.3.1</a></cxx-ref>), and not at the point
+      (<cxx-ref to="over.match.viable"><a title="over.match.viable" href="#over.match.viable">13.3.2</a></cxx-ref>), and not at the point
       of substitution.
       
     <span class="nowrap">— <em>end note</em> ]</span>
@@ -6371,7 +6227,7 @@ requires() {
 
       <ul>
       <li> the best viable candidate of non-template functions
-           (<cxx-ref to="over.match.best"><a title="over.match.best" href="#over.match.best">13.3.2</a></cxx-ref>), </li>
+           (<cxx-ref to="over.match.best"><a title="over.match.best" href="#over.match.best">13.3.3</a></cxx-ref>), </li>
       <li> the address of a non-template function
            (<cxx-ref to="over.over"><a title="over.over" href="#over.over">13.4</a></cxx-ref>), </li>
       <li> the matching of template template arguments
