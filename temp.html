@@ -827,14 +827,11 @@ template&lt;C T&gt; struct S {
     template&lt;D U&gt; struct Inner;
   }
 
-template&lt;C T&gt; void S&lt;T&gt;::f() { }        // <i>OK: parameters and constraints match</i>
+template&lt;typename T&gt; requires C&lt;T&gt; void S&lt;T&gt;::f() { } // <i>OK: parameters and constraints match</i>
 template&lt;typename T&gt; void S&lt;T&gt;::g() { } // <i>error: no matching declaration for</i> S&lt;T&gt;
 
-template&lt;C T&gt; 
-  template&lt;D U&gt; struct S&lt;T&gt;::Inner { }; // <i>OK</i>
+template&lt;C T&gt; D{U} struct S&lt;T&gt;::Inner { }; // <i>OK</i>
       </cxx-codeblock>
-      The declaration of <code>S&lt;T&gt;::g()</code> does not match because
-      it does not have the associated constraints of <code>S</code>.
       </cxx-example>
       </p>
 
@@ -905,13 +902,11 @@ template&lt;C1 T&gt;
     template&lt;C2 U&gt; void g(U);
   };
 
-template&lt;C1 T&gt; template&lt;C2 U&gt; 
-  void S&lt;T&gt;::f(U) { } // <i>OK</i>
+template&lt;C1 T&gt; template&lt;typename U&gt;
+  void S&lt;T&gt;::f(U) requires C2&lt;U&gt; { } // <i>OK</i>
 template&lt;C1 T&gt; template&lt;typename U&gt; 
   void S&lt;T&gt;::g(U) { } // <i>error: no matching function in</i> S&lt;T&gt;
       </cxx-codeblock>
-      The associated constraints in the definition of <code>g()</code> do not
-      match those in of its declaration.
       </cxx-example>
       </p>
     </cxx-section> <!-- temp.mem -->
