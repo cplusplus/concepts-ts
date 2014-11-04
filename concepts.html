@@ -589,7 +589,7 @@ pre {
         <tbody><tr><th>Document Number:</th><td><cxx-docnum>Dxxxx</cxx-docnum></td></tr>
       
       
-        <tr><th>Date:</th><td><time pubdate="">2014-10-31</time></td></tr>
+        <tr><th>Date:</th><td><time pubdate="">2014-11-04</time></td></tr>
       
       
         <tr><th>Revises:</th><td><cxx-revises><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4205.pdf">N4205</a></cxx-revises></td></tr>
@@ -805,11 +805,11 @@ pre {
         
           <ol>
             
-              <li><span class="marker">13.3.1</span><a href="#over.match.viable">Viable functions</a>
+              <li><span class="marker">13.3.2</span><a href="#over.match.viable">Viable functions</a>
         
       </li>
             
-              <li><span class="marker">13.3.2</span><a href="#over.match.best">Best viable function</a>
+              <li><span class="marker">13.3.3</span><a href="#over.match.best">Best viable function</a>
         
       </li>
             
@@ -2810,6 +2810,9 @@ template&lt;C T&gt; struct s1; // <i>associates</i> C&lt;T&gt; <i>with</i> s1</c
       specifier is called a <dfn>function concept</dfn>. A function
       concept is a non-throwing function 
       (<cxx-ref in="cxx" to="except.spec"><span title="except.spec">§15.4</span></cxx-ref>).
+
+      When a function is declared to be a concept, it shall be the only
+      declaration of that function.
       
       A variable template definition having the <code>concept</code> 
       specifier is called a <dfn>variable concept</dfn>.
@@ -2827,6 +2830,9 @@ template&lt;C T&gt; struct s1; // <i>associates</i> C&lt;T&gt; <i>with</i> s1</c
   concept bool F1() { return true; } // <i>OK: declares a function concept</i>
 template&lt;typename T&gt; 
   concept bool F2();                 // <i>error: function concept is not a definition</i>
+template&lt;typename T&gt; constexpr bool F3();
+template&lt;typename T&gt;
+  concept bool F3() { return true; } // <i>error: redeclaration of a function as a concept</i>
 template&lt;typename T&gt; 
   concept bool V1 = true;            // <i>OK: declares a variable concept</i>
 template&lt;typename T&gt; 
@@ -2845,20 +2851,31 @@ struct S {
       <code>constexpr</code> declaration 
       (<cxx-ref in="cxx" to="dcl.constexpr"><span title="dcl.constexpr">§7.1.5</span></cxx-ref>). </p>
 
-      <p para_num="3" id="dcl.spec.concept.3"> No storage specifiers shall appear in a declaration with the 
-      <code>concept</code> specifier. Additionally, a concept definition
-      shall not include the <code>friend</code> or <code>constexpr</code>
-      specifiers. </p>
+      <p para_num="3" id="dcl.spec.concept.3"> A concept definition shall not be declared with the 
+      <code>friend</code> or <code>constexpr</code> specifiers. 
 
-      <p para_num="4" id="dcl.spec.concept.4">A concept definition shall be unconstrained.
-      <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+      Additionally, a concept definition shall not have associated constraints
+      (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>). </p>
+
+      <p para_num="4" id="dcl.spec.concept.4">The definition of a function concept or the initializer of
+      a variable concept shall not include a reference to the concept being
+      declared.
+
+      <cxx-example class="inline">
     
-      A concept defines a total mapping from its template arguments to the 
-      values <code>true</code> and <code>false</code>.
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt;
+	concept bool F() { return F&lt;typename T::type&gt;(); } // error
+template&lt;typename T&gt;
+	concept bool V = V&lt;T*&gt;;                            // error</code></pre>
+  
       
-    <span class="nowrap">— <em>end note</em> ]</span>
-  </cxx-note>
-      </p>
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
 
       <p para_num="5" id="dcl.spec.concept.5"> The first declared template parameter of a concept definition is its
       <dfn>prototype parameter</dfn>. 
@@ -2870,12 +2887,11 @@ struct S {
       <p para_num="6" id="dcl.spec.concept.6">A function concept has the following restrictions:
       </p><ul>
         <li> No <cxx-grammarterm><i>function-specifier</i></cxx-grammarterm>s shall
-             appear in its declaration (<cxx-ref to="dcl.fct.spec"><a title="dcl.fct.spec" href="#dcl.fct.spec"></a></cxx-ref>). </li>
+             appear in its declaration (<cxx-ref in="cxx" to="dcl.fct.spec"><span title="dcl.fct.spec">§7.1.2</span></cxx-ref>). </li>
         <li> The declared return type shall be the non-deduced type <code>bool</code>. </li>
         <li> The declaration shall have a 
         <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm>
         equivalent to <code>()</code>. </li>
-        <li> The function shall not be recursive. </li>
         <li> The function body shall consist of a single <code>return</code> 
         statement whose <cxx-grammarterm><i>expression</i></cxx-grammarterm> shall be a
         <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>
@@ -2924,27 +2940,28 @@ template&lt;typename T&gt;
       <cxx-codeblock>
     
     <pre><code>template&lt;typename T&gt; 
-  concept bool V2 = 3 + 4; // <i>error: initializer is not a constraint-expression</i>
-template&lt;Integral T&gt; 
-  concept bool V3 = true;  // <i>error: constrained template declared as a concept</i>
-concept bool V4 = 0;       // <i>error: not a template</i></code></pre>
+  concept bool V1 = 3 + 4; // <i>error: initializer is not a constraint-expression</i>
+concept bool V3 = 0;       // <i>error: not a template</i>
+
+template&lt;typename T&gt; concept bool C = true;
+
+template&lt;C T&gt; 
+  concept bool V2 = true;  // <i>error: constrained template declared as a concept</i></code></pre>
   </cxx-codeblock>
       
     <span class="nowrap">— <em>end example</em> ]</span>
   </cxx-example>
       <!-- </p> -->
 
-      <p para_num="8" id="dcl.spec.concept.8">A program that declares an explicit instantiation
+      <p para_num="8" id="dcl.spec.concept.8">A program shall not declares an explicit instantiation
       (<cxx-ref to="temp.explicit"><a title="temp.explicit" href="#temp.explicit">14.7.2</a></cxx-ref>), an explicit specialization 
       (<cxx-ref to="temp.expl.spec"><a title="temp.expl.spec" href="#temp.expl.spec">14.7.3</a></cxx-ref>), or a partial specialization 
       of a concept definition is ill-formed.
 
       <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
-      The prohibitions against overloading and specialization prevent
-      users from subverting the constraint system by providing a meaning 
-      for a concept that differs from the one computed by evaluating its 
-      constraints.
+      This prevents users from subverting the constraint system by providing a 
+      meaning for a concept that differs from its original definition.
       
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
@@ -3086,7 +3103,7 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
     
     parameter-declaration:
   </bnf-rule>
-          <del><s>
+          <del>
           <bnf-alt>
     
     
@@ -3123,7 +3140,6 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
             <bnf-terminal><code>=</code></bnf-terminal> 
             initializer-clause
   </bnf-alt>
-          </s>
           </del>
 
           <ins>
@@ -3199,7 +3215,7 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
 
       <p para_num="16" id="dcl.fct.16" class="quoted" number="16">
       An <dfn>abbreviated function template</dfn> is a function declaration whose
-      parameter-type-list inclues one or more placeholders 
+      parameter-type-list includes one or more placeholders 
       (<cxx-ref to="dcl.spec.auto"><a title="dcl.spec.auto" href="#dcl.spec.auto">7.1.6.4</a></cxx-ref>,
       <cxx-ref to="dcl.spec.constr"><a title="dcl.spec.constr" href="#dcl.spec.constr">7.1.6.5</a></cxx-ref>).
 
@@ -3229,14 +3245,6 @@ void g(int n) requires sizeof(n) == 4;</code></pre>
       declares a function parameter pack and the type of the parameter 
       contains only one placeholder.
 
-      <!-- TODO: This is up for discussion. Striking it should have
-           no serious consequence. Note that there is a corresponding
-           example in this section. Also, I need to modify the previous
-           sentence to remove this restriction. -->
-      If the type of the function parameter that declares a function
-      parameter pack containing more than one placeholder, the program
-      is ill-formed.
-
       The adjusted function parameters of an abbreviated function template are derived
       from the <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm> 
       by replacing each occurrence of a placeholder with the name of the 
@@ -3264,8 +3272,6 @@ template&lt;typename... T&gt;
   void f2(Vec&lt;T*&gt;...);         // <i>redeclaration of</i> f2(Vec&lt;auto*&gt;...)
 template&lt;typename T, typename U, typename V&gt;
   void f3(T (U::*)(V));        // <i>redeclaration of</i> f3(auto (auto::*)(auto))
-
-void foo(Pair&lt;auto, auto&gt;...); // <i>error: multiple placeholder types in a parameter pack</i>
 
 template&lt;typename T&gt; concept bool C1 = true;
 template&lt;typename T&gt; concept bool C2 = true;
@@ -3295,7 +3301,7 @@ template&lt;D&lt;int&gt; T&gt; void g4(Vec&lt;T&gt;);         // <i>redeclaratio
 
 void h(Num*); // <i>error: invalid type in parameter declaration</i></code></pre>
   </cxx-codeblock>
-The equivalent and erroneous declaration would have this form:
+The equivalent declaration would have this form:
       <cxx-codeblock>
     
     <pre><code>template&lt;int N&gt; void h(N*); // <i>error: invalid type</i></code></pre>
@@ -3305,7 +3311,29 @@ The equivalent and erroneous declaration would have this form:
   </cxx-example>
       <p></p>
 
-      <p para_num="17" id="dcl.fct.17"> All placeholders introduced
+      <p para_num="17" id="dcl.fct.17"> A function template can be an abbreviated function template. The
+      invented <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>s are
+      added to the <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
+      after the explicitly declared <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>s.
+
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T, int N&gt; class Array { };
+
+template&lt;int N&gt; void f(Array&lt;auto, N&gt;*);
+template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent to f(Array&lt;auto, N&gt;*)</code></pre>
+  
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
+
+      <p para_num="18" id="dcl.fct.18"> All placeholders introduced by
       <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> 
       that are equivalent according to the definition in
       <cxx-ref to="dcl.spec.constr"><a title="dcl.spec.constr" href="#dcl.spec.constr">7.1.6.5</a></cxx-ref> have the
@@ -3349,36 +3377,14 @@ void f3(D&lt;0&gt; a, D&lt;1&gt; b);</code></pre>
     <pre><code>void f4(E a, E&lt;&gt; b, E&lt;0&gt; c);</code></pre>
   </cxx-codeblock>
       The types of <code>a</code>, <code>b</code>, and <code>c</code> are
-      the same since <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s
+      the same because the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s
       <code>E</code>, <code>E&lt;&gt;</code>, and <code>E&lt;0&gt;</code>
-      all associate the <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>,
+      all associate the <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>
       <code>E&lt;T, 0&gt;</code>, where <code>T</code> is an invented
       template type parameter.
       
     <span class="nowrap">— <em>end example</em> ]</span>
   <p></p>
-
-      <!-- TODO: Move into temp.fct? -->
-      <p para_num="18" id="dcl.fct.18"> A function template can be an abbreviated function template. The
-      invented <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>s are
-      added to the <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
-      after the explicitly declared <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>s.
-
-      <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
-      <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T, int N&gt; class Array { };
-
-template&lt;int N&gt; void f(Array&lt;auto, N&gt;*);
-template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent to f(Array&lt;auto, N&gt;*)</code></pre>
-  
-      
-    <span class="nowrap">— <em>end example</em> ]</span>
-  
-      <p></p>
 
     
     </section>
@@ -3510,7 +3516,8 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
     can refer to parameters.
 
     <p para_num="9" id="class.mem.9" class="quoted" number="9">
-    A <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> shall only appear
+    A <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> 
+    (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>) shall only appear
     in a <cxx-grammarterm><i>member-declarator</i></cxx-grammarterm> if its
     <cxx-grammarterm><i>declarator</i></cxx-grammarterm> is a function declarator.
 
@@ -3528,7 +3535,7 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
     A(int*) requires true;  // <i>OK: constrained constructor</i>
     ~A() requires true;     // <i>OK: constrained destructor</i>
     void f() requires true; // <i>OK: constrained member function</i>
-    int x requires true;    // <i>error: constrained member variable</i>
+    int x requires true;    // <i>error: constrained non-static data member</i>
   };</code></pre>
   
     
@@ -3572,9 +3579,7 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
 
     <p para_num="6" id="class.virtual.6" class="quoted" number="6">
     If a virtual function has associated constraints 
-    (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>), the program is ill-formed. If
-    a constrained member function overrides a virtual function in any
-    base class, the program is ill-formed.
+    (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>), the program is ill-formed.
     <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
@@ -3591,7 +3596,7 @@ struct B {
 
 struct D : B {
   void f() requires true; // <i>error: constrained override</i>
-}</code></pre>
+};</code></pre>
   
     
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -3675,11 +3680,11 @@ struct D : B {
       
     
 
-    <cxx-section id="over.match.viable">
+    <cxx-section id="over.match.viable" number="2">
     
 
     <section>
-      <header><span class="section-number">13.3.1</span> <h1 data-bookmark-label="13.3.1 Viable functions">Viable functions</h1> <span style="float:right"><a href="#over.match.viable">[over.match.viable]</a></span></header>
+      <header><span class="section-number">13.3.2</span> <h1 data-bookmark-label="13.3.2 Viable functions">Viable functions</h1> <span style="float:right"><a href="#over.match.viable">[over.match.viable]</a></span></header>
       
       
 
@@ -3691,27 +3696,25 @@ struct D : B {
       (<cxx-ref in="cxx" to="over.match.funcs"><span title="over.match.funcs">§13.3.1</span></cxx-ref>), a set of viable 
       functions is chosen, from which the best function will be selected by 
       comparing argument conversion sequences and associated constraints
-      for the best fit (<cxx-ref to="over.match.best"><a title="over.match.best" href="#over.match.best">13.3.2</a></cxx-ref>).
+      for the best fit (<cxx-ref to="over.match.best"><a title="over.match.best" href="#over.match.best">13.3.3</a></cxx-ref>).
 
       The selection of viable functions considers 
-      <ins>their associated constraints, if any (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>), and</ins>
-      their relationships between arguments and function parameters other 
+      <ins>associated constraints, if any (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>), and</ins>
+      relationships between arguments and function parameters other 
       than the ranking of conversion sequences.
       </p>
 
-      Insert the following paragraph after paragraph 1; this introduces
+      Insert a new paragraph after paragraph 2; this introduces
       new a criterion for determining if a candidate is viable. Also, update
       the beginning of the subsequent paragraphs to account for the
       insertion.
 
-      <p para_num="2" id="over.match.viable.2" class="quoted" number="2">
-      First, for <code>F</code> to be a viable function, if <code>F</code> has 
+      <p para_num="3" id="over.match.viable.3" class="quoted" number="3">
+      <ins>
+      Second, for a function to be viable, if it has 
       associated constraints (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>), those 
       constraints shall be satisfied (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>).
-      </p>
-
-      <p para_num="3" id="over.match.viable.3" class="quoted" number="3">
-      <del>First</del><ins>Second</ins>, to be a viable function ...
+      </ins>
       </p>
 
       <p para_num="4" id="over.match.viable.4" class="quoted" number="4">
@@ -3726,7 +3729,7 @@ struct D : B {
     
 
     <section>
-      <header><span class="section-number">13.3.2</span> <h1 data-bookmark-label="13.3.2 Best viable function">Best viable function</h1> <span style="float:right"><a href="#over.match.best">[over.match.best]</a></span></header>
+      <header><span class="section-number">13.3.3</span> <h1 data-bookmark-label="13.3.3 Best viable function">Best viable function</h1> <span style="float:right"><a href="#over.match.best">[over.match.best]</a></span></header>
       
       
 
@@ -3747,10 +3750,10 @@ struct D : B {
       if not that,</ins> </li>
       
       <li><ins>
-      The parameter-type-lists of <code>F1</code> and <code>F2</code> are
-      the same and <code>F1</code> is more constrained than <code>F2</code> 
-      according to the partial ordering of constraints described in
-      <cxx-ref to="temp.constr.order"><a title="temp.constr.order" href="#temp.constr.order">14.9.3</a></cxx-ref>.
+      <code>F1</code> and <code>F2</code> are non-template functions with the
+      same parameter-type-lists, and  <code>F1</code> is more constrained than 
+      <code>F2</code> according to the partial ordering of constraints 
+      described in <cxx-ref to="temp.constr.order"><a title="temp.constr.order" href="#temp.constr.order">14.9.3</a></cxx-ref>.
       </ins></li>
       </ul>
       <!-- </p> -->
@@ -3771,14 +3774,10 @@ struct D : B {
       
     
 
-    The introduction of constraints modifies the rules for determining
-    which function is selected when taking the address of an overloaded
-    function. Insert a new paragraph before paragraph 4.
+    Insert the following after paragraph 3 to remove those functions
+    whose constraints are not satisfied.
 
-    <p para_num="4" id="over.over.4" class="quoted" number="4">
-    If a single constrained function is selected, and the constraints are
-    not satisfied (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>), the program
-    is ill-formed. 
+    <p para_num="4" id="over.over.4" number="4" class="quoted">
     </p>
 
     Modify paragraph 4 (paragraph 5 in this document) to incorporate 
@@ -3787,9 +3786,14 @@ struct D : B {
     (not shown here).
 
     <p para_num="5" id="over.over.5" number="5" class="quoted">
-    If more than one function is selected, any function template 
-    specializations in the set are eliminated if the set also contains a 
-    function that is not a function template 
+    <ins>Eliminate from the set of selected functions all those whose constraints
+    are not satisfied (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>).</ins>
+
+
+    <del>If more than one function is selected</del>
+    <ins>If more than one function in the set remains</ins>, 
+    any function template specializations in the set are eliminated if the 
+    set also contains a function that is not a function template
     specialization<del>, and</del><ins>. 
 
     Any given non-template function
@@ -3807,18 +3811,19 @@ struct D : B {
     After such eliminations, if any, there shall remain exactly one 
     selected function.
 
-    <cxx-example>
+    <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
     
     <cxx-codeblock>
     
-    </cxx-codeblock></cxx-example></p><pre><code>void f() { }                // <i>#1</i>
-void f() requires true { }; // <i>#2</i>
+    </cxx-codeblock></cxx-example></p><pre><code>void f();                // <i>#1</i>
+void f() requires true ; // <i>#2</i>
 void g() requires false;
+void g() requires false and true;
 
 void (*pf)() = &amp;f;         // <i>selects #2</i>
-void (*pg)() = &amp;g;         // <i>error: g() cannot be selected</i></code></pre>
+void (*pg)() = &amp;g;         // <i>error: no matching function</i></code></pre>
   
     
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -5090,7 +5095,7 @@ template&lt;typename T&gt;
       arguments are substituted into the constraints but not evaluated.
       Constraints are checked (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>) only when
       that function is considered as a viable candidate for overload resolution
-      (<cxx-ref to="over.match.viable"><a title="over.match.viable" href="#over.match.viable">13.3.1</a></cxx-ref>).
+      (<cxx-ref to="over.match.viable"><a title="over.match.viable" href="#over.match.viable">13.3.2</a></cxx-ref>).
       
     <span class="nowrap">— <em>end note</em> ]</span>
   
@@ -5146,7 +5151,8 @@ template&lt;C T, N I&gt;        class A&lt;int, T*, I&gt;; // <i>#7</i></code></
       the following restrictions apply:
       </p><ul>
       <li>...</li>
-      <li><ins>In an unconstrained class template partial specialization,</ins>
+      <li><ins>In an class template partial specialization with no
+      associated constraints (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>),</ins>
       <del>The</del><ins>the</ins> argument list of the specialization shall
       not be identical to the implicit argument list of the primary template.
       </li><li>...</li>
@@ -5667,7 +5673,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
       The constraints associated with the function template specialization
       are checked (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>) in order to determine 
       if the specialization is a viable candidate 
-      (<cxx-ref to="over.match.viable"><a title="over.match.viable" href="#over.match.viable">13.3.1</a></cxx-ref>), and not at the point
+      (<cxx-ref to="over.match.viable"><a title="over.match.viable" href="#over.match.viable">13.3.2</a></cxx-ref>), and not at the point
       of substitution.
       
     <span class="nowrap">— <em>end note</em> ]</span>
@@ -6371,7 +6377,7 @@ requires() {
 
       <ul>
       <li> the best viable candidate of non-template functions
-           (<cxx-ref to="over.match.best"><a title="over.match.best" href="#over.match.best">13.3.2</a></cxx-ref>), </li>
+           (<cxx-ref to="over.match.best"><a title="over.match.best" href="#over.match.best">13.3.3</a></cxx-ref>), </li>
       <li> the address of a non-template function
            (<cxx-ref to="over.over"><a title="over.over" href="#over.over">13.4</a></cxx-ref>), </li>
       <li> the matching of template template arguments
