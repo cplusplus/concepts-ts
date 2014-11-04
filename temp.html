@@ -1409,18 +1409,17 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
       If the function template has associated constraints
       (Clause <cxx-ref to="temp"></cxx-ref>),
       the template arguments are substituted into the constraints without 
-      evaluating the resulting expression. If this substitution results in an 
-      invalid type, then the resulting expression is defined to be 
-      <code>false</code>.
-
-      The resulting constraints are associated with the function template
+      evaluating the resulting expression. If this substitution succeeds,
+      the resulting constraint-expression is associated with the function
+      template specialization.  If the substitution results in an
+      invalid expression, then the constraint-expression <code>false</code>
+      is associated with the function template
       specialization.
 
       <cxx-note>
       The constraints associated with the function template specialization
-      are checked (<cxx-ref to="temp.constr"></cxx-ref>) in order to determine 
-      if the specialization is a viable candidate 
-      (<cxx-ref to="over.match.viable"></cxx-ref>), and not at the point
+      are checked (<cxx-ref to="temp.constr"></cxx-ref>) during overload
+      resolution (Clause <cxx-ref to="over"></cxx-ref>), and not at the point
       of substitution.
       </cxx-note>
       </ins>
