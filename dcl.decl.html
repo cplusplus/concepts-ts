@@ -313,48 +313,4 @@ void f4(E a, E&lt;&gt; b, E&lt;0&gt; c);
   
   </cxx-section> <!-- dcl.meaning -->
 
-
-  <!-- ====================
-       Function definitions
-       ==================== -->
-
-  <cxx-section id="dcl.fct.def">
-    <h1>Function definitions</h1>
-
-
-    <!-- ==========
-         In general
-         ========== -->
-
-    <cxx-section id="dcl.fct.def.general">
-      <h1>In general</h1>
-    
-      Modify the <cxx-grammarterm>function-definition</cxx-grammarterm>
-      syntax in <cxx-ref in="cxx" to="dcl.fct.def.general">/1</cxx-ref>
-      to include a <cxx-grammarterm>requires-clause</cxx-grammarterm>.
-
-      <p class="quoted">
-      <bnf-grammar>
-        <bnf-rule>function-definition</bnf-rule>
-          <bnf-alt>
-            <bnf-opt>attribute-specifier-seq</bnf-opt>
-            <bnf-opt>decl-specifier-seq</bnf-opt>
-            declarator
-            <bnf-opt>virt-specifier-seq</bnf-opt>
-            <ins><bnf-opt>requires-clause</bnf-opt></ins>
-            function-body
-          </bnf-alt>
-      </bnf-grammar>
-      </p>
-
-      Add the following paragraph.
-
-      <p number="9" class="quoted">
-      <ins> If present, the <cxx-grammarterm>requires-clause</cxx-grammarterm>
-      associates its <cxx-grammarterm>constraint-expression</cxx-grammarterm>
-      with the function (<cxx-ref to="temp"></cxx-ref>).
-      </p>
-
-    </cxx-section> <!-- dcl.fct.def.general -->
-  </cxx-section> <!-- dcl.fct.def -->
 </cxx-clause> <!-- dcl.decl -->
