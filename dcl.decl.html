@@ -25,13 +25,14 @@
   Insert the following paragraphs.
 
   <p class="quoted">
-  A <cxx-grammarterm>requires-clause</cxx-grammarterm> in an
+  A <cxx-grammarterm>requires-clause</cxx-grammarterm> 
+  (<cxx-ref to="temp"></cxx-ref>) in an
   <cxx-grammarterm>init-declarator</cxx-grammarterm> shall only appear
-  with a function declarator (<cxx-ref to="dcl.fct"></cxx-ref>).
+  with the declarator of a function declaration (<cxx-ref to="dcl.fct"></cxx-ref>).
 
   If present, the <cxx-grammarterm>requires-clause</cxx-grammarterm> associates 
   its <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the declared
-  function (<cxx-ref to="temp"></cxx-ref>).
+  function.
   <cxx-example class="inline">
   <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = true;
@@ -164,7 +165,7 @@ void g(int n) requires sizeof(n) == 4;
 
       <p class="quoted" number="16">
       An <dfn>abbreviated function template</dfn> is a function declaration whose
-      parameter-type-list inclues one or more placeholders 
+      parameter-type-list includes one or more placeholders 
       (<cxx-ref to="dcl.spec.auto"></cxx-ref>,
       <cxx-ref to="dcl.spec.constr"></cxx-ref>).
 
@@ -194,14 +195,6 @@ void g(int n) requires sizeof(n) == 4;
       declares a function parameter pack and the type of the parameter 
       contains only one placeholder.
 
-      <!-- TODO: This is up for discussion. Striking it should have
-           no serious consequence. Note that there is a corresponding
-           example in this section. Also, I need to modify the previous
-           sentence to remove this restriction. -->
-      If the type of the function parameter that declares a function
-      parameter pack containing more than one placeholder, the program
-      is ill-formed.
-
       The adjusted function parameters of an abbreviated function template are derived
       from the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> 
       by replacing each occurrence of a placeholder with the name of the 
@@ -226,8 +219,6 @@ template&lt;typename... T&gt;
 template&lt;typename T, typename U, typename V&gt;
   void f3(T (U::*)(V));        // <i>redeclaration of</i> f3(auto (auto::*)(auto))
 
-void foo(Pair&lt;auto, auto&gt;...); // <i>error: multiple placeholder types in a parameter pack</i>
-
 template&lt;typename T&gt; concept bool C1 = true;
 template&lt;typename T&gt; concept bool C2 = true;
 template&lt;typename T, typename U&gt; concept bool D = true;
@@ -250,7 +241,7 @@ template&lt;int N&gt; concept bool Num = true;
 
 void h(Num*); // <i>error: invalid type in parameter declaration</i>
       </cxx-codeblock>
-The equivalent and erroneous declaration would have this form:
+The equivalent declaration would have this form:
       <cxx-codeblock>
 template&lt;int N&gt; void h(N*); // <i>error: invalid type</i>
       </cxx-codeblock>
