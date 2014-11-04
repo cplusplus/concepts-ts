@@ -635,7 +635,7 @@ Array&lt;double&gt; s2;    // <i>error:</i> Array <i>takes two template argument
     The introduction of a sequence of template parameters by a
     <cxx-grammarterm>concept-name</cxx-grammarterm> associates a constraint 
     with the <cxx-grammarterm>template-declaration</cxx-grammarterm>
-    according to the rules describe in <cxx-ref to="temp"></cxx-ref>.
+    according to the rules described in Clause <cxx-ref to="temp"></cxx-ref>.
     </cxx-note>
     </p>
 
@@ -1002,7 +1002,7 @@ template&lt;typename T&gt;
 
       <p number="4" class="quoted">
       A class template partial specialization may be constrained
-      (<cxx-ref to="temp"></cxx-ref>).
+      (Clause <cxx-ref to="temp"></cxx-ref>).
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = requires (T t) { t.f(); };
@@ -1024,7 +1024,7 @@ template&lt;C T, N I&gt;        class A&lt;int, T*, I&gt;; // <i>#7</i>
       <ul>
       <li>...</li>
       <li><ins>In an class template partial specialization with no
-      associated constraints (<cxx-ref to="temp"></cxx-ref>),</ins>
+      associated constraints (Clause <cxx-ref to="temp"></cxx-ref>),</ins>
       <del>The</del><ins>the</ins> argument list of the specialization shall
       not be identical to the implicit argument list of the primary template.
       <li>...</li>
@@ -1230,7 +1230,7 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
 
       <cxx-note>
       The evaluation of constraints happens during lookup or overload
-      resolution (<cxx-ref to="over"></cxx-ref>). Preserving the spelling
+      resolution (Clause <cxx-ref to="over"></cxx-ref>). Preserving the spelling
       of the substituted constraint also allows constrained member function
       to be partially ordered by those constraints according to the rules
       in <cxx-ref to="temp.constr"></cxx-ref>.
@@ -1407,7 +1407,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
 
       <ins>
       If the function template has associated constraints
-      (<cxx-ref to="temp"></cxx-ref>),
+      (Clause <cxx-ref to="temp"></cxx-ref>),
       the template arguments are substituted into the constraints without 
       evaluating the resulting expression. If this substitution results in an 
       invalid type, then the resulting expression is defined to be 
@@ -1646,7 +1646,7 @@ template&lt;typename T&gt; concept bool C = sizeof(T) == 4 &amp;&amp; !true;
           An expression constraint is satisfied if <code>E</code> is non-dependent, 
           meaning that the substitution yielding <code>E</code> did not fail. 
           Within an expression constraint, <code>E</code> is an unevaluated 
-          operand (<cxx-ref to="expr"></cxx-ref>).
+          operand (Clause <cxx-ref to="expr"></cxx-ref>).
 
           <cxx-note>
           An expression constraint is introduced by the 
@@ -1746,7 +1746,7 @@ requires (T t) {
           (call it <code>E</code>) to a 
           type (call it <code>T</code>). The constraint is satisfied if and 
           only if <code>E</code> is implicitly convertible to <code>T</code>
-          (<cxx-ref in="cxx" to="conv"></cxx-ref>).
+          (Clause <cxx-ref in="cxx" to="conv"></cxx-ref>).
           
           <cxx-note>
           A conversion constraint is introduced by a
