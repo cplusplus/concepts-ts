@@ -1001,7 +1001,7 @@ template&lt;typename T&gt;
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = requires (T t) { t.f(); };
-template&lt;typename T&gt; concept bool N = N &gt; 0;
+template&lt;int I&gt; concept bool N = I &gt; 0;
 
 template&lt;C T1, C T2, N I&gt; class A&lt;T1, T2, I&gt;;  // <i>#6</i>
 template&lt;C T, N I&gt;        class A&lt;int, T*, I&gt;; // <i>#7</i>
