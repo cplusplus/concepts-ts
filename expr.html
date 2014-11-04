@@ -176,7 +176,7 @@ struct Fun {
 
     <p> A <cxx-grammarterm>requires-expression</cxx-grammarterm> has type
     <code>bool</code> and is an unevaluated operand 
-    (<cxx-ref in="expr"></cxx-ref>).
+    (<cxx-ref to="expr"></cxx-ref>).
 
     <!-- NOTE: There is a core issue related to determining when something
     is unevaluated. -->
@@ -221,6 +221,16 @@ The first <code>requires</code> introduces the
 <cxx-grammarterm>requires-clause</cxx-grammarterm>, and the second
 introduces the <cxx-grammarterm>requires-expression</cxx-grammarterm>.
     </cxx-example>
+    <cxx-note>
+Such requirements can also be written using concepts:
+    <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool C = requires (T x) { x + x; };
+
+template&lt;typename T&gt; requires C&lt;T&gt; 
+  T add(T a, T b) { return a + b; }
+    </cxx-codeblock>
+    </cxx-note>
     </p>
 
     <p>A <cxx-grammarterm>requires-expression</cxx-grammarterm> may introduce
