@@ -223,7 +223,8 @@ The first <code>requires</code> introduces the
 introduces the <cxx-grammarterm>requires-expression</cxx-grammarterm>.
     </cxx-example>
     <cxx-note>
-Such requirements can also be written using concepts:
+Such requirements can also be written using by defining them within
+a concept.
     <cxx-codeblock>
 template&lt;typename T&gt;
   concept bool C = requires (T x) { x + x; };
