@@ -823,16 +823,14 @@ template&lt;C T&gt;
       </cxx-example>
       <!-- </p> -->
 
-      <p>A program that declares an explicit instantiation
+      <p>A program shall not declares an explicit instantiation
       (<cxx-ref to="temp.explicit"></cxx-ref>), an explicit specialization 
       (<cxx-ref to="temp.expl.spec"></cxx-ref>), or a partial specialization 
       of a concept definition is ill-formed.
 
       <cxx-note>
-      The prohibitions against overloading and specialization prevent
-      users from subverting the constraint system by providing a meaning 
-      for a concept that differs from the one computed by evaluating its 
-      constraints.
+      This prevents users from subverting the constraint system by providing a 
+      meaning for a concept that differs from its original definition.
       </cxx-note>
       </p>
 
