@@ -1967,13 +1967,13 @@ requires() {
 
       <cxx-example>
       <cxx-codeblock>
-template&lt;typename T&gt; concept bool C1 = requires(T t) { ++t; };
+template&lt;typename T&gt; concept bool C1 = requires(T t) { --t; };
 template&lt;typename T&gt; concept bool C2 = C1&lt;T&gt; &amp;&amp; requires(T t) { *t; };
 
 template&lt;C1 T&gt; void f(T);       // <i>#1</i>
 template&lt;C2 T&gt; void f(T);       // <i>#2</i>
 template&lt;typename T&gt; void g(T); // <i>#3</i>
-template&lt;C1 T&gt; void g();        // <i>#4</i>
+template&lt;C1 T&gt; void g(T);       // <i>#4</i>
 
 f(0);       // <i>selects #1</i>
 f((int*)0); // <i>selects #2</i>
