@@ -53,12 +53,12 @@
       (<cxx-ref to="dcl.spec.auto"></cxx-ref>).
     </p>
 
-    Add the following paragraph 13 in the original
+    Add the following paragraph after paragraph 13 in the original
     document.
 
     <p number="14" class="quoted">
     If an <cxx-grammarterm>id-expression</cxx-grammarterm> denotes a
-    function declaration that was declared with a 
+    non-overloaded function declaration that was declared with a
     <cxx-grammarterm>requires-clause</cxx-grammarterm> 
     (<cxx-ref to="dcl.fct"></cxx-ref>),
     its associated constraints shall be satisfied 
@@ -559,9 +559,7 @@ void g(const C&amp;);
         </bnf-grammar>
 
       <p> A <cxx-grammarterm>nested-requirement</cxx-grammarterm> can be used
-      to specify additional constraints on a type declared by a
-      <cxx-grammarterm>type-requirement</cxx-grammarterm> 
-      (<cxx-ref to="expr.prim.req.type"></cxx-ref>).
+      to specify additional constraints in terms of local parameters.
 
       A <cxx-grammarterm>nested-requirement</cxx-grammarterm> appends the 
       normalized form (<cxx-ref to="temp.constr.expr"></cxx-ref>) of its
@@ -575,12 +573,12 @@ void g(const C&amp;);
 template&lt;typename T&gt; concept bool C() { return sizeof(T) == 1; }
 
 template&lt;typename T&gt; concept bool D =
-  requires () {
-    requires C&lt;typename T::type&gt;();
+  requires (T t) {
+    requires C&lt;decltype (+t)&gt;();
   };
       </cxx-codeblock>
       The <cxx-grammarterm>nested-requirement</cxx-grammarterm> appends
-      the predicate constraint <code>sizeof(typename T::type) == 1</code>
+      the predicate constraint <code>sizeof(decltype (+t)) == 1</code>
       (<cxx-ref to="temp.constr.atom.pred"></cxx-ref>).
       </cxx-example>
     </cxx-section> <!-- expr.prim.req.nested -->
