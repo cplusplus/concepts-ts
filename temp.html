@@ -1632,87 +1632,64 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
 
     <p> A constraint <code>P</code> is said to <dfn>subsume</dfn> another
     constraint <code>Q</code> if, informally, it can be determined that
-    <code>P</code> implies <code>Q</code>, up to the equivalence of
-    expressions and types in <code>P</code> and <code>Q</code>.
-    
+    <code>P</code> implies <code>Q</code>, up to the equivalence of types
+    and expressions in atomic constraints.
+    <cxx-ref to="temp.constr.atom"></cxx-ref>. 
+
     <cxx-note>
     Subsumption does not determine, for example, if the predicate 
     constraint (<cxx-ref to="temp.constr.atom.pred"></cxx-ref>) 
     <code>N % 2 == 1</code> subsumes <code>N &amp; 1</code> for 
     some integral template argument, <code>N</code>. 
     </cxx-note>
-    The rules defining the subsumption relation are given for each kind
-    of constraint in
-    <cxx-ref to="temp.constr.op"></cxx-ref> and
+    
+    The rules determining when one constraint subsumes another is given
+    in <cxx-ref to="temp.constr.order"></cxx-ref>, and subsumption
+    rules for each kind of atomic constraint are given in
     <cxx-ref to="temp.constr.atom"></cxx-ref>.
     </p>
 
     <cxx-section id="temp.constr.op">
-      <h1>Logical operators</h1>
+      <h1>Logical operations</h1>
 
       <p> There are two logical operations on constraints: conjunction
       and disjunction. </p>
 
-
-        <!-- ===========
-             Conjunction
-             =========== -->
-
-        <cxx-section id="temp.constr.op.conj">
-          <h1>Conjunction</h1>
-
-          <p> A <dfn>conjunction</dfn> is a logical operation taking two 
-          operands. A conjunction of constraints is satisfied if and only 
-          if both operands are satisfied. </p>
-
-          <p> A conjunction of the constraints <code>P</code> 
-          and <code>Q</code> subsumes another constraint <code>R</code>
-          if and only if <code>P</code> subsumes <code>R</code>,
-          <code>Q</code> subsumes <code>R</code>, or both subsume
-          <code>R</code>.
-          </p>
-        </cxx-section> <!-- temp.constr.op.conj -->
+      <cxx-note> 
+      These logical operations have no corresponding C++ syntax.
+      For the purpose of exposition, conjunction is spelled
+      using the symbol &and;, and disjunction is spelled using the 
+      symbol &or;. Grouping of constraints is shown using parentheses.
+      </cxx-note>
 
 
-        <!-- ===========
-             Disjunction
-             =========== -->
+      <!-- ===========
+           Conjunction
+           =========== -->
 
-        <cxx-section id="temp.constr.op.disj">
-          <h1>Disjunction</h1>
+      <p> A <dfn>conjunction</dfn> is a logical operation taking two 
+      operands. A conjunction of constraints is satisfied if and only 
+      if both operands are satisfied. </p>
 
-          <p> A <dfn>disjunction</dfn> is a logical operation taking two 
-          operands. A disjunction of constraints is satisfied if and only 
-          if either operand is satisfied or both operands are satisfied. </p>
+      <!-- ===========
+           Disjunction
+           =========== -->
 
-          <p> A disjunction of the constraints <code>P</code> and <code>Q</code>
-          subsumes another constraint <code>R</code> if and only if
-          <code>P</code> subsumes <code>R</code> and <code>Q</code> subsumes
-          <code>R</code>.
-          </p>
-        </cxx-section> <!-- temp.constr.op.disj -->
+      <p> A <dfn>disjunction</dfn> is a logical operation taking two 
+      operands. A disjunction of constraints is satisfied if and only 
+      if either operand is satisfied or both operands are satisfied. </p>
 
-      </cxx-section> <!-- temp.constr.op -->
+    </cxx-section> <!-- temp.constr.op -->
 
-      <!-- =================
-          Atomic constraints
-          ================== -->
+    <!-- =================
+         Atomic constraints
+         ================== -->
 
-      <cxx-section id="temp.constr.atom">
-        <h1>Atomic constraints</h1>
+    <cxx-section id="temp.constr.atom">
+      <h1>Atomic constraints</h1>
 
-        <p> Any constraint that is not a conjunction or disjunction is an
-        <dfn>atomic constraint</dfn>. </p>
-
-        <p> An atomic constraint <code>P</code> subsumes a disjunction
-        of the constraints <code>Q</code> and <code>R</code> if and only
-        if <code>P</code> subsumes <code>Q</code>, <code>P</code>
-        subsumes <code>R</code>, or both. </p>
-
-        <p> An atomic constraint <code>P</code> subsumes a conjunction
-        of the constraints <code>Q</code> and <code>R</code> if and only
-        if <code>P</code> subsumes <code>Q</code> and <code>P</code>
-        subsumes <code>R</code>.</p>
+      <p> Any constraint that is not a conjunction or disjunction is an
+      <dfn>atomic constraint</dfn>. </p>
 
         <!-- =====================
              Predicate constraints
@@ -2039,6 +2016,65 @@ void g(const C&);
 
     <cxx-section id="temp.constr.order">
       <h1>Partial ordering by constraints</h1>
+
+      <p>
+      In order to determine if a constraint <code>P</code> subsumes a constraint
+      <code>Q</code>, transform <code>P</code> into disjunctive normal
+      form (a disjunction of clauses, each of which is a conjunction
+      of atomic propositions), and transform <code>Q</code> into conjunctive
+      normal form (a conjunction of clauses, each of which is a disjunction
+      of atomic propositions).
+      <cxx-example class="inline">
+      Let <code>A</code>, <code>B</code>, and <code>C</code> be atomic
+      constraints. 
+
+      The constraint 
+      <code>A</code> &and; (<code>B</code> &or; <code>C</code>) 
+      is in conjunctive normal form.
+
+      Its conjunctive clauses are <code>A</code> and
+      (<code>B</code> &or; <code>C</code>).
+      
+      The disjunctive normal form of the constraint
+      <code>A</code> &and; (<code>B</code> &or; <code>C</code>) 
+      is
+      (<code>A</code> &and; <code>B</code>) &or; (<code>A</code> &and; <code>C</code>).
+      
+      Its disjunctive clauses are 
+      (<code>A</code> &and; <code>B</code>) and
+      (<code>A</code> &and; <code>C</code>).
+      </cxx-example>
+      
+      The disjunctive normal form of <code>P</code> subsumes the 
+      conjunctive normal form of <code>Q</code>
+      if and only if every disjunctive clause in 
+      <code>P<sub><i>i</i></sub></code> subsumes each 
+      conjunctive clause in <code>Q<sub><i>j</i></sub></code>. 
+
+      A disjunctive clause
+      <code>P<sub><i>i</i></sub></code> subsumes a conjunctive clause 
+      <code>Q<sub><i>j</i></sub></code> when each atomic constraint in 
+      <code>P<sub><i>i</i></sub></code> subsumes any atomic constraint in
+      <code>Q<sub><i>j</i></sub></code>.
+
+      The rules for determining whether one atomic constraint subsumes
+      another are defined for each kind of atomic constraint
+      (<cxx-ref to="temp.constr.atom"></cxx-ref>).
+
+      <cxx-example class="inline">
+      Let <code>A</code> and <code>B</code> be
+      predicate constraints (<cxx-ref to="temp.constr.atom.pred"></cxx-ref>).
+
+      The constraint <code>A &and; B</code> subsumes <code>A</code>, 
+      but <code>A</code> does not subsume <code>A &and; B</code>. 
+
+      The constraint <code>A</code> subsumes <code>A &or; B</code>, but
+      <code>A &or; B</code> does not subsume code <code>A</code>. 
+
+      Also, any constraint <code>P</code> subsumes itself.
+      </cxx-example>
+      </p>
+
 
       <p>The subsumption relation defines a partial ordering on constraints. 
       This partial ordering is used to determine </p>
