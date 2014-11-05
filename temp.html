@@ -956,7 +956,7 @@ void f1() requires true; // <i>friend of all S&lt;T></i>
 void f2() requires C1&ltint>; // <i>friend of S&lt;int></i>
       </cxx-codeblock>
       The friend declaration of <code>g2</code> is ill-formed, no
-      diagnostic required because no valid instantiation of <code>S</code>
+      diagnostic required, because no valid instantiation of <code>S</code>
       is possible: for all <code>T</code> there is no <code>g2&lt;T></code>
       for which the constraints are satisfied, so template argument
       deduction (<cxx-ref to="temp.deduct.decl"></cxx-ref>) fails.
