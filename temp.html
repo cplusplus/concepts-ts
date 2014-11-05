@@ -1035,8 +1035,7 @@ template&lt;C T, N I&gt;        class A&lt;int, T*, I&gt;; // <i>#7</i>
         <h1>Matching of class template partial specializations</h1>
 
         Modify paragraph 2; constraints must be satisfied in order
-        to match a partial specialization. Add the example given here
-        to the (omitted) example in the original document.
+        to match a partial specialization. 
 
         <p number="2" class="quoted"> 
         A partial specialization matches a given actual template 
@@ -1046,6 +1045,12 @@ template&lt;C T, N I&gt;        class A&lt;int, T*, I&gt;; // <i>#7</i>
         <ins>, and the deduced template arguments satisfy the constraints 
         of the partial specialization, if any 
         (<cxx-ref to="temp.constr"></cxx-ref>)</ins>.
+        </p>
+
+        Add the following example to the end of paragraph 2.
+
+        <div class="quoted">
+        <ins>
         <cxx-example class="inline">
         <cxx-codeblock>
 struct S { void f(); };
@@ -1055,7 +1060,8 @@ A&lt;S, int, 2&gt;  a7; // <i>error: constraints not satisfied</i>
 A&lt;int, S*, 3&gt; a8; // <i>uses #7</i>
         </cxx-codeblock>
         </cxx-example>
-        </p>
+        </ins>
+        </div>
       </cxx-section> <!-- temp.class.spec.match -->
 
 
