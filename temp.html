@@ -649,7 +649,8 @@ Array&lt;double&gt; s2;    // <i>error:</i> Array <i>takes two template argument
   <cxx-section id="temp.names">
     <h1>Names of template specializations</h1>
 
-
+    <!-- NOTE: This is a core issue DR. -->
+    <!--
     Add the following paragraph to require the implicit instantiation
     of default template arguments for non-function templates.
 
@@ -673,6 +674,7 @@ S&lt;bool&gt;* p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;*
     context that requires a complete type.
     </cxx-example>
     </p>
+    -->
 
     Add this paragraph to require the satisfaction of associated constraints
     on the formation of the <cxx-grammarterm>simple-template-id</cxx-grammarterm>.
@@ -700,7 +702,6 @@ Ptr&lt;int&gt; p; // <i>error: constraints not satisfied</i>
     </cxx-codeblock>
     </cxx-example>
     </p>
-
 
   </cxx-section> <!-- temp.names -->
 
