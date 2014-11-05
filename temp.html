@@ -729,9 +729,9 @@ Ptr&lt;int&gt; p; // <i>error: constraints not satisfied</i>
       corresponding class template or alias template (call it 
       <code>A</code>) matches the corresponding template parameter in 
       the <cxx-grammarterm>template-parameter-list</cxx-grammarterm> of 
-      <code>P</code><ins>, and <code>P</code> is more constrained than
-       <code>A</code> according to the rules in 
-       <cxx-ref to="temp.constr"></cxx-ref></ins>.
+      <code>P</code><ins>, and <code>P</code> is at least as constrained as
+      <code>A</code> according to the rules in 
+      <cxx-ref to="temp.constr.order"></cxx-ref></ins>.
 
       Two template parameters match if they are of the same kind 
       (type, non-type, template), 
@@ -2021,6 +2021,11 @@ g(true);    // <i>selects #3 because</i> C1&lt;bool&gt; <i>is not satisfied</i>
 g(0);       // <i>selects #4</i>
       </cxx-codeblock>
       </cxx-example>
+
+      <p> A declaration <code>D1</code> is <dfn>at least as constrained</dfn>
+      as another declaration <code>D2</code> when <code>D1</code> is more
+      constrained than <code>D2</code> and <code>D2</code> is not more
+      constrained than <code>D1</code>. </p>
 
     </cxx-section> <!-- temp.constr.order -->
 
