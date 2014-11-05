@@ -426,7 +426,6 @@ template&lt;typename T&gt; concept bool C =
       <bnf-grammar>
         <bnf-rule>compound-requirement</bnf-rule>
           <bnf-alt>
-            <bnf-opt><bnf-terminal>constexpr</bnf-terminal></bnf-opt>
             <bnf-terminal>{</bnf-terminal> expression <bnf-terminal>}</bnf-terminal>
             <bnf-opt><bnf-terminal>noexcept</bnf-terminal></bnf-opt>
             <bnf-opt>trailing-return-type</bnf-opt>
@@ -442,11 +441,6 @@ template&lt;typename T&gt; concept bool C =
       <li>the <cxx-grammarterm>compound-requirement</cxx-grammarterm> 
       introduces an expression constraint for <code>E</code>
       (<cxx-ref to="temp.constr.atom.expr"></cxx-ref>);</li>
-
-      <li>if the <code>constexpr</code> specifier is present, the
-      <cxx-grammarterm>compound-requirement</cxx-grammarterm> appends a constant
-      expression constraint for <code>E</code>
-      (<cxx-ref to="temp.constr.atom.constexpr"></cxx-ref>);</li>
 
       <li> if the the <code>noexcept</code> specifier is present, 
       the <cxx-grammarterm>compound-requirement</cxx-grammarterm> appends an 
@@ -510,19 +504,6 @@ template&lt;typename T&gt; concept bool C3 =
       and an exception constraint on <code>g(x)</code>.
 
       <cxx-codeblock>
-template&lt;typename T&gt; concept bool C4 =
-  requires(T x) {
-    constexpr {g(x)};
-  };
-      </cxx-codeblock>
-
-      The <cxx-grammarterm>compound-requirement</cxx-grammarterm> in <code>C4</code> 
-      also introduces two constraints: an expression constraint on 
-      <code>T::value</code> and a constant expression constraint for that
-      same expression.
-      </cxx-example>
-
-      <cxx-codeblock>
 template&lt;typename T&gt; concept bool C() { return true; }
 
 template&lt;typename T&gt; concept bool C5 =
@@ -539,6 +520,7 @@ template&lt;typename T&gt; concept bool C5 =
       <cxx-codeblock>
 void g(const C&amp;);
       </cxx-codeblock>
+      </cxx-example>
       </p>
       
       <p> The substitution of template arguments into the

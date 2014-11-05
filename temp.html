@@ -1939,52 +1939,6 @@ void g(const C&);
 
 
         <!-- ===============================
-             Constant expression constraints
-             =============================== -->
-
-        <cxx-section id="temp.constr.atom.constexpr">
-          <h1>Constant expression constraints</h1>
-
-          <p> A <dfn>constant expression constraint</dfn> is an atomic
-          constraint that specifies a requirement that
-          an <cxx-grammarterm>expression</cxx-grammarterm> <code>E</code>
-          can be evaluated during translation. The constraint is satisfied if 
-          and only if <code>E</code> is a prvalue constant expression 
-          (<cxx-ref in="cxx" to="expr.const"></cxx-ref>).
-
-          <cxx-note>
-          A constant expression constraint determines if an expression can be
-          evaluated during translation for specific <code>constexpr</code>
-          arguments. It cannot be used to determine if an expression is
-          evaluated during translation for all possible arguments.
-          </cxx-note>
-
-          <cxx-note>
-          Constant expression constraints are introduced by a
-          <cxx-grammarterm>compound-requirement</cxx-grammarterm> that
-          includes the <code>constexpr</code> specifier
-          (<cxx-ref to="expr.prim.req.compound"></cxx-ref>).
-          </cxx-note>
-
-          <cxx-example class="inline">
-          <cxx-codeblock>
-template&lt;typename T, int N&gt; concept bool C = 
-requires() {
-  constexpr { T(N) }; // <i>determines if</i> T(N) <i>is a constant expression</i>
-};
-          </cxx-codeblock>
-          </cxx-example>
-          </p>
-
-          <p> A constant expression constraint <code>P</code> subsumes
-          another constant expression constraint <code>Q</code> if and
-          only if the expressions of <code>P</code> and <code>Q</code>
-          are equivalent (<cxx-ref to="temp.over.link"></cxx-ref>). </p>
-        
-        </cxx-section> <!-- temp.constr.atom.constexpr -->
-
-
-        <!-- ===============================
              Exception constraints
              =============================== -->
 
