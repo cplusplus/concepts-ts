@@ -1237,6 +1237,7 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
       in <cxx-ref to="temp.constr"></cxx-ref>.
       </cxx-note>
 
+
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = sizeof(T) &gt; 2;
@@ -1249,7 +1250,6 @@ template&lt;typename T&gt; struct S {
 
 S&lt;char&gt; s1;    // <i>error: no matching constructor</i>
 S&lt;char[8]&gt; s2; // <i>OK: calls #2</i>
-
       </cxx-codeblock>
       The instantiation of <code>S&lt;char&gt;</code> produces a class
       template specialization having the constructors
@@ -1259,7 +1259,7 @@ S&lt;char[8]&gt; s2; // <i>OK: calls #2</i>
       Even though neither constructor will be selected by overload resolution,
       they remain a part of the class template specialization. This also
       has the effect of suppressing the implicit generation of a default 
-      constructor (<cxx-ref in="cxx" to="class.ctor"></cxx-ref>).
+      constructor (<cxx-ref in="cxx" to="class.ctor"></cxx-ref>)
 
       <cxx-codeblock>
 template&lt;typename T&gt; struct S2 {
@@ -1269,6 +1269,26 @@ template&lt;typename T&gt; struct S2 {
 S2&lt;int&gt; s; // <i>error: substitution failure in definition of</i> S2&lt;int&gt;
       </cxx-codeblock>
       </cxx-example>
+
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt; struct S1 {
+  template&lt;typename U&gt; requires false struct Inner1; // <i>OK</i>
+};
+
+template&lt;typename T&gt; struct S2 {
+  template&lt;typename U&gt; 
+    requires sizeof(T[(int)-sizeof(T)]) > 1 // <i>error: ill-formed, no diagnostic required</i>
+      struct Inner2;
+};
+      </cxx-codeblock>
+      </cxx-example>
+      Every instantiation of <code>S1</code> results in a valid type,
+      although any use of its nested <code>Inner1</code> template is invalid.
+
+      <code>S2</code> is ill-formed, no diagnostic required, since no
+      substitution into the constraints of its <code>Inner2</code>
+      template would result in a valid expression.
       </p>
 
     </cxx-section> <!-- temp.inst -->
