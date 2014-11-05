@@ -1229,9 +1229,14 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
 
       If the substitution fails, the program is ill-formed.
 
+      <!-- TODO: There is a note to put this into 14.6p8??? -->
+      If substitution into the associated constraints would always result in an
+      invalid type or expression, the program is ill-formed, no diagnostic
+      required.
+
       <cxx-note>
-      The evaluation of constraints happens during lookup or overload
-      resolution (Clause <cxx-ref to="over"></cxx-ref>). Preserving the spelling
+      The satisfaction of constraints is determined during lookup or overload
+      resolution (<cxx-ref to="over.match"></cxx-ref>). Preserving the spelling
       of the substituted constraint also allows constrained member function
       to be partially ordered by those constraints according to the rules
       in <cxx-ref to="temp.constr"></cxx-ref>.
