@@ -1799,10 +1799,36 @@ requires (T a, T b) {
           <p> An <dfn>argument deduction constraint</dfn> is an atomic
           constraint that specifies a requirement on 
           the usability of an <cxx-grammarterm>expression</cxx-grammarterm> 
-          (call it <code>E</code>) as an argument to an invented 
-          function template (call it <code>F</code>) that has a single 
-          parameter whose type (call it <code>T</code>) is
-          written in terms of <code>F</code>'s template parameters.
+          <code>E</code> as an argument to an invented abbreviated
+          function template <code>F</code> (<cxx-ref to="dcl.fct"></cxx-ref>),
+          where <code>F</code> has a single parameter formed from a type that 
+          includes placeholders 
+          (<cxx-ref to="dcl.spec.auto"></cxx-ref>, <cxx-ref to="dcl.spec.constr"></cxx-ref>).
+
+          <cxx-note>
+          An argument deduction constraint is introduced by a
+          <cxx-grammarterm>trailing-return-type</cxx-grammarterm> in a
+          <cxx-grammarterm>compound-requirement</cxx-grammarterm> when the
+          <cxx-grammarterm>trailing-type-specifier-seq</cxx-grammarterm>
+          contains at least one placeholder
+          (<cxx-ref to="expr.prim.req.compound"></cxx-ref>).
+          </cxx-note>
+
+          <cxx-example class="inline">
+          <cxx-codeblock>
+template&lt;typename T&gt;
+  concept bool C1() { return true; }
+
+template&lt;typename T&gt;
+  concept bool C2() { return requires(T t) { {*t} -> const C1& x; }; }
+          </cxx-codeblock>
+          The invented function template for the
+          <cxx-grammarterm>compound-requirement</cxx-grammarterm> in
+          <code>C2</code> is:
+          <cxx-codeblock>
+void F(const C1& x);
+          </cxx-codeblock>
+          </cxx-example>
 
           The constraint is satisfied if and only if <code>F</code>
           is selected by overload resolution for the call <code>F(E)</code>
@@ -1814,15 +1840,7 @@ requires (T a, T b) {
           constraints are satisfied.
           </cxx-note>
 
-          <cxx-note>
-          An argument deduction constraint is introduced by a
-          <cxx-grammarterm>trailing-return-type</cxx-grammarterm> in a
-          <cxx-grammarterm>compound-requirement</cxx-grammarterm> when the
-          <cxx-grammarterm>trailing-type-specifier-seq</cxx-grammarterm>
-          contains at least one placeholder
-          (<cxx-ref to="expr.prim.req.compound"></cxx-ref>).
-          </cxx-note>
-
+          <!--
           <cxx-example>
           <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = requires (T t) { ++t; };
@@ -1838,6 +1856,7 @@ template&lt;typename T&gt; concept bool D = requires (T t) { *t -> const C&amp;;
 void g(const C&);
           </cxx-codeblock>
           </cxx-example>
+          -->
           </p>
 
           <!-- FIXME: For two constraints of the form {e} -> T1 (call it P)
