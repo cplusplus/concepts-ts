@@ -681,25 +681,50 @@ S&lt;bool&gt;* p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;*
 
     <p class="quoted">
     When a <cxx-grammarterm>simple-template-id</cxx-grammarterm> names
-    a constrained class template, variable template or alias template,
+    a constrained non-template function or a template template parameter,
+    but not a member template that is a member of an unknown specialization
+    (<cxx-ref in="cxx" to="temp.res"></cxx-ref>),
     and all <cxx-grammarterm>template-argument</cxx-grammarterm>s in the
-    <cxx-grammarterm>template-id</cxx-grammarterm> are non-dependent,
-    (<cxx-ref in="cxx" to="temp.nondep"></cxx-ref>), the associated constraints
-    are checked against those
-    <cxx-grammarterm>template-argument</cxx-grammarterm>s
-    (<cxx-ref to="temp.constr"></cxx-ref>). If, as a result of checking,
-    the associated constraints are not satisfied, the program is ill-formed.
+    <cxx-grammarterm>template-id</cxx-grammarterm> are non-dependent
+    (<cxx-ref in="cxx" to="temp.dep.temp"></cxx-ref>), the template
+    arguments are substituted into the associated constraints
+    (Clause <cxx-ref to="temp"></cxx-ref>). 
+
+    If, as a result of substitution, the associated constraints are not 
+    satisfied (<cxx-ref to="temp.constr"></cxx-ref>), the 
+    <cxx-grammarterm>template-id</cxx-grammarterm> is ill-formed.
 
     <cxx-example class="inline">
     <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = false;
 
-template&lt;C T&gt; struct S { };
+template&lt;C T&gt; struct S1 { };
 template&lt;C T&gt; using Ptr = T*;
 
-S&lt;int&gt;* p;  // <i>error: constraints not satisfied</i>
+S1&lt;int&gt;* p; // <i>error: constraints not satisfied</i>
 Ptr&lt;int&gt; p; // <i>error: constraints not satisfied</i>
+
+template&lt;typname T&gt;
+  struct S2 { Ptr&lt;int&gt; x; }; // <i>error: constraints not satisfied</i>
+
+template&lt;typename T&gt;
+  struct S3 { Ptr&lt;T&gt; x; }    // <i>OK: satisfaction is not required</i>
+
+S3&lt;int&gt; x;                   // <i>error: constraints not satisfied</i>
+
+template&lt;tempalte&lt;C T&gt; class X&gt;
+  struct S3 {
+    X&lt;int&gt; x; // <i>error: constraints not satisfied</i>
+
+    using Type = T::template MT&lt;char&gt;;
+  };
     </cxx-codeblock>
+    The error in the instantiation of <code>S3&lt;int&gt;</code> is caused
+    by the substitution into the type of the member <code>x</code>.
+
+    Because there is no declaration for the template named by 
+    <code>T::template MT&lt;char&gt;</code>, it cannot have associated
+    constraints.
     </cxx-example>
     </p>
 
