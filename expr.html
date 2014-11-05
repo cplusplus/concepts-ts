@@ -230,19 +230,14 @@ struct Fun {
     </p>
 
     <p >A <cxx-grammarterm>requires-expression</cxx-grammarterm> shall appear
-    only within a concept definition (<cxx-ref to="dcl.spec.concept"></cxx-ref>) 
+    only within a concept definition (<cxx-ref to="dcl.spec.concept"></cxx-ref>),
     or a <cxx-grammarterm>requires-clause</cxx-grammarterm> following a
     <cxx-grammarterm>template-parameter-list</cxx-grammarterm> 
-    (<cxx-ref to="temp"></cxx-ref>),
-    <cxx-grammarterm>init-declarator</cxx-grammarterm>
-    (<cxx-ref to="dcl.decl"></cxx-ref>),
-    <cxx-grammarterm>function-definition</cxx-grammarterm>
-    (<cxx-ref to="dcl.fct.def"></cxx-ref>), or
-    <cxx-grammarterm>member-declarator</cxx-grammarterm>
-    (<cxx-ref to="class.mem"></cxx-ref>).
+    (<cxx-ref to="temp"></cxx-ref>) or
+    function declaration (<cxx-ref to="dcl.fct"></cxx-ref>).
 
     <cxx-example class="inline">
-    The most common use of 
+    A common use of 
     <cxx-grammarterm>requires-expression</cxx-grammarterm>s is to define
     syntactic requirements in concepts  
     such as the one below:
