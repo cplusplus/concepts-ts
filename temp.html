@@ -1413,13 +1413,13 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
       (Clause <cxx-ref to="temp"></cxx-ref>),
       the template arguments are substituted into the associated constraints
       without evaluating the resulting expression. If this substitution
-      results in an invalid expression, type deduction fails.
+      results in an invalid type or expression, type deduction fails.
 
       <cxx-note>
-      The constraints associated with the function template specialization
-      are checked (<cxx-ref to="temp.constr"></cxx-ref>) during overload
-      resolution (Clause <cxx-ref to="over"></cxx-ref>), and not at the point
-      of substitution.
+      The satisfaction of constraints (<cxx-ref to="temp.constr"></cxx-ref>)
+      associated with the function template specialization is determined during 
+      overload resolution (<cxx-ref to="over.match"></cxx-ref>), and not at 
+      the point of substitution.
       </cxx-note>
       </ins>
       </p>
