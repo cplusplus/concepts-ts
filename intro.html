@@ -45,6 +45,64 @@
     programs.</cxxnote></p>
   </cxx-section>
 
+  <cxx-section id="intro.defs">
+    <h1>Terms and definitions</h1>
+
+    Modify the definitions of "signature" to include associated
+    constraints (Clause <cxx-ref to="temp"></cxx-ref>).
+
+    <dl>
+    <dt>Signature</dt>
+    <dd>
+    &lt;function&gt; name, parameter type list 
+    (<cxx-ref to="dcl.fct"></cxx-ref>), <del>and</del> 
+    enclosing namespace (if any)<ins>, and associated constraints
+    (Clause <cxx-ref to="temp"></cxx-ref>)</ins>
+    <cxx-note> 
+    Signatures are used as a basis for name mangling and linking.
+    </cxx-note>
+    </dd>
+    
+    <dt>Signature</dt>
+    <dd>
+    &lt;function template&gt; name, parameter type list 
+    (<cxx-ref to="dcl.fct"></cxx-ref>), enclosing namespace (if any), 
+    return type, <del>and</del> template parameter list<ins>,
+    and and associated constraints (Clause <cxx-ref to="temp"></cxx-ref>)</ins>
+
+
+    &lt;function&gt; name, parameter type list 
+    (<cxx-ref to="dcl.fct"></cxx-ref>), <del>and</del> 
+    enclosing namespace (if any)<ins>, and associated constraints
+    (<cxx-ref to="temp"></cxx-ref>)</ins>
+    <cxx-note> 
+    Signatures are used as a basis for name mangling and linking.
+    </cxx-note>
+    </dd>
+
+    <dt>Signature</dt>
+    <dd>
+    &lt;class member function&gt; name, parameter type list 
+    (<cxx-ref to="dcl.fct"></cxx-ref>), 
+    class of which the function is a member, 
+    <cxx-grammarterm>cv</cxx-grammarterm>-qualifiers (if any), <del>and</del> 
+    <cxx-grammarterm>ref-qualifier</cxx-grammarterm> (if any)<ins>,
+    and associated constraints, if any (Clause <cxx-ref to="temp"></cxx-ref>)</ins>
+    </dd>
+
+    <dt>Signature</dt>
+    <dd>
+    &lt;class member function template&gt; name, parameter type list 
+    (<cxx-ref to="dcl.fct"></cxx-ref>), class of which the function is a 
+    member, <cxx-grammarterm>cv</cxx-grammarterm>-qualifiers (if any), 
+    <cxx-grammarterm>ref-qualifier</cxx-grammarterm> (if any), 
+    return type, <del>and</del> template parameter list<ins>, and
+    associated constraints, if any (Clause <cxx-ref to="temp"></cxx-ref>)</ins>
+    </dd>
+
+    </dl>
+  </cxx-section>
+
   <cxx-section id="intro.ack">
     <h1>Acknowledgments</h1>
   
