@@ -1063,9 +1063,7 @@ A&lt;int, S*, 3&gt; a8; // <i>uses #7</i>
         <h1>Partial ordering of class template specializations</h1>
 
         Modify paragraph 1 so that constraints are considered in the
-        partial ordering of class template specializations. Add the
-        example at the end of this paragraph to the (omitted) example
-        in the original document.
+        partial ordering of class template specializations. 
 
         <p number="1" class="quoted">
         For two class template partial specializations, the first is 
@@ -1075,21 +1073,25 @@ A&lt;int, S*, 3&gt; a8; // <i>uses #7</i>
         rules for function templates 
         (<cxx-ref in="cxx" to="temp.func.order"></cxx-ref>):
         </p>
-        <div class="quoted">
         <ul>
           <li> the first function template has the same template 
           parameters <ins>and associated constraints</ins> as the first partial 
-          specialization and has a single function parameter whose
+          specialization, and has a single function parameter whose
           type is a class template specialization with the template 
           arguments of the first partial specialization, and</li>
 
           <li> the second function template has the same template 
           parameters <ins>and associated constraints</ins> as the second partial 
-          specialization and has a single function parameter whose
+          specialization, and has a single function parameter whose
           type is a class template specialization with the template 
           arguments of the second partial specialization.</li>
         </ul>
-        <cxx-example class="inline">
+
+        Add the following example to the end of paragraph 1.
+
+        <div class="quoted">
+        <ins>
+        <cxx-example>
         <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = requires (T t) { t.f(); };
 template&lt;typename T&gt; concept bool D = C&lt;T&gt; &amp;&amp; requires (T t) { t.f(); };
@@ -1102,10 +1104,11 @@ template&lt;D T&gt; class S&lt;T&gt; { }; // <i>#2</i>
 template&lt;C T&gt; void f(S&lt;T&gt;); // <i>A</i>
 template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
         </cxx-codeblock>
-        The partial specialization #2 is be more specialized than 
+        The partial specialization #2 is more specialized than 
         #1 for template arguments that satisfy both constraints because 
         <code>B</code> is more specialized than <code>A</code>.
         </cxx-example>
+        </ins>
         </div>
 
       </cxx-section> <!-- temp.class.order -->
