@@ -428,20 +428,19 @@ template&lt;D* N&gt; void f2();      // <i>error:</i> N <i>declares a pointer-to
     The designated concept is found using the rules in
     <cxx-ref to="dcl.spec.constr"></cxx-ref>. 
 
-    Let <code>I</code> be the <cxx-grammarterm>declarator-id</cxx-grammarterm>
-    of the <cxx-grammarterm>basic-parameter-declaration</cxx-grammarterm>,
-    and let <code>P</code> be the prototype parameter of the designated
+    Let <code>P</code> be the prototype parameter of the designated
     concept. The declared template parameter is determined by the type
-    and form of <code>P</code> and the <cxx-grammarterm>identifier</cxx-grammarterm>
-    and optional ellipsis in <code>I</code>.
+    and form of <code>P</code> and the optional ellipsis in the
+    <cxx-grammarterm>template-parameter</cxx-grammarterm>.
+    <!-- FIXME: this last line should not be template-parameter. -->
     </p>
     
     <div class="quoted">
     <ul>
     <li> If <code>P</code> is a type 
-    <cxx-grammarterm>template-parameter</cxx-grammarterm> declared with
-    the <code>class</code> or <code>typename</code>, the declared parameter is 
-    a type <cxx-grammarterm>template-parameter</cxx-grammarterm>. </li>
+    <cxx-grammarterm>template-parameter</cxx-grammarterm> the declared 
+    parameter is a type <cxx-grammarterm>template-parameter</cxx-grammarterm>. 
+    </li>
 
     <li> If <code>P</code> is a non-type 
     <cxx-grammarterm>template-parameter</cxx-grammarterm>, the declared
@@ -452,7 +451,7 @@ template&lt;D* N&gt; void f2();      // <i>error:</i> N <i>declares a pointer-to
     <cxx-grammarterm>template-parameter</cxx-grammarterm>, the declared
     parameter is a template <cxx-grammarterm>template-parameter</cxx-grammarterm>
     having the same <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
-    as <code>P</code>. </li>
+    as <code>P</code>, excluding default template arguments. </li>
 
     <li> If <code>P</code> declares a template parameter pack,
     <code>I</code> shall include an ellipsis, and the declared parameter
