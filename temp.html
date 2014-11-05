@@ -754,8 +754,8 @@ Ptr&lt;int&gt; p; // <i>error: constraints not satisfied</i>
       Add the following example to the end of paragraph 3, after the
       examples given in the original document.
 
-      <p number="3" class="quoted">
       <div class="quoted">
+      <ins>
       <cxx-example>
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = requires (T t) { t.f(); };
@@ -773,6 +773,7 @@ S&lt;Y&gt; s2; // <i>error: the constraints of</i> P <i>do not subsume those of<
 S&lt;Z&gt; s3; // OK: <i>the constraints of P subsume those of</i> Z
       </cxx-codeblock>
       </cxx-example>
+      </ins>
       </div>
 
     </cxx-section> <!-- temp.arg.template -->
@@ -795,9 +796,7 @@ S&lt;Z&gt; s3; // OK: <i>the constraints of P subsume those of</i> Z
       <h1>Class templates</h1>
 
       Modify paragraph 3 to require template constraints for out-of-class
-      definitions of members of constrained templates. Note that the example
-      in the original document is omitted. The example in this paragraph
-      is to be added after the omitted example.
+      definitions of members of constrained templates. 
 
       <p number="3" class="quoted">
       When a member function, a member class, a member enumeration, a static 
@@ -815,7 +814,12 @@ S&lt;Z&gt; s3; // OK: <i>the constraints of P subsume those of</i> Z
 
       Each template parameter pack shall be expanded with an ellipsis in the 
       template argument list.
+      </p>
 
+      Add the following example at the end of paragraph 3.
+
+      <div class="quoted">
+      <ins>
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = true;
@@ -833,7 +837,8 @@ template&lt;typename T&gt; void S&lt;T&gt;::g() { } // <i>error: no matching dec
 template&lt;C T&gt; D{U} struct S&lt;T&gt;::Inner { }; // <i>OK</i>
       </cxx-codeblock>
       </cxx-example>
-      </p>
+      </ins>
+      </div>
 
 
     <!-- ===================================
