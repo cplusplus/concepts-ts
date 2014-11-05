@@ -1012,8 +1012,9 @@ template&lt;C T, N I&gt;        class A&lt;int, T*, I&gt;; // <i>#7</i>
       </cxx-example>
       </p>
 
-      Modify the 3rd item in the list of paragraph 8 to allow 
-      constrained class template partial specializations like #6.
+      Remove the 3rd item in the list of paragraph 8 to allow
+      constrained class template partial specializations like #6, and
+      because it is redundant with the 4th item.
       Note that all other items in that list are elided. 
 
       <p number="8" class="quoted">
@@ -1021,10 +1022,11 @@ template&lt;C T, N I&gt;        class A&lt;int, T*, I&gt;; // <i>#7</i>
       the following restrictions apply:
       <ul>
       <li>...</li>
-      <li><ins>In an class template partial specialization with no
-      associated constraints (Clause <cxx-ref to="temp"></cxx-ref>),</ins>
-      <del>The</del><ins>the</ins> argument list of the specialization shall
-      not be identical to the implicit argument list of the primary template.
+      <li><del>The argument list of the specialization shall
+	not be identical to the implicit argument list of the
+	primary template.</del></li>
+      <li>The specialization shall be more specialized than the primary
+	template (<cxx-ref to="temp.class.order"></cxx-ref>).</li>
       <li>...</li>
       </ul>
 
