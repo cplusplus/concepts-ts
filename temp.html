@@ -1281,6 +1281,25 @@ S2&lt;int&gt; s; // <i>error: substitution failure in definition of</i> S2&lt;in
     <cxx-section id="temp.explicit">
       <h1>Explicit instantiation</h1>
 
+      Modify paragraph 8 to ensure that only members whose constraints are 
+      satisfied are explicitly instantiated during class template 
+      specialization. The note in the original document is omitted.
+
+      <p number="8" class="quoted">
+      An explicit instantiation that names a class template specialization is 
+      also an explicit instantiation of the same kind (declaration or 
+      definition) of each of its members (not including members inherited from 
+      base classes and members that are templates) that has not been previously 
+      explicitly specialized in the translation unit containing the explicit 
+      instantiation, 
+      <ins>
+      and provided that the associated constraints (<cxx-ref to="temp"></cxx-ref>), 
+      if any, of that member are satisfied (<cxx-ref to="temp.constr"></cxx-ref>)
+      by the template arguments of the explicit instantiation,
+      </ins> 
+      except as described below.
+      </p>
+
       Add the following paragraphs to this section. These require an explicit
       instantiation of a constrained template to satisfy the template's
       associated constraints.
