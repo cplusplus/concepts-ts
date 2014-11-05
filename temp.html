@@ -846,6 +846,7 @@ template&lt;C T&gt; D{U} struct S&lt;T&gt;::Inner { }; // <i>OK</i>
         Add the following example to the end of paragraph 1.
 
         <p number="1" class="quoted">
+        <ins>
         <cxx-example>
         <cxx-codeblock>
 template&lt;typename T&gt; struct S {
@@ -859,6 +860,7 @@ template&lt;typename T&gt;
   void S&lt;T&gt;::g() { }               // <i>error: no matching function in</i> S&lt;T&gt;
         </cxx-codeblock>
         </cxx-example>
+        </ins>
         </p>
       </cxx-section> <!-- temp.mem.func -->
     </cxx-section> <!-- temp.class -->
@@ -871,9 +873,7 @@ template&lt;typename T&gt;
       <h1>Member templates</h1>
 
       Modify paragraph 1 in order to account for constrained member templates
-      of (possibly) constrained class templates. Add the example in this
-      document after the example in the original document, which is omitted
-      here.
+      of (possibly) constrained class templates. 
 
       <p number="1" class="quoted">
       A template can be declared within a class or class template; such a 
@@ -890,7 +890,12 @@ template&lt;typename T&gt;
       <cxx-grammarterm>template-parameter</cxx-grammarterm>s
       <ins>and associated constraints</ins>
       of the member template.
+      </p>
 
+      Add the following example at the end of paragraph 1.
+
+      <div class="quoted">
+      <ins>
       <cxx-example class="inline">
       <cxx-codeblock>
 template&lt;typename T&gt; concept bool C1 = true;
@@ -908,7 +913,8 @@ template&lt;C1 T&gt; template&lt;typename U&gt;
   void S&lt;T&gt;::g(U) { } // <i>error: no matching function in</i> S&lt;T&gt;
       </cxx-codeblock>
       </cxx-example>
-      </p>
+      </ins>
+      </div>
     </cxx-section> <!-- temp.mem -->
 
 
@@ -1029,8 +1035,7 @@ template&lt;C T, N I&gt;        class A&lt;int, T*, I&gt;; // <i>#7</i>
 	template (<cxx-ref to="temp.class.order"></cxx-ref>).</li>
       <li>...</li>
       </ul>
-
-
+ 
       <cxx-section id="temp.class.spec.match">
         <h1>Matching of class template partial specializations</h1>
 
