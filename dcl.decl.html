@@ -2,56 +2,44 @@
 <cxx-clause id="dcl.decl" number="8">
   <h1>Declarators</h1>
 
-  Modify the definition of the <cxx-grammarterm>init-declarator</cxx-grammarterm>
-  production in <cxx-ref in="cxx" to="dcl.decl"></cxx-ref>/1 as follows:
+  Factor the grammar of <cxx-grammarterm>declarator</cxx-grammarterm>s to
+  allow the specification of constraints on function declarations.
 
-  <p class="quoted">
-  A declarator declares a single variable, function, or type within a 
-  declaration. The <cxx-grammarterm>init-declarator-list</cxx-grammarterm>
-  appearing in a declaration is a comma-separated sequence of declarators, 
-  each of which may
-  <del>have an initializer</del>
-  <ins>have constraints, an initializer, or both</ins>.
+  <p number="4" class="quoted">
   <bnf-grammar>
-    <bnf-rule>init-declarator</bnf-rule>
-      <bnf-alt>
-        declarator
-        <ins><bnf-opt>requires-clause</bnf-opt></ins>
-        <bnf-opt>initializer</bnf-opt>
-      </bnf-alt>
+  <bnf-rule>declarator</bnf-rule>
+    <del>
+    <bnf-alt>ptr-declarator</bnf-alt>
+    <bnf-alt>noptr-declarator parameters-and-qualifiers trailing-return-type</bnf-alt>
+    </del>
+    <ins>
+    <bnf-alt>basic-declarator <bnf-opt>requires-clause</bnf-opt></bnf-alt>
+    </ins>
+
+  <ins>
+  <bnf-rule>basic-declarator</bnf-rule>
+    <bnf-alt>ptr-declarator</bnf-alt>
+    <bnf-alt>noptr-declarator parameters-and-qualifiers trailing-return-type</bnf-alt>
+  </ins>
   </bnf-grammar>
   </p>
 
-  Insert the following paragraphs.
+  Add the following paragraph at the end of this section.
 
-  <p class="quoted">
-  A <cxx-grammarterm>requires-clause</cxx-grammarterm> 
-  (<cxx-ref to="temp"></cxx-ref>) in an
-  <cxx-grammarterm>init-declarator</cxx-grammarterm> shall only appear
-  with the declarator of a function declaration (<cxx-ref to="dcl.fct"></cxx-ref>).
+  <p number="6" class="quoted">
+  The optional <cxx-grammarterm>requires-clause</cxx-grammarterm>
+  (Clause <cxx-ref to="temp"></cxx-ref>) in a
+  <cxx-grammarterm>declarator</cxx-grammarterm> shall be present only when
+  the declarator declares a function (<cxx-ref to="dcl.fct"></cxx-ref>).
 
-  If present, the <cxx-grammarterm>requires-clause</cxx-grammarterm> associates 
-  its <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the declared
-  function.
   <cxx-example class="inline">
   <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = true;
-
-void f1(int x) requires C&lt;int&gt;;       // <i>OK</i>
-auto n requires C&lt;decltype(n)&gt; = 'a'; // <i>error: constrained variable declaration</i></cxx-codeblock>
-  </cxx-example>
-  </p>
-
-  <p class="quoted">
-  The names of parameters in a function declarator are visible in the
-  <cxx-grammarterm>constraint-expression</cxx-grammarterm> of the
-  <cxx-grammarterm>requires-clause</cxx-grammarterm>.
-  <cxx-example class="inline">
-  <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = true;
-
-void f(auto x) requires C&lt;decltype(x)&gt;;
-void g(int n) requires sizeof(n) == 4;
+void f1(int a) requires true;         // <i>OK</i>
+auto f2(int a) -> bool requires true; // <i>OK</i>
+void (*pf)() requires true;           // <i>error: constraint on a variable</i>
+void g(int (*)() requires true);      // <i>error: constraint on a parameter</i>
+  
+auto* p = new void(*[3])(char) requires true; // <i>error: not a function declaration</i>
   </cxx-codeblock>
   </cxx-example>
   </p>
@@ -71,6 +59,38 @@ void g(int n) requires sizeof(n) == 4;
 
     <cxx-section id="dcl.fct" number="5">
       <h1>Functions</h1>
+
+      Modify the matching condition in paragraph 1 to accept
+      a <cxx-grammarterm>requires-clause</cxx-grammarterm>.
+      
+      <p number="1" class="quoted">
+      <bnf-grammar>
+      <bnf-terminal>D1</bnf-terminal> 
+      <bnf-terminal>(</bnf-terminal> parameter-declaration-clause <bnf-terminal>)</bnf-terminal>
+      <bnf-opt>cv-qualifier-seq</bnf-opt> <br/>
+      <bnf-opt>ref-qualifier</bnf-opt>
+      <bnf-opt>exception-specification</bnf-opt> 
+      <bnf-opt>attribute-specifier-seq</bnf-opt> 
+      <bnf-opt>requires-clause</bnf-opt>
+      </bnf-grammar>
+      </p>
+
+      Modify the matching condition in paragraph 2 to accept
+      a <cxx-grammarterm>requires-clause</cxx-grammarterm>.
+
+      <p number="1" class="quoted">
+      <bnf-grammar>
+      <bnf-terminal>D1</bnf-terminal> 
+      <bnf-terminal>(</bnf-terminal> parameter-declaration-clause <bnf-terminal>)</bnf-terminal> 
+      <bnf-opt>cv-qualifier-seq</bnf-opt> <br/>
+      <bnf-opt>ref-qualifier</bnf-opt>
+      <bnf-opt>exception-specification</bnf-opt> 
+      <bnf-opt>attribute-specifier-seq</bnf-opt> 
+      trailing-return-type
+      <bnf-opt>requires-clause</bnf-opt>
+      </bnf-grammar>
+      </p>
+
 
       Refactor the grammar for 
       <cxx-grammarterm>parameter-declaration</cxx-grammarterm>s in
@@ -137,12 +157,28 @@ void g(int n) requires sizeof(n) == 4;
 
       <p class="quoted" number="5">
       A single name can be used for several different functions in a single 
-      scope; this is function overloading (<cxx-ref to="over"></cxx-ref>). 
+      scope; this is function overloading (Clause <cxx-ref to="over"></cxx-ref>). 
 
       All declarations for a function shall agree exactly in <del>both</del> 
       the return type<ins>,</ins> <del>and</del> the parameter-type-list<ins>,
-      and asssociated constraints, if any 
-      (<cxx-ref to="temp.constr.expr"></cxx-ref>)</ins>.
+      and associated constraints, if any 
+      (Clause <cxx-ref to="temp"></cxx-ref>)</ins>.
+      </p>
+
+      Modify paragraph 6 to exclude constraints from the type of a function.
+      Note that the change occurs in the sentence following the example
+      in the original document.
+
+      <p class="quoted" number="6">
+      The return type, the parameter-type-list, the 
+      <cxx-grammarterm>ref-qualifier</cxx-grammarterm>, and the 
+      <cxx-grammarterm>cv-qualifier-seq</cxx-grammarterm>, but not the 
+      default arguments 
+      (<cxx-ref in="cxx" to="dcl.fct.default"></cxx-ref>)<ins>, constraints 
+      associated by an optional <cxx-grammarterm>requires-clause</cxx-grammarterm> 
+      (Clause <cxx-ref to="temp"></cxx-ref>),</ins> or
+      the exception specification (<cxx-ref in="cxx" to="except.spec"></cxx-ref>), 
+      are part of the function type.
       </p>
 
       Modify paragraph 15. Note that the footnote reference has been
@@ -160,8 +196,7 @@ void g(int n) requires sizeof(n) == 4;
       <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm>.
       </p>
 
-      Add the following paragraphs after
-      <cxx-ref in="cxx" to="dcl.fct"></cxx-ref>/15.
+      Add the following paragraphs after paragraph 15.
 
       <p class="quoted" number="16">
       An <dfn>abbreviated function template</dfn> is a function declaration whose
@@ -312,48 +347,4 @@ void f4(E a, E&lt;&gt; b, E&lt;0&gt; c);
   
   </cxx-section> <!-- dcl.meaning -->
 
-
-  <!-- ====================
-       Function definitions
-       ==================== -->
-
-  <cxx-section id="dcl.fct.def">
-    <h1>Function definitions</h1>
-
-
-    <!-- ==========
-         In general
-         ========== -->
-
-    <cxx-section id="dcl.fct.def.general">
-      <h1>In general</h1>
-    
-      Modify the <cxx-grammarterm>function-definition</cxx-grammarterm>
-      syntax in <cxx-ref in="cxx" to="dcl.fct.def.general">/1</cxx-ref>
-      to include a <cxx-grammarterm>requires-clause</cxx-grammarterm>.
-
-      <p class="quoted">
-      <bnf-grammar>
-        <bnf-rule>function-definition</bnf-rule>
-          <bnf-alt>
-            <bnf-opt>attribute-specifier-seq</bnf-opt>
-            <bnf-opt>decl-specifier-seq</bnf-opt>
-            declarator
-            <bnf-opt>virt-specifier-seq</bnf-opt>
-            <ins><bnf-opt>requires-clause</bnf-opt></ins>
-            function-body
-          </bnf-alt>
-      </bnf-grammar>
-      </p>
-
-      Add the following paragraph.
-
-      <p number="9" class="quoted">
-      <ins> If present, the <cxx-grammarterm>requires-clause</cxx-grammarterm>
-      associates its <cxx-grammarterm>constraint-expression</cxx-grammarterm>
-      with the function (<cxx-ref to="temp"></cxx-ref>).
-      </p>
-
-    </cxx-section> <!-- dcl.fct.def.general -->
-  </cxx-section> <!-- dcl.fct.def -->
 </cxx-clause> <!-- dcl.decl -->
