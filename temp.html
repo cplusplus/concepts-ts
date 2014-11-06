@@ -68,17 +68,9 @@
   function declaration (<cxx-ref to="dcl.fct"></cxx-ref>).</li>
   </ul>
 
-  Let <code>T1</code> be a <cxx-grammarterm>template-declaration</cxx-grammarterm>
-  with associated constraints. <code>T1</code> is equivalent to another
-  <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>T2</code>) 
-  whose template parameters are declared explicitly as unconstrained template 
-  parameters, and <code>T2</code> has a single
-  <cxx-grammarterm>requires-clause</cxx-grammarterm> whose 
-  <cxx-grammarterm>constraint-expression</cxx-grammarterm> is equivalent to 
-  the associated constraints of <code>T1</code> 
-  (<cxx-ref to="temp.constr.expr"></cxx-ref>). <code>T2</code> is said
-  to be the <dfn>canonical declaration</dfn> of all declarations that are 
-  equivalent to it according to the rules below.
+  The formation of the associated constraints for a template declaration
+  gives a definite ordering on subexpressions for the purpose of determining
+  when one template redeclares another.
 
   <cxx-example class="inline">
   <cxx-codeblock>
@@ -89,8 +81,11 @@ void g(C);
 template&lt;C T&gt; void g(T);
 C{T} void g(T);
 template&lt;typename T&gt; requires C&lt;T&gt; void g(T);
+
+// <i> these also declare the same function:</i>
+template&lt;C T&gt; void f();
+template&lt;typename T&gt; void f() requires C&lt;T&gt;;
   </cxx-codeblock>
-  The last declaration is the canonical declaration of <code>g(T)</code>.
   </cxx-example>
   </div>
 
