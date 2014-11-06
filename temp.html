@@ -43,35 +43,29 @@
 
   <p class="quoted">
   The <dfn>associated constraints</dfn> of a 
-  <cxx-grammarterm>template-declaration</cxx-grammarterm> are the 
-  logical <code>&&</code> of all 
-  <cxx-grammarterm>constraint-expression</cxx-grammarterm>s introduced by:
-  </p>
-  
+  <cxx-grammarterm>template-declaration</cxx-grammarterm> are a defined to be a
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm> formed from the
+  conjunction of <cxx-grammarterm>constraint-expression</cxx-grammarterm>s
+  associated by:
+
   <div class="quoted">
   <ul>
-  <li> a concept introduction, and</li>
-
-  <li> a <cxx-grammarterm>requires-clause</cxx-grammarterm> following a
-  <cxx-grammarterm>template-parameter-list</cxx-grammarterm>, and</li>
+  <li> a template introduction (<cxx-ref to="temp.intro"></cxx-ref>), and</li>
 
   <li> any constrained template parameters (<cxx-ref to="temp.param"></cxx-ref>)
   in the declaration's <cxx-grammarterm>template-parameter-list</cxx-grammarterm>,
   and </li>
 
-  <li> any <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
-  in the <cxx-grammarterm>decl-specifier-seq</cxx-grammarterm> of
-  a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> in a function
-  declaration or definition (<cxx-ref to="dcl.spec.constr"></cxx-ref>), and</li>
+  <li> a <cxx-grammarterm>requires-clause</cxx-grammarterm> following a
+  <cxx-grammarterm>template-parameter-list</cxx-grammarterm>, and</li>
 
-  <li> a <cxx-grammarterm>requires-clause</cxx-grammarterm> appearing after
-  the <cxx-grammarterm>declarator</cxx-grammarterm> of an
-  <cxx-grammarterm>init-declarator</cxx-grammarterm>
-  (<cxx-ref to="dcl.decl"></cxx-ref>),
-  <cxx-grammarterm>function-definition</cxx-grammarterm>
-  (<cxx-ref to="dcl.fct.def.general"></cxx-ref>), or
-  <cxx-grammarterm>member-declarator</cxx-grammarterm>
-  (<cxx-ref to="class.mem"></cxx-ref>).</li>
+  <li> any <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
+  in the type of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> 
+  in a function declaration (<cxx-ref to="dcl.spec.constr"></cxx-ref>), and</li>
+
+  <li> a <cxx-grammarterm>requires-clause</cxx-grammarterm> appearing in
+  the <cxx-grammarterm>declarator</cxx-grammarterm> of a
+  function declaration (<cxx-ref to="dcl.fct"></cxx-ref>).</li>
   </ul>
 
   Let <code>T1</code> be a <cxx-grammarterm>template-declaration</cxx-grammarterm>
