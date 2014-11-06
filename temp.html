@@ -385,8 +385,6 @@ C{T} D{U} void X&lt;T&gt;::f() { } // <i>OK: definition of</i> f()
     The designated concept is selected by concept resolution
     (<cxx-ref to="temp.concept.resolve"></cxx-ref>). 
 
-    <!-- TODO: Specify the associated constraint? -->
-
     Let <code>P</code> be the prototype parameter of the designated
     concept. The declared template parameter is determined by the type
     and form of <code>P</code> and the optional ellipsis in the
@@ -434,6 +432,13 @@ template&lt;C5... Cs&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter 
     </cxx-codeblock>
     </cxx-example>
     </div>
+
+    <p class="quoted">
+    A <cxx-grammarterm>constrained-parameter</cxx-grammarterm> associates a
+    <cxx-grammarterm>constraint-expression</cxx-grammarterm> with its
+    <cxx-grammarterm>template-declaration</cxx-grammarterm>. This
+    <cxx-grammarterm>constraint-expression</cxx-grammarterm> is formed
+    according to the rules in <cxx-ref to="temp.constr.form"></cxx-ref>.
 
     Insert the following paragraph after paragraph 9 to restrict the forms 
     of default template argument for 
