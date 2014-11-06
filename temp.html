@@ -2366,6 +2366,105 @@ Q{T} void q2();     // <i>error: no matching concept (mismatched template argume
       </p>
     </cxx-section> <!-- temp.concept.resolve -->
 
+
+    <!-- ==================
+         Concept resolution
+         ================== -->
+
+    <cxx-section id="temp.constr.form">
+      <h1>Constraint formation</h1>
+
+      <p> When a parameter of an abbreviated function template is declared
+      with a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>,
+      or in the declaration of a 
+      <cxx-grammarterm>constrained-parameter</cxx-grammarterm>,
+      the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+      associates a <cxx-grammarterm>constraint-expression</cxx-grammarterm>
+      with the respective function or template declaration.
+
+      The formation of that <cxx-grammarterm>constraint-expression</cxx-grammarterm>
+      is derived from the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>,
+      the designated concept selected by concept resolution 
+      (<cxx-ref to="temp.concept.resolve"></cxx-ref>), and an 
+      invented template parameter or a declared template parameter, called
+      the <dfn>target template parameter</dfn>.
+      
+      When the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+      appears in the declaration of a function parameter, the target template
+      parameter is the one invented for the abbreviated function template
+      (<cxx-ref to="dcl.fct"></cxx-ref>).
+
+      When the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+      appears in the declaration of a 
+      <cxx-grammarterm>constrained-parameter</cxx-grammarterm>,
+      the target template parameter is the declared template parameter.
+      </p>
+
+      <p>
+      Let <code>C</code> be the concept designated by the
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+      (including its <cxx-grammarterm>nested-name-specifier></cxx-grammarterm>,
+      if any), 
+      let <code>P</code> be the prototype parameter of the designated
+      concept, and
+      let <code>X</code> be the target template parameter.
+
+      Form a new template argument <code>A</code> from <code>X</code> as
+      as follows. If <code>X</code> declares a parameter pack, and
+      <code>P</code> declares a parameter pack, <code>A</code>
+      is pack expansion of <code>X</code>. Otherwise <code>A</code> is
+      a template argument referring to <code>X</code>.
+
+      Form a <cxx-grammarterm>template-id</cxx-grammarterm> <code>TT</code>
+      as follows. 
+
+      When the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+      is a <cxx-grammarterm>partial-concept-id</cxx-grammarterm>, <code>TT</code>
+      is <code>C&lt;A, Args>&gt;</code> where <code>Args</code> is the sequence of
+      <cxx-grammarterm>template-argument</cxx-grammarterm>s in the
+      <cxx-grammarterm>partial-concept-id</cxx-grammarterm></code>.
+      
+      Otherwise, <code>TT</code> is <code>C&lt;A, Args>&gt;</code>.
+
+      Form an expression <code>E</code> from <code>TT</code>. If <code>C</code>
+      refers to a variable concept, <code>E</code> is the
+      <cxx-grammarterm>id-expression</cxx-grammarterm> <code>TT</code>.
+      If <code>C</code> refers to a variable concept, <code>E</code> is
+      the function call <code>TT()</code>.
+      </p>
+
+      <p>
+      The formed <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
+      the fold expression <code>(E &amp;&amp; ...)</code> 
+      (<cxx-ref to="expr.prim.fold"></cxx-ref>)
+      when the prototype parameter <code>P</code> declares a template 
+      parameter pack and the target template parameter <code>X</code> 
+      does not. Otherwise, the 
+      <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
+      <code>E</code>.
+
+
+      <!-- TODO: Add examples for constrained parameters 
+           TODO: Give an example with a nested name specifier. -->
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt; concept bool C1 = true;
+template&lt;typename T, typename U&gt; concept bool C2() { return true; }
+template&lt;typename... Ts&gt; concept bool C4;
+
+template&lt;int&gt; struct X { };
+
+void f1(C1&amp;);     // <i>associates</i> C1&lt;T1&gt; <i>with</i> f1
+void f2(C2&lt;int&gt;); // <i>associates</i> C2&lt;T2, int&gt;() <i>with</i> f2
+void f4(C1...);   // <i>associates</i> (C1<T1> && ...) <i>with</i> f4
+void f5(C4...);   // <i>associates</i> C4<T1...> <i>with f5</i>
+      </cxx-codeblock>
+      Here, <code>T1</code> and <code>T2</code> are invented type template 
+      parameters corresponding to the prototype parameter of their respective 
+      designated concepts. 
+      </p>
+
+
   </cxx-section> <!-- temp.constr -->
 
 </cxx-clause> <!-- temp -->
