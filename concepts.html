@@ -1132,7 +1132,7 @@ pre {
     class of which the function is a member, 
     <cxx-grammarterm><i>cv</i></cxx-grammarterm>-qualifiers (if any), <del>and</del> 
     <cxx-grammarterm><i>ref-qualifier</i></cxx-grammarterm> (if any)<ins>,
-    and associated constraints, if any (Clause <cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>)</ins>
+    and associated constraints (if any) (Clause <cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>)</ins>
     </dd>
 
     <dt>Signature</dt>
@@ -1142,7 +1142,7 @@ pre {
     member, <cxx-grammarterm><i>cv</i></cxx-grammarterm>-qualifiers (if any), 
     <cxx-grammarterm><i>ref-qualifier</i></cxx-grammarterm> (if any), 
     return type, <del>and</del> template parameter list<ins>, and
-    associated constraints, if any (Clause <cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>)</ins>
+    associated constraints (if any) (Clause <cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>)</ins>
     </dd>
 
     </dl>
@@ -1159,7 +1159,7 @@ pre {
     
   
     <p para_num="1" id="intro.ack.1">The design of this specification is based, in part, on a concept 
-    specification of the algorithms part of the C++ standard library, known 
+    specification of the algorithms part of the C++ Standard Library, known 
     as "The Palo Alto" TR (WG21 N3351), which was developed by a large 
     group of experts as a test of the expressive power of the idea of 
     concepts. Despite syntactic differences between the notation of the 
@@ -1753,7 +1753,7 @@ template&lt;typename T&gt; requires C&lt;T&gt;
   </bnf-grammar>
 
       <p para_num="1" id="expr.prim.req.type.1">A <cxx-grammarterm><i>type-requirement</i></cxx-grammarterm> introduces 
-      type constraint (<cxx-ref to="temp.constr.atom.type"><a title="temp.constr.atom.type" href="#temp.constr.atom.type">14.9.2.3</a></cxx-ref>) for 
+      a type constraint (<cxx-ref to="temp.constr.atom.type"><a title="temp.constr.atom.type" href="#temp.constr.atom.type">14.9.2.3</a></cxx-ref>) for 
       the type named by its 
       <cxx-grammarterm><i>typename-specifier</i></cxx-grammarterm>.
       
@@ -1867,8 +1867,13 @@ template&lt;typename T&gt; concept bool C =
 
       <cxx-example class="inline">
     
-    <span class="nowrap">[ <em>Example:</em></span>
+      <span class="nowrap">[ <em>Example:</em></span> <p/>
     
+      The <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> <code>C1</code> 
+      introduces an expression constraint on <code>x++</code>.
+      It is equivalent to a <cxx-grammarterm><i>simple-requirement</i></cxx-grammarterm>
+      with the same <cxx-grammarterm><i>expression</i></cxx-grammarterm>.
+      
       <cxx-codeblock>
     
     <pre><code>template&lt;typename T&gt; concept bool C1 =
@@ -1876,37 +1881,39 @@ template&lt;typename T&gt; concept bool C =
     {x++};
   };</code></pre>
   </cxx-codeblock>
-      The <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> in <code>C1</code> 
-      introduces an expression constraint on <code>x++</code>.
-      It is equivalent to a <cxx-grammarterm><i>simple-requirement</i></cxx-grammarterm>
-      with the same <cxx-grammarterm><i>expression</i></cxx-grammarterm>.
 
       <cxx-codeblock>
     
+      The <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> <code>C2</code> 
+      introduces three constraints: an expression constraint for <code>*x</code>, 
+      a type constraint for <code>typename T::inner</code>, and a conversion 
+      constraint requiring <code>*x</code> to be implicitly convertible to
+      <code>typename T::inner</code>.
+
     <pre><code>template&lt;typename T&gt; concept bool C2 =
   requires(T x) {
     {*x} -&gt; typename T::inner;
   };</code></pre>
   </cxx-codeblock>
 
-      The <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> in <code>C2</code> 
-      introduces three constraints: an expression constraint for <code>*x</code>, 
-      a type constraint for <code>typename T::inner</code>, and a conversion 
-      constraint requiring <code>*x</code> to be implicitly convertible to
-      <code>typename T::inner</code>.
-
       <cxx-codeblock>
     
+      The <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> <code>C3</code> 
+      introduces two constraints: an expression constraint for <code>g(x)</code> 
+      and an exception constraint on <code>g(x)</code>.
+
     <pre><code>template&lt;typename T&gt; concept bool C3 =
   requires(T x) {
     {g(x)} noexcept;
   };</code></pre>
   </cxx-codeblock>
 
-      The <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> in <code>C3</code> 
-      introduces two constraints: an expression constraint for <code>g(x)</code> 
-      and an exception constraint on <code>g(x)</code>.
-
+      The <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> <code>C5</code> 
+      introduces two constraints: an expression constraint for <code>f(x)</code>, 
+      and a deduction constraint requiring that overload resolution succeeds for the
+      call <code>g(f(x))</code> where <code>g</code> is the following
+      invented abbreviated function template.
+      
       <cxx-codeblock>
     
     <pre><code>template&lt;typename T&gt; concept bool C() { return true; }
@@ -1917,11 +1924,6 @@ template&lt;typename T&gt; concept bool C5 =
   };</code></pre>
   </cxx-codeblock>
 
-      The <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> in <code>C5</code> 
-      introduces two constraints: expression constraint for <code>f(x)</code>, 
-      and a deduction constraint requiring that overload resolution succeeds for the
-      call <code>g(f(x))</code> where <code>g</code> is the following
-      invented abbreviated function template.
       <cxx-codeblock>
     
     <pre><code>void g(const C&amp;);</code></pre>
@@ -1970,7 +1972,7 @@ template&lt;typename T&gt; concept bool C5 =
       A <cxx-grammarterm><i>nested-requirement</i></cxx-grammarterm> appends the 
       normalized form (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>) of its
       <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> to the
-      conjunction (<cxx-ref to="temp.constr.op.conj"><a title="temp.constr.op.conj" href="#temp.constr.op.conj"></a></cxx-ref>) of 
+      conjunction (<cxx-ref to="temp.constr.op.conj"><a title="temp.constr.op.conj" href="#temp.constr.op.conj">14.9.1.1</a></cxx-ref>) of 
       constraints introduced by its enclosing
       <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>.
 
@@ -3047,7 +3049,7 @@ template&lt;C T&gt;
   </cxx-example>
       <!-- </p> -->
 
-      <p para_num="8" id="dcl.spec.concept.8">A program shall not declares an explicit instantiation
+      <p para_num="8" id="dcl.spec.concept.8">A program that declares an explicit instantiation
       (<cxx-ref to="temp.explicit"><a title="temp.explicit" href="#temp.explicit">14.7.2</a></cxx-ref>), an explicit specialization 
       (<cxx-ref to="temp.expl.spec"><a title="temp.expl.spec" href="#temp.expl.spec">14.7.3</a></cxx-ref>), or a partial specialization 
       of a concept definition is ill-formed.
@@ -3613,7 +3615,7 @@ struct D : B {
     
 
     Modify paragraph 1 to extend the notion of declaration matching to
-    also include a function's associated constrains. Note that the
+    also include a function's associated constraints. Note that the
     example in the original text is omitted in this document.
 
     <p para_num="1" id="over.dcl.1" class="quoted">
@@ -3997,7 +3999,7 @@ template&lt;typename... Qs&gt;
   <!-- TODO: Update based on rewrite of temp.param -->
   <p para_num="9" id="temp.9" class="quoted">
   When a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> (call it <code>T1</code>) is
-  explicitly declared with <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
+  explicitly declared with a <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
   that has constrained template parameters (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>), 
   its canonical declaration is a 
   <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> (call it <code>T2</code>)
@@ -4009,7 +4011,7 @@ template&lt;typename... Qs&gt;
   
   The declaration, <code>T2</code>, has a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>
   whose <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is the
-  conjunction of the <cxx-grammarterm><i>constraint-expressoin</i></cxx-grammarterm>s 
+  conjunction of the <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s 
   associated by the constrained template parameters in <code>T1</code>.
 
   The order in which the introduced constraints are evaluated is 
@@ -4120,9 +4122,9 @@ C{T} void g2(T, D); // <i>OK: redeclaration of</i> g2(T, D)</code></pre>
   <cxx-grammarterm><i>init-declarator</i></cxx-grammarterm>
   (<cxx-ref to="dcl.decl"><a title="dcl.decl" href="#dcl.decl">8</a></cxx-ref>),
   <cxx-grammarterm><i>function-definition</i></cxx-grammarterm>
-  (<cxx-ref to="dcl.fct.def.general"><a title="dcl.fct.def.general" href="#dcl.fct.def.general"></a></cxx-ref>), or
+  (<cxx-ref to="dcl.fct.def.general"><a title="dcl.fct.def.general" href="#dcl.fct.def.general">8.4.1</a></cxx-ref>), or
   <cxx-grammarterm><i>member-declarator</i></cxx-grammarterm>
-  (<cxx-ref to="class.mem"><a title="class.mem" href="#class.mem"></a></cxx-ref>).
+  (<cxx-ref to="class.mem"><a title="class.mem" href="#class.mem">9.2</a></cxx-ref>).
 
   When a constrained function template or member function template is
   declared with a trailing <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>
@@ -4622,7 +4624,7 @@ template&lt;typename T&gt;
 
 S3&lt;int&gt; x;                   // <i>error: constraints not satisfied</i>
 
-template&lt;tempalte&lt;C T&gt; class X&gt;
+template&lt;template&lt;C T&gt; class X&gt;
   struct S3 {
     X&lt;int&gt; x; // <i>error: constraints not satisfied</i>
 
@@ -4831,15 +4833,15 @@ template&lt;C T&gt; D{U} struct S&lt;T&gt;::Inner { }; // <i>OK</i></code></pre>
 
         Add the following example to the end of paragraph 1.
 
-        <p para_num="1" id="temp.mem.func.1" number="1" class="quoted">
-        <ins>
-        <cxx-example>
+      <div class="quoted">
+      <ins>
+      <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
+        
+    <cxx-codeblock>
     
-        <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></ins></p><pre><code>template&lt;typename T&gt; struct S {
+    <pre><code>template&lt;typename T&gt; struct S {
   void f() requires true;
   void g() requires true;
 };
@@ -4851,7 +4853,9 @@ template&lt;typename T&gt;
   
         
     <span class="nowrap">— <em>end example</em> ]</span>
-  
+  </cxx-example>
+      </ins>
+      </div>
         
         <p></p>
       
