@@ -246,7 +246,7 @@ template&lt;typename... Qs&gt;
   <!--
   <p class="quoted">
   When a <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>T1</code>) is
-  explicitly declared with <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
+  explicitly declared with a <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
   that has constrained template parameters (<cxx-ref to="temp.param"></cxx-ref>), 
   its canonical declaration is a 
   <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>T2</code>)
@@ -798,7 +798,7 @@ template&lt;typename T&gt;
 
 S3&lt;int&gt; x;                   // <i>error: constraints not satisfied</i>
 
-template&lt;tempalte&lt;C T&gt; class X&gt;
+template&lt;template&lt;C T&gt; class X&gt;
   struct S3 {
     X&lt;int&gt; x; // <i>error: constraints not satisfied</i>
 
