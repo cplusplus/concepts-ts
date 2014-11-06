@@ -433,7 +433,7 @@ template&lt;C5... Cs&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter 
     of default template argument for 
     <cxx-grammarterm>constrained-parameter</cxx-grammarterm>.
 
-    <p number="10" class="quoted">
+    <p class="quoted">
     The default <cxx-grammarterm>template-argument</cxx-grammarterm> of
     a <cxx-grammarterm>constrained-parameter</cxx-grammarterm> shall match
     the kind (type, non-type, template) of the declared parameter.
@@ -574,39 +574,39 @@ Array&lt;double&gt; s2;    // <i>error:</i> Array <i>takes two template argument
     </cxx-example>
     </p>
 
-  <!-- TODO: Unify with temp.constr.form -->
-  <p>
-  A <cxx-grammarterm>template-introduction</cxx-grammarterm> associates
-  a <cxx-grammarterm>constraint-expression</cxx-grammarterm> with its 
-  <cxx-grammarterm>template-declaration</cxx-grammarterm>.
-  
-  The constraint is formed from the concept <code>C</code>, designated by the
-  <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> (including its
-  <cxx-grammarterm>nested-name-specifier</cxx-grammarterm>), 
-  and the sequence of introduced parameters.
+    <!-- TODO: Unify with temp.constr.form -->
+    <p>
+    A <cxx-grammarterm>template-introduction</cxx-grammarterm> associates
+    a <cxx-grammarterm>constraint-expression</cxx-grammarterm> with its 
+    <cxx-grammarterm>template-declaration</cxx-grammarterm>.
+    
+    The constraint is formed from the concept <code>C</code>, designated by the
+    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> (including its
+    <cxx-grammarterm>nested-name-specifier</cxx-grammarterm>), 
+    and the sequence of introduced parameters.
 
-  Form a sequence of <cxx-grammarterm>template-argument</cxx-grammarterm>s
-  <code>Args</code> from the template parameters declared by the
-  <cxx-grammarterm>introduced-parameter</cxx-grammarterm>s
-  as follows. If an introduced template parameter <code>T</code> is declared 
-  as a template parameter pack, its corresponding 
-  <cxx-grammarterm>template-argument</cxx-grammarterm> is a pack 
-  expansion of <code>T</code>. Otherwise, its corresponding 
-  <cxx-grammarterm>template-argument</cxx-grammarterm>
-  matches the type an form of <code>T</code>.
+    Form a sequence of <cxx-grammarterm>template-argument</cxx-grammarterm>s
+    <code>Args</code> from the template parameters declared by the
+    <cxx-grammarterm>introduced-parameter</cxx-grammarterm>s
+    as follows. If an introduced template parameter <code>T</code> is declared 
+    as a template parameter pack, its corresponding 
+    <cxx-grammarterm>template-argument</cxx-grammarterm> is a pack 
+    expansion of <code>T</code>. Otherwise, its corresponding 
+    <cxx-grammarterm>template-argument</cxx-grammarterm>
+    matches the type an form of <code>T</code>.
 
-  Let <code>TT</code> be a <cxx-grammarterm>template-id</cxx-grammarterm>
-  formed as <code>C&lt;Args&gt;</code>.
+    Let <code>TT</code> be a <cxx-grammarterm>template-id</cxx-grammarterm>
+    formed as <code>C&lt;Args&gt;</code>.
 
-  The associated <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
-  the <cxx-grammarterm>id-expression</cxx-grammarterm> <code>TT</code>
-  if <code>C</code> refers to a variable concept. 
-  The associated <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
-  the function call <code>TT()</code> if <code>C</code> refers to a variable 
-  concept.
+    The associated <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
+    the <cxx-grammarterm>id-expression</cxx-grammarterm> <code>TT</code>
+    if <code>C</code> refers to a variable concept. 
+    The associated <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
+    the function call <code>TT()</code> if <code>C</code> refers to a variable 
+    concept.
 
-  <cxx-example class="inline">
-  <cxx-codeblock>
+    <cxx-example class="inline">
+    <cxx-codeblock>
 template&lt;typename T, typename U&gt; concept bool C1 = true;
 template&lt;typename T, typename U&gt; concept bool C2() { return true; }
 template&lt;typename T, typename U = char&gt; concept bool C3 = true;
@@ -632,18 +632,8 @@ template&lt;class P&gt;
 template&lt;typename... Qs&gt;
   requires C4&lt;Qs...&gt; // <i>constraint associated by</i> C4{...Qs}
     void g(Qs&amp;&amp;...); // <i>OK: redeclaration of</i> g(Qs&amp;&amp;...)
-  </cxx-codeblock>
-  </cxx-example>
-  </p>
-
-
-    <p> 
-    <cxx-note>
-    The introduction of a sequence of template parameters by a
-    <cxx-grammarterm>concept-name</cxx-grammarterm> associates a constraint 
-    with the <cxx-grammarterm>template-declaration</cxx-grammarterm>
-    according to the rules described in Clause <cxx-ref to="temp"></cxx-ref>.
-    </cxx-note>
+    </cxx-codeblock>
+    </cxx-example>
     </p>
 
   </cxx-section> <!-- temp.intro -->
