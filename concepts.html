@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- Sources at https://github.com/cplusplus/concepts-ts -->
 <html><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8"><!--[if lte IE 8]><script>document.createElement("nav");document.createElement("section");document.createElement("time");document.createElement("CXX-TITLEPAGE");document.createElement("CXX-DOCNUM");document.createElement("CXX-REVISES");document.createElement("CXX-EDITOR");document.createElement("CXX-EMAIL");document.createElement("CXX-TOC");document.createElement("CXX-CLAUSE");document.createElement("CXX-SECTION");document.createElement("CXX-REF");document.createElement("CXX-FOREIGN-INDEX");document.createElement("CXX-NOTE");document.createElement("CXX-GRAMMARTERM");document.createElement("BNF-GRAMMAR");document.createElement("BNF-RULE");document.createElement("BNF-ALT");document.createElement("BNF-TERMINAL");document.createElement("BNF-OPT");document.createElement("CXX-EXAMPLE");document.createElement("CXX-CODEBLOCK");document.createElement("CXX-PUBLISH-BUTTON");</script><![endif]--><style>template {display: none !important;} /* injected by platform.js */</style><style>body {transition: opacity ease-in 0.2s; } 
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><!--[if lte IE 8]><script>document.createElement("nav");document.createElement("section");document.createElement("time");document.createElement("CXX-TITLEPAGE");document.createElement("CXX-DOCNUM");document.createElement("CXX-REVISES");document.createElement("CXX-EDITOR");document.createElement("CXX-EMAIL");document.createElement("CXX-TOC");document.createElement("CXX-CLAUSE");document.createElement("CXX-SECTION");document.createElement("CXX-REF");document.createElement("CXX-FOREIGN-INDEX");document.createElement("CXX-NOTE");document.createElement("CXX-DEFINITION-SECTION");document.createElement("CXX-GRAMMARTERM");document.createElement("BNF-GRAMMAR");document.createElement("BNF-RULE");document.createElement("BNF-ALT");document.createElement("BNF-TERMINAL");document.createElement("BNF-OPT");document.createElement("CXX-EXAMPLE");document.createElement("CXX-CODEBLOCK");document.createElement("CXX-PUBLISH-BUTTON");</script><![endif]--><style>template {display: none !important;} /* injected by platform.js */</style><style>body {transition: opacity ease-in 0.2s; } 
 body[unresolved] {opacity: 0; display: block; overflow: hidden; } 
 </style><style shim-shadowdom-css="">style { display: none !important; }
 cxx-function {
@@ -290,11 +290,11 @@ cxx-figure figcaption {
 
 cxx-figure figcaption figcaption {
 	display: inline;
-}[is=cxx-definition-section] dt {
-	font-weight: bold;
+}cxx-definition-section dt {
+	font-weight: bold; margin-top: 1.34em; page-break-inside: avoid;
 }
 
-[is=cxx-definition-section] dd {
+cxx-definition-section dd {
 	margin-left: 0px;
 }cxx-toc {
 	display: block;
@@ -589,7 +589,7 @@ pre {
         <tbody><tr><th>Document Number:</th><td><cxx-docnum>Dxxxx</cxx-docnum></td></tr>
       
       
-        <tr><th>Date:</th><td><time pubdate="">2014-11-04</time></td></tr>
+        <tr><th>Date:</th><td><time pubdate="">2014-11-06</time></td></tr>
       
       
         <tr><th>Revises:</th><td><cxx-revises><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4205.pdf">N4205</a></cxx-revises></td></tr>
@@ -673,23 +673,27 @@ pre {
         
       </li>
             
-              <li><span class="marker">5.1.3</span><a href="#expr.prim.req">Requires expressions</a>
+              <li><span class="marker">5.1.3</span><a href="#expr.prim.fold">Fold expressions</a>
+        
+      </li>
+            
+              <li><span class="marker">5.1.4</span><a href="#expr.prim.req">Requires expressions</a>
         
           <ol>
             
-              <li><span class="marker">5.1.3.1</span><a href="#expr.prim.req.simple">Simple requirements</a>
+              <li><span class="marker">5.1.4.1</span><a href="#expr.prim.req.simple">Simple requirements</a>
         
       </li>
             
-              <li><span class="marker">5.1.3.2</span><a href="#expr.prim.req.type">Type requirements</a>
+              <li><span class="marker">5.1.4.2</span><a href="#expr.prim.req.type">Type requirements</a>
         
       </li>
             
-              <li><span class="marker">5.1.3.3</span><a href="#expr.prim.req.compound">Compound requirements</a>
+              <li><span class="marker">5.1.4.3</span><a href="#expr.prim.req.compound">Compound requirements</a>
         
       </li>
             
-              <li><span class="marker">5.1.3.4</span><a href="#expr.prim.req.nested">Nested requirements</a>
+              <li><span class="marker">5.1.4.4</span><a href="#expr.prim.req.nested">Nested requirements</a>
         
       </li>
             
@@ -1110,8 +1114,16 @@ pre {
     Modify the definitions of "signature" to include associated
     constraints (Clause <cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>).
 
-    <dl>
-    <dt>Signature</dt>
+    <cxx-definition-section>
+    
+
+    
+    <dt id="defns.signature">
+    1.4.1
+    <span style="float:right"><a href="#defns.signature">[defns.signature]</a></span>
+    <br clear="all">
+    Signature
+  </dt>
     <dd>
     &lt;function&gt; name, parameter type list 
     (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>), <del>and</del> 
@@ -1125,7 +1137,12 @@ pre {
   </cxx-note>
     </dd>
     
-    <dt>Signature</dt>
+    <dt id="defns.signature.templ">
+    1.4.2
+    <span style="float:right"><a href="#defns.signature.templ">[defns.signature.templ]</a></span>
+    <br clear="all">
+    Signature
+  </dt>
     <dd>
     &lt;function template&gt; name, parameter type list 
     (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>), enclosing namespace (if any), 
@@ -1145,7 +1162,12 @@ pre {
   </cxx-note>
     </dd>
 
-    <dt>Signature</dt>
+    <dt id="defns.signature.member">
+    1.4.3
+    <span style="float:right"><a href="#defns.signature.member">[defns.signature.member]</a></span>
+    <br clear="all">
+    Signature
+  </dt>
     <dd>
     &lt;class member function&gt; name, parameter type list 
     (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>), 
@@ -1155,7 +1177,12 @@ pre {
     and associated constraints, if any (Clause <cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>)</ins>
     </dd>
 
-    <dt>Signature</dt>
+    <dt id="defns.signature.member.templ">
+    1.4.4
+    <span style="float:right"><a href="#defns.signature.member.templ">[defns.signature.member.templ]</a></span>
+    <br clear="all">
+    Signature
+  </dt>
     <dd>
     &lt;class member function template&gt; name, parameter type list 
     (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>), class of which the function is a 
@@ -1165,7 +1192,8 @@ pre {
     associated constraints, if any (Clause <cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>)</ins>
     </dd>
 
-    </dl>
+    
+  </cxx-definition-section>
   
     </section>
   </cxx-section>
@@ -1260,7 +1288,8 @@ pre {
       
     
 
-    In this section, add the 
+    In this section, add the
+    <cxx-grammarterm><i>fold-expression</i></cxx-grammarterm> and
     <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> to the rule for 
     <cxx-grammarterm><i>primary-expression</i></cxx-grammarterm>.
     
@@ -1271,6 +1300,10 @@ pre {
     
     primary-expression:
   </bnf-rule>
+        <ins><bnf-alt>
+    
+    fold-expression
+  </bnf-alt></ins>
         <ins><bnf-alt>
     
     requires-expression
@@ -1465,6 +1498,152 @@ struct Fun {
     </section>
   </cxx-section> <!-- expr.prim.lambda -->
 
+  <!-- ====================
+       Requires expressions
+       ==================== -->
+
+  <cxx-section id="expr.prim.fold">
+    
+
+    <section>
+      <header><span class="section-number">5.1.3</span> <h1 data-bookmark-label="5.1.3 Fold expressions">Fold expressions</h1> <span style="float:right"><a href="#expr.prim.fold">[expr.prim.fold]</a></span></header>
+      
+    
+
+    <p para_num="1" id="expr.prim.fold.1">A fold expression allows a template parameter pack
+    (<cxx-ref in="cxx" to="temp.variadic"><span title="temp.variadic">§14.5.3</span></cxx-ref>) to be expanded
+    over a binary operator.</p>
+
+    <bnf-grammar>
+    
+    
+      <bnf-rule>
+    
+    fold-expression:
+  </bnf-rule>
+        <bnf-alt>
+    
+    <bnf-terminal><code>(</code></bnf-terminal> cast-expression fold-operator <bnf-terminal><code>...</code></bnf-terminal> <bnf-terminal><code>)</code></bnf-terminal>
+  </bnf-alt>
+        <bnf-alt>
+    
+    <bnf-terminal><code>(</code></bnf-terminal> <bnf-terminal><code>...</code></bnf-terminal> fold-operator cast-expression <bnf-terminal><code>)</code></bnf-terminal>
+  </bnf-alt>
+        <bnf-alt>
+    
+    <bnf-terminal><code>(</code></bnf-terminal> cast-expression fold-operator <bnf-terminal><code>...</code></bnf-terminal> fold-operator cast-expression <bnf-terminal><code>)</code></bnf-terminal>
+  </bnf-alt>
+
+      <bnf-rule oneof="oneof">
+    
+    fold-operator:
+  </bnf-rule>
+	      <bnf-alt>
+    
+    <bnf-terminal><code>+ - * / % ^ &amp; | ~ = &lt; &gt; &lt;&lt; &gt;&gt;</code></bnf-terminal>
+  </bnf-alt>
+	      <bnf-alt>
+    
+    <bnf-terminal><code>+= -= *= /= %= ^= &amp;= |= &lt;&lt;= &gt;&gt;=</code></bnf-terminal>
+  </bnf-alt>
+	      <bnf-alt>
+    
+    <bnf-terminal><code>== != &lt;= &gt;= &amp;&amp; || , .* -&gt;*</code></bnf-terminal>
+  </bnf-alt>
+    
+  </bnf-grammar>
+
+    <p para_num="2" id="expr.prim.fold.2">An expression of the form <code>(e op ...)</code> where op is a
+    <cxx-grammarterm><i>fold-operator</i></cxx-grammarterm> is called a
+    <cxx-grammarterm><i>left fold</i></cxx-grammarterm>. The
+    <cxx-grammarterm><i>cast-expression</i></cxx-grammarterm> <code>e</code> shall
+    contain an unexpanded parameter pack. A left fold expands as the expression
+    <code>((e$1 op e$2) op ...) op e$n</code> where <code>$n</code> is an index
+    into the unexpanded parameter pack.</p>
+
+    <p para_num="3" id="expr.prim.fold.3">An expression of the form <code>(... op e)</code> where <code>op</code>
+    is a <cxx-grammarterm><i>fold-operator</i></cxx-grammarterm> is called a
+    <cxx-grammarterm><i>right fold</i></cxx-grammarterm>. The
+    <cxx-grammarterm><i>cast-expression</i></cxx-grammarterm> <code>e</code> shall
+    contain an unexpanded parameter pack. A right fold expands as the expression
+    <code>e$1 op (... (e$n-1 op e$n))</code> where <code>$n</code> is an index
+    into the unexpanded parameter pack.</p>
+
+    <p para_num="4" id="expr.prim.fold.4">
+    <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    <cxx-codeblock>
+    
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename... args=""&gt;
+  bool all(Args... args) { return (args &amp;&amp; ...); }
+
+all(true, true, true, false);</code></pre>
+  
+    
+    Within the instantiation of <code>all</code>, the returned expression
+    expands to <code>((true &amp;&amp; true) &amp;&amp; true) &amp;&amp; false</code>,
+    which evalutes to <code>false</code>.
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+    <p></p>
+
+    <p para_num="5" id="expr.prim.fold.5">In an expression of the form <code>(e1 op ... op e2)</code> either
+    <code>e1</code> shall contain an unexpanded parameter pack or
+    <code>e2</code> shall contain an unexpanded parameter pack, but not both.
+    If <code>e1</code> contains an unexpanded parameter pack, the expression is
+    a left fold and <code>e2</code> is the rightmost operand the expansion. If
+    <code>e2</code> contains an unexpanded parameter pack, the expression is a
+    right fold and <code>e1</code> is the leftmost operand in the expansion.
+    <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename... Args&gt;
+  bool f(Args... args) { 
+    return (true + ... + args); // OK
+  } 
+
+template&lt;typename... Args&gt;
+  bool f(Args... args) { 
+    return (args &amp;&amp; ... &amp;&amp; args); // error: both operands contain unexpanded parameter packs</code></pre>
+  
+     
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+     <p></p>
+
+     <p para_num="6" id="expr.prim.fold.6">When the unexpanded parameter pack in a fold expression expands to an
+     empty sequence, the value of that expression depends on the
+     <cxx-grammarterm><i>fold-operator</i></cxx-grammarterm>. The values
+     corresponding to empty fold expressions for the different kinds of
+     operators are shown in
+     <cxx-ref to="folding"><a title="folding" href="#folding">Table 1</a></cxx-ref>; the program is ill-formed if the 
+     operator is not listed in <cxx-ref to="folding"><a title="folding" href="#folding">Table 1</a></cxx-ref>.</p>
+
+     <table is="cxx-table" id="folding">
+    
+
+    <caption>Table 1 — <wbr><span>Value of folding empty sequences</span></caption>
+    
+       
+       <tbody><tr><th>Operator</th><th>Value when parameter pack is empty</th></tr>
+       <tr><td><code>*</code></td><td><code>1</code></td></tr>
+       <tr><td><code>+</code></td><td><code>0</code></td></tr>
+       <tr><td><code>&amp;</code></td><td><code>-1</code></td></tr>
+       <tr><td><code>|</code></td><td><code>0</code></td></tr>
+       <tr><td><code>&amp;&amp;</code></td><td><code>true</code></td></tr>
+       <tr><td><code>||</code></td><td><code>false</code></td></tr>
+       <tr><td><code>,</code></td><td><code>void()</code></td></tr>
+     </tbody>
+  </table>
+  
+    </section>
+  </cxx-section> <!-- expr.prim.fold -->
 
   <!-- ====================
        Requires expressions
@@ -1474,7 +1653,7 @@ struct Fun {
     
 
     <section>
-      <header><span class="section-number">5.1.3</span> <h1 data-bookmark-label="5.1.3 Requires expressions">Requires expressions</h1> <span style="float:right"><a href="#expr.prim.req">[expr.prim.req]</a></span></header>
+      <header><span class="section-number">5.1.4</span> <h1 data-bookmark-label="5.1.4 Requires expressions">Requires expressions</h1> <span style="float:right"><a href="#expr.prim.req">[expr.prim.req]</a></span></header>
       
     
 
@@ -1665,10 +1844,20 @@ template&lt;typename T&gt; requires C&lt;T&gt;
     defined by the <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>s.
     </p>
 
-    <p para_num="6" id="expr.prim.req.6">If the substitution of template arguments into an expression or type 
-    in a <cxx-grammarterm><i>requirement</i></cxx-grammarterm> would always result in
+    <p para_num="6" id="expr.prim.req.6"> The substitution of template arguments into a
+    <cxx-grammarterm><i>requirement</i></cxx-grammarterm> may result in an
+    invalid type or expression, in which case the constraint is not
+    satisfied; it does not cause the program to be ill-formed.
+
+    <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+    But if the substitution of template arguments into
+    a <cxx-grammarterm><i>requirement</i></cxx-grammarterm> would always result in
     a substitution failure, the program is ill-formed; no diagnostic
-    required.
+    required (<cxx-ref to="temp.res"><a title="temp.res" href="#temp.res">14.6</a></cxx-ref>).
+    
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
 
     <cxx-example>
     
@@ -1678,7 +1867,7 @@ template&lt;typename T&gt; requires C&lt;T&gt;
     
     </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C =
   requires () {
-    new int[-sizeof(T)]; // <i>error</i>
+    new int[-sizeof(T)]; // <i>ill-formed, no diagnostic required</i>
   };</code></pre>
   
     
@@ -1695,7 +1884,7 @@ template&lt;typename T&gt; requires C&lt;T&gt;
     
 
     <section>
-      <header><span class="section-number">5.1.3.1</span> <h1 data-bookmark-label="5.1.3.1 Simple requirements">Simple requirements</h1> <span style="float:right"><a href="#expr.prim.req.simple">[expr.prim.req.simple]</a></span></header>
+      <header><span class="section-number">5.1.4.1</span> <h1 data-bookmark-label="5.1.4.1 Simple requirements">Simple requirements</h1> <span style="float:right"><a href="#expr.prim.req.simple">[expr.prim.req.simple]</a></span></header>
       
       
 
@@ -1733,12 +1922,6 @@ template&lt;typename T&gt; requires C&lt;T&gt;
   
       <p></p>
 
-      <p para_num="2" id="expr.prim.req.simple.2"> The substitution of template arguments into the
-      <cxx-grammarterm><i>expression</i></cxx-grammarterm> of a 
-      <cxx-grammarterm><i>simple-requirement</i></cxx-grammarterm> may result
-      in an ill-formed expression. However, the resulting program is not 
-      ill-formed. </p>
-
     
     </section>
   </cxx-section> <!-- expr.prim.req.simple -->
@@ -1752,7 +1935,7 @@ template&lt;typename T&gt; requires C&lt;T&gt;
     
 
     <section>
-      <header><span class="section-number">5.1.3.2</span> <h1 data-bookmark-label="5.1.3.2 Type requirements">Type requirements</h1> <span style="float:right"><a href="#expr.prim.req.type">[expr.prim.req.type]</a></span></header>
+      <header><span class="section-number">5.1.4.2</span> <h1 data-bookmark-label="5.1.4.2 Type requirements">Type requirements</h1> <span style="float:right"><a href="#expr.prim.req.type">[expr.prim.req.type]</a></span></header>
       
       
 
@@ -1808,12 +1991,6 @@ template&lt;typename T&gt; concept bool C =
   
       <p></p>
 
-      <p para_num="2" id="expr.prim.req.type.2"> The substitution of template arguments into the
-      <cxx-grammarterm><i>typename-specifier</i></cxx-grammarterm> of a
-      <cxx-grammarterm><i>type-requirement</i></cxx-grammarterm> may result
-      in an ill-formed type. However, the resulting program is not 
-      ill-formed. </p>
-
     
     </section>
   </cxx-section> <!-- expr.prim.req.type -->
@@ -1828,7 +2005,7 @@ template&lt;typename T&gt; concept bool C =
     
 
     <section>
-      <header><span class="section-number">5.1.3.3</span> <h1 data-bookmark-label="5.1.3.3 Compound requirements">Compound requirements</h1> <span style="float:right"><a href="#expr.prim.req.compound">[expr.prim.req.compound]</a></span></header>
+      <header><span class="section-number">5.1.4.3</span> <h1 data-bookmark-label="5.1.4.3 Compound requirements">Compound requirements</h1> <span style="float:right"><a href="#expr.prim.req.compound">[expr.prim.req.compound]</a></span></header>
       
       
       
@@ -1951,12 +2128,6 @@ template&lt;typename T&gt; concept bool C5 =
   </cxx-example>
       <p para_num="2" id="expr.prim.req.compound.2"></p>
       
-      <p para_num="3" id="expr.prim.req.compound.3"> The substitution of template arguments into the
-      <cxx-grammarterm><i>expression</i></cxx-grammarterm> of a 
-      <cxx-grammarterm><i>simple-requirement</i></cxx-grammarterm> may result
-      in an ill-formed expression. However, the resulting program is not 
-      ill-formed. </p>
-
     
     </section>
   </cxx-section> <!-- expr.prim.req.compound -->
@@ -1966,7 +2137,7 @@ template&lt;typename T&gt; concept bool C5 =
     
 
     <section>
-      <header><span class="section-number">5.1.3.4</span> <h1 data-bookmark-label="5.1.3.4 Nested requirements">Nested requirements</h1> <span style="float:right"><a href="#expr.prim.req.nested">[expr.prim.req.nested]</a></span></header>
+      <header><span class="section-number">5.1.4.4</span> <h1 data-bookmark-label="5.1.4.4 Nested requirements">Nested requirements</h1> <span style="float:right"><a href="#expr.prim.req.nested">[expr.prim.req.nested]</a></span></header>
       
       
 
@@ -1990,7 +2161,7 @@ template&lt;typename T&gt; concept bool C5 =
       A <cxx-grammarterm><i>nested-requirement</i></cxx-grammarterm> appends the 
       normalized form (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>) of its
       <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> to the
-      conjunction (<cxx-ref to="temp.constr.op.conj"><a title="temp.constr.op.conj" href="#temp.constr.op.conj"></a></cxx-ref>) of 
+      conjunction of 
       constraints introduced by its enclosing
       <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>.
 
@@ -2250,7 +2421,7 @@ Size&lt;sizeof(auto)&gt; y = s;               // <i>error: failed to deduce valu
         appears in the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> 
         of a <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> in
         a <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>
-        (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>), that
+        (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.4.3</a></cxx-ref>), that
         return type introduces an argument deduction constraint
         (<cxx-ref to="temp.constr.atom.deduct"><a title="temp.constr.atom.deduct" href="#temp.constr.atom.deduct">14.9.2.5</a></cxx-ref>).
         
@@ -2574,7 +2745,7 @@ void f3(Stack&lt;auto, C3&gt;); // C3 <i>designates a placeholder for a class te
              constrained template parameter (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>);</li>
         <li> the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> of
              a <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm>
-             (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>),
+             (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.4.3</a></cxx-ref>),
              signifying an argument deduction constraint 
              (<cxx-ref to="temp.constr.atom.deduct"><a title="temp.constr.atom.deduct" href="#temp.constr.atom.deduct">14.9.2.5</a></cxx-ref>). </li>
         </ul>
@@ -3378,7 +3549,7 @@ The equivalent declaration would have this form:
 
       <p para_num="17" id="dcl.fct.17"> A function template can be an abbreviated function template. The
       invented <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>s are
-      added to the <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
+      appended to the <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
       after the explicitly declared <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>s.
 
       <cxx-example class="inline">
@@ -3821,51 +3992,70 @@ void (*pg)() = &amp;g;         // <i>error: no matching function</i></code></pre
   (<cxx-ref to="temp.intro"><a title="temp.intro" href="#temp.intro">14.2</a></cxx-ref>).
   </p>
 
-
   <p para_num="8" id="temp.8" class="quoted">
-  The <dfn>associated constraints</dfn> of a 
-  <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> are the 
-  logical <code>&amp;&amp;</code> of all 
-  <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s introduced by:
-  </p>
-  
-  <div class="quoted">
-  <ul>
-  <li> a concept introduction, and</li>
+  A template declared by a <cxx-grammarterm><i>template-introduction</i></cxx-grammarterm>
+  (<cxx-ref to="temp.intro"><a title="temp.intro" href="#temp.intro">14.2</a></cxx-ref>) can also be an abbreviated
+  function template (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>). The invented
+  template parameters introduced by the placeholders in the abbreviated
+  function template are appended to the list of template parameters declared
+  by the <cxx-grammarterm><i>template-introduction</i></cxx-grammarterm>.
 
-  <li> a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> following a
-  <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>, and</li>
+  <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+  <cxx-codeblock>
+    
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C1 = true;
+template&lt;typename T&gt; concept bool C2 = true;
+
+C1{T} void f(T, auto);
+template&lt;C T, typename U&gt; void f(T, U); // OK: redeclaration of f(T, auto)</code></pre>
+  
+  <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+  The second declaration of <code>f</code> is a redeclaration of the first
+  because their associated constraints are equivalent 
+  (<cxx-ref to="temp.over.link"><a title="temp.over.link" href="#temp.over.link">14.5.6.1</a></cxx-ref>); this is described in the following
+  paragraphs.
+  
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+  <p></p>
+
+  <p para_num="9" id="temp.9" class="quoted">
+  The <dfn>associated constraints</dfn> of a 
+  <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> are a defined to be a
+  <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> formed from the
+  conjunction of <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s
+  associated by:
+
+  </p><div class="quoted">
+  <ul>
+  <li> a constraint associated by a template introduction 
+  (<cxx-ref to="temp.intro"><a title="temp.intro" href="#temp.intro">14.2</a></cxx-ref>), and</li>
 
   <li> any constrained template parameters (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>)
   in the declaration's <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>,
   and </li>
 
-  <li> any <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s
-  in the <cxx-grammarterm><i>decl-specifier-seq</i></cxx-grammarterm> of
-  a <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> in a function
-  declaration or definition (<cxx-ref to="dcl.spec.constr"><a title="dcl.spec.constr" href="#dcl.spec.constr">7.1.6.5</a></cxx-ref>), and</li>
+  <li> a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> following a
+  <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>, and</li>
 
-  <li> a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> appearing after
-  the <cxx-grammarterm><i>declarator</i></cxx-grammarterm> of an
-  <cxx-grammarterm><i>init-declarator</i></cxx-grammarterm>
-  (<cxx-ref to="dcl.decl"><a title="dcl.decl" href="#dcl.decl">8</a></cxx-ref>),
-  <cxx-grammarterm><i>function-definition</i></cxx-grammarterm>
-  (<cxx-ref to="dcl.fct.def.general"><a title="dcl.fct.def.general" href="#dcl.fct.def.general"></a></cxx-ref>), or
-  <cxx-grammarterm><i>member-declarator</i></cxx-grammarterm>
-  (<cxx-ref to="class.mem"><a title="class.mem" href="#class.mem"></a></cxx-ref>).</li>
+  <li> any <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s
+  in the type of a <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> 
+  in a function declaration (<cxx-ref to="dcl.spec.constr"><a title="dcl.spec.constr" href="#dcl.spec.constr">7.1.6.5</a></cxx-ref>), and</li>
+
+  <li> a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> appearing in
+  the <cxx-grammarterm><i>declarator</i></cxx-grammarterm> of a
+  function declaration (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>).</li>
   </ul>
 
-  Let <code>T1</code> be a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>
-  with associated constraints. <code>T1</code> is equivalent to another
-  <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> (call it <code>T2</code>) 
-  whose template parameters are declared explicitly as unconstrained template 
-  parameters, and <code>T2</code> has a single
-  <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> whose 
-  <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is equivalent to 
-  the associated constraints of <code>T1</code> 
-  (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>). <code>T2</code> is said
-  to be the <dfn>canonical declaration</dfn> of all declarations that are 
-  equivalent to it according to the rules below.
+  The formation of the associated constraints for a template declaration
+  gives a definite ordering on subexpressions for the purpose of determining
+  when one template redeclares another.
 
   <cxx-example class="inline">
     
@@ -3879,27 +4069,107 @@ void (*pg)() = &amp;g;         // <i>error: no matching function</i></code></pre
 void g(C);
 template&lt;C T&gt; void g(T);
 C{T} void g(T);
-template&lt;typename T&gt; requires C&lt;T&gt; void g(T);</code></pre>
+template&lt;typename T&gt; requires C&lt;T&gt; void g(T);
+
+// <i> these also declare the same function:</i>
+template&lt;C T&gt; void f();
+template&lt;typename T&gt; void f() requires C&lt;T&gt;;</code></pre>
   </cxx-codeblock>
-  The last declaration is the canonical declaration of <code>g(T)</code>.
   
     <span class="nowrap">— <em>end example</em> ]</span>
   </cxx-example>
   </div>
 
-  <p para_num="8" id="temp.8" class="quoted" number="8"> 
-  When a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> is
-  declared by a template introduction (<cxx-ref to="temp.intro"><a title="temp.intro" href="#temp.intro">14.2</a></cxx-ref>), 
+  <p para_num="10" id="temp.10" class="quoted"> 
+  The order in which the subexpressions of the associated constraints
+  are composed is the left-to-right order in which
+  <cxx-grammarterm><i>template-introduction</i></cxx-grammarterm>s,
+  <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s, and
+  <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>s occur in the
+  declaration.
+
+  <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    
+  A program containing two declarations whose associated constraints are 
+  functionally equivalent but not equivalent 
+  (<cxx-ref to="temp.over.link"><a title="temp.over.link" href="#temp.over.link">14.5.6.1</a></cxx-ref>) is ill-formed, no diagnostic
+  required.
+  
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
+
+  <cxx-example>
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+  <cxx-codeblock>
+    
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C1 = true;
+template&lt;typename T&gt; concept bool C2 = true;
+
+C1{T} void f1(C2);                                                      // <i>#1</i>
+template&lt;typename T, typename U&gt; requires C1&lt;T&gt; &amp;&amp; C2&lt;U&gt; void f1(T, U); // <i>#2</i></code></pre>
+  
+
+In the associated constraints of #1, the constraint associated by the 
+<cxx-grammarterm><i>template-introduction</i></cxx-grammarterm> <code>C1{T}</code>
+occurs before the constraint associated by the
+<cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> in the
+<cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm>
+<code>C2</code>. 
+
+The resulting <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is 
+equivalent to the <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> in
+#2.
+
+  <cxx-codeblock>
+    
+    <pre><code>C1{T} void f2(T) requires C2&lt;T&gt;;                        // <i>#1</i>
+template&lt;typename T&gt; requires C1&lt;T&gt; &amp;&amp; C2&lt;T&gt; void f2(); // <i>#2</i></code></pre>
+  </cxx-codeblock>
+The associated constraints of #1 and #2 are equivalent.
+
+  <cxx-codeblock>
+    
+    <pre><code>template&lt;C1 T&gt; requires C2&lt;T&gt; void f3(T);                // <i>#1</i>
+template&lt;C1 T&gt; void f3(T) requires C2&lt;T&gt;;                // <i>#2</i>
+template&lt;typename T&gt; requires C1&lt;T&gt; &amp;&amp; C2&lt;T&gt; void f3(T); // <i>#3</i>
+template&lt;typename T&gt; void f3(T) requires C1&lt;T&gt; &amp;&amp; C2&lt;T&gt;; // <i>#4</i></code></pre>
+  </cxx-codeblock>
+The associated constraints of #1, #2, #3, and #4 are equivalent. The 
+<cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> associated by
+<code>C1</code> occurs before the constraint associated by 
+<code>C2</code> in each declaration.
+
+  <cxx-codeblock>
+    
+    <pre><code>template&lt;C1 T&gt; requires C2&lt;T&gt; void f5();
+template&lt;C2 T&gt; requires C1&lt;T&gt; void f5(); // <i>error: constraints are functionally equivalent but not equivalent</i></code></pre>
+  </cxx-codeblock>
+
+The associated constraints of the first declaration are
+<code>C1&lt;T&gt; &amp;&amp; C2&lt;T&gt;</code>, and those of the second are
+<code>C2&lt;T&gt; &amp;&amp; C1&lt;T&gt;</code>.
+  
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+
+  <p></p>
+
+<!--
+  <p class="quoted" number="9"> 
+  When a <cxx-grammarterm>template-declaration</cxx-grammarterm> is
+  declared by a template introduction (<cxx-ref to="temp.intro"></cxx-ref>), 
   its canonical declaration is a
-  <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> whose
-  <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> is defined 
+  <cxx-grammarterm>template-declaration</cxx-grammarterm> whose
+  <cxx-grammarterm>template-parameter-list</cxx-grammarterm> is defined 
   according to the rules for introducing template parameters in
-  <cxx-ref to="temp.intro"><a title="temp.intro" href="#temp.intro">14.2</a></cxx-ref>, and the 
-  equivalent declaration has a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> 
-  whose <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is
+  <cxx-ref to="temp.intro"></cxx-ref>, and the 
+  equivalent declaration has a <cxx-grammarterm>requires-clause</cxx-grammarterm> 
+  whose <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
   formed as follows.
 
-  Let <code>TT</code> be a <cxx-grammarterm><i>template-id</i></cxx-grammarterm>
+  Let <code>TT</code> be a <cxx-grammarterm>template-id</cxx-grammarterm>
   formed as 
   <code>C&lt;I<i>1</i>, I<i>2</i>, ..., I<i>n</i>, D<i>1</i>, D<i>2</i>, ..., D<i>n</i>&gt;</code>
   where <code>C</code> is the name of the designated concept,
@@ -3907,27 +4177,23 @@ template&lt;typename T&gt; requires C&lt;T&gt; void g(T);</code></pre>
   of introduced template parameters, and
   <code>D<i>1</i>, D<i>2</i>, ..., D<i>n</i></code> is the (possibly empty)
   sequence of instantiated default template arguments needed to form the
-  <cxx-grammarterm><i>template-id</i></cxx-grammarterm> that refers to <code>C</code>.
+  <cxx-grammarterm>template-id</cxx-grammarterm> that refers to <code>C</code>.
 
   If an introduced parameter declares a template parameter pack, the
   corresponding template argument in the <code>TT</code> is a pack
-  expansion (<cxx-ref in="cxx" to="temp.variadic"><span title="temp.variadic">§14.5.3</span></cxx-ref>).
+  expansion (<cxx-ref in="cxx" to="temp.variadic"></cxx-ref>).
   
   If <code>C</code> is a variable concept, then the
-  <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is
-  the <cxx-grammarterm><i>id-expression</i></cxx-grammarterm> <code>TT</code>.
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
+  the <cxx-grammarterm>id-expression</cxx-grammarterm> <code>TT</code>.
   
   If <code>C</code> is a function concept, then the
-  <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
   the function call <code>TT()</code>.
 
   <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
   <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T, typename U&gt; concept bool C1 = true;
+template&lt;typename T, typename U&gt; concept bool C1 = true;
 template&lt;typename T, typename U&gt; concept bool C2() { return true; }
 template&lt;typename T, typename U = char&gt; concept bool C3 = true;
 template&lt;typename... Ts&gt; concept bool C4 = true;
@@ -3951,29 +4217,27 @@ template&lt;class P&gt;
 
 template&lt;typename... Qs&gt;
   requires C4&lt;Qs...&gt; // <i>constraint associated by</i> C4{...Qs}
-    void g(Qs&amp;&amp;...); // <i>OK: redeclaration of</i> g(Qs&amp;&amp;...)</code></pre>
-  
-  
-    <span class="nowrap">— <em>end example</em> ]</span>
-  
-  <p></p>
+    void g(Qs&amp;&amp;...); // <i>OK: redeclaration of</i> g(Qs&amp;&amp;...)
+  </cxx-codeblock>
+  </cxx-example>
+  </p>
 
-  <!-- TODO: Update based on rewrite of temp.param -->
-  <p para_num="9" id="temp.9" class="quoted">
-  When a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> (call it <code>T1</code>) is
-  explicitly declared with <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
-  that has constrained template parameters (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>), 
+  <!--
+  <p class="quoted">
+  When a <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>T1</code>) is
+  explicitly declared with <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
+  that has constrained template parameters (<cxx-ref to="temp.param"></cxx-ref>), 
   its canonical declaration is a 
-  <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> (call it <code>T2</code>)
+  <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>T2</code>)
   with the same template parameters,
   except that all constrained parameters are replaced by unconstrained
   parameters matching the corresponding prototype parameter designated
-  by the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> 
-  (<cxx-ref to="dcl.spec.constr"><a title="dcl.spec.constr" href="#dcl.spec.constr">7.1.6.5</a></cxx-ref>).
+  by the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> 
+  (<cxx-ref to="dcl.spec.constr"></cxx-ref>).
   
-  The declaration, <code>T2</code>, has a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>
-  whose <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is the
-  conjunction of the <cxx-grammarterm><i>constraint-expressoin</i></cxx-grammarterm>s 
+  The declaration, <code>T2</code>, has a <cxx-grammarterm>requires-clause</cxx-grammarterm>
+  whose <cxx-grammarterm>constraint-expression</cxx-grammarterm> is the
+  conjunction of the <cxx-grammarterm>constraint-expressoin</cxx-grammarterm>s 
   associated by the constrained template parameters in <code>T1</code>.
 
   The order in which the introduced constraints are evaluated is 
@@ -3981,18 +4245,14 @@ template&lt;typename... Qs&gt;
   parameters are declared.
 
   If the original declaration <code>T1</code> includes a 
-  <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>, its
-  <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is evaluated after 
+  <cxx-grammarterm>requires-clause</cxx-grammarterm>, its
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm> is evaluated after 
   the constraints associated by the constrained template parameters in
   <code>T2</code>.
 
   <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
   <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename&gt; concept bool C1 = true;
+template&lt;typename&gt; concept bool C1 = true;
 template&lt;int&gt; concept bool C2 = true;
 
 template&lt;C1 A, C2 B&gt; struct S;
@@ -4004,27 +4264,21 @@ template&lt;typename X, int Y&gt;
 
 template&lt;typename T&gt; 
   requires C1&lt;T&gt; &amp;&amp; C2&lt;sizeof(T)&gt;
-    void f(T); // <i>OK: redeclaration of</i> f(T)</code></pre>
-  
-  
-    <span class="nowrap">— <em>end example</em> ]</span>
-  
-  <p></p>
+    void f(T); // <i>OK: redeclaration of</i> f(T)
+  </cxx-codeblock>
+  </cxx-example>
+  </p>
 
-  <p para_num="10" id="temp.10" class="quoted"> 
+  <p class="quoted"> 
   When the declaration is an abbreviated function template, it is
-  equivalent to a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>
+  equivalent to a <cxx-grammarterm>template-declaration</cxx-grammarterm>
   whose template parameters are declared according to the rules in
-  <cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>. The associated constraints of the
+  <cxx-ref to="dcl.fct"></cxx-ref>. The associated constraints of the
   abbreviated function template are evaluated in the order in which they appear.
 
   <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
   <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C = true;
+template&lt;typename T&gt; concept bool C = true;
 template&lt;typename T&gt; concept bool D() { return true; }
 
 void f(C, C, D);
@@ -4034,32 +4288,26 @@ template&lt;C T, D U&gt;
 
 template&lt;typename T, typename U&gt;
   requires C&lt;T&gt; &amp;&amp; D&lt;U&gt;()
-    void f(T, T, U): // <i>OK: also a redeclaration of</i> f(C, C, D)</code></pre>
-  
-  
-    <span class="nowrap">— <em>end example</em> ]</span>
-  
-  <p></p>
+    void f(T, T, U): // <i>OK: also a redeclaration of</i> f(C, C, D)
+  </cxx-codeblock>
+  </cxx-example>
+  </p>
 
-  <p para_num="11" id="temp.11" class="quoted"> 
+  <p class="quoted"> 
   An abbreviated function template can also be declared as a
-  <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>. The constraints
-  associated by <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s
-  in the <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm> of
+  <cxx-grammarterm>template-declaration</cxx-grammarterm>. The constraints
+  associated by <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
+  in the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> of
   the function declaration are evaluated after those introduced by
-  <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s in the
-  <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> and the
-  following <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>, if present.
+  <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s in the
+  <cxx-grammarterm>template-parameter-list</cxx-grammarterm> and the
+  following <cxx-grammarterm>requires-clause</cxx-grammarterm>, if present.
   This is also the case for an abbreviated function template that
   is declared with a concept introduction.
 
   <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
   <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C = true;
+template&lt;typename T&gt; concept bool C = true;
 template&lt;typename T&gt; concept bool D() { return true; }
 template&lt;typename T&gt; concept bool P = true;
 
@@ -4070,38 +4318,32 @@ template&lt;typename T, typename U&gt;
   requires C&lt;T&gt; &amp;&amp; P&lt;T&gt; &amp;&amp; D&lt;U&gt;()
     void g1(T, U);      // <i>OK: redeclaration of</i> g1(T, D)
 
-C{T} void g2(T, D); // <i>OK: redeclaration of</i> g2(T, D)</code></pre>
-  
-  
-    <span class="nowrap">— <em>end example</em> ]</span>
-  
-  <p></p>
+C{T} void g2(T, D); // <i>OK: redeclaration of</i> g2(T, D)
+  </cxx-codeblock>
+  </cxx-example>
+  </p>
 
-  <p para_num="12" id="temp.12" class="quoted"> 
-  A <dfn>trailing <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm></dfn> 
-  is a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> that appears after
-  the <cxx-grammarterm><i>declarator</i></cxx-grammarterm> in an
-  <cxx-grammarterm><i>init-declarator</i></cxx-grammarterm>
-  (<cxx-ref to="dcl.decl"><a title="dcl.decl" href="#dcl.decl">8</a></cxx-ref>),
-  <cxx-grammarterm><i>function-definition</i></cxx-grammarterm>
-  (<cxx-ref to="dcl.fct.def.general"><a title="dcl.fct.def.general" href="#dcl.fct.def.general"></a></cxx-ref>), or
-  <cxx-grammarterm><i>member-declarator</i></cxx-grammarterm>
-  (<cxx-ref to="class.mem"><a title="class.mem" href="#class.mem"></a></cxx-ref>).
+  <p class="quoted"> 
+  A <dfn>trailing <cxx-grammarterm>requires-clause</cxx-grammarterm></dfn> 
+  is a <cxx-grammarterm>requires-clause</cxx-grammarterm> that appears after
+  the <cxx-grammarterm>declarator</cxx-grammarterm> in an
+  <cxx-grammarterm>init-declarator</cxx-grammarterm>
+  (<cxx-ref to="dcl.decl"></cxx-ref>),
+  <cxx-grammarterm>function-definition</cxx-grammarterm>
+  (<cxx-ref to="dcl.fct.def.general"></cxx-ref>), or
+  <cxx-grammarterm>member-declarator</cxx-grammarterm>
+  (<cxx-ref to="class.mem"></cxx-ref>).
 
   When a constrained function template or member function template is
-  declared with a trailing <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>
+  declared with a trailing <cxx-grammarterm>requires-clause</cxx-grammarterm>
   it is equivalent to a declaration in which the 
-  <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> of the
-  trailing <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> is evaluated
+  <cxx-grammarterm>constraint-expression</cxx-grammarterm> of the
+  trailing <cxx-grammarterm>requires-clause</cxx-grammarterm> is evaluated
   after all other associated constraints.
 
   <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
   <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;C T&gt; struct S {
+template&lt;C T&gt; struct S {
   template&lt;D U&gt; void f(U) requires D&lt;T&gt;;
 };
 
@@ -4110,14 +4352,12 @@ template&lt;C T&gt; template&lt;typename U&gt;
       void S&lt;T&gt;::f(U) { } <i>// OK: definition of</i> S&lt;T&gt;::f(U)
 
 template&lt;C T&gt; template&lt;typename U&gt;
-    void S&lt;T&gt;::f(U) requires D&lt;U&gt; &amp;&amp; D&lt;T&gt; { } // <i>error: redefinition of</i> S&lt;T&gt;::f(U)</code></pre>
-  
+    void S&lt;T&gt;::f(U) requires D&lt;U&gt; &amp;&amp; D&lt;T&gt; { } // <i>error: redefinition of</i> S&lt;T&gt;::f(U)
+  </cxx-codeblock>
   The second definition if <code>S&lt;T&gt;::f(U)</code> is an error 
   because its declaration is equivalent to the first.
-  
-    <span class="nowrap">— <em>end example</em> ]</span>
-  
-  <p></p>
+  </cxx-example>
+  </p>
 
   <!-- FIXME: Does this need to go somewhere? Notes refer to it as 
        redundant. -->
@@ -4296,7 +4536,7 @@ template&lt;C5... Cs&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter 
     of default template argument for 
     <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>.
 
-    </p><p para_num="10" id="temp.param.10" number="10" class="quoted">
+    </p><p para_num="11" id="temp.param.11" class="quoted">
     The default <cxx-grammarterm><i>template-argument</i></cxx-grammarterm> of
     a <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> shall match
     the kind (type, non-type, template) of the declared parameter.
@@ -4495,17 +4735,73 @@ Array&lt;double&gt; s2;    // <i>error:</i> Array <i>takes two template argument
   
     <p></p>
 
-    <p para_num="6" id="temp.intro.6"> 
-    <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+    <!-- TODO: Unify with temp.constr.form -->
+    <p para_num="6" id="temp.intro.6">
+    A <cxx-grammarterm><i>template-introduction</i></cxx-grammarterm> associates
+    a <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> with its 
+    <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>.
     
-    The introduction of a sequence of template parameters by a
-    <cxx-grammarterm><i>concept-name</i></cxx-grammarterm> associates a constraint 
-    with the <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>
-    according to the rules described in Clause <cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>.
+    The constraint is formed from the concept <code>C</code>, designated by the
+    <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> (including its
+    <cxx-grammarterm><i>nested-name-specifier</i></cxx-grammarterm>), 
+    and the sequence of introduced parameters.
+
+    Form a sequence of <cxx-grammarterm><i>template-argument</i></cxx-grammarterm>s
+    <code>Args</code> from the template parameters declared by the
+    <cxx-grammarterm><i>introduced-parameter</i></cxx-grammarterm>s
+    as follows. If an introduced template parameter <code>T</code> is declared 
+    as a template parameter pack, its corresponding 
+    <cxx-grammarterm><i>template-argument</i></cxx-grammarterm> is a pack 
+    expansion of <code>T</code>. Otherwise, its corresponding 
+    <cxx-grammarterm><i>template-argument</i></cxx-grammarterm>
+    matches the type an form of <code>T</code>.
+
+    Let <code>TT</code> be a <cxx-grammarterm><i>template-id</i></cxx-grammarterm>
+    formed as <code>C&lt;Args&gt;</code>.
+
+    The associated <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is
+    the <cxx-grammarterm><i>id-expression</i></cxx-grammarterm> <code>TT</code>
+    if <code>C</code> refers to a variable concept. 
+    The associated <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is
+    the function call <code>TT()</code> if <code>C</code> refers to a variable 
+    concept.
+
+    <cxx-example class="inline">
     
-    <span class="nowrap">— <em>end note</em> ]</span>
-  </cxx-note>
-    </p>
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+    <cxx-codeblock>
+    
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T, typename U&gt; concept bool C1 = true;
+template&lt;typename T, typename U&gt; concept bool C2() { return true; }
+template&lt;typename T, typename U = char&gt; concept bool C3 = true;
+template&lt;typename... Ts&gt; concept bool C4 = true;
+
+C1{A, B} struct X;
+C2{A, B} struct Y;
+C3{P} void f(P);
+C4{...Qs} void g(Qs&amp;&amp;...);
+
+template&lt;typename A, typename B&gt; 
+  requires C1&lt;A, B&gt; // <i>constraint associated by</i> C1{A, B}
+    struct X;       // <i>OK: redeclaration of</i> X
+
+template&lt;typename A, typename B&gt; 
+  requires C2&lt;A, B&gt;()  // <i>constraint associated by</i> C2{A, B}
+    struct Y;          // <i>OK: redeclaration of</i> Y
+
+template&lt;class P&gt;
+  requires C3&lt;P&gt; // <i>constraint associated by</i> C3{P}
+    void f(P);   // <i>OK: redeclaration of</i> f(P)
+
+template&lt;typename... Qs&gt;
+  requires C4&lt;Qs...&gt; // <i>constraint associated by</i> C4{...Qs}
+    void g(Qs&amp;&amp;...); // <i>OK: redeclaration of</i> g(Qs&amp;&amp;...)</code></pre>
+  
+    
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+    <p></p>
 
   
     </section>
@@ -5225,9 +5521,9 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i></code></pre>
         <li> have return types and parameter lists that are equivalent using
              the rules described above to compare expressions involving 
              template parameters, and</li>
-        <li> have associated constraints that are equivalent using the rules 
-             in <cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref> to
-             compare <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s.</li>
+        <li> have associated constraints (Clause <cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>) 
+             that are equivalent using the rules 
+             above to compare expressions involving template parameters.</li>
         </ul>
         </ins>
         </div>
@@ -5241,7 +5537,9 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i></code></pre>
         <ins>
         <ul> 
         <li>one or more expressions that involve template parameters in the 
-        return types and parameter lists are functionally equivalent using 
+        return types <del>and</del><ins>,</ins> parameter lists<ins>, and
+        associated constraints, if any, (Clause <cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>)</ins> 
+        are functionally equivalent using 
         the rules described above to compare expressions involving template 
         parameters; or</li>
 
@@ -5992,10 +6290,10 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
           An expression constraint is introduced by the 
           <cxx-grammarterm><i>expression</i></cxx-grammarterm> in either a
           <cxx-grammarterm><i>simple-requirement</i></cxx-grammarterm> 
-          (<cxx-ref to="expr.prim.req.simple"><a title="expr.prim.req.simple" href="#expr.prim.req.simple">5.1.3.1</a></cxx-ref>)
+          (<cxx-ref to="expr.prim.req.simple"><a title="expr.prim.req.simple" href="#expr.prim.req.simple">5.1.4.1</a></cxx-ref>)
           or
           <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm>
-          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>)
+          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.4.3</a></cxx-ref>)
           of a
           <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>.
           
@@ -6059,7 +6357,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
           <cxx-grammarterm><i>typename-specifier</i></cxx-grammarterm> in a
           <cxx-grammarterm><i>type-requirement</i></cxx-grammarterm> of a
           <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>
-          (<cxx-ref to="expr.prim.req.type"><a title="expr.prim.req.type" href="#expr.prim.req.type">5.1.3.2</a></cxx-ref>).
+          (<cxx-ref to="expr.prim.req.type"><a title="expr.prim.req.type" href="#expr.prim.req.type">5.1.4.2</a></cxx-ref>).
           
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
@@ -6125,7 +6423,7 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
           <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> in a
           <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> when
           the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> contains 
-          no placeholders (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>).
+          no placeholders (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.4.3</a></cxx-ref>).
           
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
@@ -6197,7 +6495,7 @@ requires (T a, T b) {
           <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> when the
           <cxx-grammarterm><i>trailing-type-specifier-seq</i></cxx-grammarterm>
           contains at least one placeholder
-          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>).
+          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.4.3</a></cxx-ref>).
           
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
@@ -6297,7 +6595,7 @@ void g(const C&);
           Constant expression constraints are introduced by a
           <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> that
           includes the <code>noexcept</code> specifier
-          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.3.3</a></cxx-ref>).
+          (<cxx-ref to="expr.prim.req.compound"><a title="expr.prim.req.compound" href="#expr.prim.req.compound">5.1.4.3</a></cxx-ref>).
           
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
@@ -6535,7 +6833,7 @@ g(0);       // <i>selects #4</i></code></pre>
 
       <li> The normalized form of a 
       <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> 
-      (<cxx-ref to="expr.prim.req"><a title="expr.prim.req" href="#expr.prim.req">5.1.3</a></cxx-ref>) is
+      (<cxx-ref to="expr.prim.req"><a title="expr.prim.req" href="#expr.prim.req">5.1.4</a></cxx-ref>) is
       the conjunction of constraints (<cxx-ref to="temp.constr.op.conj"><a title="temp.constr.op.conj" href="#temp.constr.op.conj"></a></cxx-ref>) 
       introduced by the body of that expression.
       </li>
@@ -6825,11 +7123,11 @@ Q{T} void q2();     // <i>error: no matching concept (mismatched template argume
 
       When the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
       is a <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm>, <code>TT</code>
-      is <code>C&lt;A, Args&gt;&gt;</code> where <code>Args</code> is the sequence of
+      is <code>C&lt;A, Args&gt;</code> where <code>Args</code> is the sequence of
       <cxx-grammarterm><i>template-argument</i></cxx-grammarterm>s in the
       <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm>.
       
-      Otherwise, <code>TT</code> is <code>C&lt;A, Args&gt;&gt;</code>.
+      Otherwise, <code>TT</code> is <code>C&lt;A, Args&gt;</code>.
 
       Form an expression <code>E</code> from <code>TT</code>. If <code>C</code>
       refers to a variable concept, <code>E</code> is the
@@ -6841,7 +7139,7 @@ Q{T} void q2();     // <i>error: no matching concept (mismatched template argume
       <p para_num="3" id="temp.constr.form.3">
       The formed <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is
       the fold expression <code>(E &amp;&amp; ...)</code> 
-      (<cxx-ref to="expr.prim.fold"><a title="expr.prim.fold" href="#expr.prim.fold"></a></cxx-ref>)
+      (<cxx-ref to="expr.prim.fold"><a title="expr.prim.fold" href="#expr.prim.fold">5.1.3</a></cxx-ref>)
       when the prototype parameter <code>P</code> declares a template 
       parameter pack and the target template parameter <code>X</code> 
       does not. Otherwise, the 
