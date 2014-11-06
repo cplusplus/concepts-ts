@@ -2093,7 +2093,7 @@ void g(const C&);
       </ul>
 
       <p> When two declarations <code>D1</code> and <code>D2</code> are
-      partially ordered by their constraints, <code>D1</code> is 
+      partially ordered by their normalized constraints, <code>D1</code> is 
       <dfn>more constrained</dfn> than <code>D2</code> if
 
       <ul>
@@ -2244,6 +2244,151 @@ C3&lt;int&gt;            /* <i>type constraint for</i> int::type */
       </cxx-example>
 
     </cxx-section> <!-- temp.constr.expr -->
+
+
+    <!-- ==================
+         Concept resolution
+         ================== -->
+
+    <cxx-section id="temp.concept.resolve">
+      <h1>Concept resolution</h1>
+
+      <p> Whenever a <cxx-grammarterm>identifier</cxx-grammarterm> is a
+      <cxx-grammarterm>concept-name</cxx-grammarterm>, it is necessary to
+      determine a single concept referred to by the use of that name.
+
+      <p> <dfn>Concept resolution</dfn> is the process of selecting a concept 
+      from a set of concept definitions referred to by a concept name.
+      
+      Concept resolution is performed when a 
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> appears in
+      the declaration of an abbreviated function (<cxx-ref to="dcl.fct"></cxx-ref>)
+      or generic lambda (<cxx-ref to="expr.prim.lambda"></cxx-ref>),
+      in the <cxx-grammarterm>trailing-return-type</cxx-grammarterm> of a
+      <cxx-grammarterm>compound-requirement</cxx-grammarterm>, the
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> of a
+      <cxx-grammarterm>constrained-parameter</cxx-grammarterm>, or
+      in a <cxx-grammarterm>template-introduction</cxx-grammarterm>.
+      </p>
+
+      <p> A concept is selected from a set of concepts based on a sequence
+      of <dfn>pending template arguments</dfn> and a sequence of explicit
+      template arguments. 
+
+      A pending template argument is a placeholder used to deduce the type 
+      and form of a template parameter from a concept definition. A pending 
+      template argument can be a pack expansion.
+
+      A concept is selected from the set by matching the designated and
+      explicit template arguments against the template parameters of that
+      concept. 
+      </p>
+
+      <p>
+      When selecting a concept for a 
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> 
+      there is a single pending template argument. 
+      
+      If, the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> 
+      appears in the declaration of a
+      <cxx-grammarterm>constrained-parameter</cxx-grammarterm> 
+      (<cxx-ref to="temp.param"></cxx-ref>) and is
+      followed by an ellipsis, the pending template argument is a pack
+      expansion.
+
+      If the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+      is a <cxx-grammarterm>partial-concept-id</cxx-grammarterm> the
+      <cxx-grammarterm>template-arguments</cxx-grammarterm> are those in
+      the <cxx-grammarterm>partial-concept-id</cxx-grammarterm>.
+
+      When selecting a concept for a 
+      <cxx-grammarterm>concept-name</cxx-grammarterm>
+      in a <cxx-grammarterm>template-introduction</cxx-grammarterm>, there
+      is one pending template argument for each 
+      <cxx-grammarterm>introduced-parameter</cxx-grammarterm>.
+
+      If an <cxx-grammarterm>introduced-parameter</cxx-grammarterm> is
+      preceded by an ellipsis, its corresponding pending template argument
+      is a pack expansion.
+
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt; concept bool C1() { return true; }
+template&lt;typename T, typename U&gt; concept bool C1() { return true; }
+template&lt;typename... T&gt; concept bool C2() { return true; }
+
+void f(1C1); 
+void f2(C1&lt;int&gt;);
+      </cxx-codeblock>
+      In the resolution of required by the declaration of <code>f1</code>, 
+      there is a single pending template argument and no explicit template 
+      arguments.
+
+      For <code>f2</code> there is a single pending template argument and the 
+      single explicit template argument, <code>int</code>.
+      <cxx-codeblock>
+C1{T} void f3(T);
+C1{T, U} void f4(T);
+      </cxx-codeblock>
+      In the resolution required by the declaration of <code>f3</code>, there
+      is a single pending template argument. There are two in the resolution
+      required by <code>f2</code>.
+      <cxx-codeblock>
+C2{...T} void f5();
+      </cxx-codeblock>
+      There is a single pending template argument in the resolution of
+      <code>f2</code> and it is a pack expansion.
+      </cxx-example>
+      </p>
+
+      <p>
+      For each concept <code>C</code> in the concept set, each template 
+      argument in the combined sequence of pending and explicit template 
+      arguments is matched against the corresponding template parameter
+      in the <cxx-grammarterm>template-parameter-list</cxx-grammarterm> of 
+      <code>C</code> as follows.
+
+      A pending template argument that is not a parameter pack matches a 
+      non-pack template parameter of any type and form. A pending template
+      argument that is a parameter pack matches a template parameter pack
+      whose pattern is any form.
+
+      The remaining explicit arguments are matched against parameters
+      according in the usual way (<cxx-ref to="temp.arg"></cxx-ref>).
+
+      If any pending or template arguments do not match the corresponding
+      parameter, <code>C</code> is removed from the set.
+      </p>
+
+      <p>If a single concept remains, that concept is the one selected
+      by concept resolution. Otherwise, the program is ill-formed. </p>
+
+      <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename T&gt; concept bool C() { return true; }             // <i>#1</i>
+template&lt;typename T, typename U&gt; concept bool C() { return true; } // <i>#2</i>
+template&lt;typename T&gt; concept bool P() { return true; }
+template&lt;int T&gt; concept bool P() { return true; }
+template<&lt;typename... Ts> concept bool Q = true;
+
+void f1(const C*);  // <i>OK:</i> C <i>selects #1</i>
+void f2(C&lt;char&gt;);   // <i>OK:</i> C&lt;char&gt; <i>selects #2</i>
+void f3(C&lt;3&gt;);      // <i>error: no matching concept for</i> C&lt;3&gt; <i>(mismatched template arguments)</i>
+void g1(P);         // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>refers to two concepts)</i>
+Q{...Ts} void q1(); // <i>OK: selects</i> Q
+Q{T} void q2();     // <i>error: no matching concept (mismatched template arguments)</i>
+      </cxx-codeblock>
+      </cxx-example>
+      </p>
+
+      <p>
+      In the selected template, the set of parameters corresponding
+      to the matched pending template arguments are called the
+      <dfn>selected template parameters</dfn>. In 
+      <cxx-grammarterm>template-introductions</cxx-grammarterm>, these
+      are used to derive the declarations of introduced parameters.
+      </p>
+    </cxx-section> <!-- temp.concept.resolve -->
 
   </cxx-section> <!-- temp.constr -->
 
