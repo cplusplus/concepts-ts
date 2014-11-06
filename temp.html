@@ -457,10 +457,10 @@ template&lt;template&lt;typename&gt; class X&gt; concept bool C3 = true;
 
 template&lt;typename T&gt; struct S0;
 
-template&lt;C1 T = int&gt; struct S1; // OK
-template&lt;C2 N = 0&gt; struct S2;   // OK
-template&lt;C3 X = S0&gt; struct S3;  // OK
-template&lt;C1 T = 0&gt; struct S4;   // error: default argument is not a type</i>
+template&lt;C1 T = int&gt; struct S1; // <i>OK</i>
+template&lt;C2 N = 0&gt; struct S2;   // <i>OK</i>
+template&lt;C3 X = S0&gt; struct S3;  // <i>OK</i>
+template&lt;C1 T = 0&gt; struct S4;   // <i>error: default argument is not a type</i>
     </cxx-codeblock>
     </cxx-example>
     </p>
