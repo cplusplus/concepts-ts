@@ -733,10 +733,6 @@ pre {
         
       </li>
             
-              <li><span class="marker">7.1.7</span><a href="#dcl.spec.concept">concept specifier</a>
-        
-      </li>
-            
           </ol>
         
       </li>
@@ -897,6 +893,26 @@ pre {
         
       </li>
             
+              <li><span class="marker">14.6</span><a href="#temp.res">Name resolution</a>
+        
+          <ol>
+            
+              <li><span class="marker">14.6.4</span><a href="#temp.dep.res">Dependent name resolution</a>
+        
+          <ol>
+            
+              <li><span class="marker">14.6.4.1</span><a href="#temp.point">Point of instantiation</a>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
+          </ol>
+        
+      </li>
+            
               <li><span class="marker">14.7</span><a href="#temp.spec">Template instantiation and specialization</a>
         
           <ol>
@@ -986,6 +1002,10 @@ pre {
       </li>
             
               <li><span class="marker">14.9.5</span><a href="#temp.concept.resolve">Concept resolution</a>
+        
+      </li>
+            
+              <li><span class="marker">14.9.6</span><a href="#temp.constr.form">Constraint formation</a>
         
       </li>
             
@@ -1555,7 +1575,7 @@ struct Fun {
     </p>
 
     <p para_num="3" id="expr.prim.req.3">A <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> shall appear
-    only within a concept definition (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">7.1.7</a></cxx-ref>),
+    only within a concept definition (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">?</a></cxx-ref>),
     or a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm> following a
     <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> 
     (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>) or
@@ -2443,7 +2463,7 @@ template:</ins>
     
 
     <section>
-      <header><span class="section-number">7.1.6.5</span> <h1 data-bookmark-label="7.1.6.5 Constrained type specifiers">Constrained type specifiers</h1> <span style="float:right"><a href="#dcl.spec.constr">[dcl.spec.constr]</a></span></header>
+      <header><span class="section-number">7.1.6.5</span> <h1 data-bookmark-label="7.1.6.5 Constrained type specifiers">Constrained type specifiers</h1><h1><code>concept</code> specifier</h1> <span style="float:right"><a href="#dcl.spec.constr">[dcl.spec.constr]</a></span></header>
       
         
 
@@ -2629,16 +2649,13 @@ D&lt;0&gt; fn(int x);  // <i>error:</i> D&lt;0&gt; <i>used as a return type</i><
   
         <p></p>
 
-        <p para_num="4" id="dcl.spec.constr.4">
-        A <cxx-grammarterm><i>concept-name</i></cxx-grammarterm> refers to a
-        set of concept definitions (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">7.1.7</a></cxx-ref>)
-        called the <dfn>candidate concept set</dfn>.
-
-        If that set is empty, the program is ill-formed.
+	      <p para_num="4" id="dcl.spec.constr.4"> An identifier is a <cxx-grammarterm><i>concept-name</i></cxx-grammarterm> if
+  	    it refers to a set of of concept definitions 
+  	    (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">?</a></cxx-ref>).
 
         <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
-        The candidate concept set has multiple members
+        The set of concepts has multiple members
         only when referring to a set of overloaded function concepts.
         There is at most one member of this set when a 
         <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>
@@ -2657,14 +2674,13 @@ D&lt;0&gt; fn(int x);  // <i>error:</i> D&lt;0&gt; <i>used as a return type</i><
 template&lt;typename T, typename U&gt; concept bool C() { return true; } // <i>#2</i>
 template&lt;typename T&gt; concept bool D = true;                        // <i>#3</i>
 
-void f(C); // <i>OK: the concept-name</i> C <i>may refer to both #1 and #2</i>
+void f(C); // <i>OK: the concept-name</i> C <i>refers to both #1 and #2</i>
 void g(D); // <i>OK: the concept-name</i> D <i>refers only to #3</i></code></pre>
   
         
     <span class="nowrap">— <em>end example</em> ]</span>
   
         <p></p>
-
 
         <p para_num="5" id="dcl.spec.constr.5">
         A <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm> is a
@@ -2677,118 +2693,58 @@ void g(D); // <i>OK: the concept-name</i> D <i>refers only to #3</i></code></pre
     
         <cxx-codeblock>
     
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T, typename U&gt; concept bool C() { return true; }
-template&lt;typename T, int N = 0&gt; concept bool Seq = true;
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T, int N = 0&gt; concept bool Seq = true;
 
-void f(C&lt;int&gt;);
-void f(Seq&lt;3&gt;);
-void f(Seq&lt;&gt;);</code></pre>
+void f1(Seq&lt;3&gt;);
+void f2(Seq&lt;&gt;);</code></pre>
   
         
     <span class="nowrap">— <em>end example</em> ]</span>
   
         <p></p>
 
-        <p para_num="6" id="dcl.spec.constr.6">
-        The concept designated by a 
+        <p para_num="6" id="dcl.spec.constr.6"> The concept designated by a
         <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
-        is resolved by determining the viability of each concept in the
-        candidate concept set.
-
-        For each candidate concept in that set, <code>TT</code> is a 
-        <cxx-grammarterm><i>template-id</i></cxx-grammarterm> formed as follows:
-
-        let <code>C</code> be the <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>
-        for the candidate concept set, and let <code>X</code> be a template 
-        argument that matches
-        the type and form (<cxx-ref to="temp.arg"><a title="temp.arg" href="#temp.arg">14.4</a></cxx-ref>) of the prototype 
-        parameter (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">7.1.7</a></cxx-ref>)
-        of the candidate concept. 
-
-        The template <code>X</code> is called the 
-        <dfn>deduced concept argument</dfn>.
-
-        If the <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm> in
-        the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> is
-        a <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>, <code>TT</code> is
-        formed as <code>C&lt;X&gt;</code>.
-
-        Otherwise, the <cxx-grammarterm><i>constrained-type-name</i></cxx-grammarterm> is
-        a <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm> whose
-        <cxx-grammarterm><i>template-argument-list</i></cxx-grammarterm> is
-        <code>A<sub>1</sub>, A<sub>2</sub>, ..., A<sub><i>n</i></sub></code>, and
-        <code>TT</code> is formed as
-        <code>C&lt;X, A<sub>1</sub>, A<sub>2</sub>, ..., A<sub><i>n</i></sub>&gt;</code>.
-
-        The candidate concept is a <dfn>viable candidate concept</dfn> when all
-        <cxx-grammarterm><i>template-arguments</i></cxx-grammarterm> of <code>TT</code> 
-        match the template parameters of that candidate 
-        (<cxx-ref to="temp.arg"><a title="temp.arg" href="#temp.arg">14.4</a></cxx-ref>).
-
-        If, after determining the viability of each concept, there is a
-        single viable candidate concept, that is the concept designated by the
-        <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
-
-        Otherwise, the program is ill-formed.
-
-        <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
-        <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C() { return true; }             // <i>#1</i>
-template&lt;typename T, typename U&gt; concept bool C() { return true; } // <i>#2</i>
-template&lt;typename T&gt; concept bool P() { return true; }
-template&lt;int T&gt; concept bool P() { return true; }
-
-void f1(const C*); // <i>OK:</i> C <i>designates #1</i>
-void f2(C&lt;char&gt;);  // <i>OK:</i> C&lt;char&gt; <i>designates #2</i>
-void f3(C&lt;3&gt;);     // <i>error: no matching concept for</i> C&lt;3&gt; <i>(mismatched template arguments)</i>
-void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>refers to two concepts)</i></code></pre>
-  
-        
-    <span class="nowrap">— <em>end example</em> ]</span>
-  
-        <p></p>
+        is the one selected by concept resolution 
+        (<cxx-ref to="temp.concept.resolve"><a title="temp.concept.resolve" href="#temp.concept.resolve">14.9.5</a></cxx-ref>).
 
 
-        <p para_num="7" id="dcl.spec.constr.7">The use of a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
-        in the type of a <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm>
-        associates a <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> 
-        (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>) with the 
+        <!-- FIXME: We don't know how to synthesize the constraint here -->
+        <!-- 
+        <p>The use of a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        in the type of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
+        associates a <cxx-grammarterm>constraint-expression</cxx-grammarterm> 
+        (<cxx-ref to="temp.constr.expr"></cxx-ref>) with the 
         entity for which that parameter is declared. 
 
         In the case of a generic lambda, the association is with
         the member function call operator of the closure type 
-        (<cxx-ref to="expr.prim.lambda"><a title="expr.prim.lambda" href="#expr.prim.lambda">5.1.2</a></cxx-ref>).
+        (<cxx-ref to="expr.prim.lambda"></cxx-ref>).
 
         For an abbreviated function template declaration
-        (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>), the association is with that
+        (<cxx-ref to="dcl.fct"></cxx-ref>), the association is with that
         function template.
 
-        When a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+        When a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
         appears in the 
-        <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> of a 
-        <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm> it
-        associates a <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> 
+        <cxx-grammarterm>trailing-return-type</cxx-grammarterm> of a 
+        <cxx-grammarterm>compound-requirement</cxx-grammarterm> it
+        associates a <cxx-grammarterm>constraint-expression</cxx-grammarterm> 
         with the invented function template of the introduced argument 
-        deduction constraint (<cxx-ref to="temp.constr.atom.deduct"><a title="temp.constr.atom.deduct" href="#temp.constr.atom.deduct">14.9.2.5</a></cxx-ref>).
+        deduction constraint (<cxx-ref to="temp.constr.atom.deduct"></cxx-ref>).
 
-        When a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
-        is used in a <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>,
+        When a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        is used in a <cxx-grammarterm>template-parameter</cxx-grammarterm>,
         it associates a 
-        <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> with the
-        <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> in which the
-        <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> is declared.
+        <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the
+        <cxx-grammarterm>template-declaration</cxx-grammarterm> in which the
+        <cxx-grammarterm>template-parameter</cxx-grammarterm> is declared.
         </p>
 
-        <!-- FIXME: This is practically unreadable -->
-
-        <p para_num="8" id="dcl.spec.constr.8"> The <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> 
+        <p> The <cxx-grammarterm>constraint-expression</cxx-grammarterm> 
         associated by a
-        <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
-        is derived from the <cxx-grammarterm><i>template-id</i></cxx-grammarterm> 
+        <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        is derived from the <cxx-grammarterm>template-id</cxx-grammarterm> 
         (called <code>TT</code> above) used to determine the viability of
         the designated concept (call it <code>D</code>).
 
@@ -2796,33 +2752,33 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
         deduced concept argument <code>X</code> in <code>TT</code> with a 
         template argument, <code>A</code>. That template argument is
         defined as follows:
-        </p><ul>
-        <li> when the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
-        appears in the type of a <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm>
+        <ul>
+        <li> when the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        appears in the type of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
         of a function or lambda, 
 
         or when the when the 
-        <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
-        appears in the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm>
-        of a <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm>,
+        <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        appears in the <cxx-grammarterm>trailing-return-type</cxx-grammarterm>
+        of a <cxx-grammarterm>compound-requirement</cxx-grammarterm>,
 
         <code>A</code> is the name of the
         invented template parameter corresponding to the 
         placeholder in that (possibly invented) function template 
-        (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>) ;</li>
+        (<cxx-ref to="dcl.fct"></cxx-ref>) ;</li>
 
-        <li> when the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
-        appears in a <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm>
+        <li> when the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+        appears in a <cxx-grammarterm>template-parameter</cxx-grammarterm>
         declaration, <code>A</code> is the name of the declared
-        parameter (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>). </li>
+        parameter (<cxx-ref to="temp.param"></cxx-ref>). </li>
         </ul>
 
-        Let <code>TT2</code> be a <cxx-grammarterm><i>template-id</i></cxx-grammarterm>
+        Let <code>TT2</code> be a <cxx-grammarterm>template-id</cxx-grammarterm>
         formed as follows. 
 
         If the template parameter <code>A</code> declares a template parameter 
         pack, and <code>D</code> is a variadic concept 
-        (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">7.1.7</a></cxx-ref>),
+        (<cxx-ref to="dcl.spec.concept"></cxx-ref>),
         <code>TT2</code> is formed by replacing the deduced concept
         argument <code>X</code> in 
         <code>TT</code> with the pack expansion <code>A...</code>.
@@ -2830,7 +2786,7 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
         Otherwise <code>TT2</code> is formed by replacing <code>X</code>
         with <code>A</code>.
 
-        Let <code>E</code> be the <cxx-grammarterm><i>id-expression</i></cxx-grammarterm>
+        Let <code>E</code> be the <cxx-grammarterm>id-expression</cxx-grammarterm>
         <code>TT2</code> when the <code>D</code> is a variable concept, and
         the function call <code>TT2()</code> when the <code>D</code> is a 
         function concept.
@@ -2839,17 +2795,12 @@ void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>re
         parameter pack, and <code>D</code> is not a variadic concept,
         then the associated constraint is the fold expression 
         <code>(E &amp;&amp; ...)</code>
-        (<cxx-ref in="cxx" to="expr.prim.fold"><span title="expr.prim.fold">§5.1.4</span></cxx-ref>).
+        (<cxx-ref in="cxx" to="expr.prim.fold"></cxx-ref>).
         
         Otherwise, the associated constraint is the expression <code>E</code>.
-        
         <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
         <cxx-codeblock>
-    
-    <pre><code>template&lt;typename T&gt; concept bool C = true;
+template&lt;typename T&gt; concept bool C = true;
 template&lt;typename T, typename U&gt; concept bool D() { return true; }
 template&lt;int N&gt; concept bool Num = true;
 
@@ -2858,30 +2809,19 @@ template&lt;int&gt; struct X { };
 void f(C&amp;);              // <i>associates</i> C&lt;T1&gt; <i>with</i> f
 void g(D&lt;int&gt;);          // <i>associates</i> D&lt;T2, int&gt;() <i>with</i> g
 void h(X&lt;Num&gt;);          // <i>associates</i> Num&lt;M&gt; <i>with</i> h
-template&lt;C T&gt; struct s1; // <i>associates</i> C&lt;T&gt; <i>with</i> s1</code></pre>
-  </cxx-codeblock>
+template&lt;C T&gt; struct s1; // <i>associates</i> C&lt;T&gt; <i>with</i> s1
+        </cxx-codeblock>
         Here, <code>T1</code> and <code>T2</code> are invented type template 
         parameters corresponding to the
         prototype parameter of their respective designated concepts.
         Likewise, <code>M</code> is an invented non-type template parameter
         corresponding to the prototype parameter of <code>Num</code>.
-        <p></p>
+        </p>
+        -->
 
-        <p>Two <cxx-grammarterm><i>constrained-type-specifiers</i></cxx-grammarterm>
-        are said to be equivalent if their associated
-        <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s are
-        equivalent according to the rules in 
-        <cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>.</p>
+       <!-- dcl.spec.constr -->
 
-      
-    <span class="nowrap">— <em>end example</em> ]</span>
-  </cxx-example>
-    </section>
-  </cxx-section> <!-- dcl.spec.constr -->
-
-    
-    </section>
-  </cxx-section> <!-- dcl.type -->
+     <!-- dcl.type -->
 
 
     <!-- =================
@@ -2891,12 +2831,14 @@ template&lt;C T&gt; struct s1; // <i>associates</i> C&lt;T&gt; <i>with</i> s1</c
     <cxx-section id="dcl.spec.concept">
     
 
-    <section>
-      <header><span class="section-number">7.1.7</span> <h1 data-bookmark-label="7.1.7 concept specifier"><code>concept</code> specifier</h1> <span style="float:right"><a href="#dcl.spec.concept">[dcl.spec.concept]</a></span></header>
+    </cxx-section></p><section>
+      <header><span class="section-number">?</span>  <span style="float:right"><a href="#dcl.spec.concept">[dcl.spec.concept]</a></span></header>
       
       
+    </section>
+  <p></p>
 
-      <p para_num="1" id="dcl.spec.concept.1"> The <code>concept</code> specifier shall be applied only to the 
+      <p para_num="7" id="dcl.spec.constr.7"> The <code>concept</code> specifier shall be applied only to the 
       definition of a function template or variable template, declared
       in namespace scope (<cxx-ref in="cxx" to="basic.scope.namespace"><span title="basic.scope.namespace">§3.3.6</span></cxx-ref>).
       
@@ -2941,17 +2883,17 @@ struct S {
   
       <p></p>
 
-      <p para_num="2" id="dcl.spec.concept.2"> Every concept definition is implicitly defined to be a 
+      <p para_num="8" id="dcl.spec.constr.8"> Every concept definition is implicitly defined to be a 
       <code>constexpr</code> declaration 
       (<cxx-ref in="cxx" to="dcl.constexpr"><span title="dcl.constexpr">§7.1.5</span></cxx-ref>). </p>
 
-      <p para_num="3" id="dcl.spec.concept.3"> A concept definition shall not be declared with the 
+      <p para_num="9" id="dcl.spec.constr.9"> A concept definition shall not be declared with the 
       <code>friend</code> or <code>constexpr</code> specifiers. 
 
       Additionally, a concept definition shall not have associated constraints
       (<cxx-ref to="temp"><a title="temp" href="#temp">14</a></cxx-ref>). </p>
 
-      <p para_num="4" id="dcl.spec.concept.4">The definition of a function concept or the initializer of
+      <p para_num="10" id="dcl.spec.constr.10">The definition of a function concept or the initializer of
       a variable concept shall not include a reference to the concept being
       declared.
 
@@ -2971,14 +2913,14 @@ template&lt;typename T&gt;
   
       <p></p>
 
-      <p para_num="5" id="dcl.spec.concept.5"> The first declared template parameter of a concept definition is its
+      <p para_num="11" id="dcl.spec.constr.11"> The first declared template parameter of a concept definition is its
       <dfn>prototype parameter</dfn>. 
 
       A <dfn>variadic concept</dfn> is a concept whose prototype parameter
       is a template parameter pack.
       </p>
 
-      <p para_num="6" id="dcl.spec.concept.6">A function concept has the following restrictions:
+      <p para_num="12" id="dcl.spec.constr.12">A function concept has the following restrictions:
       </p><ul>
         <li> No <cxx-grammarterm><i>function-specifier</i></cxx-grammarterm>s shall
              appear in its declaration (<cxx-ref in="cxx" to="dcl.fct.spec"><span title="dcl.fct.spec">§7.1.2</span></cxx-ref>). </li>
@@ -3020,7 +2962,7 @@ template&lt;typename T&gt;
   </cxx-example>
       <!-- </p> -->
 
-      <p para_num="7" id="dcl.spec.concept.7">A variable concept has the following restrictions:
+      <p para_num="13" id="dcl.spec.constr.13">A variable concept has the following restrictions:
       </p><ul>
         <li> The declared type shall be <code>bool</code>. </li>
         <li> The declaration shall have an initializer. </li>
@@ -3047,7 +2989,7 @@ template&lt;C T&gt;
   </cxx-example>
       <!-- </p> -->
 
-      <p para_num="8" id="dcl.spec.concept.8">A program shall not declares an explicit instantiation
+      <p para_num="14" id="dcl.spec.constr.14">A program shall not declares an explicit instantiation
       (<cxx-ref to="temp.explicit"><a title="temp.explicit" href="#temp.explicit">14.7.2</a></cxx-ref>), an explicit specialization 
       (<cxx-ref to="temp.expl.spec"><a title="temp.expl.spec" href="#temp.expl.spec">14.7.3</a></cxx-ref>), or a partial specialization 
       of a concept definition is ill-formed.
@@ -3069,6 +3011,8 @@ template&lt;C T&gt;
     </section>
   </cxx-section> <!-- dcl.spec -->
 
+    </section>
+  </cxx-section>
     </section>
   </cxx-clause> <!-- dcl.dcl -->
 
@@ -3347,15 +3291,21 @@ auto* p = new void(*[3])(char) requires true; // <i>error: not a function declar
       Otherwise, the placeholder is designated by a
       <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>, and
       the corresponding invented parameter matches the type and form of
-      the prototype parameter (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">7.1.7</a></cxx-ref>) of 
+      the prototype parameter (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">?</a></cxx-ref>) of 
       the concept designated by the 
-      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
+      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+      (<cxx-ref to="temp.concept.resolve"><a title="temp.concept.resolve" href="#temp.concept.resolve">14.9.5</a></cxx-ref>).
 
       The invented <cxx-grammarterm><i>template-parameter</i></cxx-grammarterm> is 
       a parameter pack if the corresponding 
       <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm>
       declares a function parameter pack and the type of the parameter 
       contains only one placeholder.
+
+      If the prototype parameter of the designated concept declares a
+      template parameter pack, the corresponding
+      <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> shall
+      declare a function parameter pack.
 
       The adjusted function parameters of an abbreviated function template are derived
       from the <cxx-grammarterm><i>parameter-declaration-clause</i></cxx-grammarterm> 
@@ -3388,11 +3338,14 @@ template&lt;typename T, typename U, typename V&gt;
 template&lt;typename T&gt; concept bool C1 = true;
 template&lt;typename T&gt; concept bool C2 = true;
 template&lt;typename T, typename U&gt; concept bool D = true;
+template&lt;&lt;typename... Ts&gt; concept bool E = true;
 
 void g1(const C1*, C2&amp;);
 void g2(Vec&lt;C1&gt;&amp;);
 void g3(C1&amp;...);
 void g4(Vec&lt;D&lt;int&gt;&gt;);
+void g5(E...); // <i>OK</i>
+void g6(E);    // <i>error:</i> E <i>does not declare a function parameter pack</i>
 
 template&lt;C1 T, C2 U&gt; void g1(const T*, U&amp;); // <i>redeclaration of</i> g1(const C1*, C2&amp;)
 template&lt;C1 T&gt; void g2(Vec&lt;T&gt;&amp;);            // <i>redeclaration of</i> g2(Vec&lt;C1&gt;&amp;)
@@ -3444,12 +3397,23 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
   
       <p></p>
 
+      <p para_num="18" id="dcl.fct.18"> The use of a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+      in a <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> associates
+      a <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> with the 
+      abbreviated function template. This 
+      <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is formed
+      according to the rules in <cxx-ref to="temp.constr.form"><a title="temp.constr.form" href="#temp.constr.form">14.9.6</a></cxx-ref>. 
 
-      <p para_num="18" id="dcl.fct.18"> All placeholders introduced by
-      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> 
-      that are equivalent according to the definition in
-      <cxx-ref to="dcl.spec.constr"><a title="dcl.spec.constr" href="#dcl.spec.constr">7.1.6.5</a></cxx-ref> have the
-      same invented template parameter.
+      Two <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s
+      are said to be <dfn>equivalent</dfn> if their associated
+      <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s are
+      equivalent according to the rules in 
+      <cxx-ref to="temp.over.link"><a title="temp.over.link" href="#temp.over.link">14.5.6.1</a></cxx-ref>.
+      </p>
+
+      <p para_num="19" id="dcl.fct.19"> All placeholders introduced by equivalent
+      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>s
+       have the same invented template parameter.
       <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
@@ -4267,8 +4231,6 @@ C{T} D{U} void X&lt;T&gt;::f() { } // <i>OK: definition of</i> f()
     The designated concept is selected by concept resolution
     (<cxx-ref to="temp.concept.resolve"><a title="temp.concept.resolve" href="#temp.concept.resolve">14.9.5</a></cxx-ref>). 
 
-    <!-- TODO: Specify the associated constraint? -->
-
     Let <code>P</code> be the prototype parameter of the designated
     concept. The declared template parameter is determined by the type
     and form of <code>P</code> and the optional ellipsis in the
@@ -4323,11 +4285,18 @@ template&lt;C5... Cs&gt; f6();      // <i>OK:</i> Cs <i>is a template parameter 
   </cxx-example>
     </div>
 
+    <p para_num="10" id="temp.param.10" class="quoted">
+    A <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> associates a
+    <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> with its
+    <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm>. This
+    <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is formed
+    according to the rules in <cxx-ref to="temp.constr.form"><a title="temp.constr.form" href="#temp.constr.form">14.9.6</a></cxx-ref>.
+
     Insert the following paragraph after paragraph 9 to restrict the forms 
     of default template argument for 
     <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>.
 
-    <p para_num="10" id="temp.param.10" number="10" class="quoted">
+    </p><p para_num="10" id="temp.param.10" number="10" class="quoted">
     The default <cxx-grammarterm><i>template-argument</i></cxx-grammarterm> of
     a <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> shall match
     the kind (type, non-type, template) of the declared parameter.
@@ -4344,10 +4313,10 @@ template&lt;template&lt;typename&gt; class X&gt; concept bool C3 = true;
 
 template&lt;typename T&gt; struct S0;
 
-template&lt;C1 T = int&gt; struct S1; // OK
-template&lt;C2 N = 0&gt; struct S2;   // OK
-template&lt;C3 X = S0&gt; struct S3;  // OK
-template&lt;C1 T = 0&gt; struct S4;   // error: default argument is not a type</code></pre>
+template&lt;C1 T = int&gt; struct S1; // <i>OK</i>
+template&lt;C2 N = 0&gt; struct S2;   // <i>OK</i>
+template&lt;C3 X = S0&gt; struct S3;  // <i>OK</i>
+template&lt;C1 T = 0&gt; struct S4;   // <i>error: default argument is not a type</i></code></pre>
   
     
     <span class="nowrap">— <em>end example</em> ]</span>
@@ -4587,7 +4556,7 @@ S&lt;bool&gt;* p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;*
 
     <p para_num="1" id="temp.names.1" class="quoted">
     When a <cxx-grammarterm><i>simple-template-id</i></cxx-grammarterm> names
-    a constrained non-template function or a template template parameter,
+    a constrained non-function template or a template template parameter,
     but not a member template that is a member of an unknown specialization
     (<cxx-ref in="cxx" to="temp.res"><span title="temp.res">§14.6</span></cxx-ref>),
     and all <cxx-grammarterm><i>template-argument</i></cxx-grammarterm>s in the
@@ -4752,6 +4721,21 @@ S&lt;Z&gt; s3; // OK: <i>the constraints of P subsume those of</i> Z</code></pre
       
     
 
+    Modify paragraph 2 to indicate that associated constraints are
+    instantiated separately from the template they are associated with.
+
+    <p para_num="2" id="temp.decls.2" number="2" class="quoted">
+      For purposes of name lookup and instantiation, default
+      arguments<ins>, associated constraints,</ins> and
+      <i>exception-specifications</i> of function templates and default
+      arguments<ins>, associated constraints,</ins>
+      and <i>exception-specifications</i> of member functions of class
+      templates are considered definitions; each default argument<ins>,
+      associated constraint,</ins> or exception-specification is a separate
+      definition which is unrelated to the function template definition or
+      to any other default arguments<ins>, associated constraints,</ins>
+      or <i>exception-specifications</i>.
+    </p>
 
     <!-- ===============
          Class templates
@@ -4949,6 +4933,8 @@ template&lt;C1 T&gt; template&lt;typename U&gt;
 	constrained,</ins> nor shall the inline specifier be used in such a
 	declaration.</p>
 
+      And add examples following that paragraph.
+
 	<p para_num="10" id="temp.friend.10" class="quoted">
 	<cxx-note><span class="nowrap">[ <em>Note:</em></span>
     Other friend declarations can be constrained.  In a
@@ -4983,8 +4969,8 @@ void f1() requires true; // <i>friend of all S&lt;T&gt;</i>
 void f2() requires C1&lt;int&gt;; // <i>friend of S&lt;int&gt;</i></code></pre>
   
       The friend declaration of <code>g2</code> is ill-formed, no
-      diagnostic required, because no valid instantiation of <code>S</code>
-      is possible: for all <code>T</code> there is no <code>g2&lt;T&gt;</code>
+      diagnostic required, because no valid specialization of <code>S</code>
+      can be generated: for all <code>T</code> there is no <code>g2&lt;T&gt;</code>
       for which the constraints are satisfied, so template argument
       deduction (<cxx-ref to="temp.deduct.decl"><a title="temp.deduct.decl" href="#temp.deduct.decl">14.8.2.6</a></cxx-ref>) fails.
       
@@ -5316,6 +5302,65 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i></code></pre>
     </section>
   </cxx-section> <!-- temp.decls -->
 
+  <cxx-section id="temp.res">
+    
+
+    <section>
+      <header><span class="section-number">14.6</span> <h1 data-bookmark-label="14.6 Name resolution">Name resolution</h1> <span style="float:right"><a href="#temp.res">[temp.res]</a></span></header>
+      
+    
+
+    Modify paragraph 8.
+
+    <p para_num="8" id="temp.res.8" number="8" class="quoted">
+      Knowing which names are type names allows the syntax of every
+      template to be checked. No diagnostic shall be issued for a template
+      for which a valid specialization can be generated. If no valid
+      specialization can be generated for a template, and that template is
+      not instantiated, the template is ill-formed, no diagnostic
+      required. If every valid specialization of a variadic template
+      requires an empty template parameter pack, the template is
+      ill-formed, no diagnostic required. <ins>If no instantiation of
+      the associated constraints of a template would result in a valid
+      expression, the template is ill-formed, no diagnostic required.</ins>
+      If a hypothetical instantiation of a template immediately following
+      its definition would be ill-formed due to a construct that does not
+      depend on a template parameter, the program is ill-formed; no
+      diagnostic is required. If the interpretation of such a construct in
+      the hypothetical instantiation is different from the interpretation
+      of the corresponding construct in any actual instantiation of the
+      template, the program is ill-formed; no diagnostic is required.
+    </p>
+    <cxx-section id="temp.dep.res" number="4">
+    
+
+    <section>
+      <header><span class="section-number">14.6.4</span> <h1 data-bookmark-label="14.6.4 Dependent name resolution">Dependent name resolution</h1> <span style="float:right"><a href="#temp.dep.res">[temp.dep.res]</a></span></header>
+      
+      
+      <cxx-section id="temp.point">
+    
+
+    <section>
+      <header><span class="section-number">14.6.4.1</span> <h1 data-bookmark-label="14.6.4.1 Point of instantiation">Point of instantiation</h1> <span style="float:right"><a href="#temp.point">[temp.point]</a></span></header>
+      
+	
+	Add a new paragraph after paragraph 4.
+
+	<p para_num="5" id="temp.point.5" number="5" class="quoted">
+	  The point of instantiation of a constraint-expression of a
+	  specialization immediately precedes the point of instantiation of
+	  the specialization.
+	</p>
+      
+    </section>
+  </cxx-section>
+    
+    </section>
+  </cxx-section>
+  
+    </section>
+  </cxx-section>
 
   <!-- =========================================
        Template instantiation and specialization
@@ -5338,21 +5383,42 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i></code></pre>
       
       
 
-      Add the following paragraph after paragraph 1 in order to explain
-      the how constrained members are instantiated.
+      Change paragraph 1 to include associated constraints.
 
-      <p para_num="2" id="temp.inst.2" number="2" class="quoted">
-      When a constrained member of a class is instantiated, new constraints
-      for the instantiated declaration are formed by substituting the
-      template arguments into the associated constraints of that member.
-      The resulting expression is not evaluated after this substitution.
+      <p para_num="1" id="temp.inst.1" class="quoted">
+	Unless a class template specialization has been explicitly
+	instantiated (14.7.2) or explicitly specialized (14.7.3), the class
+	template specialization is implicitly instantiated when the
+	specialization is referenced in a context that requires a
+	completely-defined object type or when the completeness of the
+	class type affects the semantics of the program. [ Note: Within a
+	template declaration, a local class or enumeration and the members
+	of a local class are never considered to be entities that can be
+	separately instantiated (this includes their default arguments,
+	<i>exception-specifications</i>,
+	and non-static data member initializers, if any). As a result, the
+	dependent names are looked up, the semantic constraints are
+	checked, and any templates used are instantiated as part of the
+	instantiation of the entity within which the local class or
+	enumeration is declared. —end note ] The implicit instantiation of
+	a class template specialization causes the implicit instantiation
+	of the declarations, but not of the definitions, default
+	arguments, <ins>associated constraints,</ins> or
+	<i>exception-specifications</i> of the class member functions,
+	member classes, scoped member enumerations, static data members and
+	member templates; and it causes the implicit instantiation of the
+	definitions of unscoped member enumerations and member anonymous
+	unions.
+      </p>
 
-      If the substitution fails, the program is ill-formed.
+      Add a new paragraph after paragraph 15 to describe how associated
+      constraints are instantiated.
 
-      <!-- TODO: There is a note to put this into 14.6p8??? -->
-      If substitution into the associated constraints would always result in an
-      invalid type or expression, the program is ill-formed, no diagnostic
-      required.
+      <p para_num="16" id="temp.inst.16" number="16" class="quoted">
+	The associated constraints of a template specialization are not
+	instantiated along with the specialization itself; they are
+	instantiated as part of satisfaction checking.
+	(<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>).
 
       <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
@@ -5360,7 +5426,7 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i></code></pre>
       resolution (<cxx-ref to="over.match"><a title="over.match" href="#over.match">13.3</a></cxx-ref>). Preserving the spelling
       of the substituted constraint also allows constrained member function
       to be partially ordered by those constraints according to the rules
-      in <cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>.
+      in <cxx-ref to="temp.constr.order"><a title="temp.constr.order" href="#temp.constr.order">14.9.3</a></cxx-ref>.
       
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
@@ -5383,24 +5449,12 @@ template&lt;typename T&gt; struct S {
 S&lt;char&gt; s1;    // <i>error: no matching constructor</i>
 S&lt;char[8]&gt; s2; // <i>OK: calls #2</i></code></pre>
   
-      The instantiation of <code>S&lt;char&gt;</code> produces a class
-      template specialization having the constructors
-      <code>S&lt;char&gt;::S() requires C&lt;char&gt;</code> and
-      <code>S&lt;char&gt;::S() requires D&lt;char&gt;</code>.
 
-      Even though neither constructor will be selected by overload resolution,
+      Even though neither constructor for S&lt;char&gt; will be selected by
+      overload resolution,
       they remain a part of the class template specialization. This also
       has the effect of suppressing the implicit generation of a default 
       constructor (<cxx-ref in="cxx" to="class.ctor"><span title="class.ctor">§12.1</span></cxx-ref>)
-
-      <cxx-codeblock>
-    
-    <pre><code>template&lt;typename T&gt; struct S2 {
-    void f() requires T::value == 1;
-  };
-
-S2&lt;int&gt; s; // <i>error: substitution failure in definition of</i> S2&lt;int&gt;</code></pre>
-  </cxx-codeblock>
       
     <span class="nowrap">— <em>end example</em> ]</span>
   
@@ -5548,7 +5602,7 @@ template void g(void*); // <i>OK: refers to #2</i></code></pre>
       <p para_num="12" id="temp.expl.spec.12" number="12" class="quoted">
       The <cxx-grammarterm><i>template-arguments</i></cxx-grammarterm> in the
       <cxx-grammarterm><i>template-id</i></cxx-grammarterm> of an explicit 
-      specialization of a constrained non-template function shall satisfy the 
+      specialization of a constrained non-function template shall satisfy the 
       associated constraints of that template, if any 
       (<cxx-ref to="temp.constr"><a title="temp.constr" href="#temp.constr">14.9</a></cxx-ref>).
 
@@ -6467,7 +6521,7 @@ g(0);       // <i>selects #4</i></code></pre>
       <code>C&lt;A<sub><i>1</i></sub>, A<sub><i>2</i></sub>, ..., A<sub><i>n</i></sub>&gt;()</code>,
       where <code>A<sub><i>1</i></sub>, A<sub><i>2</i></sub>, ..., A<sub><i>n</i></sub></code>
       is a sequence of template arguments and <code>C</code> names a function
-      concept (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">7.1.7</a></cxx-ref>), is the result of 
+      concept (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">?</a></cxx-ref>), is the result of 
       substituting the template arguments into the expression
       returned by <code>C</code>.</li>
 
@@ -6475,7 +6529,7 @@ g(0);       // <i>selects #4</i></code></pre>
       of the form <code>C&lt;A<sub><i>1</i></sub>, A<sub><i>2</i></sub>, ..., A<sub><i>n</i></sub>&gt;</code>
       where <code>A<sub><i>1</i></sub>, A<sub><i>2</i></sub>, ..., A<sub><i>n</i></sub></code>
       is a sequence of template arguments and <code>C</code> names a variable
-      concept (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">7.1.7</a></cxx-ref>) is the result of 
+      concept (<cxx-ref to="dcl.spec.concept"><a title="dcl.spec.concept" href="#dcl.spec.concept">?</a></cxx-ref>) is the result of 
       substituting the template arguments into the initializer
       of <code>C</code>.</li>
 
@@ -6579,43 +6633,42 @@ C3&lt;int&gt;            /* <i>type constraint for</i> int::type */
       </p>
 
       <p para_num="3" id="temp.concept.resolve.3"> A concept is selected from a set of concepts based on a sequence
-      of <dfn>pending template arguments</dfn> and a sequence of explicit
+      of <dfn>template argument pattern</dfn>s and a sequence of explicit
       template arguments. 
 
-      A pending template argument is a placeholder used to deduce the type 
-      and form of a template parameter from a concept definition. A pending 
-      template argument can be a pack expansion.
+      A template argument pattern is a kind of template argument that is used 
+      to match the type and form of any template parameter from a concept 
+      definition. A template argument pattern can be a pack expansion.
 
-      A concept is selected from the set by matching the designated and
-      explicit template arguments against the template parameters of that
-      concept. 
-      </p>
+      A concept is selected from the set by matching the template
+      argument patterns and explicit template arguments against the template 
+      parameters of that concept. </p>
 
       <p para_num="4" id="temp.concept.resolve.4">
       When selecting a concept for a 
       <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> 
-      there is a single pending template argument. 
+      there is a single template argument pattern. 
       
       If, the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> 
       appears in the declaration of a
       <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> 
       (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>) and is
-      followed by an ellipsis, the pending template argument is a pack
+      followed by an ellipsis, the template argument pattern is a pack
       expansion.
 
       If the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
-      is a <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm> the
+      is a <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm> the explicit
       <cxx-grammarterm><i>template-arguments</i></cxx-grammarterm> are those in
       the <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm>.
 
       When selecting a concept for a 
       <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>
       in a <cxx-grammarterm><i>template-introduction</i></cxx-grammarterm>, there
-      is one pending template argument for each 
+      is one template argument pattern for each 
       <cxx-grammarterm><i>introduced-parameter</i></cxx-grammarterm>.
 
       If an <cxx-grammarterm><i>introduced-parameter</i></cxx-grammarterm> is
-      preceded by an ellipsis, its corresponding pending template argument
+      preceded by an ellipsis, its corresponding template argument pattern
       is a pack expansion.
 
       <cxx-example class="inline">
@@ -6632,10 +6685,10 @@ void f(1C1);
 void f2(C1&lt;int&gt;);</code></pre>
   
       In the resolution of required by the declaration of <code>f1</code>, 
-      there is a single pending template argument and no explicit template 
+      there is a single template argument pattern and zero explicit template 
       arguments.
 
-      For <code>f2</code> there is a single pending template argument and the 
+      For <code>f2</code> there is a single template argument pattern and the 
       single explicit template argument, <code>int</code>.
       <cxx-codeblock>
     
@@ -6643,14 +6696,15 @@ void f2(C1&lt;int&gt;);</code></pre>
 C1{T, U} void f4(T);</code></pre>
   </cxx-codeblock>
       In the resolution required by the declaration of <code>f3</code>, there
-      is a single pending template argument. There are two in the resolution
-      required by <code>f2</code>.
+      is a single template argument pattern; there are two in the resolution
+      required by <code>f2</code>. There are zero explicit template arguments
+      in the resolutions of <code>f1</code> and <code>f2</code>.
       <cxx-codeblock>
     
     <pre><code>C2{...T} void f5();</code></pre>
   </cxx-codeblock>
-      There is a single pending template argument in the resolution of
-      <code>f2</code> and it is a pack expansion.
+      There is a single template argument pattern in the resolution of
+      <code>f2</code>, and it is a pack expansion.
       
     <span class="nowrap">— <em>end example</em> ]</span>
   
@@ -6658,24 +6712,23 @@ C1{T, U} void f4(T);</code></pre>
 
       <p para_num="5" id="temp.concept.resolve.5">
       For each concept <code>C</code> in the concept set, each template 
-      argument in the combined sequence of pending and explicit template 
-      arguments is matched against the corresponding template parameter
+      argument in the combined sequence of template argument patterns and explicit 
+      template arguments is matched against the corresponding template parameter
       in the <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> of 
       <code>C</code> as follows.
 
-      A pending template argument that is not a parameter pack matches a 
-      non-pack template parameter of any type and form. A pending template
-      argument that is a parameter pack matches a template parameter pack
+      A template argument pattern that is not a parameter pack matches a 
+      non-pack template parameter of any type and form. A template argument 
+      pattern that is a parameter pack matches a template parameter pack
       whose pattern is any form.
 
       The remaining explicit arguments are matched against parameters
       according in the usual way (<cxx-ref to="temp.arg"><a title="temp.arg" href="#temp.arg">14.4</a></cxx-ref>).
 
-      If any pending or template arguments do not match the corresponding
-      parameter, <code>C</code> is removed from the set.
-      </p>
-
-      <p para_num="6" id="temp.concept.resolve.6">If a single concept remains, that concept is the one selected
+      If any template argument patterns or explicit template arguments do not 
+      match the corresponding parameter, <code>C</code> is removed from the set.
+      
+      If a single concept remains, that concept is the one selected
       by concept resolution. Otherwise, the program is ill-formed. </p>
 
       <cxx-example class="inline">
@@ -6700,11 +6753,11 @@ Q{T} void q2();     // <i>error: no matching concept (mismatched template argume
       
     <span class="nowrap">— <em>end example</em> ]</span>
   </cxx-example>
-      <p para_num="7" id="temp.concept.resolve.7"></p>
+      <p para_num="6" id="temp.concept.resolve.6"></p>
 
-      <p para_num="8" id="temp.concept.resolve.8">
+      <p para_num="7" id="temp.concept.resolve.7">
       For the selected template, the set of template parameters corresponding
-      to the matched pending template arguments are called the
+      to the matched template argument patterns are called the
       <dfn>selected template parameters</dfn>. In 
       <cxx-grammarterm><i>template-introductions</i></cxx-grammarterm>, these
       are used to derive the declarations of introduced parameters.
@@ -6713,11 +6766,124 @@ Q{T} void q2();     // <i>error: no matching concept (mismatched template argume
     </section>
   </cxx-section> <!-- temp.concept.resolve -->
 
+
+    <!-- ==================
+         Concept resolution
+         ================== -->
+
+    <cxx-section id="temp.constr.form">
+    
+
+    <section>
+      <header><span class="section-number">14.9.6</span> <h1 data-bookmark-label="14.9.6 Constraint formation">Constraint formation</h1> <span style="float:right"><a href="#temp.constr.form">[temp.constr.form]</a></span></header>
+      
+      
+
+      <p para_num="1" id="temp.constr.form.1"> When a parameter of an abbreviated function template is declared
+      with a <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>,
+      or in the declaration of a 
+      <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>,
+      the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+      associates a <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>
+      with the respective function or template declaration.
+
+      The formation of that <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>
+      is derived from the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>,
+      the designated concept selected by concept resolution 
+      (<cxx-ref to="temp.concept.resolve"><a title="temp.concept.resolve" href="#temp.concept.resolve">14.9.5</a></cxx-ref>), and an 
+      invented template parameter or a declared template parameter, called
+      the <dfn>target template parameter</dfn>.
+      
+      When the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+      appears in the declaration of a function parameter, the target template
+      parameter is the one invented for the abbreviated function template
+      (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>).
+
+      When the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+      appears in the declaration of a 
+      <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>,
+      the target template parameter is the declared template parameter.
+      </p>
+
+      <p para_num="2" id="temp.constr.form.2">
+      Let <code>C</code> be the concept designated by the
+      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+      (including its <cxx-grammarterm><i>nested-name-specifier&gt;</i></cxx-grammarterm>,
+      if any), 
+      let <code>P</code> be the prototype parameter of the designated
+      concept, and
+      let <code>X</code> be the target template parameter.
+
+      Form a new template argument <code>A</code> from <code>X</code> as
+      as follows. If <code>X</code> declares a parameter pack, and
+      <code>P</code> declares a parameter pack, <code>A</code>
+      is pack expansion of <code>X</code>. Otherwise <code>A</code> is
+      a template argument referring to <code>X</code>.
+
+      Form a <cxx-grammarterm><i>template-id</i></cxx-grammarterm> <code>TT</code>
+      as follows. 
+
+      When the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+      is a <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm>, <code>TT</code>
+      is <code>C&lt;A, Args&gt;&gt;</code> where <code>Args</code> is the sequence of
+      <cxx-grammarterm><i>template-argument</i></cxx-grammarterm>s in the
+      <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm>.
+      
+      Otherwise, <code>TT</code> is <code>C&lt;A, Args&gt;&gt;</code>.
+
+      Form an expression <code>E</code> from <code>TT</code>. If <code>C</code>
+      refers to a variable concept, <code>E</code> is the
+      <cxx-grammarterm><i>id-expression</i></cxx-grammarterm> <code>TT</code>.
+      If <code>C</code> refers to a variable concept, <code>E</code> is
+      the function call <code>TT()</code>.
+      </p>
+
+      <p para_num="3" id="temp.constr.form.3">
+      The formed <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is
+      the fold expression <code>(E &amp;&amp; ...)</code> 
+      (<cxx-ref to="expr.prim.fold"><a title="expr.prim.fold" href="#expr.prim.fold"></a></cxx-ref>)
+      when the prototype parameter <code>P</code> declares a template 
+      parameter pack and the target template parameter <code>X</code> 
+      does not. Otherwise, the 
+      <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is
+      <code>E</code>.
+
+
+      <!-- TODO: Add examples for constrained parameters 
+           TODO: Give an example with a nested name specifier. -->
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C1 = true;
+template&lt;typename T, typename U&gt; concept bool C2() { return true; }
+template&lt;typename... Ts&gt; concept bool C4;
+
+template&lt;int&gt; struct X { };
+
+void f1(C1&amp;);     // <i>associates</i> C1&lt;T1&gt; <i>with</i> f1
+void f2(C2&lt;int&gt;); // <i>associates</i> C2&lt;T2, int&gt;() <i>with</i> f2
+void f4(C1...);   // <i>associates</i> (C1<t1> &amp;&amp; ...) <i>with</i> f4
+void f5(C4...);   // <i>associates</i> C4<t1...> <i>with f5</i>
+      </t1...></t1></code></pre>
+  
+      Here, <code>T1</code> and <code>T2</code> are invented type template 
+      parameters corresponding to the prototype parameter of their respective 
+      designated concepts. 
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  <p></p>
+
+
   
     </section>
   </cxx-section> <!-- temp.constr -->
 
 
+    </section>
+  </cxx-section>
     </section>
   </cxx-clause> <!-- temp -->
 
