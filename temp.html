@@ -1159,9 +1159,9 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
         <li> have return types and parameter lists that are equivalent using
              the rules described above to compare expressions involving 
              template parameters, and</li>
-        <li> have associated constraints that are equivalent using the rules 
-             in <cxx-ref to="temp.constr.expr"></cxx-ref> to
-             compare <cxx-grammarterm>constraint-expression</cxx-grammarterm>s.</li>
+        <li> have associated constraints (Clause <cxx-ref to="temp"></cxx-ref>) 
+             that are equivalent using the rules 
+             above to compare expressions involving template parameters.</li>
         </ul>
         </ins>
         </div>
@@ -1175,7 +1175,9 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
         <ins>
         <ul> 
         <li>one or more expressions that involve template parameters in the 
-        return types and parameter lists are functionally equivalent using 
+        return types <del>and</del><ins>,</ins> parameter lists<ins>, and
+        associated constraints, if any, (Clause <cxx-ref to="temp"></cxx-ref>)</ins> 
+        are functionally equivalent using 
         the rules described above to compare expressions involving template 
         parameters; or</li>
 
