@@ -89,7 +89,7 @@ template&lt;typename T&gt; void f() requires C&lt;T&gt;;
   </cxx-example>
   </div>
 
-  <p class="quoted" number="8"> 
+  <p class="quoted" number="9"> 
   When a <cxx-grammarterm>template-declaration</cxx-grammarterm> is
   declared by a template introduction (<cxx-ref to="temp.intro"></cxx-ref>), 
   its canonical declaration is a
@@ -573,6 +573,69 @@ Array&lt;double&gt; s2;    // <i>error:</i> Array <i>takes two template argument
     </cxx-codeblock>
     </cxx-example>
     </p>
+
+  <!-- TODO: Unify with temp.constr.form -->
+  <p>
+  A <cxx-grammarterm>template-introduction</cxx-grammarterm> associates
+  a <cxx-grammarterm>constraint-expression</cxx-grammarterm> with its 
+  <cxx-grammarterm>template-declaration</cxx-grammarterm>.
+  
+  The constraint is formed from the concept <code>C</code>, designated by the
+  <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> (including its
+  <cxx-grammarterm>nested-name-specifier</cxx-grammarterm>), 
+  and the sequence of introduced parameters.
+
+  Form a sequence of <cxx-grammarterm>template-argument</cxx-grammarterm>s
+  <code>Args</code> from the template parameters declared by the
+  <cxx-grammarterm>introduced-parameter</cxx-grammarterm>s
+  as follows. If an introduced template parameter <code>T</code> is declared 
+  as a template parameter pack, its corresponding 
+  <cxx-grammarterm>template-argument</cxx-grammarterm> is a pack 
+  expansion of <code>T</code>. Otherwise, its corresponding 
+  <cxx-grammarterm>template-argument</cxx-grammarterm>
+  matches the type an form of <code>T</code>.
+
+  Let <code>TT</code> be a <cxx-grammarterm>template-id</cxx-grammarterm>
+  formed as <code>C&lt;Args&gt;</code>.
+
+  The associated <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
+  the <cxx-grammarterm>id-expression</cxx-grammarterm> <code>TT</code>
+  if <code>C</code> refers to a variable concept. 
+  The associated <cxx-grammarterm>constraint-expression</cxx-grammarterm> is
+  the function call <code>TT()</code> if <code>C</code> refers to a variable 
+  concept.
+
+  <cxx-example class="inline">
+  <cxx-codeblock>
+template&lt;typename T, typename U&gt; concept bool C1 = true;
+template&lt;typename T, typename U&gt; concept bool C2() { return true; }
+template&lt;typename T, typename U = char&gt; concept bool C3 = true;
+template&lt;typename... Ts&gt; concept bool C4 = true;
+
+C1{A, B} struct X;
+C2{A, B} struct Y;
+C3{P} void f(P);
+C4{...Qs} void g(Qs&amp;&amp;...);
+
+template&lt;typename A, typename B&gt; 
+  requires C1&lt;A, B&gt; // <i>constraint associated by</i> C1{A, B}
+    struct X;       // <i>OK: redeclaration of</i> X
+
+template&lt;typename A, typename B&gt; 
+  requires C2&lt;A, B&gt;()  // <i>constraint associated by</i> C2{A, B}
+    struct Y;          // <i>OK: redeclaration of</i> Y
+
+template&lt;class P&gt;
+  requires C3&lt;P&gt; // <i>constraint associated by</i> C3{P}
+    void f(P);   // <i>OK: redeclaration of</i> f(P)
+
+template&lt;typename... Qs&gt;
+  requires C4&lt;Qs...&gt; // <i>constraint associated by</i> C4{...Qs}
+    void g(Qs&amp;&amp;...); // <i>OK: redeclaration of</i> g(Qs&amp;&amp;...)
+  </cxx-codeblock>
+  </cxx-example>
+  </p>
+
 
     <p> 
     <cxx-note>
