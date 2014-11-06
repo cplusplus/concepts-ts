@@ -1753,7 +1753,7 @@ template&lt;typename T&gt; requires C&lt;T&gt;
   </bnf-grammar>
 
       <p para_num="1" id="expr.prim.req.type.1">A <cxx-grammarterm><i>type-requirement</i></cxx-grammarterm> introduces 
-      type constraint (<cxx-ref to="temp.constr.atom.type"><a title="temp.constr.atom.type" href="#temp.constr.atom.type">14.9.2.3</a></cxx-ref>) for 
+      a type constraint (<cxx-ref to="temp.constr.atom.type"><a title="temp.constr.atom.type" href="#temp.constr.atom.type">14.9.2.3</a></cxx-ref>) for 
       the type named by its 
       <cxx-grammarterm><i>typename-specifier</i></cxx-grammarterm>.
       
@@ -3047,7 +3047,7 @@ template&lt;C T&gt;
   </cxx-example>
       <!-- </p> -->
 
-      <p para_num="8" id="dcl.spec.concept.8">A program shall not declares an explicit instantiation
+      <p para_num="8" id="dcl.spec.concept.8">A program that declares an explicit instantiation
       (<cxx-ref to="temp.explicit"><a title="temp.explicit" href="#temp.explicit">14.7.2</a></cxx-ref>), an explicit specialization 
       (<cxx-ref to="temp.expl.spec"><a title="temp.expl.spec" href="#temp.expl.spec">14.7.3</a></cxx-ref>), or a partial specialization 
       of a concept definition is ill-formed.
@@ -3613,7 +3613,7 @@ struct D : B {
     
 
     Modify paragraph 1 to extend the notion of declaration matching to
-    also include a function's associated constrains. Note that the
+    also include a function's associated constraints. Note that the
     example in the original text is omitted in this document.
 
     <p para_num="1" id="over.dcl.1" class="quoted">
@@ -3997,7 +3997,7 @@ template&lt;typename... Qs&gt;
   <!-- TODO: Update based on rewrite of temp.param -->
   <p para_num="9" id="temp.9" class="quoted">
   When a <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> (call it <code>T1</code>) is
-  explicitly declared with <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
+  explicitly declared with a <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
   that has constrained template parameters (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>), 
   its canonical declaration is a 
   <cxx-grammarterm><i>template-declaration</i></cxx-grammarterm> (call it <code>T2</code>)
@@ -4009,7 +4009,7 @@ template&lt;typename... Qs&gt;
   
   The declaration, <code>T2</code>, has a <cxx-grammarterm><i>requires-clause</i></cxx-grammarterm>
   whose <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> is the
-  conjunction of the <cxx-grammarterm><i>constraint-expressoin</i></cxx-grammarterm>s 
+  conjunction of the <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm>s 
   associated by the constrained template parameters in <code>T1</code>.
 
   The order in which the introduced constraints are evaluated is 
@@ -4622,7 +4622,7 @@ template&lt;typename T&gt;
 
 S3&lt;int&gt; x;                   // <i>error: constraints not satisfied</i>
 
-template&lt;tempalte&lt;C T&gt; class X&gt;
+template&lt;template&lt;C T&gt; class X&gt;
   struct S3 {
     X&lt;int&gt; x; // <i>error: constraints not satisfied</i>
 
