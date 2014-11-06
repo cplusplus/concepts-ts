@@ -309,12 +309,23 @@ template&lt;int N, typename T&gt; void f(Array&lt;T, N&gt;*); // OK: equivalent 
       </cxx-example>
       </p>
 
+      <p> The use of a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+      in a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> associates
+      a <cxx-grammarterm>constraint-expression</cxx-grammarterm> with the 
+      abbreviated function template. This 
+      <cxx-grammarterm>constraint-expression</cxx-grammarterm> is formed
+      according to the rules in <cxx-ref to="temp.constr.form"></cxx-ref>. 
 
-      <p> All placeholders introduced by
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> 
-      that are equivalent according to the definition in
-      <cxx-ref to="dcl.spec.constr"></cxx-ref> have the
-      same invented template parameter.
+      Two <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
+      are said to be <dfn>equivalent</dfn> if their associated
+      <cxx-grammarterm>constraint-expression</cxx-grammarterm>s are
+      equivalent according to the rules in 
+      <cxx-ref to="temp.over.link"></cxx-ref>.
+      </p>
+
+      <p> All placeholders introduced by equivalent
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s
+       have the same invented template parameter.
       <cxx-example class="inline">
       <cxx-codeblock>
 namespace N {
