@@ -2249,43 +2249,42 @@ C3&lt;int&gt;            /* <i>type constraint for</i> int::type */
       </p>
 
       <p> A concept is selected from a set of concepts based on a sequence
-      of <dfn>pending template arguments</dfn> and a sequence of explicit
+      of <dfn>template argument pattern</dfn>s and a sequence of explicit
       template arguments. 
 
-      A pending template argument is a placeholder used to deduce the type 
-      and form of a template parameter from a concept definition. A pending 
-      template argument can be a pack expansion.
+      A template argument pattern is a kind of template argument that is used 
+      to match the type and form of any template parameter from a concept 
+      definition. A template argument pattern can be a pack expansion.
 
-      A concept is selected from the set by matching the designated and
-      explicit template arguments against the template parameters of that
-      concept. 
-      </p>
+      A concept is selected from the set by matching the template
+      argument patterns and explicit template arguments against the template 
+      parameters of that concept. </p>
 
       <p>
       When selecting a concept for a 
       <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> 
-      there is a single pending template argument. 
+      there is a single template argument pattern. 
       
       If, the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> 
       appears in the declaration of a
       <cxx-grammarterm>constrained-parameter</cxx-grammarterm> 
       (<cxx-ref to="temp.param"></cxx-ref>) and is
-      followed by an ellipsis, the pending template argument is a pack
+      followed by an ellipsis, the template argument pattern is a pack
       expansion.
 
       If the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
-      is a <cxx-grammarterm>partial-concept-id</cxx-grammarterm> the
+      is a <cxx-grammarterm>partial-concept-id</cxx-grammarterm> the explicit
       <cxx-grammarterm>template-arguments</cxx-grammarterm> are those in
       the <cxx-grammarterm>partial-concept-id</cxx-grammarterm>.
 
       When selecting a concept for a 
       <cxx-grammarterm>concept-name</cxx-grammarterm>
       in a <cxx-grammarterm>template-introduction</cxx-grammarterm>, there
-      is one pending template argument for each 
+      is one template argument pattern for each 
       <cxx-grammarterm>introduced-parameter</cxx-grammarterm>.
 
       If an <cxx-grammarterm>introduced-parameter</cxx-grammarterm> is
-      preceded by an ellipsis, its corresponding pending template argument
+      preceded by an ellipsis, its corresponding template argument pattern
       is a pack expansion.
 
       <cxx-example class="inline">
@@ -2298,46 +2297,46 @@ void f(1C1);
 void f2(C1&lt;int&gt;);
       </cxx-codeblock>
       In the resolution of required by the declaration of <code>f1</code>, 
-      there is a single pending template argument and no explicit template 
+      there is a single template argument pattern and zero explicit template 
       arguments.
 
-      For <code>f2</code> there is a single pending template argument and the 
+      For <code>f2</code> there is a single template argument pattern and the 
       single explicit template argument, <code>int</code>.
       <cxx-codeblock>
 C1{T} void f3(T);
 C1{T, U} void f4(T);
       </cxx-codeblock>
       In the resolution required by the declaration of <code>f3</code>, there
-      is a single pending template argument. There are two in the resolution
-      required by <code>f2</code>.
+      is a single template argument pattern; there are two in the resolution
+      required by <code>f2</code>. There are zero explicit template arguments
+      in the resolutions of <code>f1</code> and <code>f2</code>.
       <cxx-codeblock>
 C2{...T} void f5();
       </cxx-codeblock>
-      There is a single pending template argument in the resolution of
-      <code>f2</code> and it is a pack expansion.
+      There is a single template argument pattern in the resolution of
+      <code>f2</code>, and it is a pack expansion.
       </cxx-example>
       </p>
 
       <p>
       For each concept <code>C</code> in the concept set, each template 
-      argument in the combined sequence of pending and explicit template 
-      arguments is matched against the corresponding template parameter
+      argument in the combined sequence of template argument patterns and explicit 
+      template arguments is matched against the corresponding template parameter
       in the <cxx-grammarterm>template-parameter-list</cxx-grammarterm> of 
       <code>C</code> as follows.
 
-      A pending template argument that is not a parameter pack matches a 
-      non-pack template parameter of any type and form. A pending template
-      argument that is a parameter pack matches a template parameter pack
+      A template argument pattern that is not a parameter pack matches a 
+      non-pack template parameter of any type and form. A template argument 
+      pattern that is a parameter pack matches a template parameter pack
       whose pattern is any form.
 
       The remaining explicit arguments are matched against parameters
       according in the usual way (<cxx-ref to="temp.arg"></cxx-ref>).
 
-      If any pending or template arguments do not match the corresponding
-      parameter, <code>C</code> is removed from the set.
-      </p>
-
-      <p>If a single concept remains, that concept is the one selected
+      If any template argument patterns or explicit template arguments do not 
+      match the corresponding parameter, <code>C</code> is removed from the set.
+      
+      If a single concept remains, that concept is the one selected
       by concept resolution. Otherwise, the program is ill-formed. </p>
 
       <cxx-example class="inline">
@@ -2360,7 +2359,7 @@ Q{T} void q2();     // <i>error: no matching concept (mismatched template argume
 
       <p>
       For the selected template, the set of template parameters corresponding
-      to the matched pending template arguments are called the
+      to the matched template argument patterns are called the
       <dfn>selected template parameters</dfn>. In 
       <cxx-grammarterm>template-introductions</cxx-grammarterm>, these
       are used to derive the declarations of introduced parameters.
