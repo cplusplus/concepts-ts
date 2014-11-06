@@ -941,19 +941,7 @@ pre {
         
           <ol>
             
-              <li><span class="marker">14.9.1</span><a href="#temp.constr.op">Logical operators</a>
-        
-          <ol>
-            
-              <li><span class="marker">14.9.1.1</span><a href="#temp.constr.op.conj">Conjunction</a>
-        
-      </li>
-            
-              <li><span class="marker">14.9.1.2</span><a href="#temp.constr.op.disj">Disjunction</a>
-        
-      </li>
-            
-          </ol>
+              <li><span class="marker">14.9.1</span><a href="#temp.constr.op">Logical operations</a>
         
       </li>
             
@@ -994,6 +982,10 @@ pre {
       </li>
             
               <li><span class="marker">14.9.4</span><a href="#temp.constr.expr">Constraint expressions</a>
+        
+      </li>
+            
+              <li><span class="marker">14.9.5</span><a href="#temp.concept.resolve">Concept resolution</a>
         
       </li>
             
@@ -1978,7 +1970,7 @@ template&lt;typename T&gt; concept bool C5 =
       A <cxx-grammarterm><i>nested-requirement</i></cxx-grammarterm> appends the 
       normalized form (<cxx-ref to="temp.constr.expr"><a title="temp.constr.expr" href="#temp.constr.expr">14.9.4</a></cxx-ref>) of its
       <cxx-grammarterm><i>constraint-expression</i></cxx-grammarterm> to the
-      conjunction (<cxx-ref to="temp.constr.op.conj"><a title="temp.constr.op.conj" href="#temp.constr.op.conj">14.9.1.1</a></cxx-ref>) of 
+      conjunction (<cxx-ref to="temp.constr.op.conj"><a title="temp.constr.op.conj" href="#temp.constr.op.conj"></a></cxx-ref>) of 
       constraints introduced by its enclosing
       <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm>.
 
@@ -4263,62 +4255,6 @@ C{T} D{U} void X&lt;T&gt;::f() { } // <i>OK: definition of</i> f()
     the <cxx-grammarterm><i>parameter-declaration</i></cxx-grammarterm> is a
     <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>.
     </p>
-    <!-- 
-    Update the wording in <cxx-ref in="cxx" to="temp.param"></cxx-ref>/2 as 
-    follows.
-
-    <p number="2" class="quoted">
-    There is no semantic difference between <code>class</code> and <code>typename</code> 
-    in a <cxx-grammarterm>template-parameter</cxx-grammarterm>. <code>typename</code> 
-    followed by an <cxx-grammarterm>unqualified-id</cxx-grammarterm> names a 
-    template type parameter. <code>typename</code> followed by a 
-    <cxx-grammarterm>qualified-id</cxx-grammarterm> denotes the
-    type in a non-type 
-    <del><cxx-grammarterm>parameter-declaration</cxx-grammarterm></del>
-    <ins><cxx-grammarterm>non-type-or-constrained-parameter</cxx-grammarterm></ins>. 
-    </p>
- 
-    Insert the following paragraphs after paragraph 3 in order to distinguish
-    between a template parameter that declares a non-type parameter and a
-    template-parameter that declares a constrained parameter, which may
-    declare a type parameter. 
-
-    <p number="3" class="quoted">
-    When a <cxx-grammarterm>non-type-or-constrained-parameter</cxx-grammarterm> has
-    the following form:
-    <bnf-grammar>
-    <bnf-alt>
-    constrained-type-specifier <bnf-opt>...</bnf-opt> <bnf-opt>identifier</bnf-opt>
-    </bnf-alt>
-    </bnf-grammar>
-    it declares a <dfn>constrained template parameter</dfn>.
-
-    Otherwise the parameter is a non-type 
-    <cxx-grammarterm>template-parameter</cxx-grammarterm>.
-    </p>
-
-    <p class="quoted">
-    If the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
-    appears in the the parameter type of a
-    <cxx-grammarterm>non-type-or-constrained-parameter</cxx-grammarterm>,
-    the program is ill-formed. The program is also ill-formed if a
-    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> appears
-    anywhere in the <cxx-grammarterm>basic-parameter-declaration</cxx-grammarterm> 
-    and the form of that declaration does not match the form above.
-    <cxx-example>
-    <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = true;
-template&lt;typename T&gt; concept bool D = true;
-
-template&lt;C T&gt; struct S1;       // <i>OK:</i> T <i>is a constrained template parameter</i>
-template&lt;int N&gt; struct S2;     // <i>OK:</i> N <i>is a non-type template parameter</i>
-template&lt;auto X&gt; struct S2;    // <i>error: auto in template parameter</i>
-template&lt;const D N&gt; void f1(); // <i>error:</i> D <i>is used with a const-qualifier</i>
-template&lt;D* N&gt; void f2();      // <i>error:</i> N <i>declares a pointer-to-</i>D
-    </cxx-codeblock>
-    </cxx-example>
-    </p>
-    -->
 
     Insert the following paragraphs after paragraph 8. These paragraphs
     define the meaning of a constrained template parameter.
@@ -4327,9 +4263,11 @@ template&lt;D* N&gt; void f2();      // <i>error:</i> N <i>declares a pointer-to
     A <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> declares a 
     template parameter whose type and form match that of the prototype 
     parameter of the concept designated by its 
-    <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>.
-    The designated concept is found using the rules in
-    <cxx-ref to="dcl.spec.constr"><a title="dcl.spec.constr" href="#dcl.spec.constr">7.1.6.5</a></cxx-ref>. 
+    <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+    The designated concept is selected by concept resolution
+    (<cxx-ref to="temp.concept.resolve"><a title="temp.concept.resolve" href="#temp.concept.resolve">14.9.5</a></cxx-ref>). 
+
+    <!-- TODO: Specify the associated constraint? -->
 
     Let <code>P</code> be the prototype parameter of the designated
     concept. The declared template parameter is determined by the type
@@ -4486,64 +4424,23 @@ template&lt;C1 T = 0&gt; struct S4;   // error: default argument is not a type</
     its <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm>.
 
 
-    <!-- FIXME: This is grorss... -->
     </p><p para_num="2" id="temp.intro.2"> The concept designated by the <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>
-    (call it <code>C</code>) is determined by the 
-    <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm>.
+    is selected by concept resolution 
+    (<cxx-ref to="temp.concept.resolve"><a title="temp.concept.resolve" href="#temp.concept.resolve">14.9.5</a></cxx-ref>).
 
-    The <cxx-grammarterm><i>concept-name</i></cxx-grammarterm> <code>C</code> 
-    refers to a set of concept definitions. A concept <code>CC</code> in
-    that set is viable if <code>CC</code> declares at least as many template 
-    parameters as there are <cxx-grammarterm><i>identifier</i></cxx-grammarterm>s in 
-    the <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm>, and
-    all template parameters in excess of the number of 
-    <cxx-grammarterm><i>identifier</i></cxx-grammarterm>s are declared with default 
-    template arguments.
-
-    If only one concept in that set is viable, that is the concept
-    designated by <code>C</code>. Otherwise, the program is ill-formed.
-
-    <cxx-example class="inline">
-    
-    <span class="nowrap">[ <em>Example:</em></span>
-    
-    It is possible to overload function concepts in such a way that a
-    <cxx-grammarterm><i>concept-name</i></cxx-grammarterm> can designate multiple
-    concepts.
-    <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool Eq() { return true; }             // <i>#1</i>
-template&lt;typename T, typename U&gt; concept bool Eq() { return true; } // <i>#2</i>
-
-Eq{T} void f1(T, T);    // <i>OK:</i> Eq{T} <i>designates #1</i>
-Eq{A, B} void f2(A, B); // <i>OK:</i> Eq{A, B} <i>designates #2</i></code></pre>
-  
-  <cxx-codeblock>
-    
-    <pre><code>template&lt;typename T&gt; concept bool C() { return true; }
-template&lt;int N&gt; concept bool C() { return true; }
-
-C{X} void f(); // <i>error: resolution of</i> C{X} <i>is ambiguous</i></code></pre>
-  </cxx-codeblock>
-    
-    <span class="nowrap">— <em>end example</em> ]</span>
-  
-    <p></p>
-
-    <p para_num="3" id="temp.intro.3">
+    </p><p para_num="3" id="temp.intro.3">
     For each 
     <cxx-grammarterm><i>introduced-parameter</i></cxx-grammarterm> <code>I</code> in an
     <cxx-grammarterm><i>introduction-list</i></cxx-grammarterm>,
-    and for its corresponding template parameter in the 
-    <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm>
-    of the designated concept (call it <code>P</code>), declare a new template 
+    and for its corresponding selected template parameter <code>P</code>
+    from the designated concept, declare a new template 
     parameter using the rules for declaring a constrained parameter in
     <cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref> by using <code>I</code> as a
     <cxx-grammarterm><i>declarator-id</i></cxx-grammarterm> and <code>P</code>
     as the prototype parameter.
 
-    However, if <code>I</code> contains an ellipsis, <code>P</code> shall
-    declare a template parameter pack.
+    If <code>I</code> contains an ellipsis, <code>P</code> declares a template 
+    parameter pack.
 
     <cxx-example class="inline">
     
@@ -5870,9 +5767,10 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
 
     <p para_num="4" id="temp.constr.4"> A constraint <code>P</code> is said to <dfn>subsume</dfn> another
     constraint <code>Q</code> if, informally, it can be determined that
-    <code>P</code> implies <code>Q</code>, up to the equivalence of
-    expressions and types in <code>P</code> and <code>Q</code>.
-    
+    <code>P</code> implies <code>Q</code>, up to the equivalence of types
+    and expressions in atomic constraints.
+    <cxx-ref to="temp.constr.atom"><a title="temp.constr.atom" href="#temp.constr.atom">14.9.2</a></cxx-ref>. 
+
     <cxx-note><span class="nowrap">[ <em>Note:</em></span>
     
     Subsumption does not determine, for example, if the predicate 
@@ -5882,9 +5780,10 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
     
     <span class="nowrap">— <em>end note</em> ]</span>
   </cxx-note>
-    The rules defining the subsumption relation are given for each kind
-    of constraint in
-    <cxx-ref to="temp.constr.op"><a title="temp.constr.op" href="#temp.constr.op">14.9.1</a></cxx-ref> and
+    
+    The rules determining when one constraint subsumes another is given
+    in <cxx-ref to="temp.constr.order"><a title="temp.constr.order" href="#temp.constr.order">14.9.3</a></cxx-ref>, and subsumption
+    rules for each kind of atomic constraint are given in
     <cxx-ref to="temp.constr.atom"><a title="temp.constr.atom" href="#temp.constr.atom">14.9.2</a></cxx-ref>.
     </p>
 
@@ -5892,94 +5791,58 @@ template&lt;&gt; void g(void*); // <i>OK: refers to #2</i></code></pre>
     
 
     <section>
-      <header><span class="section-number">14.9.1</span> <h1 data-bookmark-label="14.9.1 Logical operators">Logical operators</h1> <span style="float:right"><a href="#temp.constr.op">[temp.constr.op]</a></span></header>
+      <header><span class="section-number">14.9.1</span> <h1 data-bookmark-label="14.9.1 Logical operations">Logical operations</h1> <span style="float:right"><a href="#temp.constr.op">[temp.constr.op]</a></span></header>
       
       
 
       <p para_num="1" id="temp.constr.op.1"> There are two logical operations on constraints: conjunction
       and disjunction. </p>
 
+      <cxx-note><span class="nowrap">[ <em>Note:</em></span>
+     
+      These logical operations have no corresponding C++ syntax.
+      For the purpose of exposition, conjunction is spelled
+      using the symbol ∧, and disjunction is spelled using the 
+      symbol ∨. Grouping of constraints is shown using parentheses.
+      
+    <span class="nowrap">— <em>end note</em> ]</span>
+  </cxx-note>
 
-        <!-- ===========
-             Conjunction
-             =========== -->
 
-        <cxx-section id="temp.constr.op.conj">
+      <!-- ===========
+           Conjunction
+           =========== -->
+
+      <p para_num="2" id="temp.constr.op.2"> A <dfn>conjunction</dfn> is a logical operation taking two 
+      operands. A conjunction of constraints is satisfied if and only 
+      if both operands are satisfied. </p>
+
+      <!-- ===========
+           Disjunction
+           =========== -->
+
+      <p para_num="3" id="temp.constr.op.3"> A <dfn>disjunction</dfn> is a logical operation taking two 
+      operands. A disjunction of constraints is satisfied if and only 
+      if either operand is satisfied or both operands are satisfied. </p>
+
     
-
-    <section>
-      <header><span class="section-number">14.9.1.1</span> <h1 data-bookmark-label="14.9.1.1 Conjunction">Conjunction</h1> <span style="float:right"><a href="#temp.constr.op.conj">[temp.constr.op.conj]</a></span></header>
-      
-          
-
-          <p para_num="1" id="temp.constr.op.conj.1"> A <dfn>conjunction</dfn> is a logical operation taking two 
-          operands. A conjunction of constraints is satisfied if and only 
-          if both operands are satisfied. </p>
-
-          <p para_num="2" id="temp.constr.op.conj.2"> A conjunction of the constraints <code>P</code> 
-          and <code>Q</code> subsumes another constraint <code>R</code>
-          if and only if <code>P</code> subsumes <code>R</code>,
-          <code>Q</code> subsumes <code>R</code>, or both subsume
-          <code>R</code>.
-          </p>
-        
-    </section>
-  </cxx-section> <!-- temp.constr.op.conj -->
-
-
-        <!-- ===========
-             Disjunction
-             =========== -->
-
-        <cxx-section id="temp.constr.op.disj">
-    
-
-    <section>
-      <header><span class="section-number">14.9.1.2</span> <h1 data-bookmark-label="14.9.1.2 Disjunction">Disjunction</h1> <span style="float:right"><a href="#temp.constr.op.disj">[temp.constr.op.disj]</a></span></header>
-      
-          
-
-          <p para_num="1" id="temp.constr.op.disj.1"> A <dfn>disjunction</dfn> is a logical operation taking two 
-          operands. A disjunction of constraints is satisfied if and only 
-          if either operand is satisfied or both operands are satisfied. </p>
-
-          <p para_num="2" id="temp.constr.op.disj.2"> A disjunction of the constraints <code>P</code> and <code>Q</code>
-          subsumes another constraint <code>R</code> if and only if
-          <code>P</code> subsumes <code>R</code> and <code>Q</code> subsumes
-          <code>R</code>.
-          </p>
-        
-    </section>
-  </cxx-section> <!-- temp.constr.op.disj -->
-
-      
     </section>
   </cxx-section> <!-- temp.constr.op -->
 
-      <!-- =================
-          Atomic constraints
-          ================== -->
+    <!-- =================
+         Atomic constraints
+         ================== -->
 
-      <cxx-section id="temp.constr.atom">
+    <cxx-section id="temp.constr.atom">
     
 
     <section>
       <header><span class="section-number">14.9.2</span> <h1 data-bookmark-label="14.9.2 Atomic constraints">Atomic constraints</h1> <span style="float:right"><a href="#temp.constr.atom">[temp.constr.atom]</a></span></header>
       
-        
+      
 
-        <p para_num="1" id="temp.constr.atom.1"> Any constraint that is not a conjunction or disjunction is an
-        <dfn>atomic constraint</dfn>. </p>
-
-        <p para_num="2" id="temp.constr.atom.2"> An atomic constraint <code>P</code> subsumes a disjunction
-        of the constraints <code>Q</code> and <code>R</code> if and only
-        if <code>P</code> subsumes <code>Q</code>, <code>P</code>
-        subsumes <code>R</code>, or both. </p>
-
-        <p para_num="3" id="temp.constr.atom.3"> An atomic constraint <code>P</code> subsumes a conjunction
-        of the constraints <code>Q</code> and <code>R</code> if and only
-        if <code>P</code> subsumes <code>Q</code> and <code>P</code>
-        subsumes <code>R</code>.</p>
+      <p para_num="1" id="temp.constr.atom.1"> Any constraint that is not a conjunction or disjunction is an
+      <dfn>atomic constraint</dfn>. </p>
 
         <!-- =====================
              Predicate constraints
@@ -6413,7 +6276,76 @@ void g(const C&);
       
       
 
-      <p para_num="1" id="temp.constr.order.1">The subsumption relation defines a partial ordering on constraints. 
+      <p para_num="1" id="temp.constr.order.1">
+      In order to determine if a constraint <code>P</code> subsumes a constraint
+      <code>Q</code>, transform <code>P</code> into disjunctive normal
+      form (a disjunction of clauses, each of which is a conjunction
+      of atomic propositions), and transform <code>Q</code> into conjunctive
+      normal form (a conjunction of clauses, each of which is a disjunction
+      of atomic propositions).
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      Let <code>A</code>, <code>B</code>, and <code>C</code> be atomic
+      constraints. 
+
+      The constraint 
+      <code>A</code> ∧ (<code>B</code> ∨ <code>C</code>) 
+      is in conjunctive normal form.
+
+      Its conjunctive clauses are <code>A</code> and
+      (<code>B</code> ∨ <code>C</code>).
+      
+      The disjunctive normal form of the constraint
+      <code>A</code> ∧ (<code>B</code> ∨ <code>C</code>) 
+      is
+      (<code>A</code> ∧ <code>B</code>) ∨ (<code>A</code> ∧ <code>C</code>).
+      
+      Its disjunctive clauses are 
+      (<code>A</code> ∧ <code>B</code>) and
+      (<code>A</code> ∧ <code>C</code>).
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  </cxx-example>
+      
+      The disjunctive normal form of <code>P</code> subsumes the 
+      conjunctive normal form of <code>Q</code>
+      if and only if every disjunctive clause in 
+      <code>P<sub><i>i</i></sub></code> subsumes each 
+      conjunctive clause in <code>Q<sub><i>j</i></sub></code>. 
+
+      A disjunctive clause
+      <code>P<sub><i>i</i></sub></code> subsumes a conjunctive clause 
+      <code>Q<sub><i>j</i></sub></code> when each atomic constraint in 
+      <code>P<sub><i>i</i></sub></code> subsumes any atomic constraint in
+      <code>Q<sub><i>j</i></sub></code>.
+
+      The rules for determining whether one atomic constraint subsumes
+      another are defined for each kind of atomic constraint
+      (<cxx-ref to="temp.constr.atom"><a title="temp.constr.atom" href="#temp.constr.atom">14.9.2</a></cxx-ref>).
+
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      Let <code>A</code> and <code>B</code> be
+      predicate constraints (<cxx-ref to="temp.constr.atom.pred"><a title="temp.constr.atom.pred" href="#temp.constr.atom.pred">14.9.2.1</a></cxx-ref>).
+
+      The constraint <code>A ∧ B</code> subsumes <code>A</code>, 
+      but <code>A</code> does not subsume <code>A ∧ B</code>. 
+
+      The constraint <code>A</code> subsumes <code>A ∨ B</code>, but
+      <code>A ∨ B</code> does not subsume code <code>A</code>. 
+
+      Also, any constraint <code>P</code> subsumes itself.
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  </cxx-example>
+      </p>
+
+
+      <p para_num="2" id="temp.constr.order.2">The subsumption relation defines a partial ordering on constraints. 
       This partial ordering is used to determine </p>
 
       <ul>
@@ -6429,8 +6361,8 @@ void g(const C&);
            (<cxx-ref to="temp.func.order"><a title="temp.func.order" href="#temp.func.order">14.5.6.2</a></cxx-ref>).</li>
       </ul>
 
-      <p para_num="2" id="temp.constr.order.2"> When two declarations <code>D1</code> and <code>D2</code> are
-      partially ordered by their constraints, <code>D1</code> is 
+      <p para_num="3" id="temp.constr.order.3"> When two declarations <code>D1</code> and <code>D2</code> are
+      partially ordered by their normalized constraints, <code>D1</code> is 
       <dfn>more constrained</dfn> than <code>D2</code> if
 
       </p><ul>
@@ -6465,7 +6397,7 @@ g(0);       // <i>selects #4</i></code></pre>
     <span class="nowrap">— <em>end example</em> ]</span>
   </cxx-example>
 
-      <p para_num="3" id="temp.constr.order.3"> A declaration <code>D1</code> is <dfn>at least as constrained</dfn>
+      <p para_num="4" id="temp.constr.order.4"> A declaration <code>D1</code> is <dfn>at least as constrained</dfn>
       as another declaration <code>D2</code> when <code>D1</code> is more
       constrained than <code>D2</code> and <code>D2</code> is not more
       constrained than <code>D1</code>. </p>
@@ -6514,7 +6446,7 @@ g(0);       // <i>selects #4</i></code></pre>
       <code>P</code>.</li>
 
       <li> The normalized form of <code>P || Q</code> is
-      the disjunction (<cxx-ref to="temp.constr.op.disj"><a title="temp.constr.op.disj" href="#temp.constr.op.disj">14.9.1.2</a></cxx-ref>) of the 
+      the disjunction (<cxx-ref to="temp.constr.op.disj"><a title="temp.constr.op.disj" href="#temp.constr.op.disj"></a></cxx-ref>) of the 
       normalized form of <code>P</code> and the normalized form of 
       <code>Q</code>.</li>
 
@@ -6523,7 +6455,7 @@ g(0);       // <i>selects #4</i></code></pre>
       <code>operator||</code>, the program is ill-formed.
 
       <li> The normalized form of <code>P &amp;&amp; Q</code> is
-      the conjunction (<cxx-ref to="temp.constr.op.conj"><a title="temp.constr.op.conj" href="#temp.constr.op.conj">14.9.1.1</a></cxx-ref>) of the 
+      the conjunction (<cxx-ref to="temp.constr.op.conj"><a title="temp.constr.op.conj" href="#temp.constr.op.conj"></a></cxx-ref>) of the 
       normalized form of <code>P</code> and the normalized form of
       <code>Q</code>.
 
@@ -6550,7 +6482,7 @@ g(0);       // <i>selects #4</i></code></pre>
       <li> The normalized form of a 
       <cxx-grammarterm><i>requires-expression</i></cxx-grammarterm> 
       (<cxx-ref to="expr.prim.req"><a title="expr.prim.req" href="#expr.prim.req">5.1.3</a></cxx-ref>) is
-      the conjunction of constraints (<cxx-ref to="temp.constr.op.conj"><a title="temp.constr.op.conj" href="#temp.constr.op.conj">14.9.1.1</a></cxx-ref>) 
+      the conjunction of constraints (<cxx-ref to="temp.constr.op.conj"><a title="temp.constr.op.conj" href="#temp.constr.op.conj"></a></cxx-ref>) 
       introduced by the body of that expression.
       </li>
 
@@ -6614,6 +6546,172 @@ C3&lt;int&gt;            /* <i>type constraint for</i> int::type */
     
     </section>
   </cxx-section> <!-- temp.constr.expr -->
+
+
+    <!-- ==================
+         Concept resolution
+         ================== -->
+
+    <cxx-section id="temp.concept.resolve">
+    
+
+    <section>
+      <header><span class="section-number">14.9.5</span> <h1 data-bookmark-label="14.9.5 Concept resolution">Concept resolution</h1> <span style="float:right"><a href="#temp.concept.resolve">[temp.concept.resolve]</a></span></header>
+      
+      
+
+      <p para_num="1" id="temp.concept.resolve.1"> Whenever a <cxx-grammarterm><i>identifier</i></cxx-grammarterm> is a
+      <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>, it is necessary to
+      determine a single concept referred to by the use of that name.
+
+      </p><p para_num="2" id="temp.concept.resolve.2"> <dfn>Concept resolution</dfn> is the process of selecting a concept 
+      from a set of concept definitions referred to by a concept name.
+      
+      Concept resolution is performed when a 
+      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> appears in
+      the declaration of an abbreviated function (<cxx-ref to="dcl.fct"><a title="dcl.fct" href="#dcl.fct">8.3.5</a></cxx-ref>)
+      or generic lambda (<cxx-ref to="expr.prim.lambda"><a title="expr.prim.lambda" href="#expr.prim.lambda">5.1.2</a></cxx-ref>),
+      in the <cxx-grammarterm><i>trailing-return-type</i></cxx-grammarterm> of a
+      <cxx-grammarterm><i>compound-requirement</i></cxx-grammarterm>, the
+      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> of a
+      <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm>, or
+      in a <cxx-grammarterm><i>template-introduction</i></cxx-grammarterm>.
+      </p>
+
+      <p para_num="3" id="temp.concept.resolve.3"> A concept is selected from a set of concepts based on a sequence
+      of <dfn>pending template arguments</dfn> and a sequence of explicit
+      template arguments. 
+
+      A pending template argument is a placeholder used to deduce the type 
+      and form of a template parameter from a concept definition. A pending 
+      template argument can be a pack expansion.
+
+      A concept is selected from the set by matching the designated and
+      explicit template arguments against the template parameters of that
+      concept. 
+      </p>
+
+      <p para_num="4" id="temp.concept.resolve.4">
+      When selecting a concept for a 
+      <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> 
+      there is a single pending template argument. 
+      
+      If, the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm> 
+      appears in the declaration of a
+      <cxx-grammarterm><i>constrained-parameter</i></cxx-grammarterm> 
+      (<cxx-ref to="temp.param"><a title="temp.param" href="#temp.param">14.1</a></cxx-ref>) and is
+      followed by an ellipsis, the pending template argument is a pack
+      expansion.
+
+      If the <cxx-grammarterm><i>constrained-type-specifier</i></cxx-grammarterm>
+      is a <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm> the
+      <cxx-grammarterm><i>template-arguments</i></cxx-grammarterm> are those in
+      the <cxx-grammarterm><i>partial-concept-id</i></cxx-grammarterm>.
+
+      When selecting a concept for a 
+      <cxx-grammarterm><i>concept-name</i></cxx-grammarterm>
+      in a <cxx-grammarterm><i>template-introduction</i></cxx-grammarterm>, there
+      is one pending template argument for each 
+      <cxx-grammarterm><i>introduced-parameter</i></cxx-grammarterm>.
+
+      If an <cxx-grammarterm><i>introduced-parameter</i></cxx-grammarterm> is
+      preceded by an ellipsis, its corresponding pending template argument
+      is a pack expansion.
+
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    
+    </cxx-codeblock></cxx-example></p><pre><code>template&lt;typename T&gt; concept bool C1() { return true; }
+template&lt;typename T, typename U&gt; concept bool C1() { return true; }
+template&lt;typename... T&gt; concept bool C2() { return true; }
+
+void f(1C1); 
+void f2(C1&lt;int&gt;);</code></pre>
+  
+      In the resolution of required by the declaration of <code>f1</code>, 
+      there is a single pending template argument and no explicit template 
+      arguments.
+
+      For <code>f2</code> there is a single pending template argument and the 
+      single explicit template argument, <code>int</code>.
+      <cxx-codeblock>
+    
+    <pre><code>C1{T} void f3(T);
+C1{T, U} void f4(T);</code></pre>
+  </cxx-codeblock>
+      In the resolution required by the declaration of <code>f3</code>, there
+      is a single pending template argument. There are two in the resolution
+      required by <code>f2</code>.
+      <cxx-codeblock>
+    
+    <pre><code>C2{...T} void f5();</code></pre>
+  </cxx-codeblock>
+      There is a single pending template argument in the resolution of
+      <code>f2</code> and it is a pack expansion.
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  
+      <p></p>
+
+      <p para_num="5" id="temp.concept.resolve.5">
+      For each concept <code>C</code> in the concept set, each template 
+      argument in the combined sequence of pending and explicit template 
+      arguments is matched against the corresponding template parameter
+      in the <cxx-grammarterm><i>template-parameter-list</i></cxx-grammarterm> of 
+      <code>C</code> as follows.
+
+      A pending template argument that is not a parameter pack matches a 
+      non-pack template parameter of any type and form. A pending template
+      argument that is a parameter pack matches a template parameter pack
+      whose pattern is any form.
+
+      The remaining explicit arguments are matched against parameters
+      according in the usual way (<cxx-ref to="temp.arg"><a title="temp.arg" href="#temp.arg">14.4</a></cxx-ref>).
+
+      If any pending or template arguments do not match the corresponding
+      parameter, <code>C</code> is removed from the set.
+      </p>
+
+      <p para_num="6" id="temp.concept.resolve.6">If a single concept remains, that concept is the one selected
+      by concept resolution. Otherwise, the program is ill-formed. </p>
+
+      <cxx-example class="inline">
+    
+    <span class="nowrap">[ <em>Example:</em></span>
+    
+      <cxx-codeblock>
+    
+    <pre><code>template&lt;typename T&gt; concept bool C() { return true; }             // <i>#1</i>
+template&lt;typename T, typename U&gt; concept bool C() { return true; } // <i>#2</i>
+template&lt;typename T&gt; concept bool P() { return true; }
+template&lt;int T&gt; concept bool P() { return true; }
+template&lt;&lt;typename... Ts&gt; concept bool Q = true;
+
+void f1(const C*);  // <i>OK:</i> C <i>selects #1</i>
+void f2(C&lt;char&gt;);   // <i>OK:</i> C&lt;char&gt; <i>selects #2</i>
+void f3(C&lt;3&gt;);      // <i>error: no matching concept for</i> C&lt;3&gt; <i>(mismatched template arguments)</i>
+void g1(P);         // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>refers to two concepts)</i>
+Q{...Ts} void q1(); // <i>OK: selects</i> Q
+Q{T} void q2();     // <i>error: no matching concept (mismatched template arguments)</i></code></pre>
+  </cxx-codeblock>
+      
+    <span class="nowrap">— <em>end example</em> ]</span>
+  </cxx-example>
+      <p para_num="7" id="temp.concept.resolve.7"></p>
+
+      <p para_num="8" id="temp.concept.resolve.8">
+      For the selected template, the set of template parameters corresponding
+      to the matched pending template arguments are called the
+      <dfn>selected template parameters</dfn>. In 
+      <cxx-grammarterm><i>template-introductions</i></cxx-grammarterm>, these
+      are used to derive the declarations of introduced parameters.
+      </p>
+    
+    </section>
+  </cxx-section> <!-- temp.concept.resolve -->
 
   
     </section>
