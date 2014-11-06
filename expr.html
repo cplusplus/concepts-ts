@@ -22,12 +22,14 @@
   <cxx-section id="expr.prim.general">
     <h1>General</h1>
 
-    In this section, add the 
+    In this section, add the
+    <cxx-grammarterm>fold-expression</cxx-grammarterm> and
     <cxx-grammarterm>requires-expression</cxx-grammarterm> to the rule for 
     <cxx-grammarterm>primary-expression</cxx-grammarterm>.
     
     <bnf-grammar>
       <bnf-rule>primary-expression</bnf-rule>
+        <ins><bnf-alt>fold-expression</bnf-alt></ins>
         <ins><bnf-alt>requires-expression</bnf-alt></ins>
     </bnf-grammar>
 
@@ -170,6 +172,96 @@ struct Fun {
 
     </cxx-section> <!-- expr.prim.lambda -->
 
+  <!-- ====================
+       Requires expressions
+       ==================== -->
+
+  <cxx-section id="expr.prim.fold">
+    <h1>Fold expressions</h1>
+
+    <p>A fold expression allows a template parameter pack
+    (<cxx-ref in="cxx" to="temp.variadic"></cxx-ref>) over a binary
+    operator.</p>
+
+    <bnf-grammar>
+      <bnf-rule>fold-expression</bnf-rule>
+        <bnf-alt><bnf-terminal>(</bnf-terminal> cast-expression fold-operator <bnf-terminal>...</bnf-terminal> <bnf-terminal>)</bnf-terminal></bnf-alt>
+        <bnf-alt><bnf-terminal>(</bnf-terminal> <bnf-terminal>...</bnf-terminal> fold-operator cast-expression <bnf-terminal>)</bnf-terminal></bnf-alt>
+        <bnf-alt><bnf-terminal>(</bnf-terminal> cast-expression fold-operator <bnf-terminal>...</bnf-terminal> fold-operator cast-expression <bnf-terminal>)</bnf-terminal></bnf-alt>
+
+      <bnf-rule oneof="oneof">fold-operator</bnf-rule>
+	      <bnf-alt><bnf-terminal>+ - * / % ^ &amp; | ~ = &lt; &gt; &lt;&lt; &gt;&gt;</bnf-terminal></bnf-alt>
+	      <bnf-alt><bnf-terminal>+= -= *= /= %= ^= &amp;= |= &lt;&lt;= &gt;&gt;=</bnf-terminal></bnf-alt>
+	      <bnf-alt><bnf-terminal>== != &lt;= &gt;= &amp;&amp; || , .* ->*</bnf-terminal></bnf-alt>
+    </bnf-grammar>
+
+    <p>An expression of the form <code>(e op ...)</code> where op is a
+    <cxx-grammarterm>fold-operator</cxx-grammarterm> is called a
+    <cxx-grammarterm>left fold</cxx-grammarterm>. The
+    <cxx-grammarterm>cast-expression</cxx-grammarterm> <code>e</code> shall
+    contain an unexpanded parameter pack. A left fold expands as expression
+    <code>((e$1 op e$2) op ...) op e$n</code> where <code>$n</code> is an index
+    into the unexpanded parameter pack.</p>
+
+    <p>An expression of the form <code>(... op e)</code> where <code>op</code>
+    is a <cxx-grammarterm>fold-operator</cxx-grammarterm> is called a
+    <cxx-grammarterm>right fold</cxx-grammarterm>. The
+    <cxx-grammarterm>cast-expression</cxx-grammarterm> <code>e</code> shall
+    contain an unexpanded parameter pack. A right fold expands as expression
+    <code>e$1 op (... (e$n-1 op e$n))</code> where <code>$n</code> is an index
+    into the unexpanded parameter pack.</p>
+
+    <cxx-example>
+      <cxx-codeblock>
+template&lt;typename... args=""&gt;
+  bool all(Args... args) { return (args &amp;&amp; ...); }
+
+all(true, true, true, false);
+      </cxx-codeblock>
+    <p>Within the instantiation of <code>all</code>, the returned expression
+    expands to
+    <code>((true &amp;&amp; true) &amp;&amp; true) &amp;&amp; false</code>,
+    which evalutes to <code>false</code>.</p>
+    </cxx-example>
+
+    <p>In an expression of the form <code>(e1 op ... op e2)</code> either
+    <code>e1</code> shall contain an unexpanded parameter pack or
+    <code>e2</code> shall contain an unexpanded parameter pack, but not both.
+    If <code>e1</code> contains an unexpanded parameter pack, the expression is
+    a left fold and <code>e2</code> is the rightmost operand the expansion. If
+    <code>e2</code> contains an unexpanded parameter pack, the expression is a
+    right fold and <code>e1</code> is the leftmost operand in the expansion.
+    <cxx-example class="inline">
+      <cxx-codeblock>
+template&lt;typename... Args&gt;
+  bool f(Args... args) { 
+    return (true + ... + args); // OK
+  } 
+
+template&lt;typename... Args&gt;
+  bool f(Args... args) { 
+    return (args &amp;&amp; ... &amp;&amp; args); // error: both operands contain unexpanded parameter packs
+       </cxx-codeblock>
+     </cxx-example>
+     </p>
+
+     <p>When the unexpanded parameter pack in a fold expression expands to an
+     empty sequence, the value the expression is shown in
+     <cxx-ref to="folding"></cxx-ref>; the program is ill-formed if the operator is not
+     listed in <cxx-ref to="folding"></cxx-ref>.</p>
+
+     <table is="cxx-table" id="folding">
+       <caption>Value of folding empty sequences</caption>
+       <tr><th>Operator</th><th>Value when parameter pack is empty</th></tr>
+       <tr><td><code>*</code></td><td><code>1</code></td></tr>
+       <tr><td><code>+</code></td><td><code>0</code></td></tr>
+       <tr><td><code>&amp;</code></td><td><code>-1</code></td></tr>
+       <tr><td><code>|</code></td><td><code>0</code></td></tr>
+       <tr><td><code>&amp;&amp;</code></td><td><code>true</code></td></tr>
+       <tr><td><code>||</code></td><td><code>false</code></td></tr>
+       <tr><td><code>,</code></td><td><code>void()</code></td></tr>
+     </table>
+  </cxx-section> <!-- expr.prim.fold -->
 
   <!-- ====================
        Requires expressions

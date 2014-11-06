@@ -39,12 +39,15 @@ limitations under the License.
 <!-- BNF rule
   Defines a BNF production.
 -->
-<polymer-element name="bnf-rule" noscript>
+<polymer-element name="bnf-rule" attributes="oneof" noscript>
   <template>
     <style>
       :host { display: block; margin-left: .6in; }
     </style>
     <content></content>:
+    <template if="{{oneof}}">
+      <span style="font-style: normal">one of</span>
+    </template>
   </template>
 </polymer-element>
 
