@@ -1087,7 +1087,7 @@ template&lt;typename T&gt;
   struct S {
     friend void f1() requires true;  // <i>OK</i>
     friend void f2() requires C1&lt;T&gt;; // <i>OK</i>
-    friend void g0&lt;T&gt;(T) requires C&lt;T>; // <i>error: constrained friend specialization</i>
+    friend void g0&lt;T&gt;(T) requires C1&lt;T>; // <i>error: constrained friend specialization</i>
     friend void g1&lt;T&gt;(T);            // <i>OK</i>
     friend void g2&lt;T&gt;(T);            // <i>ill-formed, no diagnostic required</i>
   };
@@ -1097,9 +1097,9 @@ void f2() requires C1&ltint>; // <i>friend of S&lt;int></i>
       </cxx-codeblock>
       The friend declaration of <code>g2</code> is ill-formed, no
       diagnostic required, because no valid specialization of <code>S</code>
-      can be generated: for all <code>T</code> there is no <code>g2&lt;T></code>
-      for which the constraints are satisfied, so template argument
-      deduction (<cxx-ref to="temp.deduct.decl"></cxx-ref>) fails.
+      can be generated: the constraint on <code>g2</code> can never
+      be satisfied, so template argument deduction
+      (<cxx-ref to="temp.deduct.decl"></cxx-ref>) will always fail.
       </cxx-example>
       </p>
       <p class="quoted">
