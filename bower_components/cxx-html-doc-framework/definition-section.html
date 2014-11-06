@@ -18,11 +18,12 @@ limitations under the License.
     and definitions" section that gets numbered as if each term is a section,
     but doesn't make them show up in the table of contents.
 -->
-<polymer-element name="cxx-definition-section" extends="dl">
+<polymer-element name="cxx-definition-section">
   <template>
     <style>
       polyfill-next-selector { content: 'dt'; }
-      ::content dt { font-weight: bold; }
+      ::content dt { font-weight: bold; margin-top: 1.34em;
+                     page-break-inside: avoid; }
       polyfill-next-selector { content: 'dd'; }
       ::content dd { margin-left: 0; }
     </style>
