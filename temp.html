@@ -719,7 +719,7 @@ S&lt;bool&gt;* p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;*
 
     <p class="quoted">
     When a <cxx-grammarterm>simple-template-id</cxx-grammarterm> names
-    a constrained non-template function or a template template parameter,
+    a constrained non-function template or a template template parameter,
     but not a member template that is a member of an unknown specialization
     (<cxx-ref in="cxx" to="temp.res"></cxx-ref>),
     and all <cxx-grammarterm>template-argument</cxx-grammarterm>s in the
@@ -1470,7 +1470,7 @@ template void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
       <p number="12" class="quoted">
       The <cxx-grammarterm>template-arguments</cxx-grammarterm> in the
       <cxx-grammarterm>template-id</cxx-grammarterm> of an explicit 
-      specialization of a constrained non-template function shall satisfy the 
+      specialization of a constrained non-function template shall satisfy the 
       associated constraints of that template, if any 
       (<cxx-ref to="temp.constr"></cxx-ref>).
 
