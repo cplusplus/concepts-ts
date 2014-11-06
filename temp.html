@@ -113,32 +113,71 @@ template&lt;typename T&gt; void f() requires C&lt;T&gt;;
   </cxx-example>
   </div>
 
-  <p> The order in which the subexpressions of the associated constraints
-  are composed is the left-to-right order of occurrences in which
+  <p class="quoted"> 
+  The order in which the subexpressions of the associated constraints
+  are composed is the left-to-right order in which
   <cxx-grammarterm>template-introduction</cxx-grammarterm>s,
   <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s, and
   <cxx-grammarterm>requires-clause</cxx-grammarterm>s occur in the
   declaration.
+
+  <cxx-note>
+  A program containing two declarations whose associated constraints are 
+  functionally equivalent but not equivalent 
+  (<cxx-ref to="temp.over.link"></cxx-ref>) is ill-formed, no diagnostic
+  required.
+  </cxx-note>
 
   <cxx-example>
   <cxx-codeblock>
 template&lt;typename T&gt; concept bool C1 = true;
 template&lt;typename T&gt; concept bool C2 = true;
 
-C1{T} void f1(C2);
-template&lt;typenaem T, typename U&gt; 
-  requires C1&lt;T&gt; and C2&lt;U&gt; 
-    void f1(T, U); // redeclaration of f1
-
-C1{T} void f2(T) requires C2&lt;T&gt;;
-template&lt;typename T&gt;
-  requires C1&lt;T&gt; && C2&lt;T&gt;
-    void f2(); // redeclaration of f2
+C1{T} void f1(C2);                                                      // <i>#1</i>
+template&lt;typename T, typename U&gt; requires C1&lt;T&gt; && C2&lt;U&gt; void f1(T, U); // <i>#2</i>
   </cxx-codeblock>
+
+In the associated constraints of #1, the constraint associated by the 
+<cxx-grammarterm>template-introduction</cxx-grammarterm> <code>C1{T}</code>
+occurs before the constraint associated by the
+<cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> in the
+<cxx-grammarterm>parameter-declaration</cxx-grammarterm>
+<code>C2</code>. 
+
+The resulting <cxx-grammarterm>constraint-expression</cxx-grammarterm> is 
+equivalent to the <cxx-grammarterm>requires-clause</cxx-grammarterm> in
+#2.
+
+  <cxx-codeblock>
+C1{T} void f2(T) requires C2&lt;T&gt;;                        // <i>#1</i>
+template&lt;typename T&gt; requires C1&lt;T&gt; &amp;&amp; C2&lt;T&gt; void f2(); // <i>#2</i>
+  </cxx-codeblock>
+The associated constraints of #1 and #2 are equivalent.
+
+  <cxx-codeblock>
+template&lt;C1 T&gt; requires C2&lt;T&gt; void f3(T);                // <i>#1</i>
+template&lt;C1 T&gt; void f3(T) requires C2&lt;T&gt;;                // <i>#2</i>
+template&lt;typename T&gt; requires C1&lt;T&gt; && C2&lt;T&gt; void f3(T); // <i>#3</i>
+template&lt;typename T&gt; void f3(T) requires C1&lt;T&gt; && C2&lt;T&gt;; // <i>#4</i>
+  </cxx-codeblock>
+The associated constraints of #1, #2, #3, and #4 are equivalent. The 
+<cxx-grammarterm>constraint-expression</cxx-grammarterm> associated by
+<code>C1</code> occurs before the constraint associated by 
+<code>C2</code> in each declaration.
+
+  <cxx-codeblock>
+template&lt;C1 T&gt; requires C2&lt;T&gt; void f5();
+template&lt;C2 T&gt; requires C1&lt;T&gt; void f5(); // <i>error: constraints are functionally equivalent but not equivalent</i>
+  </cxx-codeblock>
+
+The associated constraints of the first declaration are
+<code>C1&lt;T&gt; &amp;&amp; C2&lt;T&gt;</code>, and those of the second are
+<code>C2&lt;T&gt; &amp;&amp; C1&lt;T&gt;</code>.
   </cxx-example>
 
+  </p>
 
-
+<!--
   <p class="quoted" number="9"> 
   When a <cxx-grammarterm>template-declaration</cxx-grammarterm> is
   declared by a template introduction (<cxx-ref to="temp.intro"></cxx-ref>), 
@@ -204,7 +243,7 @@ template&lt;typename... Qs&gt;
   </cxx-example>
   </p>
 
-  <!-- TODO: Update based on rewrite of temp.param -->
+  <!--
   <p class="quoted">
   When a <cxx-grammarterm>template-declaration</cxx-grammarterm> (call it <code>T1</code>) is
   explicitly declared with <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
