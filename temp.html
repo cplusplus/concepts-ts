@@ -631,7 +631,7 @@ S&lt;bool&gt;* p; // <i>the type of</i> p <i>i</i>s S&lt;bool, int&gt;*
 
     <p class="quoted">
     When a <cxx-grammarterm>simple-template-id</cxx-grammarterm> names
-    a constrained non-template function or a template template parameter,
+    a constrained non-function template or a template template parameter,
     but not a member template that is a member of an unknown specialization
     (<cxx-ref in="cxx" to="temp.res"></cxx-ref>),
     and all <cxx-grammarterm>template-argument</cxx-grammarterm>s in the
@@ -763,6 +763,21 @@ S&lt;Z&gt; s3; // OK: <i>the constraints of P subsume those of</i> Z
   <cxx-section id="temp.decls" number="5">
     <h1>Template declarations</h1>
 
+    Modify paragraph 2 to indicate that associated constraints are
+    instantiated separately from the template they are associated with.
+
+    <p number="2" class="quoted">
+      For purposes of name lookup and instantiation, default
+      arguments<ins>, associated constraints,</ins> and
+      <i>exception-specifications</i> of function templates and default
+      arguments<ins>, associated constraints,</ins>
+      and <i>exception-specifications</i> of member functions of class
+      templates are considered definitions; each default argument<ins>,
+      associated constraint,</ins> or exception-specification is a separate
+      definition which is unrelated to the function template definition or
+      to any other default arguments<ins>, associated constraints,</ins>
+      or <i>exception-specifications</i>.
+    </p>
 
     <!-- ===============
          Class templates
@@ -916,6 +931,8 @@ template&lt;C1 T&gt; template&lt;typename U&gt;
 	constrained,</ins> nor shall the inline specifier be used in such a
 	declaration.</p>
 
+      And add examples following that paragraph.
+
 	<p class="quoted">
 	<cxx-note>Other friend declarations can be constrained.  In a
 	constrained friend declaration that is not a definition, the
@@ -943,8 +960,8 @@ void f1() requires true; // <i>friend of all S&lt;T></i>
 void f2() requires C1&ltint>; // <i>friend of S&lt;int></i>
       </cxx-codeblock>
       The friend declaration of <code>g2</code> is ill-formed, no
-      diagnostic required, because no valid instantiation of <code>S</code>
-      is possible: for all <code>T</code> there is no <code>g2&lt;T></code>
+      diagnostic required, because no valid specialization of <code>S</code>
+      can be generated: for all <code>T</code> there is no <code>g2&lt;T></code>
       for which the constraints are satisfied, so template argument
       deduction (<cxx-ref to="temp.deduct.decl"></cxx-ref>) fails.
       </cxx-example>
@@ -1201,6 +1218,44 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
 
   </cxx-section> <!-- temp.decls -->
 
+  <cxx-section id="temp.res">
+    <h1>Name resolution</h1>
+
+    Modify paragraph 8.
+
+    <p number="8" class="quoted">
+      Knowing which names are type names allows the syntax of every
+      template to be checked. No diagnostic shall be issued for a template
+      for which a valid specialization can be generated. If no valid
+      specialization can be generated for a template, and that template is
+      not instantiated, the template is ill-formed, no diagnostic
+      required. If every valid specialization of a variadic template
+      requires an empty template parameter pack, the template is
+      ill-formed, no diagnostic required. <ins>If no instantiation of
+      the associated constraints of a template would result in a valid
+      expression, the template is ill-formed, no diagnostic required.</ins>
+      If a hypothetical instantiation of a template immediately following
+      its definition would be ill-formed due to a construct that does not
+      depend on a template parameter, the program is ill-formed; no
+      diagnostic is required. If the interpretation of such a construct in
+      the hypothetical instantiation is different from the interpretation
+      of the corresponding construct in any actual instantiation of the
+      template, the program is ill-formed; no diagnostic is required.
+    </p>
+    <cxx-section id="temp.dep.res" number="4">
+      <h1>Dependent name resolution</h1>
+      <cxx-section id="temp.point">
+	<h1>Point of instantiation</h1>
+	Add a new paragraph after paragraph 4.
+
+	<p number="5" class="quoted">
+	  The point of instantiation of a constraint-expression of a
+	  specialization immediately precedes the point of instantiation of
+	  the specialization.
+	</p>
+      </cxx-section>
+    </cxx-section>
+  </cxx-section>
 
   <!-- =========================================
        Template instantiation and specialization
@@ -1213,28 +1268,49 @@ template&lt;D T&gt; void f(S&lt;T&gt;); // <i>B</i>
     <cxx-section id="temp.inst">
       <h1>Implicit instantiation</h1>
 
-      Add the following paragraph after paragraph 1 in order to explain
-      the how constrained members are instantiated.
+      Change paragraph 1 to include associated constraints.
 
-      <p number="2" class="quoted">
-      When a constrained member of a class is instantiated, new constraints
-      for the instantiated declaration are formed by substituting the
-      template arguments into the associated constraints of that member.
-      The resulting expression is not evaluated after this substitution.
+      <p class="quoted">
+	Unless a class template specialization has been explicitly
+	instantiated (14.7.2) or explicitly specialized (14.7.3), the class
+	template specialization is implicitly instantiated when the
+	specialization is referenced in a context that requires a
+	completely-defined object type or when the completeness of the
+	class type affects the semantics of the program. [ Note: Within a
+	template declaration, a local class or enumeration and the members
+	of a local class are never considered to be entities that can be
+	separately instantiated (this includes their default arguments,
+	<i>exception-specifications</i>,
+	and non-static data member initializers, if any). As a result, the
+	dependent names are looked up, the semantic constraints are
+	checked, and any templates used are instantiated as part of the
+	instantiation of the entity within which the local class or
+	enumeration is declared. —end note ] The implicit instantiation of
+	a class template specialization causes the implicit instantiation
+	of the declarations, but not of the definitions, default
+	arguments, <ins>associated constraints,</ins> or
+	<i>exception-specifications</i> of the class member functions,
+	member classes, scoped member enumerations, static data members and
+	member templates; and it causes the implicit instantiation of the
+	definitions of unscoped member enumerations and member anonymous
+	unions.
+      </p>
 
-      If the substitution fails, the program is ill-formed.
+      Add a new paragraph after paragraph 15 to describe how associated
+      constraints are instantiated.
 
-      <!-- TODO: There is a note to put this into 14.6p8??? -->
-      If substitution into the associated constraints would always result in an
-      invalid type or expression, the program is ill-formed, no diagnostic
-      required.
+      <p number="16" class="quoted">
+	The associated constraints of a template specialization are not
+	instantiated along with the specialization itself; they are
+	instantiated as part of satisfaction checking.
+	(<cxx-ref to="temp.constr"></cxx-ref>).
 
       <cxx-note>
       The satisfaction of constraints is determined during lookup or overload
       resolution (<cxx-ref to="over.match"></cxx-ref>). Preserving the spelling
       of the substituted constraint also allows constrained member function
       to be partially ordered by those constraints according to the rules
-      in <cxx-ref to="temp.constr"></cxx-ref>.
+      in <cxx-ref to="temp.constr.order"></cxx-ref>.
       </cxx-note>
 
 
@@ -1251,23 +1327,12 @@ template&lt;typename T&gt; struct S {
 S&lt;char&gt; s1;    // <i>error: no matching constructor</i>
 S&lt;char[8]&gt; s2; // <i>OK: calls #2</i>
       </cxx-codeblock>
-      The instantiation of <code>S&lt;char&gt;</code> produces a class
-      template specialization having the constructors
-      <code>S&lt;char&gt;::S() requires C&lt;char&gt;</code> and
-      <code>S&lt;char&gt;::S() requires D&lt;char&gt;</code>.
 
-      Even though neither constructor will be selected by overload resolution,
+      Even though neither constructor for S&lt;char> will be selected by
+      overload resolution,
       they remain a part of the class template specialization. This also
       has the effect of suppressing the implicit generation of a default 
       constructor (<cxx-ref in="cxx" to="class.ctor"></cxx-ref>)
-
-      <cxx-codeblock>
-template&lt;typename T&gt; struct S2 {
-    void f() requires T::value == 1;
-  };
-
-S2&lt;int&gt; s; // <i>error: substitution failure in definition of</i> S2&lt;int&gt;
-      </cxx-codeblock>
       </cxx-example>
 
       <cxx-example class="inline">
@@ -1380,7 +1445,7 @@ template void g(void*); // <i>OK: refers to #2</i></cxx-codeblock>
       <p number="12" class="quoted">
       The <cxx-grammarterm>template-arguments</cxx-grammarterm> in the
       <cxx-grammarterm>template-id</cxx-grammarterm> of an explicit 
-      specialization of a constrained non-template function shall satisfy the 
+      specialization of a constrained non-function template shall satisfy the 
       associated constraints of that template, if any 
       (<cxx-ref to="temp.constr"></cxx-ref>).
 
