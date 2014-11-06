@@ -477,7 +477,7 @@ D&lt;0&gt; fn(int x);  // <i>error:</i> D&lt;0&gt; <i>used as a return type</i>
   	    (<cxx-ref to="dcl.spec.concept"></cxx-ref>).
 
         <cxx-note>
-        The candidate concept set has multiple members
+        The set of concepts has multiple members
         only when referring to a set of overloaded function concepts.
         There is at most one member of this set when a 
         <cxx-grammarterm>concept-name</cxx-grammarterm>
@@ -511,14 +511,14 @@ void f2(Seq&lt;&gt;);
         </cxx-example>
         </p>
 
-        <p>
-        The concept designated by a 
+        <p> The concept designated by a
         <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
         is the one selected by concept resolution 
         (<cxx-ref to="temp.concept.resolve"></cxx-ref>).
 
 
         <!-- FIXME: We don't know how to synthesize the constraint here -->
+        <!-- 
         <p>The use of a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
         in the type of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
         associates a <cxx-grammarterm>constraint-expression</cxx-grammarterm> 
@@ -548,8 +548,6 @@ void f2(Seq&lt;&gt;);
         <cxx-grammarterm>template-declaration</cxx-grammarterm> in which the
         <cxx-grammarterm>template-parameter</cxx-grammarterm> is declared.
         </p>
-
-        <!-- FIXME: This is practically unreadable -->
 
         <p> The <cxx-grammarterm>constraint-expression</cxx-grammarterm> 
         associated by a
@@ -608,7 +606,6 @@ void f2(Seq&lt;&gt;);
         (<cxx-ref in="cxx" to="expr.prim.fold"></cxx-ref>).
         
         Otherwise, the associated constraint is the expression <code>E</code>.
-        
         <cxx-example class="inline">
         <cxx-codeblock>
 template&lt;typename T&gt; concept bool C = true;
@@ -628,6 +625,7 @@ template&lt;C T&gt; struct s1; // <i>associates</i> C&lt;T&gt; <i>with</i> s1
         Likewise, <code>M</code> is an invented non-type template parameter
         corresponding to the prototype parameter of <code>Num</code>.
         </p>
+        -->
 
         <p>Two <cxx-grammarterm>constrained-type-specifiers</cxx-grammarterm>
         are said to be equivalent if their associated
