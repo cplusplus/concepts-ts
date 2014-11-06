@@ -314,10 +314,12 @@ template&lt;typename T&gt; requires C&lt;T&gt;
     invalid type or expression, in which case the constraint is not
     satisfied; it does not cause the program to be ill-formed.
 
+    <cxx-note>
     But if the substitution of template arguments into
     a <cxx-grammarterm>requirement</cxx-grammarterm> would always result in
     a substitution failure, the program is ill-formed; no diagnostic
-    required.
+    required (<cxx-ref to="temp.res"></cxx-ref>).
+    </cxx-note>
 
     <cxx-example>
     <cxx-codeblock>
