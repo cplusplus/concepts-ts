@@ -40,6 +40,29 @@
   (<cxx-ref to="temp.intro"></cxx-ref>).
   </p>
 
+  <p>
+  A template declared by a <cxx-example>template-introduction</cxx-example>
+  (<cxx-ref to="temp.intro"></cxx-ref>) can also be an abbreviated
+  function template (<cxx-ref to="dcl.fct"></cxx-ref>). The invented
+  template parameters of introduced by the placeholders in the abbreviated
+  function template are appended to the list of template parameters declared
+  by the <cxx-grammarterm>template-introduction</cxx-grammarterm>.
+
+  <cxx-example>
+  <cxx-codeblock>
+template&lt;typename T&gt; concept bool C1 = true;
+template&lt;typename T&gt; concept bool C2 = true;
+
+C1{T} void f(T, auto);
+template&lt;C T, typename U&gt; void f(T, U); // OK: redeclaration of f(T, auto)
+  </cxx-codeblock>
+  <cxx-note>
+  The second declaration of <code>f</code> is a redeclaration of the first
+  because their associated constraints are equivalent 
+  (<cxx-ref to="temp.over.link"></cxx-ref>); this is described in the following
+  paragraphs.
+  </cxx-example>
+  </p>
 
   <p class="quoted">
   The <dfn>associated constraints</dfn> of a 
@@ -50,7 +73,8 @@
 
   <div class="quoted">
   <ul>
-  <li> a template introduction (<cxx-ref to="temp.intro"></cxx-ref>), and</li>
+  <li> a constraint associated by a template introduction 
+  (<cxx-ref to="temp.intro"></cxx-ref>), and</li>
 
   <li> any constrained template parameters (<cxx-ref to="temp.param"></cxx-ref>)
   in the declaration's <cxx-grammarterm>template-parameter-list</cxx-grammarterm>,
@@ -88,6 +112,32 @@ template&lt;typename T&gt; void f() requires C&lt;T&gt;;
   </cxx-codeblock>
   </cxx-example>
   </div>
+
+  <p> The order in which the subexpressions of the associated constraints
+  are composed is the left-to-right order of occurrences in which
+  <cxx-grammarterm>template-introduction</cxx-grammarterm>s,
+  <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>s, and
+  <cxx-grammarterm>requires-clause</cxx-grammarterm>s occur in the
+  declaration.
+
+  <cxx-example>
+  <cxx-codeblock>
+template&lt;typename T&gt; concept bool C1 = true;
+template&lt;typename T&gt; concept bool C2 = true;
+
+C1{T} void f1(C2);
+template&lt;typenaem T, typename U&gt; 
+  requires C1&lt;T&gt; and C2&lt;U&gt; 
+    void f1(T, U); // redeclaration of f1
+
+C1{T} void f2(T) requires C2&lt;T&gt;;
+template&lt;typename T&gt;
+  requires C1&lt;T&gt; && C2&lt;T&gt;
+    void f2(); // redeclaration of f2
+  </cxx-codeblock>
+  </cxx-example>
+
+
 
   <p class="quoted" number="9"> 
   When a <cxx-grammarterm>template-declaration</cxx-grammarterm> is
