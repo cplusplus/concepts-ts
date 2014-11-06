@@ -472,12 +472,9 @@ D&lt;0&gt; fn(int x);  // <i>error:</i> D&lt;0&gt; <i>used as a return type</i>
         </cxx-note>
         </p>
 
-        <p>
-        A <cxx-grammarterm>concept-name</cxx-grammarterm> refers to a
-        set of concept definitions (<cxx-ref to="dcl.spec.concept"></cxx-ref>)
-        called the <dfn>candidate concept set</dfn>.
-
-        If that set is empty, the program is ill-formed.
+	      <p> An identifier is a <cxx-grammarterm>concept-name</cxx-grammarterm> if
+  	    it refers to a set of of concept definitions 
+  	    (<cxx-ref to="dcl.spec.concept"></cxx-ref>).
 
         <cxx-note>
         The candidate concept set has multiple members
@@ -493,12 +490,11 @@ template&lt;typename T&gt; concept bool C() { return true; }             // <i>#
 template&lt;typename T, typename U&gt; concept bool C() { return true; } // <i>#2</i>
 template&lt;typename T&gt; concept bool D = true;                        // <i>#3</i>
 
-void f(C); // <i>OK: the concept-name</i> C <i>may refer to both #1 and #2</i>
+void f(C); // <i>OK: the concept-name</i> C <i>refers to both #1 and #2</i>
 void g(D); // <i>OK: the concept-name</i> D <i>refers only to #3</i>
         </cxx-codeblock>
         </cxx-example>
         </p>
-
 
         <p>
         A <cxx-grammarterm>partial-concept-id</cxx-grammarterm> is a
@@ -507,12 +503,10 @@ void g(D); // <i>OK: the concept-name</i> D <i>refers only to #3</i>
 
         <cxx-example class="inline">
         <cxx-codeblock>
-template&lt;typename T, typename U&gt; concept bool C() { return true; }
 template&lt;typename T, int N = 0&gt; concept bool Seq = true;
 
-void f(C&lt;int&gt;);
-void f(Seq&lt;3&gt;);
-void f(Seq&lt;&gt;);
+void f1(Seq&lt;3&gt;);
+void f2(Seq&lt;&gt;);
         </cxx-codeblock>
         </cxx-example>
         </p>
@@ -520,61 +514,11 @@ void f(Seq&lt;&gt;);
         <p>
         The concept designated by a 
         <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
-        is resolved by determining the viability of each concept in the
-        candidate concept set.
-
-        For each candidate concept in that set, <code>TT</code> is a 
-        <cxx-grammarterm>template-id</cxx-grammarterm> formed as follows:
-
-        let <code>C</code> be the <cxx-grammarterm>concept-name</cxx-grammarterm>
-        for the candidate concept set, and let <code>X</code> be a template 
-        argument that matches
-        the type and form (<cxx-ref to="temp.arg"></cxx-ref>) of the prototype 
-        parameter (<cxx-ref to="dcl.spec.concept"></cxx-ref>)
-        of the candidate concept. 
-
-        The template <code>X</code> is called the 
-        <dfn>deduced concept argument</dfn>.
-
-        If the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> in
-        the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> is
-        a <cxx-grammarterm>concept-name</cxx-grammarterm>, <code>TT</code> is
-        formed as <code>C&lt;X&gt;</code>.
-
-        Otherwise, the <cxx-grammarterm>constrained-type-name</cxx-grammarterm> is
-        a <cxx-grammarterm>partial-concept-id</cxx-grammarterm> whose
-        <cxx-grammarterm>template-argument-list</cxx-grammarterm> is
-        <code>A<sub>1</sub>, A<sub>2</sub>, ..., A<sub><i>n</i></sub></code>, and
-        <code>TT</code> is formed as
-        <code>C&lt;X, A<sub>1</sub>, A<sub>2</sub>, ..., A<sub><i>n</i></sub>&gt;</code>.
-
-        The candidate concept is a <dfn>viable candidate concept</dfn> when all
-        <cxx-grammarterm>template-arguments</cxx-grammarterm> of <code>TT</code> 
-        match the template parameters of that candidate 
-        (<cxx-ref to="temp.arg"></cxx-ref>).
-
-        If, after determining the viability of each concept, there is a
-        single viable candidate concept, that is the concept designated by the
-        <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
-
-        Otherwise, the program is ill-formed.
-
-        <cxx-example class="inline">
-        <cxx-codeblock>
-template&lt;typename T&gt; concept bool C() { return true; }             // <i>#1</i>
-template&lt;typename T, typename U&gt; concept bool C() { return true; } // <i>#2</i>
-template&lt;typename T&gt; concept bool P() { return true; }
-template&lt;int T&gt; concept bool P() { return true; }
-
-void f1(const C*); // <i>OK:</i> C <i>designates #1</i>
-void f2(C&lt;char&gt;);  // <i>OK:</i> C&lt;char&gt; <i>designates #2</i>
-void f3(C&lt;3&gt;);     // <i>error: no matching concept for</i> C&lt;3&gt; <i>(mismatched template arguments)</i>
-void g1(P);        // <i>error: resolution of</i> P <i>is ambiguous (</i>P <i>refers to two concepts)</i>
-        </cxx-codeblock>
-        </cxx-example>
-        </p>
+        is the one selected by concept resolution 
+        (<cxx-ref to="temp.concept.resolve"></cxx-ref>).
 
 
+        <!-- FIXME: We don't know how to synthesize the constraint here -->
         <p>The use of a <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
         in the type of a <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
         associates a <cxx-grammarterm>constraint-expression</cxx-grammarterm> 
