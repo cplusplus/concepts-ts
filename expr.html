@@ -309,16 +309,23 @@ template&lt;typename T&gt; requires C&lt;T&gt;
     defined by the <cxx-grammarterm>requires-expression</cxx-grammarterm>s.
     </p>
 
-    <p>If the substitution of template arguments into an expression or type 
-    in a <cxx-grammarterm>requirement</cxx-grammarterm> would always result in
+    <p> The substitution of template arguments into a
+    <cxx-grammarterm>requirement</cxx-grammarterm> may result in an
+    invalid type or expression, in which case the constraint is not
+    satisfied; it does not cause the program to be ill-formed.
+
+    <cxx-note>
+    But if the substitution of template arguments into
+    a <cxx-grammarterm>requirement</cxx-grammarterm> would always result in
     a substitution failure, the program is ill-formed; no diagnostic
-    required.
+    required (<cxx-ref to="temp.res"></cxx-ref>).
+    </cxx-note>
 
     <cxx-example>
     <cxx-codeblock>
   template&lt;typename T&gt; concept bool C =
   requires () {
-    new int[-sizeof(T)]; // <i>error</i>
+    new int[-sizeof(T)]; // <i>ill-formed, no diagnostic required</i>
   };
     </cxx-codeblock>
     </cxx-example>
@@ -350,12 +357,6 @@ template&lt;typename T&gt; concept bool C =
       </cxx-codeblock>
       </cxx-example>
       </p>
-
-      <p> The substitution of template arguments into the
-      <cxx-grammarterm>expression</cxx-grammarterm> of a 
-      <cxx-grammarterm>simple-requirement</cxx-grammarterm> may result
-      in an ill-formed expression. However, the resulting program is not 
-      ill-formed. </p>
 
     </cxx-section> <!-- expr.prim.req.simple -->
 
@@ -400,12 +401,6 @@ template&lt;typename T&gt; concept bool C =
       </cxx-codeblock>
       </cxx-example>
       </p>
-
-      <p> The substitution of template arguments into the
-      <cxx-grammarterm>typename-specifier</cxx-grammarterm> of a
-      <cxx-grammarterm>type-requirement</cxx-grammarterm> may result
-      in an ill-formed type. However, the resulting program is not 
-      ill-formed. </p>
 
     </cxx-section> <!-- expr.prim.req.type -->
 
@@ -518,12 +513,6 @@ void g(const C&amp;);
       </cxx-example>
       </p>
       
-      <p> The substitution of template arguments into the
-      <cxx-grammarterm>expression</cxx-grammarterm> of a 
-      <cxx-grammarterm>simple-requirement</cxx-grammarterm> may result
-      in an ill-formed expression. However, the resulting program is not 
-      ill-formed. </p>
-
     </cxx-section> <!-- expr.prim.req.compound -->
 
 
@@ -541,7 +530,7 @@ void g(const C&amp;);
       A <cxx-grammarterm>nested-requirement</cxx-grammarterm> appends the 
       normalized form (<cxx-ref to="temp.constr.expr"></cxx-ref>) of its
       <cxx-grammarterm>constraint-expression</cxx-grammarterm> to the
-      conjunction (<cxx-ref to="temp.constr.op.conj"></cxx-ref>) of 
+      conjunction of 
       constraints introduced by its enclosing
       <cxx-grammarterm>requires-expression</cxx-grammarterm>.
 
