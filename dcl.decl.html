@@ -224,13 +224,19 @@ auto* p = new void(*[3])(char) requires true; // <i>error: not a function declar
       the corresponding invented parameter matches the type and form of
       the prototype parameter (<cxx-ref to="dcl.spec.concept"></cxx-ref>) of 
       the concept designated by the 
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+      (<cxx-ref to="temp.concept.resolve"></cxx-ref>).
 
       The invented <cxx-grammarterm>template-parameter</cxx-grammarterm> is 
       a parameter pack if the corresponding 
       <cxx-grammarterm>parameter-declaration</cxx-grammarterm>
       declares a function parameter pack and the type of the parameter 
       contains only one placeholder.
+
+      If the prototype parameter of the designated concept declares a
+      template parameter pack, the corresponding
+      <cxx-grammarterm>parameter-declaration</cxx-grammarterm> shall
+      declare a function parameter pack.
 
       The adjusted function parameters of an abbreviated function template are derived
       from the <cxx-grammarterm>parameter-declaration-clause</cxx-grammarterm> 
@@ -259,11 +265,14 @@ template&lt;typename T, typename U, typename V&gt;
 template&lt;typename T&gt; concept bool C1 = true;
 template&lt;typename T&gt; concept bool C2 = true;
 template&lt;typename T, typename U&gt; concept bool D = true;
+template<&lt;typename... Ts> concept bool E = true;
 
 void g1(const C1*, C2&amp;);
 void g2(Vec&lt;C1&gt;&amp;);
 void g3(C1&amp;...);
 void g4(Vec&lt;D&lt;int&gt;&gt;);
+void g5(E...); // <i>OK</i>
+void g6(E);    // <i>error:</i> E <i>does not declare a function parameter pack</i>
 
 template&lt;C1 T, C2 U&gt; void g1(const T*, U&amp;); // <i>redeclaration of</i> g1(const C1*, C2&amp;)
 template&lt;C1 T&gt; void g2(Vec&lt;T&gt;&amp;);            // <i>redeclaration of</i> g2(Vec&lt;C1&gt;&amp;)
