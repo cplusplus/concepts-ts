@@ -448,7 +448,7 @@ C{T} D{U} void X&lt;T&gt;::f() { } // <i>OK: definition of</i> f()
     If the <cxx-grammarterm>type-specifier-seq</cxx-grammarterm> of
     a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> is a
     <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>, then
-    the <cxx-grammarterm>parameter-declaration</cxx-grammarterm> is a
+    the <cxx-grammarterm>template-parameter</cxx-grammarterm> is a
     <cxx-grammarterm>constrained-parameter</cxx-grammarterm>.
     </p>
 
@@ -682,7 +682,7 @@ Array&lt;double&gt; s2;    // <i>error:</i> Array <i>takes two template argument
     <cxx-grammarterm>template-argument</cxx-grammarterm> is a pack 
     expansion of <code>T</code>. Otherwise, its corresponding 
     <cxx-grammarterm>template-argument</cxx-grammarterm>
-    matches the type an form of <code>T</code>.
+    matches the type and form of <code>T</code>.
 
     Let <code>TT</code> be a <cxx-grammarterm>template-id</cxx-grammarterm>
     formed as <code>C&lt;Args&gt;</code>.
@@ -790,22 +790,22 @@ template&lt;C T&gt; using Ptr = T*;
 S1&lt;int&gt;* p; // <i>error: constraints not satisfied</i>
 Ptr&lt;int&gt; p; // <i>error: constraints not satisfied</i>
 
-template&lt;typname T&gt;
+template&lt;typename T&gt;
   struct S2 { Ptr&lt;int&gt; x; }; // <i>error: constraints not satisfied</i>
 
 template&lt;typename T&gt;
-  struct S3 { Ptr&lt;T&gt; x; }    // <i>OK: satisfaction is not required</i>
+  struct S3 { Ptr&lt;T&gt; x; };   // <i>OK: satisfaction is not required</i>
 
 S3&lt;int&gt; x;                   // <i>error: constraints not satisfied</i>
 
-template&lt;tempalte&lt;C T&gt; class X&gt;
-  struct S3 {
+template&lt;template&lt;C T&gt; class X&gt;
+  struct S4 {
     X&lt;int&gt; x; // <i>error: constraints not satisfied</i>
 
     using Type = T::template MT&lt;char&gt;;
   };
     </cxx-codeblock>
-    The error in the instantiation of <code>S3&lt;int&gt;</code> is caused
+    The error in the instantiation of <code>S4&lt;int&gt;</code> is caused
     by the substitution into the type of the member <code>x</code>.
 
     Because there is no declaration for the template named by 
