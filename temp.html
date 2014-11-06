@@ -373,62 +373,6 @@ C{T} D{U} void X&lt;T&gt;::f() { } // <i>OK: definition of</i> f()
     the <cxx-grammarterm>parameter-declaration</cxx-grammarterm> is a
     <cxx-grammarterm>constrained-parameter</cxx-grammarterm>.
     </p>
-    <!-- 
-    Update the wording in <cxx-ref in="cxx" to="temp.param"></cxx-ref>/2 as 
-    follows.
-
-    <p number="2" class="quoted">
-    There is no semantic difference between <code>class</code> and <code>typename</code> 
-    in a <cxx-grammarterm>template-parameter</cxx-grammarterm>. <code>typename</code> 
-    followed by an <cxx-grammarterm>unqualified-id</cxx-grammarterm> names a 
-    template type parameter. <code>typename</code> followed by a 
-    <cxx-grammarterm>qualified-id</cxx-grammarterm> denotes the
-    type in a non-type 
-    <del><cxx-grammarterm>parameter-declaration</cxx-grammarterm></del>
-    <ins><cxx-grammarterm>non-type-or-constrained-parameter</cxx-grammarterm></ins>. 
-    </p>
- 
-    Insert the following paragraphs after paragraph 3 in order to distinguish
-    between a template parameter that declares a non-type parameter and a
-    template-parameter that declares a constrained parameter, which may
-    declare a type parameter. 
-
-    <p number="3" class="quoted">
-    When a <cxx-grammarterm>non-type-or-constrained-parameter</cxx-grammarterm> has
-    the following form:
-    <bnf-grammar>
-    <bnf-alt>
-    constrained-type-specifier <bnf-opt>...</bnf-opt> <bnf-opt>identifier</bnf-opt>
-    </bnf-alt>
-    </bnf-grammar>
-    it declares a <dfn>constrained template parameter</dfn>.
-
-    Otherwise the parameter is a non-type 
-    <cxx-grammarterm>template-parameter</cxx-grammarterm>.
-    </p>
-
-    <p class="quoted">
-    If the <code>auto</code> <cxx-grammarterm>type-specifier</cxx-grammarterm>
-    appears in the the parameter type of a
-    <cxx-grammarterm>non-type-or-constrained-parameter</cxx-grammarterm>,
-    the program is ill-formed. The program is also ill-formed if a
-    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> appears
-    anywhere in the <cxx-grammarterm>basic-parameter-declaration</cxx-grammarterm> 
-    and the form of that declaration does not match the form above.
-    <cxx-example>
-    <cxx-codeblock>
-template&lt;typename T&gt; concept bool C = true;
-template&lt;typename T&gt; concept bool D = true;
-
-template&lt;C T&gt; struct S1;       // <i>OK:</i> T <i>is a constrained template parameter</i>
-template&lt;int N&gt; struct S2;     // <i>OK:</i> N <i>is a non-type template parameter</i>
-template&lt;auto X&gt; struct S2;    // <i>error: auto in template parameter</i>
-template&lt;const D N&gt; void f1(); // <i>error:</i> D <i>is used with a const-qualifier</i>
-template&lt;D* N&gt; void f2();      // <i>error:</i> N <i>declares a pointer-to-</i>D
-    </cxx-codeblock>
-    </cxx-example>
-    </p>
-    -->
 
     Insert the following paragraphs after paragraph 8. These paragraphs
     define the meaning of a constrained template parameter.
@@ -437,9 +381,11 @@ template&lt;D* N&gt; void f2();      // <i>error:</i> N <i>declares a pointer-to
     A <cxx-grammarterm>constrained-parameter</cxx-grammarterm> declares a 
     template parameter whose type and form match that of the prototype 
     parameter of the concept designated by its 
-    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>.
-    The designated concept is found using the rules in
-    <cxx-ref to="dcl.spec.constr"></cxx-ref>. 
+    <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
+    The designated concept is selected by concept resolution
+    (<cxx-ref to="temp.concept.resolve"></cxx-ref>). 
+
+    <!-- TODO: Specify the associated constraint? -->
 
     Let <code>P</code> be the prototype parameter of the designated
     concept. The declared template parameter is determined by the type
@@ -553,57 +499,23 @@ template&lt;C1 T = 0&gt; struct S4;   // error: default argument is not a type</
     its <cxx-grammarterm>introduction-list</cxx-grammarterm>.
 
 
-    <!-- FIXME: This is grorss... -->
     <p> The concept designated by the <cxx-grammarterm>concept-name</cxx-grammarterm>
-    (call it <code>C</code>) is determined by the 
-    <cxx-grammarterm>introduction-list</cxx-grammarterm>.
-
-    The <cxx-grammarterm>concept-name</cxx-grammarterm> <code>C</code> 
-    refers to a set of concept definitions. A concept <code>CC</code> in
-    that set is viable if <code>CC</code> declares at least as many template 
-    parameters as there are <cxx-grammarterm>identifier</cxx-grammarterm>s in 
-    the <cxx-grammarterm>introduction-list</cxx-grammarterm>, and
-    all template parameters in excess of the number of 
-    <cxx-grammarterm>identifier</cxx-grammarterm>s are declared with default 
-    template arguments.
-
-    If only one concept in that set is viable, that is the concept
-    designated by <code>C</code>. Otherwise, the program is ill-formed.
-
-    <cxx-example class="inline">
-    It is possible to overload function concepts in such a way that a
-    <cxx-grammarterm>concept-name</cxx-grammarterm> can designate multiple
-    concepts.
-    <cxx-codeblock>
-template&lt;typename T&gt; concept bool Eq() { return true; }             // <i>#1</i>
-template&lt;typename T, typename U&gt; concept bool Eq() { return true; } // <i>#2</i>
-
-Eq{T} void f1(T, T);    // <i>OK:</i> Eq{T} <i>designates #1</i>
-Eq{A, B} void f2(A, B); // <i>OK:</i> Eq{A, B} <i>designates #2</i>
-  </cxx-codeblock>
-  <cxx-codeblock>
-template&lt;typename T&gt; concept bool C() { return true; }
-template&lt;int N&gt; concept bool C() { return true; }
-
-C{X} void f(); // <i>error: resolution of</i> C{X} <i>is ambiguous</i>
-    </cxx-codeblock>
-    </cxx-example>
-    </p>
+    is selected by concept resolution 
+    (<cxx-ref to="temp.concept.resolve"></cxx-ref>).
 
     <p>
     For each 
     <cxx-grammarterm>introduced-parameter</cxx-grammarterm> <code>I</code> in an
     <cxx-grammarterm>introduction-list</cxx-grammarterm>,
-    and for its corresponding template parameter in the 
-    <cxx-grammarterm>template-parameter-list</cxx-grammarterm>
-    of the designated concept (call it <code>P</code>), declare a new template 
+    and for its corresponding selected template parameter <code>P</code>
+    from the designated concept, declare a new template 
     parameter using the rules for declaring a constrained parameter in
     <cxx-ref to="temp.param"></cxx-ref> by using <code>I</code> as a
     <cxx-grammarterm>declarator-id</cxx-grammarterm> and <code>P</code>
     as the prototype parameter.
 
-    However, if <code>I</code> contains an ellipsis, <code>P</code> shall
-    declare a template parameter pack.
+    If <code>I</code> contains an ellipsis, <code>P</code> declares a template 
+    parameter pack.
 
     <cxx-example class="inline">
     <cxx-codeblock>
@@ -2382,7 +2294,7 @@ Q{T} void q2();     // <i>error: no matching concept (mismatched template argume
       </p>
 
       <p>
-      In the selected template, the set of parameters corresponding
+      For the selected template, the set of template parameters corresponding
       to the matched pending template arguments are called the
       <dfn>selected template parameters</dfn>. In 
       <cxx-grammarterm>template-introductions</cxx-grammarterm>, these
