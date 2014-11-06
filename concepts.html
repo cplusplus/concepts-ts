@@ -4833,15 +4833,15 @@ template&lt;C T&gt; D{U} struct S&lt;T&gt;::Inner { }; // <i>OK</i></code></pre>
 
         Add the following example to the end of paragraph 1.
 
-        <p para_num="1" id="temp.mem.func.1" number="1" class="quoted">
-        <ins>
-        <cxx-example>
+      <div class="quoted">
+      <ins>
+      <cxx-example class="inline">
     
     <span class="nowrap">[ <em>Example:</em></span>
+        
+    <cxx-codeblock>
     
-        <cxx-codeblock>
-    
-    </cxx-codeblock></cxx-example></ins></p><pre><code>template&lt;typename T&gt; struct S {
+    <pre><code>template&lt;typename T&gt; struct S {
   void f() requires true;
   void g() requires true;
 };
@@ -4853,7 +4853,9 @@ template&lt;typename T&gt;
   
         
     <span class="nowrap">— <em>end example</em> ]</span>
-  
+  </cxx-example>
+      </ins>
+      </div>
         
         <p></p>
       
