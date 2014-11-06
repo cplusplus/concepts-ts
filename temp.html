@@ -2400,10 +2400,10 @@ C3&lt;int&gt;            /* <i>type constraint for</i> int::type */
 
       <p>
       When selecting a concept for a 
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> 
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>,
       there is a single template argument pattern. 
       
-      If, the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> 
+      If the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
       appears in the declaration of a
       <cxx-grammarterm>constrained-parameter</cxx-grammarterm> 
       (<cxx-ref to="temp.param"></cxx-ref>) and is
@@ -2431,7 +2431,7 @@ template&lt;typename T&gt; concept bool C1() { return true; }
 template&lt;typename T, typename U&gt; concept bool C1() { return true; }
 template&lt;typename... T&gt; concept bool C2() { return true; }
 
-void f(1C1); 
+void f(C1);
 void f2(C1&lt;int&gt;);
       </cxx-codeblock>
       In the resolution of required by the declaration of <code>f1</code>, 
@@ -2469,7 +2469,7 @@ C2{...T} void f5();
       whose pattern is any form.
 
       The remaining explicit arguments are matched against parameters
-      according in the usual way (<cxx-ref to="temp.arg"></cxx-ref>).
+      in the usual way (<cxx-ref to="temp.arg"></cxx-ref>).
 
       If any template argument patterns or explicit template arguments do not 
       match the corresponding parameter, <code>C</code> is removed from the set.
@@ -2541,7 +2541,7 @@ Q{T} void q2();     // <i>error: no matching concept (mismatched template argume
       <p>
       Let <code>C</code> be the concept designated by the
       <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
-      (including its <cxx-grammarterm>nested-name-specifier></cxx-grammarterm>,
+      (including its <cxx-grammarterm>nested-name-specifier</cxx-grammarterm>,
       if any), 
       let <code>P</code> be the prototype parameter of the designated
       concept, and
@@ -2567,7 +2567,7 @@ Q{T} void q2();     // <i>error: no matching concept (mismatched template argume
       Form an expression <code>E</code> from <code>TT</code>. If <code>C</code>
       refers to a variable concept, <code>E</code> is the
       <cxx-grammarterm>id-expression</cxx-grammarterm> <code>TT</code>.
-      If <code>C</code> refers to a variable concept, <code>E</code> is
+      If <code>C</code> refers to a function concept, <code>E</code> is
       the function call <code>TT()</code>.
       </p>
 
