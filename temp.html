@@ -448,7 +448,7 @@ C{T} D{U} void X&lt;T&gt;::f() { } // <i>OK: definition of</i> f()
     If the <cxx-grammarterm>type-specifier-seq</cxx-grammarterm> of
     a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> is a
     <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>, then
-    the <cxx-grammarterm>parameter-declaration</cxx-grammarterm> is a
+    the <cxx-grammarterm>template-parameter</cxx-grammarterm> is a
     <cxx-grammarterm>constrained-parameter</cxx-grammarterm>.
     </p>
 
@@ -489,8 +489,8 @@ C{T} D{U} void X&lt;T&gt;::f() { } // <i>OK: definition of</i> f()
     as <code>P</code>, excluding default template arguments. </li>
 
     <li> If <code>P</code> declares a template parameter pack,
-    <code>I</code> shall include an ellipsis, and the declared parameter
-    is a template parameter pack. </li>
+    the <i>constrained-type-specifier</i> shall be followed by an ellipsis,
+    and the declared parameter is a template parameter pack. </li>
     </ul>
 
     <cxx-example class="inline">
@@ -682,7 +682,7 @@ Array&lt;double&gt; s2;    // <i>error:</i> Array <i>takes two template argument
     <cxx-grammarterm>template-argument</cxx-grammarterm> is a pack 
     expansion of <code>T</code>. Otherwise, its corresponding 
     <cxx-grammarterm>template-argument</cxx-grammarterm>
-    matches the type an form of <code>T</code>.
+    matches the type and form of <code>T</code>.
 
     Let <code>TT</code> be a <cxx-grammarterm>template-id</cxx-grammarterm>
     formed as <code>C&lt;Args&gt;</code>.
@@ -790,22 +790,22 @@ template&lt;C T&gt; using Ptr = T*;
 S1&lt;int&gt;* p; // <i>error: constraints not satisfied</i>
 Ptr&lt;int&gt; p; // <i>error: constraints not satisfied</i>
 
-template&lt;typname T&gt;
+template&lt;typename T&gt;
   struct S2 { Ptr&lt;int&gt; x; }; // <i>error: constraints not satisfied</i>
 
 template&lt;typename T&gt;
-  struct S3 { Ptr&lt;T&gt; x; }    // <i>OK: satisfaction is not required</i>
+  struct S3 { Ptr&lt;T&gt; x; };   // <i>OK: satisfaction is not required</i>
 
 S3&lt;int&gt; x;                   // <i>error: constraints not satisfied</i>
 
-template&lt;tempalte&lt;C T&gt; class X&gt;
-  struct S3 {
+template&lt;template&lt;C T&gt; class X&gt;
+  struct S4 {
     X&lt;int&gt; x; // <i>error: constraints not satisfied</i>
 
     using Type = T::template MT&lt;char&gt;;
   };
     </cxx-codeblock>
-    The error in the instantiation of <code>S3&lt;int&gt;</code> is caused
+    The error in the instantiation of <code>S4&lt;int&gt;</code> is caused
     by the substitution into the type of the member <code>x</code>.
 
     Because there is no declaration for the template named by 
@@ -1087,7 +1087,7 @@ template&lt;typename T&gt;
   struct S {
     friend void f1() requires true;  // <i>OK</i>
     friend void f2() requires C1&lt;T&gt;; // <i>OK</i>
-    friend void g0&lt;T&gt;(T) requires C&lt;T>; // <i>error: constrained friend specialization</i>
+    friend void g0&lt;T&gt;(T) requires C1&lt;T>; // <i>error: constrained friend specialization</i>
     friend void g1&lt;T&gt;(T);            // <i>OK</i>
     friend void g2&lt;T&gt;(T);            // <i>ill-formed, no diagnostic required</i>
   };
@@ -1097,9 +1097,9 @@ void f2() requires C1&ltint>; // <i>friend of S&lt;int></i>
       </cxx-codeblock>
       The friend declaration of <code>g2</code> is ill-formed, no
       diagnostic required, because no valid specialization of <code>S</code>
-      can be generated: for all <code>T</code> there is no <code>g2&lt;T></code>
-      for which the constraints are satisfied, so template argument
-      deduction (<cxx-ref to="temp.deduct.decl"></cxx-ref>) fails.
+      can be generated: the constraint on <code>g2</code> can never
+      be satisfied, so template argument deduction
+      (<cxx-ref to="temp.deduct.decl"></cxx-ref>) will always fail.
       </cxx-example>
       </p>
       <p class="quoted">
@@ -2400,10 +2400,10 @@ C3&lt;int&gt;            /* <i>type constraint for</i> int::type */
 
       <p>
       When selecting a concept for a 
-      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> 
+      <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>,
       there is a single template argument pattern. 
       
-      If, the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> 
+      If the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
       appears in the declaration of a
       <cxx-grammarterm>constrained-parameter</cxx-grammarterm> 
       (<cxx-ref to="temp.param"></cxx-ref>) and is
@@ -2431,7 +2431,7 @@ template&lt;typename T&gt; concept bool C1() { return true; }
 template&lt;typename T, typename U&gt; concept bool C1() { return true; }
 template&lt;typename... T&gt; concept bool C2() { return true; }
 
-void f(1C1); 
+void f(C1);
 void f2(C1&lt;int&gt;);
       </cxx-codeblock>
       In the resolution of required by the declaration of <code>f1</code>, 
@@ -2469,7 +2469,7 @@ C2{...T} void f5();
       whose pattern is any form.
 
       The remaining explicit arguments are matched against parameters
-      according in the usual way (<cxx-ref to="temp.arg"></cxx-ref>).
+      in the usual way (<cxx-ref to="temp.arg"></cxx-ref>).
 
       If any template argument patterns or explicit template arguments do not 
       match the corresponding parameter, <code>C</code> is removed from the set.
@@ -2541,7 +2541,7 @@ Q{T} void q2();     // <i>error: no matching concept (mismatched template argume
       <p>
       Let <code>C</code> be the concept designated by the
       <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
-      (including its <cxx-grammarterm>nested-name-specifier></cxx-grammarterm>,
+      (including its <cxx-grammarterm>nested-name-specifier</cxx-grammarterm>,
       if any), 
       let <code>P</code> be the prototype parameter of the designated
       concept, and
@@ -2567,7 +2567,7 @@ Q{T} void q2();     // <i>error: no matching concept (mismatched template argume
       Form an expression <code>E</code> from <code>TT</code>. If <code>C</code>
       refers to a variable concept, <code>E</code> is the
       <cxx-grammarterm>id-expression</cxx-grammarterm> <code>TT</code>.
-      If <code>C</code> refers to a variable concept, <code>E</code> is
+      If <code>C</code> refers to a function concept, <code>E</code> is
       the function call <code>TT()</code>.
       </p>
 
