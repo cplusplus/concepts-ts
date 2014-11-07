@@ -453,7 +453,7 @@ C{T} D{U} void X&lt;T&gt;::f() { } // <i>OK: definition of</i> f()
     If the <cxx-grammarterm>type-specifier-seq</cxx-grammarterm> of
     a <cxx-grammarterm>parameter-declaration</cxx-grammarterm> is a
     <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>, then
-    the <cxx-grammarterm>parameter-declaration</cxx-grammarterm> is a
+    the <cxx-grammarterm>template-parameter</cxx-grammarterm> is a
     <cxx-grammarterm>constrained-parameter</cxx-grammarterm>.
     </p>
 
@@ -494,7 +494,8 @@ C{T} D{U} void X&lt;T&gt;::f() { } // <i>OK: definition of</i> f()
     as <code>P</code>, excluding default template arguments. </li>
 
     <li> If <code>P</code> declares a template parameter pack,
-    the declared parameter is a template parameter pack. </li>
+    the <i>constrained-type-specifier</i> shall be followed by an ellipsis,
+    and the declared parameter is a template parameter pack. </li>
     </ul>
 
     <cxx-example class="inline">
@@ -1102,9 +1103,9 @@ void f2() requires C1&lt;int&gt;; // <i>friend of S&lt;int&gt;</i>
       </cxx-codeblock>
       The friend declaration of <code>g2</code> is ill-formed, no
       diagnostic required, because no valid specialization of <code>S</code>
-      can be generated: for all <code>T</code> there is no <code>g2&lt;T></code>
-      for which the constraints are satisfied, so template argument
-      deduction (<cxx-ref to="temp.deduct.decl"></cxx-ref>) fails.
+      can be generated: the constraint on <code>g2</code> can never
+      be satisfied, so template argument deduction
+      (<cxx-ref to="temp.deduct.decl"></cxx-ref>) will always fail.
       </cxx-example>
       </p>
       <p class="quoted">
@@ -2409,7 +2410,7 @@ C3&lt;int&gt;            /* <i>type constraint for</i> int::type */
       <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>,
       there is a single template argument pattern. 
       
-      If the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm> 
+      If the <cxx-grammarterm>constrained-type-specifier</cxx-grammarterm>
       appears in the declaration of a
       <cxx-grammarterm>constrained-parameter</cxx-grammarterm> 
       (<cxx-ref to="temp.param"></cxx-ref>) and is
