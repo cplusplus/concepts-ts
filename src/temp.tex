@@ -1,0 +1,2176 @@
+
+%%
+%% Templates
+%%
+\setcounter{chapter}{13}
+\rSec0[temp]{Templates}
+
+
+Modify the \grammarterm{template-declaration} grammar in paragraph 1 to 
+allow a template declaration introduced by a concept.
+
+\begin{quote}
+\pnum
+
+\begin{bnf}
+\nontermdef{template-declaration}\br
+  \terminal{template} \terminal{<} template-parameter-list \terminal{>}
+    \added{requires-clause\opt} declaration\br
+  \added{template-introduction declaration}
+
+\nontermdef{requires-clause}\br
+  \terminal{requires} constraint-expression
+\end{bnf}
+\end{quote}
+  
+Add the following paragraphs after paragraph 6.
+
+\begin{quote}
+\setcounter{Paras}{6}
+\pnum
+A \grammarterm{template-declaration} is written in terms of its template 
+parameters. These parameters are declared explicitly in a 
+\grammarterm{template-parameter-list} (\ref{temp.param}), or they are
+introduced by a \grammarterm{template-introduction} (\ref{temp.intro}).
+
+
+% TODO: Move this into 14.2
+\pnum
+A template declared by a \grammarterm{template-introduction}
+(\ref{temp.intro}) can also be an abbreviated function template (\ref{dcl.fct}). 
+% 
+The invented
+template parameters introduced by the placeholders in the abbreviated
+function template are appended to the list of template parameters declared
+by the \grammarterm{template-introduction}.
+
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C1 = true;
+template<typename T> concept bool C2 = true;
+
+C1{T} void f(T, auto);
+template<C T, typename U> void f(T, U); // OK: redeclaration of f(T, auto)
+\end{codeblock}
+\enternote
+  The second declaration of \tcode{f} is a redeclaration of the first
+  because their associated constraints are equivalent (\ref{temp.over.link}); 
+  this is described in the following paragraphs.
+\exitnote
+\exitexample
+
+\pnum
+The \defn{associated constraints} of a \grammarterm{template-declaration} are 
+defined to be a \grammarterm{constraint-expression} formed from the conjunction 
+of \grammarterm{constraint-expression}{}s associated by:
+% 
+\begin{itemize}
+\item a constraint associated by a template introduction 
+(\ref{temp.intro}), and
+
+\item any constrained template parameters (\ref{temp.param}) in the 
+declaration's \grammarterm{template-parameter-list}, and
+
+\item a \grammarterm{requires-clause} following a
+\grammarterm{template-parameter-list}, and
+
+\item any \grammarterm{constrained-type-specifier}s in the type of a 
+\grammarterm{parameter-declaration} in a function declaration 
+(\ref{dcl.spec.constr}), and
+
+\item a \grammarterm{requires-clause} appearing in the \grammarterm{declarator} 
+of a function declaration (\ref{dcl.fct}).
+\end{itemize}
+% 
+The formation of the associated constraints for a template declaration
+gives a definite ordering on subexpressions for the purpose of determining
+when one template redeclares another.
+
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = true;
+
+// all of the following declare the same function:
+void g(C);
+template<C T> void g(T);
+C{T} void g(T);
+template<typename T> requires C<T> void g(T);
+
+// these also declare the same function:
+template<C T> void f();
+template<typename T> void f() requires C<T>;
+\end{codeblock}
+\exitexample
+
+% FIXME: This is not strong enough. It might be better to define this
+% when we enumerate where associated constraints come from. That is,
+% introductions, constrained parameters (in the order in which they
+% appear), a requires clause after a template parameter list,
+% constrained-type-specifiers (in the order in which they appear), and
+% a requires clause in a function declarator.
+\pnum
+The order in which the subexpressions of the associated constraints
+are composed is the left-to-right order in which 
+\grammarterm{template-introduction}{}s,
+\grammarterm{constrained-type-specifier}{}s, and
+\grammarterm{requires-clause}s occur in the declaration.
+% 
+\enternote
+A program containing two declarations whose associated constraints are 
+functionally equivalent but not equivalent (\ref{temp.over.link}) is 
+ill-formed, no diagnostic required.
+\exitnote
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C1 = true;
+template<typename T> concept bool C2 = true;
+
+C1{T} void f1(C2);                                                      // \#1
+template<typename T, typename U> requires C1<T> && C2<U> void f1(T, U); // \#2
+\end{codeblock}
+% 
+In the associated constraints of \#1, the constraint associated by the 
+\grammarterm{template-introduction} \tcode{C1{T}} occurs before the 
+constraint associated by the \grammarterm{constrained-type-specifier} in the
+\grammarterm{parameter-declaration} \tcode{C2}.
+% 
+The resulting \grammarterm{constraint-expression} is equivalent to the 
+\grammarterm{requires-clause} in \#2.
+% 
+\begin{codeblock}
+C1{T} void f2(T) requires C2<T>;                        // \#1
+template<typename T> requires C1<T> && C2<T> void f2(); // \#2
+\end{codeblock}
+The associated constraints of \#1 and \#2 are equivalent.
+
+\begin{codeblock}
+template<C1 T> requires C2<T> void f3(T);                // \#1
+template<C1 T> void f3(T) requires C2<T>;                // \#2
+template<typename T> requires C1<T> && C2<T> void f3(T); // \#3
+template<typename T> void f3(T) requires C1<T> && C2<T>; // \#4
+\end{codeblock}
+The associated constraints of \#1, \#2, \#3, and \#4 are equivalent. The 
+\grammarterm{constraint-expression} associated by \tcode{C1} occurs before 
+the constraint associated by \tcode{C2} in each declaration.
+% 
+\begin{codeblock}
+template<C1 T> requires C2<T> void f5();
+template<C2 T> requires C1<T> void f5(); // error: constraints are functionally equivalent but not equivalent
+\end{codeblock}
+% 
+The associated constraints of the first declaration are
+\tcode{C1<T> \&\& C2<T>}, and those of the second are
+\tcode{C2<T> \&\& C1<T>}.
+\exitexample
+\end{quote}
+
+
+%%
+%% Template parameters
+%%
+\rSec1[temp.param]{Template parameters}
+
+In paragraph 1, extend the grammar for template parameters to 
+constrained template parameters.
+
+\begin{quote}
+\pnum
+\begin{bnf}
+\nontermdef{template-parameter}
+  \added{constrained-parameter}
+
+\added{
+\nontermdef{constrained-parameter}\br
+  constrained-type-specifier ...\opt identifier\opt\br
+  constrained-type-specifier ...\opt identifier\opt \terminal{=} type-id\br
+  constrained-type-specifier ...\opt identifier\opt \terminal{=} id-expression\br
+  constrained-type-specifier ...\opt identifier\opt \terminal{=} initializer-clause\br
+}
+\end{bnf}
+\end{quote}
+
+Insert a new paragraph after paragraph 1.
+
+\begin{quote}
+\pnum
+There is an ambiguity in the syntax of a template parameter between the
+declaration of a \grammarterm{constrained-parameter} and 
+\grammarterm{parameter-declaration}.
+% 
+If the \grammarterm{type-specifier-seq} of a \grammarterm{parameter-declaration} 
+is a \grammarterm{constrained-type-specifier}, then the 
+\grammarterm{template-parameter} is a \grammarterm{constrained-parameter}.
+\end{quote}
+
+Insert the following paragraphs after paragraph 8. These paragraphs
+define the meaning of a constrained template parameter.
+
+% FIXME: Replace "type and form"
+\begin{quote}
+\setcounter{Paras}{8}
+\pnum
+A \grammarterm{constrained-parameter} declares a template parameter whose 
+type and form match that of the prototype parameter of the concept designated 
+by its \grammarterm{constrained-type-specifier}.
+% 
+The designated concept is selected by concept resolution 
+(\ref{temp.constr.resolve}).
+% 
+Let \tcode{P} be the prototype parameter of the designated
+concept. The declared template parameter is determined by the type
+and form of \tcode{P} and the optional ellipsis in the
+\grammarterm{template-parameter}.
+% 
+\begin{itemize}
+\item If \tcode{P} is a type \grammarterm{template-parameter} the declared
+parameter is a type \grammarterm{template-parameter}. 
+
+\item If \tcode{P} is a non-type \grammarterm{template-parameter}, the declared
+parameter is a non-type \grammarterm{template-parameter} having the same 
+type as \tcode{P}.
+
+\item If \tcode{P} is a template \grammarterm{template-parameter}, the declared
+parameter is a template \grammarterm{template-parameter} having the same 
+\grammarterm{template-parameter-list} as \tcode{P}, excluding default template 
+arguments.
+
+\item If \tcode{P} declares a template parameter pack, the 
+\grammarterm{constrained-type-specifier} shall be followed by an ellipsis,
+and the declared parameter is a template parameter pack. 
+\end{itemize}
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C1 = true;
+template<template<typename> class X> concept bool C2 = true;
+template<int N> concept bool C3 = true;
+template<typename... Ts> concept bool C4 = true;
+template<char... Cs> concept bool C5 = true;
+
+template<C1 T> void f1();     // OK: \tcode{T} is a type template-parameter
+template<C2 X> void f2();     // OK: \tcode{X} is a template with one type-parameter
+template<C3 N> void f3();     // OK: \tcode{N} has type int
+template<C4... Ts> void f4(); // OK: \tcode{Ts} is a template parameter pack of types
+template<C4 Ts> void f5();    // error: \tcode{Ts} must be preceded by an ellipsis
+template<C5... Cs> f6();      // OK: \tcode{Cs} is a template parameter pack of chars
+\end{codeblock}
+\exitexample
+
+\pnum
+A \grammarterm{constrained-parameter} associates a
+\grammarterm{constraint-expression} with its
+\grammarterm{template-declaration}. 
+% 
+This \grammarterm{constraint-expression} is formed according to the rules 
+in \ref{temp.constr.form}.
+\end{quote}
+
+Insert the following paragraph after paragraph 9 to restrict the forms 
+of default template argument for \grammarterm{constrained-parameter}.
+
+\begin{quote}
+\setcounter{Paras}{11}
+\pnum
+The default \grammarterm{template-argument} of
+a \grammarterm{constrained-parameter} shall match
+the kind (type, non-type, template) of the declared parameter.
+
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C1 = true;
+template<int N> concept bool C2 = true;
+template<template<typename> class X> concept bool C3 = true;
+
+template<typename T> struct S0;
+
+template<C1 T = int> struct S1; // OK
+template<C2 N = 0> struct S2;   // OK
+template<C3 X = S0> struct S3;  // OK
+template<C1 T = 0> struct S4;   // error: default argument is not a type
+\end{codeblock}
+\exitexample
+\end{quote}
+
+
+%%
+%% Introduction of template parameters
+%%
+\rSec1[temp.intro]{Introduction of template parameters}
+
+Add this section after \ref{temp.param}.
+
+\pnum
+A \defn{template introduction} provides a more concise way of declaring
+different templates that have the same template parameters and constraints.
+
+\begin{bnf}
+\nontermdef{template-introduction}\br
+  nested-name-specifier\opt concept-name \terminal{\{} introduction-list \terminal{\}}
+
+\nontermdef{introduction-list}\br
+  introduced-parameter
+  introduction-list \terminal{,} introduced-parameter
+
+\nontermdef{introduced-parameter}\br
+    \terminal{...}\opt identifier
+\end{bnf}
+
+A template introduction declares a sequence of 
+\grammarterm{template-parameter}{}s, which are derived from a 
+\grammarterm{concept-name} and the sequence of \grammarterm{identifier}{}s in
+its \grammarterm{introduction-list}.
+
+\pnum
+The concept designated by the \grammarterm{concept-name} is selected by 
+concept resolution (\ref{temp.constr.resolve}).
+
+\pnum
+For each \grammarterm{introduced-parameter} \tcode{I} in an
+\grammarterm{introduction-list}, and for its corresponding selected template 
+parameter \tcode{P} from the designated concept, declare a new template
+parameter using the rules for declaring a constrained parameter in
+\ref{temp.param} by using \tcode{I} as a \grammarterm{declarator-id} and 
+\tcode{P} as the prototype parameter.
+% 
+% FIXME: This condition is broken. P shall declare a template pack?
+% 
+If \tcode{I} contains an ellipsis, \tcode{P} declares a template 
+parameter pack.
+% 
+\enterexample
+\begin{codeblock}
+template<typename T, int N, typename... Xs> concept bool C1 = true;
+template<template<typename> class X> concept bool C2 = true;
+
+C1{A, B, ...C} // OK: \tcode{A} is declared as \tcode{typename A},
+struct s;      // \tcode{B} is declared as \tcode{int B}, and
+               // \tcode{C} is declared as \tcode{typename... C}
+
+C1{X, Y, Z} // error: \tcode{Z} must be preceded by an ellipsis
+struct t;
+
+C2{T} // OK: \tcode{T} is declared as \tcode{template<typename> class T}
+void foo();
+
+C2{...X}    // error: the corresponding parameter is not a 
+void bar(); // template parameter pack
+\end{codeblock}
+\exitexample
+
+
+\pnum
+\enternote
+A concept referred to by a \grammarterm{concept-name} may have template 
+parameters with default template arguments. An \grammarterm{introduction-list} 
+may omit \grammarterm{identifier}{}s for a corresponding template
+parameter if it has a default argument. 
+% 
+However, only the \grammarterm{introduced-parameter}{}s are declared
+as template parameters. 
+% 
+\enterexample
+\begin{codeblock}
+template<typename A, typename B = bool> concept bool C() { return true; }
+
+C{T} void f(T); // OK: \tcode{f(T)} is a function template with
+                // a single template type parameter \tcode{T}
+\end{codeblock}
+There is no \grammarterm{introduced-parameter} that corresponds to the 
+template parameter \tcode{B} in the \tcode{C} concept, so \tcode{f(T)} is 
+declared with only one template parameter.
+\exitexample
+\exitnote
+
+
+\pnum
+An introduced template parameter does not have a default template argument 
+even if its corresponding template parameter does.
+% 
+\enterexample
+\begin{codeblock}
+template<typename T, int N = -1> concept bool P() { return true; }
+
+P{T, N} struct Array { };
+
+Array<double, 0> s1; // OK
+Array<double> s2;    // error: \tcode{Array} takes two template arguments
+\end{codeblock}
+\exitexample
+
+%  TODO: Unify with temp.constr.form
+
+\pnum
+A \grammarterm{template-introduction} associates a 
+\grammarterm{constraint-expression} with its
+\grammarterm{template-declaration}.
+
+The constraint is formed from the concept \tcode{C}, designated by the
+\grammarterm{constrained-type-specifier} (including its
+\grammarterm{nested-name-specifier}), 
+and the sequence of introduced parameters.
+
+Form a sequence of \grammarterm{template-argument}{}s
+\tcode{Args} from the template parameters declared by the
+\grammarterm{introduced-parameter}{}s as follows. 
+% 
+If an introduced template parameter \tcode{T} is declared as a template 
+parameter pack, its corresponding \grammarterm{template-argument} is a pack
+expansion of \tcode{T}. 
+% 
+% FIXME: Replace type and form
+% 
+Otherwise, its corresponding \grammarterm{template-argument} matches the 
+type and form of \tcode{T}.
+% 
+Let \tcode{TT} be a \grammarterm{template-id}
+formed as \tcode{C<Args>}.
+% 
+The associated \grammarterm{constraint-expression} is
+the \grammarterm{id-expression} \tcode{TT}
+if \tcode{C} refers to a variable concept. 
+% 
+The associated \grammarterm{constraint-expression} is
+the function call \tcode{TT()} if \tcode{C} refers to a function 
+concept.
+% 
+\enterexample
+\begin{codeblock}
+template<typename T, typename U> concept bool C1 = true;
+template<typename T, typename U> concept bool C2() { return true; }
+template<typename T, typename U = char> concept bool C3 = true;
+template<typename... Ts> concept bool C4 = true;
+
+C1{A, B} struct X;
+C2{A, B} struct Y;
+C3{P} void f(P);
+C4{...Qs} void g(Qs&&...);
+
+template<typename A, typename B> 
+  requires C1<A, B> // constraint associated by \tcode{C1{A, B}}
+    struct X;       // OK: redeclaration of \tcode{X}
+
+template<typename A, typename B> 
+  requires C2<A, B>()  // constraint associated by \tcode{C2{A, B}}
+    struct Y;          // OK: redeclaration of \tcode{Y}
+
+template<class P>
+  requires C3<P> // constraint associated by \tcode{C3{P}}
+    void f(P);   // OK: redeclaration of \tcode{f(P)}
+
+template<typename... Qs>
+  requires C4<Qs...> // constraint associated by \tcode{C4{...Qs}}
+    void g(Qs&&...); // OK: redeclaration of \tcode{g(Qs\&\&...)}
+\end{codeblock}
+\exitexample
+
+
+
+%%
+%% Names of template specializations
+%%
+\rSec1[temp.names]{Names of template specializations}
+
+Add this paragraph at the end of the section to require the satisfaction of 
+associated constraints on the formation of the \grammarterm{simple-template-id}.
+
+\begin{quote}
+\setcounter{Paras}{7}
+\pnum
+When a \grammarterm{simple-template-id} names
+a constrained non-function template or a template template parameter,
+but not a member template that is a member of an unknown specialization
+\ref{temp.res}, and all \grammarterm{template-argument}{}s in the
+\grammarterm{template-id} are non-dependent \ref{temp.dep.temp}, the template
+arguments are substituted into the associated constraints
+(Clause~\ref{temp}). 
+% 
+If, as a result of substitution, the associated constraints are not 
+satisfied (\ref{temp.constr}), the \grammarterm{template-id} is ill-formed.
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = false;
+
+template<C T> struct S1 { };
+template<C T> using Ptr = T*;
+
+S1<int>* p; // error: constraints not satisfied
+Ptr<int> p; // error: constraints not satisfied
+
+template<typename T>
+  struct S2 { Ptr<int> x; }; // error: constraints not satisfied
+
+template<typename T>
+  struct S3 { Ptr<T> x; };   // OK: satisfaction is not required
+
+S3<int> x;                   // error: constraints not satisfied
+
+template<template<C T> class X>
+  struct S4 {
+    X<int> x; // error: constraints not satisfied
+
+    using Type = T::template MT<char>;
+  };
+\end{codeblock}
+The error in the instantiation of \tcode{S4<int>} is caused
+by the substitution into the type of the member \tcode{x}.
+
+Because there is no declaration for the template named by 
+\tcode{T::template MT<char>}, it cannot have associated
+constraints.
+\exitexample
+\end{quote}
+
+
+%%
+%% Template arguments
+%%
+\rSec1[temp.arg]{Template arguments}
+
+Modify paragraph 3 to include rules for matching constrained template 
+\grammarterm{template parameter}{}s. Note that the examples following this 
+paragraph in the original document are omitted.
+
+\begin{quote}
+\setcounter{Paras}{2}
+\pnum
+A \grammarterm{template-argument} matches  a template 
+\grammarterm{template-parameter}  (call it \tcode{P}) when each of the 
+template parameters in the \grammarterm{template-parameter-list} of the 
+\grammarterm{template-argument}'s corresponding class template or alias 
+template (call it  \tcode{A}) matches the corresponding template parameter in 
+the \grammarterm{template-parameter-list} of \tcode{P}\added{, and \tcode{P} is 
+at least as constrained as \tcode{A} according to the rules in 
+\ref{temp.constr.order}}.
+% 
+Two template parameters match if they are of the same kind (type, non-type, 
+template), for non-type \grammarterm{template-parameter}{}s, their types are 
+equivalent (\ref{temp.over.link}), and for template 
+\grammarterm{template-parameter}{}s, each of their corresponding
+\grammarterm{template-parameter}{}s matches, recursively. 
+% 
+When \tcode{P}’s \grammarterm{template-parameter-list} 
+contains a template parameter pack (\ref{temp.variadic}), the template 
+parameter pack will match zero or more template parameters or template 
+parameter packs in the \grammarterm{template-parameter-list} of
+\tcode{A} with the same type and form as the template parameter
+pack in \tcode{P} (ignoring whether those template parameters are 
+template parameter packs).
+\end{quote}
+
+Add the following example to the end of paragraph 3, after the
+examples given in the original document.
+
+\begin{quote}
+\begin{addedblock}
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = requires (T t) { t.f(); };
+template<typename T> concept bool D = C<T> && requires (T t) { t.g(); };
+
+template<template<C> class P>
+  struct S { };
+
+template<C> struct X { };
+template<D> struct Y { };
+template<typename T> struct Z { };
+
+S<X> s1; // OK: X has the same constraints as P
+S<Y> s2; // error: the constraints of P do not subsume those of Y
+S<Z> s3; // OK: the constraints of P subsume those of Z
+\end{codeblock}
+\exitexample
+\end{addedblock}
+\end{quote}
+
+
+%%
+%% Template declarations
+%%
+\setcounter{section}{5}
+\rSec1[temp.decls]{Template declarations}
+
+Modify paragraph 2 to indicate that associated constraints are
+instantiated separately from the template they are associated with.
+
+\begin{quote}
+\setcounter{Paras}{1}
+For purposes of name lookup and instantiation, default 
+arguments\added{, associated constraints (Clause~\ref{temp}),} and
+\grammarterm{exception-specification}{}s of function templates and default
+arguments\added{, associated constraints,} and 
+\grammarterm{exception-specification}{}s of member functions of class
+templates are considered definitions; each default 
+argument\added{, associated constraint,} or 
+\grammarterm{exception-specification} is a separate definition which is 
+unrelated to the function template definition or to any other default 
+arguments\added{, associated constraints,} or 
+\grammarterm{exception-specification}s.
+\end{quote}
+
+
+%%
+%% Class templates
+%%
+\rSec2[temp.class]{Class templates}
+
+Modify paragraph 3 to require template constraints for out-of-class
+definitions of members of constrained templates. 
+
+\begin{quote}
+\setcounter{Paras}{2}
+\pnum
+When a member function, a member class, a member enumeration, a static 
+data member or a member template of a class template is defined outside 
+of the class template definition, the member definition is defined as a 
+template definition in which the \grammarterm{template-parameter}{}s
+\added{and associated constraints} are those of the class template.
+% 
+The names of the template parameters used in the definition of the 
+member may be different from the template parameter names used in the 
+class template definition. The template argument list following the class
+template name in the member definition shall name the parameters in the 
+same order as the one used in the template parameter list of the member. 
+% 
+Each template parameter pack shall be expanded with an ellipsis in the 
+template argument list.
+\end{quote}
+
+Add the following example at the end of paragraph 3.
+
+\begin{quote}
+\begin{addedblock}
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = true;
+template<typename T> concept bool D = true;
+
+template<C T> struct S {
+    void f();
+    void g();
+    template<D U> struct Inner;
+  }
+
+template<typename T> requires C<T> void S<T>::f() { } // OK: parameters and constraints match
+template<typename T> void S<T>::g() { } // error: no matching declaration for S<T>
+
+template<C T> D{U} struct S<T>::Inner { }; // OK
+\end{codeblock}
+\exitexample
+\end{addedblock}
+\end{quote}
+
+%%
+%% Member functions of class templates
+%%
+\rSec3[temp.mem.func]{Member functions of class templates}
+
+Add the following example to the end of paragraph 1.
+
+\begin{quote}
+\begin{addedblock}
+\enterexample
+\begin{codeblock}
+template<typename T> struct S {
+  void f() requires true;
+  void g() requires true;
+};
+
+template<typename T> 
+  void S<T>::f() requires true { } // OK
+template<typename T> 
+  void S<T>::g() { }               // error: no matching function in S<T>
+\end{codeblock}
+\exitexample
+\end{addedblock}
+\end{quote}
+
+
+%%
+%% Member templates
+%%
+\rSec2[temp.mem]{Member templates}
+
+
+Modify paragraph 1 in order to account for constrained member templates
+of (possibly) constrained class templates. 
+
+\begin{quote}
+A template can be declared within a class or class template; such a 
+template is called a member template. 
+
+A member template can be defined within or outside its class definition 
+or class template definition. 
+
+A member template of a class template that is defined outside of its 
+class template definition shall be specified with the 
+\grammarterm{template-parameter}{}s \added{and associated constraints}
+of the class template followed by the \grammarterm{template-parameter}{}s
+\added{and associated constraints} (Clause~\ref{temp}) of the member template.
+\end{quote}
+
+
+Add the following example at the end of paragraph 1.
+
+\begin{quote}
+\begin{addedblock}
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C1 = true;
+template<typename T> concept bool C2 = sizeof(T) <= 4;
+
+template<C1 T>
+  struct S {
+    template<C2 U> void f(U);
+    template<C2 U> void g(U);
+  };
+
+template<C1 T> template<typename U> 
+  void S<T>::f(U) requires C2<U> { } // OK
+template<C1 T> template<typename U> 
+  void S<T>::g(U) { }                // error: no matching function in \tcode{S<T>}
+\end{codeblock}
+\exitexample
+\end{addedblock}
+\end{quote}
+
+
+%%
+%% Friends
+%%
+\setcounter{subsection}{3}
+\rSec2[temp.friend]{Friends}
+
+Modify paragraph 9 to restrict constrained friend declarations.
+
+\begin{quote}
+\setcounter{Paras}{8}
+\pnum
+When a friend declaration refers to a specialization of a function
+template, the function parameter declarations shall not include
+default arguments, \added{the declaration shall not be
+constrained,} nor shall the inline specifier be used in such a
+declaration.
+\end{quote}
+
+Add examples following that paragraph.
+
+\begin{quote}
+\begin{addedblock}
+\pnum
+\enternote
+Other friend declarations can be constrained. In a constrained friend 
+declaration that is not a definition, the constraints are used for declaration
+\exitnote
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C1 = true;
+template<typename T> concept bool C2 = false;
+
+template<C1 T> g0(T);
+template<C1 T> g1(T);
+template<C2 T> g2(T);
+
+template<typename T>
+  struct S {
+    friend void f1() requires true;                  // OK
+    friend void f2() requires C1<T>;           // OK
+    friend void g0<T>(T) requires C1<T<; // error: constrained friend specialization
+    friend void g1<T>(T);                      // OK
+    friend void g2<T>(T);                      // error: constraint can never be satisfied, no diagnostic required
+  };
+
+void f1() requires true;    // friend of all S<T>
+void f2() requires C1<int>; // friend of S<int>
+\end{codeblock}
+The friend declaration of \tcode{g2} is ill-formed, no
+diagnostic required, because no valid specialization of \tcode{S}
+can be generated: the constraint on \tcode{g2} can never
+be satisfied, so template argument deduction
+(\ref{temp.deduct.decl}) will always fail.
+\exitexample
+
+\pnum
+\enternote
+Within a class template, a friend may define a non-template function
+whose constraints specify requirements on template arguments.
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool Eq = requires (T t) { t == t; };
+
+template<typename T>
+  struct S {
+    friend bool operator==(S a, S b) requires Eq<T> { return a == b; } // OK
+  };
+\end{codeblock}
+\exitexample
+In the instantiation of such a class template, the template
+arguments are substituted into the constraints but not evaluated.
+Constraints are checked (\ref{temp.constr}) only when
+that function is considered as a viable candidate for overload resolution
+(\ref{over.match.viable}).
+\exitnote
+\end{addedblock}
+\end{quote}
+
+
+%%
+%% Class template partial specializations
+%%
+\rSec2[temp.class.spec]{Class template partial specialization}
+
+After paragraph 3, insert the following, which explains constrained partial 
+specializations.
+
+\begin{quote}
+\begin{addedblock}
+\setcounter{Paras}{3}
+\pnum
+A class template partial specialization may be constrained
+(Clause~\ref{temp}).
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = requires (T t) { t.f(); };
+template<int I> concept bool N = I > 0;
+
+template<C T1, C T2, N I> class A<T1, T2, I>;  // \#6
+template<C T, N I>        class A<int, T*, I>; // \#7
+\end{codeblock}
+\exitexample
+\end{addedblock}
+\end{quote}
+
+Remove the 3rd item in the list of paragraph 8 to allow constrained class 
+template partial specializations like \#6, and because it is redundant with 
+the 4th item. Note that all other items in that list are elided.
+
+\begin{quote}
+\setcounter{Paras}{7}
+Within the argument list of a class template partial specialization, 
+the following restrictions apply:
+\begin{itemize}
+\item ...
+
+\item \removed{The argument list of the specialization shall
+not be identical to the implicit argument list of the
+primary template.}
+
+\item The specialization shall be more specialized than the primary
+template (\ref{temp.class.order}).
+
+\item ...
+\end{itemize}
+\end{quote}
+ 
+%%
+%% Matching of class template partial specializations
+%%
+\rSec3[temp.class.spec.match]{Matching of class template partial specializations}
+
+Modify paragraph 2; constraints must be satisfied in order
+to match a partial specialization. 
+
+\begin{quote}
+\setcounter{Paras}{1}
+\pnum
+A partial specialization matches a given actual template argument list if 
+the template arguments of the partial specialization can be deduced from the 
+actual template argument list (\ref{temp.deduct}) \added{, and the deduced 
+template arguments satisfy the constraints of the partial specialization, if 
+any (\ref{temp.constr})}.
+\end{quote}
+
+Add the following example to the end of paragraph 2.
+
+\begin{quote}
+\begin{addedblock}
+\enterexample
+\begin{codeblock}
+struct S { void f(); };
+
+A<S, S, 1>    a6; // uses \#6
+A<S, int, 2>  a7; // error: constraints not satisfied
+A<int, S*, 3> a8; // uses \#7
+\end{codeblock}
+\exitexample
+\end{addedblock}
+\end{quote}
+
+
+%%
+%% Partial ordering of class template specializations
+%%
+\rSec3[temp.class.order]{Partial ordering of class template specializations}
+
+Modify paragraph 1 so that constraints are considered in the
+partial ordering of class template specializations. 
+
+\begin{quote}
+\pnum
+For two class template partial specializations, the first is 
+at least as specialized as the second if, given the following 
+rewrite to two function templates, the first function template 
+is at least as specialized as the second according to the ordering 
+rules for function templates 
+(\ref{temp.func.order}):
+% 
+\begin{itemize}
+\item the first function template has the same template 
+parameters \added{and associated constraints} as the first partial 
+specialization, and has a single function parameter whose
+type is a class template specialization with the template 
+arguments of the first partial specialization, and
+
+\item the second function template has the same template 
+parameters \added{and associated constraints} as the second partial 
+specialization, and has a single function parameter whose
+type is a class template specialization with the template 
+arguments of the second partial specialization.
+\end{itemize}
+\end{quote}
+
+Add the following example to the end of paragraph 1.
+
+\begin{quote}
+\begin{addedblock}
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = requires (T t) { t.f(); };
+template<typename T> concept bool D = C<T> && requires (T t) { t.f(); };
+
+
+template<typename T> class S { };
+template<C T> class S<T> { }; // \#1
+template<D T> class S<T> { }; // \#2
+
+template<C T> void f(S<T>); // A
+template<D T> void f(S<T>); // B
+\end{codeblock}
+The partial specialization \#2 is more specialized than 
+\#1 for template arguments that satisfy both constraints because 
+\tcode{B} is more specialized than \tcode{A}.
+\exitexample
+\end{addedblock}
+\end{quote}
+
+
+%%
+%% Function templates
+%%
+\rSec2[temp.fct]{Function templates}
+
+%%
+%% Function template overloading
+%%
+\rSec3[temp.over.link]{Function template overloading}
+
+Modify paragraph 6 to account for constraints on function templates.
+
+\begin{quote}
+\setcounter{Paras}{5}
+\pnum
+
+\removed{ Two function templates are \defn{equivalent} if they are 
+declared in the same scope, have the same name, have identical template 
+parameter lists, and have return types and parameter lists that are 
+equivalent using the rules described above to compare expressions 
+involving template parameters.}
+% 
+\begin{addedblock}
+Two function templates are \defn{equivalent} if they:
+\begin{itemize}
+\item are declared in the same scope,
+
+\item have the same name,
+
+\item have identical template parameter lists,
+
+\item have return types and parameter lists that are equivalent using the 
+rules described above to compare expressions involving template parameters, and
+
+\item have associated constraints (Clause~\ref{temp}) that are equivalent 
+using the rules above to compare expressions involving template parameters.
+\end{itemize}
+\end{addedblock}
+% 
+Two function templates are \defn{functionally equivalent} if they 
+are equivalent except that one or more expressions that involve 
+template parameters in the return types and parameter lists\added{, or the
+associated constraints (Clause~\ref{temp})} are functionally equivalent using 
+the rules described above to compare expressions involving template parameters.
+% 
+If a program contains declarations of function templates that are 
+functionally equivalent but not equivalent, the program is ill-formed; 
+no diagnostic is required.
+\end{quote}
+
+
+%%
+%% Partial ordering of function templates
+%%
+\rSec3[temp.func.order]{Partial ordering of function templates}
+
+Modify paragraph 2 to include constraints in the partial ordering
+of function templates.
+
+\begin{quote}
+\setcounter{Paras}{1}
+\pnum
+Partial ordering selects which of two function templates is 
+more specialized than the other by transforming each template 
+in turn (see next paragraph) and performing template argument 
+deduction using the function type. The deduction process 
+determines whether one of the templates is more specialized 
+than the other.
+% 
+If so, the more specialized template is the one chosen by the 
+partial ordering process. 
+% 
+\added{If both deductions succeed, the partial ordering selects
+the more constrained template as described by the rules in
+\ref{temp.constr.order}.}
+\end{quote}
+
+%%
+%% Name resolution
+%%
+\rSec1[temp.res]{Name resolution}
+
+Modify paragraph 8.
+
+\begin{quote}
+\setcounter{Paras}{7}
+\pnum
+Knowing which names are type names allows the syntax of every
+template to be checked. No diagnostic shall be issued for a template
+for which a valid specialization can be generated. If no valid
+specialization can be generated for a template, and that template is
+not instantiated, the template is ill-formed, no diagnostic
+required. If every valid specialization of a variadic template
+requires an empty template parameter pack, the template is
+ill-formed, no diagnostic required. \added{If no instantiation of
+the associated constraints of a template would result in a valid
+expression, the template is ill-formed, no diagnostic required.}
+If a hypothetical instantiation of a template immediately following
+its definition would be ill-formed due to a construct that does not
+depend on a template parameter, the program is ill-formed; no
+diagnostic is required. If the interpretation of such a construct in
+the hypothetical instantiation is different from the interpretation
+of the corresponding construct in any actual instantiation of the
+template, the program is ill-formed; no diagnostic is required.
+\end{quote}
+
+%%
+%% Dependent name resolution
+%% 
+\setcounter{subsection}{3}
+\rSec2[temp.dep.res]{Dependent name resolution}
+
+%%
+%% Point of instantiation
+%%
+\rSec3[temp.point]{Point of instantiation}
+
+Add a new paragraph after paragraph 4.
+
+\begin{quote}
+\setcounter{Paras}{4}
+\pnum
+The point of instantiation of a \grammarterm{constraint-expression} of a
+specialization immediately precedes the point of instantiation of
+the specialization.
+\end{quote}
+
+
+%%
+%% Template instantiation and specialization
+%%
+\rSec1[temp.spec]{Template instantiation and specialization}
+
+%%
+%% Implicit instantiation
+\rSec2[temp.inst]{Implicit Instantiation}
+    
+Change paragraph 1 to include associated constraints.
+
+\begin{quote}
+Unless a class template specialization has been explicitly
+instantiated \ref{temp.explicit} or explicitly specialized \ref{temp.expl.spec}, 
+the class template specialization is implicitly instantiated when the
+specialization is referenced in a context that requires a
+completely-defined object type or when the completeness of the
+class type affects the semantics of the program. 
+% 
+\enternote
+Within a template declaration, a local class or enumeration and the members
+of a local class are never considered to be entities that can be
+separately instantiated (this includes their default arguments,
+exception-specifications, and non-static data member initializers, if any). 
+% 
+As a result, the dependent names are looked up, the semantic constraints 
+are checked, and any templates used are instantiated as part of the
+instantiation of the entity within which the local class or enumeration is 
+declared.
+\exitnote
+% 
+The implicit instantiation of a class template specialization causes the 
+implicit instantiation of the declarations, but not of the definitions, default
+arguments, \added{associated constraints (Clause~\ref{temp}),} or
+\grammarterm{exception-specification}{}s of the class member functions,
+member classes, scoped member enumerations, static data members and
+member templates; and it causes the implicit instantiation of the
+definitions of unscoped member enumerations and member anonymous
+unions.
+\end{quote}
+
+
+Add a new paragraph after paragraph 15 to describe how associated
+constraints are instantiated.
+
+\begin{quote}
+\begin{addedblock}
+\setcounter{Paras}{15}
+\pnum
+The associated constraints of a template specialization are not
+instantiated along with the specialization itself; they are
+instantiated only to determine if they are satisfied
+(\ref{temp.constr}).
+% 
+\enternote
+The satisfaction of constraints is determined during lookup or overload
+resolution (\ref{over.match}). Preserving the spelling
+of the substituted constraint also allows constrained member function
+to be partially ordered by those constraints according to the rules
+in \ref{temp.constr.order}.
+\exitnote
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = sizeof(T) > 2;
+template<typename T> concept bool D = C<T> && sizeof(T) > 4;
+
+template<typename T> struct S {
+  S() requires C<T> { } // \#1
+  S() requires D<T> { } // \#2
+};
+
+S<char> s1;    // error: no matching constructor
+S<char[8]> s2; // OK: calls \#2
+\end{codeblock}
+
+Even though neither constructor for \tcode{S<char>} will be selected by
+overload resolution, they remain a part of the class template specialization. 
+% 
+This also has the effect of suppressing the implicit generation of a default
+constructor (\ref{class.ctor}).
+\exitexample
+
+\enterexample
+\begin{codeblock}
+template<typename T> struct S1 {
+  template<typename U> requires false struct Inner1; // OK
+};
+
+template<typename T> struct S2 {
+  template<typename U> 
+    requires sizeof(T[(int)-sizeof(T)]) > 1 // error: ill-formed, no diagnostic required
+      struct Inner2;
+};
+\end{codeblock}
+\exitexample
+Every instantiation of \tcode{S1} results in a valid type, although any use 
+of its nested \tcode{Inner1} template is invalid.
+% 
+\tcode{S2} is ill-formed, no diagnostic required, since no substitution into 
+the constraints of its \tcode{Inner2} template would result in a valid 
+expression.
+\end{addedblock}
+\end{quote}
+
+
+%%
+%% Explicit instantiation
+%%
+\rSec2[temp.explicit]{Explicit instantiation}
+
+Modify paragraph 8 to ensure that only members whose constraints are 
+satisfied are explicitly instantiated during class template 
+specialization. The note in the original document is omitted.
+
+\begin{quote}
+\setcounter{Paras}{7}
+\pnum
+An explicit instantiation that names a class template specialization is 
+also an explicit instantiation of the same kind (declaration or 
+definition) of each of its members (not including members inherited from 
+base classes and members that are templates) that has not been previously 
+explicitly specialized in the translation unit containing the explicit 
+instantiation, \added{and provided that the associated constraints (\ref{temp}),
+if any, of that member are satisfied (\ref{temp.constr}) by the template 
+arguments of the explicit instantiation, } except as described below.
+\end{quote}
+
+Add the following paragraphs to this section. These require an explicit
+instantiation of a constrained template to satisfy the template's
+associated constraints.
+
+\begin{quote}
+\begin{addedblock}
+\setcounter{Paras}{13}
+\pnum
+If the explicit instantiation names a class template specialization
+or variable template specialization of a constrained template, then
+the \grammarterm{template-arguments} in the
+\grammarterm{template-id} of the explicit
+instantiation shall satisfy the template's associated constraints
+(\ref{temp.constr}).
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = sizeof(T) == 1;
+
+template<C T> struct S { };
+
+template struct S<char>;    // OK
+template struct S<char[2]>; // error: constraints not satisfied
+\end{codeblock}
+\exitexample
+
+\pnum
+When an explicit instantiation refers to a specialization of a
+function template (\ref{temp.deduct.decl}), that 
+template's associated constraints shall be satisfied by the template 
+arguments of the explicit instantiation.
+
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = requires (T t) { -t; };
+
+template<C T>        void f(T) { } // \#1
+template<typename T> void g(T) { } // \#2
+template<C T>        void g(T) { } // \#3
+
+template void f(int);   // OK: refers to \#1
+template void f(void*); // error: no matching template
+template void g(int);   // OK: refers to \#3
+template void g(void*); // OK: refers to \#2
+\end{codeblock}
+\exitexample
+\end{addedblock}
+\end{quote}
+
+
+%%
+%% Explicit specialization
+%%
+\rSec2[temp.expl.spec]{Explicit specialization}
+
+Insert the following paragraphs after paragraph 12. These require
+an explicit specialization to satisfy the constraints of the primary
+template.
+
+\begin{quote}
+\begin{addedblock}
+\setcounter{Paras}{12}
+\pnum
+The \grammarterm{template-arguments} in the
+\grammarterm{template-id} of an explicit 
+specialization of a constrained non-function template shall satisfy the 
+associated constraints of that template, if any 
+(\ref{temp.constr}).
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = sizeof(T) == 1;
+
+template<C T> struct S { };
+
+template<> struct S<char> { };    // OK
+template<> struct S<char[2]> { }; // error: constraints not satisfied
+\end{codeblock}
+\exitexample
+
+\pnum
+When determining the function template referred to by an explicit 
+specialization of a function template (\ref{temp.deduct.decl}),
+the associated constraints of that template (if any) shall be satisfied 
+(\ref{temp.constr}) by the template arguments of the explicit specialization.
+
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = requires (T t) { -t; };
+
+template<C T>        void f(T); // \#1
+template<typename T> void g(T); // \#2
+template<C T>        void g(T); // \#3
+
+template<> void f(int);   // OK: refers to \#1
+template<> void f(void*); // error: no matching template
+template<> void g(int);   // OK: refers to \#3
+template<> void g(void*); // OK: refers to \#2
+\end{codeblock}
+\exitexample
+\end{addedblock}
+\end{quote}
+
+
+%%
+%% Function template specializations
+%%
+\rSec1[temp.fct.spec]{Function template specializations}
+
+%%
+%% Template argument deduction
+%%
+\rSec2[temp.deduct]{Template argument deduction}
+
+Add the following sentences to the end of paragraph 5. This defines
+the substitution of template arguments into a function template's
+associated constraints. Note that the last part of paragraph 5
+has been duplicated in order to provide context for the addition.
+
+\begin{quote}
+\setcounter{Paras}{4}
+\pnum
+When all template arguments have been deduced or obtained from default 
+template arguments, all uses of template parameters in the template 
+parameter list of the template and the function type are replaced with
+the corresponding deduced or default argument values. 
+
+If the substitution results in an invalid type, as described above, type 
+deduction fails.
+
+\added{If the function template has associated constraints (Clause~\ref{temp}),
+the template arguments are substituted into the associated constraints
+without evaluating the resulting expression. If this substitution
+results in an invalid type or expression, type deduction fails.
+% 
+\enternote
+The satisfaction of constraints (\ref{temp.constr})
+associated with the function template specialization is determined during 
+overload resolution (\ref{over.match}), and not at 
+the point of substitution.
+\exitnote}
+\end{quote}
+
+\setcounter{subsection}{5}
+\rSec3[temp.deduct.decl]{Deducing template arguments from a function declaration}
+
+Add the following after paragraph 1 in order to require the
+satisfaction of constraints when matching a specialization to a
+template.
+
+\begin{quote}
+\begin{addedblock}
+\setcounter{Paras}{2}
+\pnum
+Remove from the set of function templates considered all those
+whose associated constraints (if any) are not satisfied by the deduced
+template arguments (\ref{temp.constr}).
+\end{addedblock}
+\end{quote}
+
+Update paragraph 2 (now paragraph 3) to accommodate the new wording.
+
+\begin{quote}
+\pnum
+If, 
+\removed{for the set of function templates so considered}
+\added{for the remaining function templates},
+there is either no match or more than one match after partial ordering 
+has been considered (\ref{temp.func.order}), deduction fails 
+and, in the declaration cases, the program is ill-formed.
+\end{quote}
+
+%%
+%% Template constraints
+%%
+\rSec1[temp.constr]{Template constraints}
+
+Add this section after 14.8.
+
+\pnum
+\enternote
+This section defines the meaning of constraints on template arguments, including
+the translation of \grammarterm{constraint-expression}s
+into constraints (\ref{temp.constr.expr}),
+and also the abstract syntax, satisfaction, and subsumption of those 
+constraints (\ref{temp.constr.op}, \ref{temp.constr.atom}).
+\exitnote
+
+\pnum
+A \defn{constraint} is a sequence of logical operations and 
+operands that specifies requirements on template arguments.
+\enternote The operands of a logical operation are constraints. \exitnote
+
+\pnum
+After substitution, a constraint is \defn{satisfied} if and only if 
+it and all of its operands are satisfied according to the evaluation 
+rules described in \ref{temp.constr.op} and \ref{temp.constr.atom}.
+% 
+If the substitution of template arguments into a constraint fails, 
+that constraint is not satisfied.
+% 
+\enternote
+Substitution into a constraint may yield a well-formed constraint that
+contains ill-formed expressions or types. This may happen, for
+example, in the substitution into expression constraints
+(\ref{temp.constr.atom.expr}) and type constraints
+(\ref{temp.constr.atom.type}).
+\exitnote
+
+\pnum
+A constraint \tcode{P} is said to \defn{subsume} another constraint \tcode{Q} 
+if, informally, it can be determined that \tcode{P} implies \tcode{Q}, up to 
+the equivalence of types and expressions in atomic constraints.
+\ref{temp.constr.atom}. 
+% 
+\enternote
+Subsumption does not determine, for example, if the predicate 
+constraint (\ref{temp.constr.atom.pred}) 
+\tcode{N \% 2 == 1} subsumes \tcode{N \& 1} for 
+some integral template argument, \tcode{N}. 
+\exitnote
+% 
+The rules determining when one constraint subsumes another is given
+in \ref{temp.constr.order}, and subsumption
+rules for each kind of atomic constraint are given in
+\ref{temp.constr.atom}.
+
+
+%%
+%% Logical operations
+%%
+\rSec2[temp.constr.op]{Logical operations}
+
+\pnum
+There are two logical operations on constraints: conjunction
+and disjunction.
+% 
+\enternote 
+These logical operations have no corresponding C++ syntax.
+For the purpose of exposition, conjunction is spelled
+using the symbol $\land$ and disjunction is spelled using the 
+symbol $\lor$. Grouping of constraints is shown using parentheses.
+\exitnote
+
+\pnum
+A \defn{conjunction} is a logical operation taking two 
+operands. A conjunction of constraints is satisfied if and only 
+if both operands are satisfied.
+
+\pnum
+A \defn{disjunction} is a logical operation taking two 
+operands. A disjunction of constraints is satisfied if and only 
+if either operand is satisfied or both operands are satisfied.
+
+%%
+%% Atomic constraints
+%%
+\rSec2[temp.constr.atom]{Atomic constraints}
+
+Any constraint that is not a conjunction or disjunction is an
+\defn{atomic constraint}.
+
+%%
+%% Predicate constraints
+%%
+\rSec3[temp.constr.atom.pred]{Predicate constraints}
+
+\pnum
+A \defn{predicate constraint} is an atomic constraint
+that evaluates a prvalue constant expression of type \tcode{bool}
+(\ref{expr.const}).
+% 
+The constraint is satisfied if and only if the expression 
+evaluates to \tcode{true}.
+% 
+\enternote
+Predicate constraints allow the definition of template requirements
+in terms of constant expressions. This allows the specification 
+constraints on non-type template arguments and template template 
+arguments.
+\exitnote
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = sizeof(T) == 4 && !true;
+\end{codeblock}
+Here, \tcode{sizeof(T) == 4} and \tcode{!true} are 
+predicate constraints required by the concept, \tcode{C}.
+\exitexample
+
+\pnum
+A predicate constraint \tcode{P} subsumes another predicate constraint 
+\tcode{Q} if and only if \tcode{P} and \tcode{Q} are equivalent 
+\grammarterm{constraint-expression}{}s (\ref{temp.constr.expr}).
+% 
+\enterexample
+The predicate \tcode{M >= 0} does not subsume the predicate
+\tcode{M > 0} because they are not equivalent
+\grammarterm{constraint-expressions}.
+\exitexample
+
+
+
+%%
+%% Expression constraints
+%%
+\rSec3[temp.constr.atom.expr]{Expression constraints}
+
+\pnum
+An \defn{expression constraint} is an atomic constraint
+that specifies a requirement on the formation of an
+\grammarterm{expression} \tcode{E}
+through substitution of template arguments.
+% 
+An expression constraint is satisfied if substitution 
+yielding \tcode{E} did not fail. 
+% 
+Within an expression constraint, \tcode{E} is an unevaluated 
+operand (Clause \ref{expr}).
+% 
+\enternote
+An expression constraint is introduced by the \grammarterm{expression} in 
+either a \grammarterm{simple-requirement} (\ref{expr.prim.req.simple})
+or \grammarterm{compound-requirement} (\ref{expr.prim.req.compound})
+of a \grammarterm{requires-expression}.
+\exitnote
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = requires (T t) { ++t; };
+\end{codeblock}
+The concept \tcode{C} introduces an expression constraint for 
+the expression \tcode{++t}.
+% 
+The type argument \tcode{int} satisfies this constraint because the
+the expression \tcode{++t} is valid after substituting \tcode{int}
+for \tcode{T}.
+\exitexample
+
+\pnum
+An expression constraint \tcode{P} subsumes another expression constraint 
+\tcode{Q} if and only if the \grammarterm{expression}s of \tcode{P}
+and \tcode{Q} are equivalent (\ref{temp.over.link}). 
+
+
+%%
+%% Type constraints
+%%
+\rSec3[temp.constr.atom.type]{Type constraints}
+
+\pnum
+A \defn{type constraint} is an atomic constraint that specifies a requirement 
+on the formation of a type \tcode{T} through the substitution of template 
+arguments.
+% 
+A type constraint is satisfied if and only \tcode{T} is non-dependent, meaning 
+that the substitution yielding \tcode{T} did not fail.
+% 
+\enternote
+A type constraint is introduced by the \grammarterm{typename-specifier} in a
+\grammarterm{type-requirement} of a \grammarterm{requires-expression}
+(\ref{expr.prim.req.type}).
+\exitnote
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = requires () { typename T::type; };
+\end{codeblock}
+The concept \tcode{C} introduces a type constraint for the 
+type name \tcode{T::type}.
+% 
+The type \tcode{int} does not satisfy this constraint
+because substitution of that type into the constraint results in a
+substitution failure; \tcode{typename int::type} is ill-formed.
+\exitexample
+
+\pnum
+A type constraint that names a class template specialization 
+does not require that type to be complete 
+(\ref{basic.types}).
+
+\pnum
+A type constraint \tcode{P} subsumes another type
+constraint \tcode{Q} if and only if the types in \tcode{P}
+and \tcode{Q} are equivalent 
+(\ref{temp.type}).
+
+
+%%
+%% Implicit conversion constraints
+%%
+\rSec3[temp.constr.atom.conv]{Implicit conversion constraints}
+
+\pnum
+An \defn{implicit conversion constraint} is an atomic constraint that 
+specifies a requirement on the implicit conversion of an \grammarterm{expression}
+\tcode{E} to a type \tcode{T}. 
+% 
+The constraint is satisfied if and only if \tcode{E} is implicitly convertible 
+to \tcode{T} (Clause~\ref{conv}).
+
+\enternote
+A conversion constraint is introduced by a \grammarterm{trailing-return-type} 
+in a \grammarterm{compound-requirement} when the 
+\grammarterm{trailing-return-type} contains no placeholders 
+(\ref{expr.prim.req.compound}).
+\exitnote
+
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = 
+  requires (T a, T b) {
+    { a == b } -> bool;
+  };
+\end{codeblock}
+The \grammarterm{compound-requirement} in the
+\grammarterm{requires-expression} of \tcode{C} introduces two atomic 
+constraints: an expression constraint for \tcode{a == b}, and the implicit 
+conversion constraint that the expression \tcode{a == b} is implicitly 
+convertible to \tcode{bool}.
+\exitexample
+
+\pnum
+An implicit conversion constraint \tcode{P} subsumes another implicit 
+conversion constraint \tcode{Q} if and only if the \grammarterm{expression}{}s 
+of \tcode{P} and \tcode{Q} are equivalent (\ref{temp.over.link}) and the types
+of \tcode{P} and \tcode{Q} are equivalent (\ref{temp.type}).</p>
+
+
+%%
+%% Argument deduction constraints
+%%
+\rSec3[temp.constr.atom.deduct]{Argument deduction constraints}
+
+\pnum
+An \defn{argument deduction constraint} is an atomic
+constraint that specifies a requirement on 
+the usability of an \grammarterm{expression} 
+\tcode{E} as an argument to an invented abbreviated
+function template \tcode{F} (\ref{dcl.fct}),
+where \tcode{F} has a single parameter formed from a type that 
+includes placeholders 
+(\ref{dcl.spec.auto}, \ref{dcl.spec.constr}).
+% 
+\enternote
+An argument deduction constraint is introduced by a
+\grammarterm{trailing-return-type} in a
+\grammarterm{compound-requirement} when the
+\grammarterm{trailing-type-specifier-seq}
+contains at least one placeholder
+(\ref{expr.prim.req.compound}).
+\exitnote
+% 
+\enterexample
+\begin{codeblock}
+template<typename T>
+concept bool C1() { return true; }
+
+template<typename T>
+concept bool C2() { return requires(T t) { {*t} -> const C1& x; }; }
+\end{codeblock}
+The invented function template for the
+\grammarterm{compound-requirement} in
+\tcode{C2} is:
+\begin{codeblock}
+void F(const C1& x);
+\end{codeblock}
+\exitexample
+% 
+The constraint is satisfied if and only if \tcode{F}
+is selected by overload resolution for the call \tcode{F(E)}
+(\ref{over.match}).
+% 
+\enternote
+Overload resolution selects \tcode{F} only when template 
+argument deduction succeeds and \tcode{F}'s associated 
+constraints are satisfied.
+\exitnote
+
+\pnum
+An argument deduction constraint \tcode{P} subsumes another argument deduction 
+constraint \tcode{Q} if and only if the \grammarterm{expression}{}s of
+\tcode{P} and \tcode{Q} are equivalent (\ref{temp.over.link}), and the types
+of \tcode{P} and \tcode{Q} are equivalent (\ref{temp.type}). 
+
+
+%%
+%% Exception constraints
+%%
+\rSec3[temp.constr.atom.noexcept]{Exception constraints}
+
+\pnum
+An \defn{exception constraint} is an atomic constraint
+for an expression \tcode{E} that is satisfied if and only
+if the expression \tcode{noexcept(E)} is \tcode{true}
+(\ref{expr.unary.noexcept}).
+% 
+\enternote
+Constant expression constraints are introduced by a
+\grammarterm{compound-requirement} that
+includes the \tcode{noexcept} specifier
+(\ref{expr.prim.req.compound}).
+\exitnote
+
+
+\pnum
+An exception constraint \tcode{P} subsumes another
+exception constraint \tcode{Q} if and only if the
+\grammarterm{expression}s of \tcode{P}
+and \tcode{Q} are equivalent 
+(\ref{temp.over.link}).
+
+
+
+%%
+%% Partial ordering by constraints
+%%
+\rSec2[temp.constr.order]{Partial ordering by constraints}
+
+\pnum
+In order to determine if a constraint \tcode{P} subsumes a constraint
+\tcode{Q}, transform \tcode{P} into disjunctive normal form, 
+and transform \tcode{Q} into conjunctive normal form\footnote{
+A constraint is in disjunctive normal form when it is a disjunction of
+clauses where each clause is a conjunction of atomic constraints. 
+% 
+Similarly, a constraint is in conjunctive normal form when it is a conjunction 
+of clauses where each each clause is disjunction of atomic constraints.
+\enterexample
+Let \tcode{A}, \tcode{B}, and \tcode{C} be atomic
+constraints. 
+% 
+The constraint \tcode{A} $\land$ (\tcode{B} $\lor$ \tcode{C}) is in 
+conjunctive normal form.
+% 
+Its conjunctive clauses are \tcode{A} and (\tcode{B} $\lor$ \tcode{C}).
+% 
+The disjunctive normal form of the constraint
+\tcode{A} $\land$ (\tcode{B} $\lor$ \tcode{C}) 
+is
+(\tcode{A} $\land$ \tcode{B}) $\lor$ (\tcode{A} $\land$ \tcode{C}).
+% 
+Its disjunctive clauses are (\tcode{A} $\land$ \tcode{B}) and 
+(\tcode{A} $\land$ \tcode{C}).
+\exitexample
+}.
+% 
+The disjunctive normal form of \tcode{P} subsumes the conjunctive normal 
+form of \tcode{Q} if and only if every disjunctive clause in \tcode{P$i$} 
+subsumes each conjunctive clause in \tcode{Q$j$}.
+% 
+A disjunctive clause \tcode{P$i$} subsumes a conjunctive clause
+\tcode{Q$j$} when each atomic constraint in \tcode{P$i$} subsumes any atomic 
+constraint in \tcode{Q$j$}.
+% 
+The rules for determining whether one atomic constraint subsumes
+another are defined for each kind of atomic constraint
+(\ref{temp.constr.atom}).
+% 
+\enterexample
+Let \tcode{A} and \tcode{B} be
+predicate constraints (\ref{temp.constr.atom.pred}).
+% 
+The constraint \tcode{A $\land$ B} subsumes \tcode{A}, 
+but \tcode{A} does not subsume \tcode{A $\land$ B}. 
+% 
+The constraint \tcode{A} subsumes \tcode{A $\lor$ B}, but
+\tcode{A $\lor$ B} does not subsume code \tcode{A}. 
+% 
+Also, any constraint \tcode{P} subsumes itself.
+\exitexample
+
+
+\pnum
+The subsumption relation defines a partial ordering on constraints. 
+This partial ordering is used to determine
+% 
+\begin{itemize}
+\item the best viable candidate of non-template functions
+     (\ref{over.match.best}), 
+\item the address of a non-template function
+     (\ref{over.over}), 
+\item the matching of template template arguments
+     (\ref{temp.arg.template}), 
+\item the partial ordering of class template specializations
+     (\ref{temp.class.order}), and
+\item the partial ordering of function templates
+     (\ref{temp.func.order}).
+\end{itemize}
+
+\pnum
+When two declarations \tcode{D1} and \tcode{D2} are
+partially ordered by their normalized constraints, \tcode{D1} is 
+\defn{more constrained} than \tcode{D2} if
+% 
+\begin{itemize}
+\item \tcode{D1} and \tcode{D2} are both constrained
+declarations and \tcode{D1}'s associated constraints subsume but 
+are not subsumed by those of \tcode{D2}; or
+
+\item \tcode{D1} is constrained and \tcode{D2} is
+unconstrained. 
+\end{itemize}
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C1 = requires(T t) { --t; };
+template<typename T> concept bool C2 = C1<T> && requires(T t) { *t; };
+
+template<C1 T> void f(T);       // \#1
+template<C2 T> void f(T);       // \#2
+template<typename T> void g(T); // \#3
+template<C1 T> void g(T);       // \#4
+
+f(0);       // selects \#1
+f((int*)0); // selects \#2
+g(true);    // selects \#3 because C1<bool> is not satisfied
+g(0);       // selects \#4
+\end{codeblock}
+\exitexample
+
+\pnum
+A declaration \tcode{D1} is \defn{at least as constrained}
+as another declaration \tcode{D2} when \tcode{D1} is more
+constrained than \tcode{D2}, and \tcode{D2} is not more
+constrained than \tcode{D1}.
+
+
+%%
+%% Constraint expressions
+%%
+\rSec2[temp.constr.expr]{Constraint expressions}
+
+\pnum
+Certain contexts require expressions that can be transformed
+into constraints through the process of \defn{normalization}.
+\begin{bnf}
+\nontermdef{constraint-expression}\br
+    logical-or-expression
+\end{bnf}
+
+\pnum
+A \grammarterm{constraint-expression} is \defn{normalized} by forming a 
+constraint as follows.
+
+\begin{itemize}
+\item The normalized form of \tcode{(P)} is the normalized form of 
+\tcode{P}.
+
+\item The normalized form of \tcode{P || Q} is
+the disjunction (\ref{temp.constr.op}) of the 
+normalized form of \tcode{P} and the normalized form of 
+\tcode{Q}.
+
+If, after substitution, overload resolution 
+(\ref{over.match}) selects a user-declared 
+\tcode{operator||}, the program is ill-formed.
+
+\item The normalized form of \tcode{P \&\& Q} is
+the conjunction (\ref{temp.constr.op}) of the 
+normalized form of \tcode{P} and the normalized form of
+\tcode{Q}.
+
+If, after substitution, overload resolution 
+(\ref{over.match}) selects a user-declared 
+\tcode{operator\&\&}, the program is ill-formed.
+
+\item The normalized form of a function call of the form
+\tcode{C<A$1$, A$2$, ..., A$N$>()},
+where \tcode{A$1$, A$2$, ..., A$N$}
+is a sequence of template arguments and \tcode{C} names a function
+concept (\ref{dcl.spec.concept}), is the result of 
+substituting the template arguments into the expression
+returned by \tcode{C}.
+
+\item The normalized form of an \grammarterm{id-expression}
+of the form \tcode{C<A$1$, A$2$, ..., A$N$>}
+where \tcode{A$1$, A$2$, ..., A$N$}
+is a sequence of template arguments and \tcode{C} names a variable
+concept (\ref{dcl.spec.concept}) is the result of 
+substituting the template arguments into the initializer
+of \tcode{C}.
+
+\item The normalized form of a 
+\grammarterm{requires-expression} 
+(\ref{expr.prim.req}) is
+the conjunction of constraints (\ref{temp.constr.op.conj}) 
+introduced by the body of that expression.
+
+
+\item Otherwise, \tcode{E} is a predicate constraint 
+(\ref{temp.constr.atom.pred}). 
+% 
+After substitution, \tcode{E} shall be a converted constant 
+expression of type \tcode{bool}.
+
+\end{itemize}
+
+% Do we need a top-level conversion requirement for constraint expressions?
+
+\enternote
+A \grammarterm{constraint-expression} defines a subset of constant 
+expressions over which certain logical implications can be deduced during 
+translation.
+
+The prohibition against user-defined logical operators is intended to
+prevent the subversion of the logic used to partially order 
+constraints (\ref{temp.constr.order}).
+\exitnote
+
+% TODO: Make this a table.
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C1() { return sizeof(T) == 1; }
+template<typename T> concept bool C2 = C1<T>() && 1 == 2;
+template<typename T> concept bool C3 = requires () { typename T::type; };
+
+// Expression      // Constraints
+C2<char>           sizeof(char) == 1 /* and */ 1 == 2
+C3<int>            /* type constraint for int::type */
+3 + 4              // error: not a constraint
+(bool)(3 + 4)      (bool)(3 + 4)
+\end{codeblock}
+In the normalized constraints, the expressions \tcode{sizeof(char) == 1}, 
+\tcode{1 == 2}, and \tcode{(bool)(3 + 4)} are predicate 
+constraints (\ref{temp.constr.atom.pred}). 
+
+The concept \tcode{C3} is normalized to a single type constraint
+(\ref{temp.constr.atom.type}) for the (ill-formed) 
+type \tcode{int::type}.
+
+The expression \tcode{3 + 4} is not a 
+\grammarterm{constraint-expression} because it does
+not satisfy the requirements for being normalized into a predicate 
+constraint.
+\exitexample
+
+
+%%
+%% Resolution of constrained-type-specifiers
+%%
+\rSec2[temp.constr.resolve]{Resolution of \grammarterm{constrained-type-specifier}{}s}
+
+\pnum
+Whenever an \grammarterm{identifier} is a \grammarterm{concept-name}, it is 
+necessary to determine a single concept referred to by the use of that name.
+% 
+\defn{Concept resolution} is the process of selecting a concept 
+from a set of concept definitions referred to by a concept name.
+
+Concept resolution is performed when a 
+\grammarterm{constrained-type-specifier} appears in
+the declaration of an abbreviated function (\ref{dcl.fct})
+or generic lambda (\ref{expr.prim.lambda}),
+in the \grammarterm{trailing-return-type} of a
+\grammarterm{compound-requirement}, the
+\grammarterm{constrained-type-specifier} of a
+\grammarterm{constrained-parameter}, or
+in a \grammarterm{template-introduction}.
+
+\pnum
+A concept is selected from a set of concepts based on a sequence
+of template argument patterns and a sequence of explicit
+template arguments. 
+% 
+A \defn{template argument pattern} is a kind of template argument 
+that is used to match the type and form of a template parameter from a 
+concept definition. A template argument pattern can be a pack expansion.
+% 
+A concept is selected from the set by matching the template
+argument patterns and explicit template arguments against the template 
+parameters of that concept.
+
+\pnum
+When selecting a concept for a \grammarterm{constrained-type-specifier},
+there is a single template argument pattern. 
+% 
+If the \grammarterm{constrained-type-specifier} appears in the declaration 
+of a \grammarterm{constrained-parameter} (\ref{temp.param}) and is
+followed by an ellipsis, the template argument pattern is a pack
+expansion.
+% 
+If the \grammarterm{constrained-type-specifier}
+is a \grammarterm{partial-concept-id} the explicit
+\grammarterm{template-arguments} are those in
+the \grammarterm{partial-concept-id}.
+% 
+When selecting a concept for a \grammarterm{concept-name} in a 
+\grammarterm{template-introduction}, there is one template argument pattern 
+for each \grammarterm{introduced-parameter}.
+% 
+If an \grammarterm{introduced-parameter} is
+preceded by an ellipsis, its corresponding template argument pattern
+is a pack expansion.
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C1() { return true; }
+template<typename T, typename U> concept bool C1() { return true; }
+template<typename... T> concept bool C2() { return true; }
+% 
+void f1(C1); 
+void f2(C1<int>);
+\end{codeblock}
+% 
+In the resolution of \tcode{C1} required by the declaration of \tcode{f1}, 
+there is a single template argument pattern and zero explicit template 
+arguments.
+% 
+For \tcode{f2} there is a single template argument pattern and the 
+single explicit template argument, \tcode{int}.
+\begin{codeblock}
+C1{T} void f3(T);
+C1{T, U} void f4(T);
+\end{codeblock}
+In the resolution required by the declaration of \tcode{f3}, there
+is a single template argument pattern; there are two in the resolution
+required by \tcode{f2}. There are zero explicit template arguments
+in the resolutions of \tcode{f1} and \tcode{f2}.
+\begin{codeblock}
+C2{...T} void f5();
+\end{codeblock}
+There is a single template argument pattern in the resolution of
+\tcode{f2}, and it is a pack expansion.
+\exitexample
+
+\pnum
+For each concept \tcode{C} in the concept set, each template 
+argument in the combined sequence of template argument patterns and explicit 
+template arguments is matched against the corresponding template parameter
+in the \grammarterm{template-parameter-list} of 
+\tcode{C} as follows.
+% 
+A template argument pattern that is not a parameter pack matches a 
+non-pack template parameter of any type and form. A template argument 
+pattern that is a parameter pack matches a template parameter pack
+whose pattern is any form.
+% 
+The remaining explicit arguments are matched against parameters
+as specified in \ref{temp.arg}.
+% 
+If any template argument patterns or explicit template arguments do not 
+match the corresponding parameter, \tcode{C} is removed from the set.
+% 
+If a single concept remains, it is the one selected by concept 
+resolution. Otherwise, the program is ill-formed. </p>
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C() { return true; }             // \#1
+template<typename T, typename U> concept bool C() { return true; } // \#2
+template<typename T> concept bool P() { return true; }
+template<int T> concept bool P() { return true; }
+template<<typename... Ts> concept bool Q = true;
+
+void f1(const C*);  // OK: \tcode{C} selects \#1
+void f2(C<char>);   // OK: \tcode{C<char>} selects \#2
+void f3(C<3>);      // error: no matching concept for \tcode{C<3>} (mismatched template arguments)
+void g1(P);         // error: resolution of \tcode{P} is ambiguous (\tcode{P} refers to two concepts)
+Q{...Ts} void q1(); // OK: selects \tcode{Q}
+Q{T} void q2();     // error: no matching concept (mismatched template arguments)
+\end{codeblock}
+\exitexample
+
+\pnum
+For the selected template, the set of template parameters corresponding
+to the matched template argument patterns are called the
+\defn{selected template parameters}. 
+% 
+In a \grammarterm{template-introduction} (\ref{temp.intro}), these
+are used to derive the declarations of introduced parameters.
+
+
+%%
+%% Constraint formation from constrained-type-specifiers
+%%
+\rSec2[temp.constr.form]{Constraint formation from \grammarterm{constrained-type-specifier}{}s}
+
+\pnum
+When a parameter of an abbreviated function template is declared
+with a \grammarterm{constrained-type-specifier},
+or in the declaration of a 
+\grammarterm{constrained-parameter},
+the \grammarterm{constrained-type-specifier}
+associates a \grammarterm{constraint-expression}
+with the respective function or template declaration.
+% 
+The formation of that \grammarterm{constraint-expression}
+is derived from the \grammarterm{constrained-type-specifier},
+the designated concept selected by concept resolution 
+(\ref{temp.constr.resolve}), and an 
+invented template parameter or a declared template parameter, called
+the \defn{target template parameter}.
+% 
+When the \grammarterm{constrained-type-specifier}
+appears in the declaration of a function parameter, the target template
+parameter is the one invented for the abbreviated function template
+(\ref{dcl.fct}).
+
+When the \grammarterm{constrained-type-specifier}
+appears in the declaration of a 
+\grammarterm{constrained-parameter},
+the target template parameter is the declared template parameter.
+
+
+\pnum
+Let \tcode{C} be the concept designated by the
+\grammarterm{constrained-type-specifier} (including its 
+\grammarterm{nested-name-specifier}, if any),
+let \tcode{P} be the prototype parameter of the designated
+concept, and let \tcode{X} be the target template parameter.
+% 
+Form a new template argument \tcode{A} from \tcode{X} as
+as follows. If \tcode{X} declares a parameter pack, and
+\tcode{P} declares a parameter pack, \tcode{A}
+is a pack expansion of \tcode{X}. Otherwise \tcode{A} is
+a template argument referring to \tcode{X}.
+% 
+Form a \grammarterm{template-id} \tcode{TT}
+as follows. 
+% 
+When the \grammarterm{constrained-type-specifier} is a 
+\grammarterm{partial-concept-id}, \tcode{TT} is 
+\tcode{C<A, Args>} where \tcode{Args} is the sequence of 
+\grammarterm{template-argument}s in the
+\grammarterm{partial-concept-id}.
+% 
+Otherwise, \tcode{TT} is \tcode{C<A, Args>}.
+% 
+Form an expression \tcode{E} from \tcode{TT}. If \tcode{C} refers to a 
+variable concept, \tcode{E} is the \grammarterm{id-expression} \tcode{TT}.
+% 
+If \tcode{C} refers to a function concept, \tcode{E} is the function call 
+\tcode{TT()}.
+
+\pnum
+The formed constraint is the fold expression \tcode{(E \&\& ...)}
+(\ref{expr.prim.fold}) when the prototype parameter \tcode{P} declares a 
+template parameter pack and the target template parameter \tcode{X}
+does not. 
+% 
+Otherwise, the \grammarterm{constraint-expression} is \tcode{E}.
+
+
+% TODO: Add examples for constrained parameters 
+% TODO: Give an example with a nested name specifier.
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C1 = true;
+template<typename T, typename U> concept bool C2() { return true; }
+template<typename... Ts> concept bool C3;
+
+template<int> struct X { };
+
+void f1(C1&);     // associates C1<T1> with f1
+void f2(C2<int>); // associates C2<T2, int>() with f2
+void f3(C1...);   // associates (C1<T1> \&\& ...) with f3
+void f4(C3...);   // associates C3<T1...> with f4
+\end{codeblock}
+% 
+Here, \tcode{T1} and \tcode{T2} are invented type template parameters 
+corresponding to the prototype parameter of their respective designated 
+concepts.
+

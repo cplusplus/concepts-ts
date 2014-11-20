@@ -1,0 +1,289 @@
+
+%%
+%% Declarators
+%%
+\rSec0[dcl.decl]{Declarators}
+
+Factor the grammar of \grammarterm{declarator}{}s to
+allow the specification of constraints on function declarations.
+
+\begin{quote}
+\setcounter{Paras}{3}
+\begin{bnf}
+\nontermdef{declarator}\br
+    \removed{ptr-declarator}\br
+    \removed{noptr-declarator parameters-and-qualifiers trailing-return-type}\br
+    \added{basic-declarator requires-clause\opt}
+
+\added{
+\nontermdef{basic-declarator}\br
+    ptr-declarator\br
+    noptr-declarator parameters-and-qualifiers trailing-return-type
+}
+\end{bnf}
+\end{quote}
+
+
+Add the following paragraph at the end of this section.
+
+\begin{quote}
+The optional \grammarterm{requires-clause} (Clause~\ref{temp}) in a
+\grammarterm{declarator} shall be present only when
+the declarator declares a function (\ref{dcl.fct}).
+
+\enterexample
+\begin{codeblock}
+void f1(int a) requires true;         // OK
+auto f2(int a) -> bool requires true; // OK
+void (*pf)() requires true;           // error: constraint on a variable
+void g(int (*)() requires true);      // error: constraint on a parameter
+  
+auto* p = new void(*[3])(char) requires true; // error: not a function declaration
+\end{codeblock}
+\exitexample
+\end{quote}
+
+
+%%
+%% Meaning of declarators
+%%
+\setcounter{section}{2}
+\rSec1[dcl.meaning]{Meaning of declarators}
+
+
+%%
+%% Functions
+%%
+\setcounter{section}{4}
+\rSec2[dcl.fct]{Functions}
+
+Modify the matching condition in paragraph 1 to accept a 
+\grammarterm{requires-clause}.
+      
+\begin{quote}
+\pnum
+\begin{bnf}
+\terminal{D1} \terminal{(} parameter-declaration-clause \terminal{)}
+  cv-qualifier-seq\opt ref-qualifier\opt exception-specification\opt
+  attribute-specifier-seq\opt \added{requires-clause\opt}
+\end{bnf}
+\end{quote}
+
+Modify the matching condition in paragraph 2 to accept a 
+\grammarterm{requires-clause}.
+
+\begin{quote}
+\pnum
+\begin{bnf}
+\terminal{D1} \terminal{(} parameter-declaration-clause \terminal{)}
+  cv-qualifier-seq\opt ref-qualifier\opt exception-specification\opt
+  attribute-specifier-seq\opt trailing-return-type \added{requires-clause\opt}
+\end{bnf}
+\end{quote}
+
+
+Modify the second sentence of paragraph 5. The remainder of this
+paragraph has been omitted.
+
+\begin{quote}
+\setcounter{Paras}{4}
+\pnum
+A single name can be used for several different functions in a single 
+scope; this is function overloading (Clause~\ref{over}). 
+%
+All declarations for a function shall agree exactly in \removed{both} 
+the return type\added{,} \removed{and} the parameter-type-list\added{, and 
+associated constraints, if any (Clause~\ref{temp})}.
+\end{quote}
+
+Modify paragraph 6 to exclude constraints from the type of a function.
+Note that the change occurs in the sentence following the example
+in the original document.
+
+\begin{quote}
+\pnum
+The return type, the parameter-type-list, the \grammarterm{ref-qualifier}, 
+and the \grammarterm{cv-qualifier-seq}, but not the default arguments
+(\ref{dcl.fct.default})\added{, constraints associated by an 
+optional \grammarterm{requires-clause} (Clause~\ref{temp}),} or
+the exception specification (\ref{except.spec}), are part of the function 
+type.
+\end{quote}
+
+Modify paragraph 15. Note that the footnote reference has been
+omitted.
+
+\begin{quote}
+\setcounter{Paras}{14}
+\pnum
+There is a syntactic ambiguity when an ellipsis occurs at the end of a 
+\grammarterm{parameter-declaration-clause} without a preceding comma. In this 
+case, the ellipsis is parsed as part of the \grammarterm{abstract-declarator} 
+if the type of the parameter either names a template parameter pack that has 
+not been expanded or contains \added{either} \tcode{auto} \added{or a
+\grammarterm{constrained-type-specifier}}; otherwise, it is parsed as part 
+of the \grammarterm{parameter-declaration-clause}.
+\end{quote}
+
+Add the following paragraphs after paragraph 15.
+
+\begin{quote}
+\pnum
+An \defn{abbreviated function template} is a function declaration whose
+parameter-type-list includes one or more placeholders (\ref{dcl.spec.auto},
+\ref{dcl.spec.constr}).
+% 
+An abbreviated function template is equivalent to a function template
+(\ref{temp.fct}) whose \grammarterm{template-parameter-list}
+includes one invented \grammarterm{template-parameter} for each occurrence 
+of a placeholder in the \grammarterm{parameter-declaration-clause},
+in order of appearance. 
+% 
+If the placeholder is designated by the \tcode{auto}
+\grammarterm{type-specifier}, then the corresponding invented template 
+parameter is a type \grammarterm{template-parameter}.
+% 
+Otherwise, the placeholder is designated by a 
+\grammarterm{constrained-type-specifier}, and the corresponding invented 
+parameter matches the type and form of the prototype parameter 
+(\ref{dcl.spec.concept}) of the concept designated by the 
+\grammarterm{constrained-type-specifier} (\ref{temp.concept.resolve}).
+% 
+The invented \grammarterm{template-parameter} is a parameter pack if 
+the corresponding \grammarterm{parameter-declaration} declares a function 
+parameter pack and the type of the parameter contains only one placeholder.
+% 
+If the prototype parameter of the designated concept declares a template 
+parameter pack, the corresponding \grammarterm{parameter-declaration} shall
+declare a function parameter pack.
+% 
+The adjusted function parameters of an abbreviated function template are derived
+from the \grammarterm{parameter-declaration-clause} by replacing each 
+occurrence of a placeholder with the name of the corresponding invented 
+\grammarterm{template-parameter}.
+% 
+If the replacement of a placeholder with the name of a template parameter
+results in an invalid parameter declaration, the program is ill-formed.
+
+\enterexample
+\begin{codeblock}
+template<typename T> class Vec { };
+template<typename T, typename U> class Pair { };
+
+void f1(const auto&, auto);
+void f2(Vec<auto*>...);
+void f3(auto (auto::*)(auto));
+
+template<typename T, typename U> 
+  void f1(const T&, U);        // redeclaration of \tcode{f1(const auto\&, auto)}
+template<typename... T> 
+  void f2(Vec<T*>...);         // redeclaration of \tcode{f2(Vec<auto*>...)}
+template<typename T, typename U, typename V>
+  void f3(T (U::*)(V));        // redeclaration of \tcode{f3(auto (auto::*)(auto))}
+
+template<typename T> concept bool C1 = true;
+template<typename T> concept bool C2 = true;
+template<typename T, typename U> concept bool D = true;
+template<<typename... Ts> concept bool E = true;
+
+void g1(const C1*, C2&);
+void g2(Vec<C1>&);
+void g3(C1&...);
+void g4(Vec<D<int>>);
+void g5(E...); // OK
+void g6(E);    // error: E does not declare a function parameter pack
+
+template<C1 T, C2 U> void g1(const T*, U&); // redeclaration of \tcode{g1(const C1*, C2\&)}
+template<C1 T> void g2(Vec<T>&);            // redeclaration of \tcode{g2(Vec<C1>\&)}
+template<C1... Ts> void g3(Ts&...);         // redeclaration of \tcode{g3(C1\&...)}
+template<D<int> T> void g4(Vec<T>);         // redeclaration of \tcode{g4(Vec<D<int>>)}
+\end{codeblock}
+\exitexample
+
+\enterexample
+\begin{codeblock}
+template<int N> concept bool Num = true;
+
+void h(Num*); // error: invalid type in parameter declaration
+      \end{codeblock}
+The equivalent declaration would have this form:
+      \begin{codeblock}
+template<int N> void h(N*); // error: invalid type
+\end{codeblock}
+\exitexample
+
+\pnum
+A function template can be an abbreviated function template. The 
+invented \grammarterm{template-parameter}s are appended to the 
+\grammarterm{template-parameter-list} after the explicitly declared 
+\grammarterm{template-parameter}s.
+
+\enterexample
+\begin{codeblock}
+template<typename T, int N> class Array { };
+
+template<int N> void f(Array<auto, N>*);
+template<int N, typename T> void f(Array<T, N>*); // OK: equivalent to f(Array<auto, N>*)
+\end{codeblock}
+\exitexample
+
+\pnum
+The use of a \grammarterm{constrained-type-specifier} in a 
+\grammarterm{parameter-declaration} associates a 
+\grammarterm{constraint-expression} with the abbreviated function template. 
+% 
+This \grammarterm{constraint-expression} is formed according to the rules 
+in \ref{temp.constr.form}.
+% 
+Two \grammarterm{constrained-type-specifier}{}s are said to be 
+\defn{equivalent} if their associated \grammarterm{constraint-expression}s are
+equivalent according to the rules in \ref{temp.over.link}.
+
+
+\pnum
+All placeholders introduced by equivalent 
+\grammarterm{constrained-type-specifier}{}s
+have the same invented template parameter.
+% 
+\enterexample
+\begin{codeblock}
+namespace N {
+  template<typename T> concept bool C = true;
+}
+template<typename T> concept bool C = true;
+template<typename T, int> concept bool D = true;
+template<typename, int = 0> concept bool E = true;
+
+void f0(C a, C b);
+\end{codeblock}
+The types of \tcode{a} and \tcode{b} are the same invented template
+type parameter.
+% 
+\begin{codeblock}
+void f1(C& a, C* b);
+\end{codeblock}
+The type of \tcode{a} is a reference to an invented template type parameter 
+(call it \tcode{T}), and the type of \tcode{b} is a pointer to 
+\tcode{T}.
+% 
+\begin{codeblock}
+void f2(N::C a, C b);
+void f3(D<0> a, D<1> b);
+\end{codeblock}
+In both functions, the parameters \tcode{a} and
+\tcode{b} have different invented template type parameters.
+% 
+\begin{codeblock}
+void f4(E a, E<> b, E<0> c);
+\end{codeblock}
+The types of \tcode{a}, \tcode{b}, and \tcode{c} are the same because the 
+\grammarterm{constrained-type-specifier}{}s \tcode{E}, \tcode{E<>}, and 
+\tcode{E<0>} all associate the \grammarterm{constraint-expression}
+\tcode{E<T, 0>}, where \tcode{T} is an invented template type parameter.
+\end{quote}
+
+% TODO: Add this as an example:
+% 
+%     void f(C head, C... tail)
+% 
+% head and tail have different types.
