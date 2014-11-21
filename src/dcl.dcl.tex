@@ -35,7 +35,7 @@ to include the \tcode{concept} specifier.
 \rSec3[dcl.type.simple]{Simple type specifiers}
         
 Add \grammarterm{constrained-type-specifier}
-to the grammar for \grammarterm{simple-type-specifier}s.
+to the grammar for \grammarterm{simple-type-specifier}{}s.
 
 \begin{quote}
 \begin{bnf}
@@ -177,13 +177,13 @@ The type of a variable declared using \tcode{auto} or
 \tcode{decltype(auto)} is deduced from its initializer. 
 % 
 This use is allowed when declaring 
-variables in a block (\ref{stmt.block}), 
-in namespace scope (\ref{basic.scope.namespace}), and
-in a \grammarterm{for-init-statement} (\ref{stmt.for}).
+variables in a block (\cxxref{stmt.block}), 
+in namespace scope (\cxxref{basic.scope.namespace}), and
+in a \grammarterm{for-init-statement} (\cxxref{stmt.for}).
 %
 \removed{
 \tcode{auto} or \tcode{decltype(auto)} shall appear as one
-of the \grammarterm{decl-specifier}s in the \grammarterm{decl-specifier-seq}
+of the \grammarterm{decl-specifier}{}s in the \grammarterm{decl-specifier-seq}
 }
 %
 \added{
@@ -228,7 +228,7 @@ the deduced type is determined using the rules for template argument
 deduction. 
 %
 If the deduction is for a return statement and the initializer is a 
-\grammarterm{braced-init-list} (\ref{dcl.init.list}), the program is
+\grammarterm{braced-init-list} (\cxxref{dcl.init.list}), the program is
 ill-formed. 
 %
 \removed{
@@ -254,7 +254,7 @@ where \tcode{U} is an invented template type parameter.
 % 
 Deduce a value for \removed{\tcode{U}} \added{each invented template type 
 parameter in \tcode{P}} using the rules of template argument deduction from 
-a function call (\ref{temp.deduct.call}), where \tcode{P} is a function 
+a function call (\cxxref{temp.deduct.call}), where \tcode{P} is a function 
 template parameter type and the initializer is the corresponding argument.
 %
 If the deduction fails, the declaration is ill-formed. 
@@ -321,7 +321,9 @@ void g(Pair< T1(*)(T2, T3), T4 (T5::*)(T6)> x);
 %%
 \rSec3[dcl.spec.constr]{Constrained type specifiers}
 
-Add this section to {dcl.type}.
+Add this section to \ref{dcl.type}.
+
+\begin{quote}
 
 \pnum
 Like the \tcode{auto} \grammarterm{type-specifier} (\ref{dcl.spec.auto}),
@@ -422,7 +424,7 @@ template<typename T> concept bool Iter() {
 \end{codeblock}
 The declaration of \tcode{f4} is valid, but a value can never be deduced 
 for the placeholder designated by \tcode{C1} since it appears in a
-non-deduced context (\ref{temp.deduct.type}).
+non-deduced context (\cxxref{temp.deduct.type}).
 % 
 However, a value may be explicitly given as a template argument in a
 \grammarterm{template-id}.
@@ -480,22 +482,27 @@ void f2(Seq<>);
 
 \pnum
 The concept designated by a \grammarterm{constrained-type-specifier}
-is the one selected by concept resolution (\ref{temp.concept.resolve}).
+is the one selected by concept resolution (\ref{temp.constr.resolve}).
 
+\end{quote}
 
 %%
 %% concept specifier
 %%
 \rSec2[dcl.spec.concept]{\tcode{concept} specifier}
 
+Add ths section to \ref{dcl.spec}.
+
+\begin{quote}
+
 \pnum
 The \tcode{concept} specifier shall be applied only to the 
 definition of a function template or variable template, declared
-in namespace scope (\ref{basic.scope.namespace}).
+in namespace scope (\cxxref{basic.scope.namespace}).
 %
 A function template definition having the \tcode{concept}
 specifier is called a \defn{function concept}. A function
-concept is a non-throwing function (\ref{except.spec}).
+concept is a non-throwing function (\cxxref{except.spec}).
 %
 When a function is declared to be a concept, it shall be the only
 declaration of that function.
@@ -528,7 +535,7 @@ struct S {
 
 \pnum
 Every concept definition is implicitly defined to be a 
-\tcode{constexpr} declaration (\ref{dcl.constexpr}).
+\tcode{constexpr} declaration (\cxxref{dcl.constexpr}).
 
 \pnum
 A concept definition shall not be declared with the 
@@ -563,7 +570,7 @@ is a template parameter pack.
 A function concept has the following restrictions:
 \begin{itemize}
 \item No \grammarterm{function-specifier}{}s shall
-     appear in its declaration (\ref{dcl.fct.spec}).
+     appear in its declaration (\cxxref{dcl.fct.spec}).
 \item The declared return type shall be the non-deduced type \tcode{bool}.
 
 % FIXME: It's not equivalent to (). It shall be (). We don't want
@@ -623,3 +630,5 @@ of a concept definition.
 This prevents users from subverting the constraint system by providing a 
 meaning for a concept that differs from its original definition.
 \exitnote
+
+\end{quote}

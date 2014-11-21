@@ -74,7 +74,7 @@ declaration's \grammarterm{template-parameter-list}, and
 \item a \grammarterm{requires-clause} following a
 \grammarterm{template-parameter-list}, and
 
-\item any \grammarterm{constrained-type-specifier}s in the type of a 
+\item any \grammarterm{constrained-type-specifier}{}s in the type of a 
 \grammarterm{parameter-declaration} in a function declaration 
 (\ref{dcl.spec.constr}), and
 
@@ -113,7 +113,7 @@ The order in which the subexpressions of the associated constraints
 are composed is the left-to-right order in which 
 \grammarterm{template-introduction}{}s,
 \grammarterm{constrained-type-specifier}{}s, and
-\grammarterm{requires-clause}s occur in the declaration.
+\grammarterm{requires-clause}{}s occur in the declaration.
 % 
 \enternote
 A program containing two declarations whose associated constraints are 
@@ -300,6 +300,8 @@ template<C1 T = 0> struct S4;   // error: default argument is not a type
 
 Add this section after \ref{temp.param}.
 
+\begin{quote}
+
 \pnum
 A \defn{template introduction} provides a more concise way of declaring
 different templates that have the same template parameters and constraints.
@@ -464,7 +466,7 @@ template<typename... Qs>
 \end{codeblock}
 \exitexample
 
-
+\end{quote}
 
 %%
 %% Names of template specializations
@@ -481,7 +483,7 @@ When a \grammarterm{simple-template-id} names
 a constrained non-function template or a template template parameter,
 but not a member template that is a member of an unknown specialization
 \ref{temp.res}, and all \grammarterm{template-argument}{}s in the
-\grammarterm{template-id} are non-dependent \ref{temp.dep.temp}, the template
+\grammarterm{template-id} are non-dependent \cxxref{temp.dep.temp}, the template
 arguments are substituted into the associated constraints
 (Clause~\ref{temp}). 
 % 
@@ -528,6 +530,10 @@ constraints.
 %%
 \rSec1[temp.arg]{Template arguments}
 
+%%
+%% Template template arguments
+\rSec2[temp.arg.template]{Template template arguments}
+
 Modify paragraph 3 to include rules for matching constrained template 
 \grammarterm{template parameter}{}s. Note that the examples following this 
 paragraph in the original document are omitted.
@@ -551,7 +557,7 @@ equivalent (\ref{temp.over.link}), and for template
 \grammarterm{template-parameter}{}s matches, recursively. 
 % 
 When \tcode{P}’s \grammarterm{template-parameter-list} 
-contains a template parameter pack (\ref{temp.variadic}), the template 
+contains a template parameter pack (\cxxref{temp.variadic}), the template 
 parameter pack will match zero or more template parameters or template 
 parameter packs in the \grammarterm{template-parameter-list} of
 \tcode{A} with the same type and form as the template parameter
@@ -606,7 +612,7 @@ argument\added{, associated constraint,} or
 \grammarterm{exception-specification} is a separate definition which is 
 unrelated to the function template definition or to any other default 
 arguments\added{, associated constraints,} or 
-\grammarterm{exception-specification}s.
+\grammarterm{exception-specification}{}s.
 \end{quote}
 
 
@@ -1163,7 +1169,7 @@ Even though neither constructor for \tcode{S<char>} will be selected by
 overload resolution, they remain a part of the class template specialization. 
 % 
 This also has the effect of suppressing the implicit generation of a default
-constructor (\ref{class.ctor}).
+constructor (\cxxref{class.ctor}).
 \exitexample
 
 \enterexample
@@ -1389,10 +1395,12 @@ and, in the declaration cases, the program is ill-formed.
 
 Add this section after 14.8.
 
+\begin{quote}
+
 \pnum
 \enternote
 This section defines the meaning of constraints on template arguments, including
-the translation of \grammarterm{constraint-expression}s
+the translation of \grammarterm{constraint-expression}{}s
 into constraints (\ref{temp.constr.expr}),
 and also the abstract syntax, satisfaction, and subsumption of those 
 constraints (\ref{temp.constr.op}, \ref{temp.constr.atom}).
@@ -1480,7 +1488,7 @@ Any constraint that is not a conjunction or disjunction is an
 \pnum
 A \defn{predicate constraint} is an atomic constraint
 that evaluates a prvalue constant expression of type \tcode{bool}
-(\ref{expr.const}).
+(\cxxref{expr.const}).
 % 
 The constraint is satisfied if and only if the expression 
 evaluates to \tcode{true}.
@@ -1551,7 +1559,7 @@ for \tcode{T}.
 
 \pnum
 An expression constraint \tcode{P} subsumes another expression constraint 
-\tcode{Q} if and only if the \grammarterm{expression}s of \tcode{P}
+\tcode{Q} if and only if the \grammarterm{expression}{}s of \tcode{P}
 and \tcode{Q} are equivalent (\ref{temp.over.link}). 
 
 
@@ -1589,13 +1597,13 @@ substitution failure; \tcode{typename int::type} is ill-formed.
 \pnum
 A type constraint that names a class template specialization 
 does not require that type to be complete 
-(\ref{basic.types}).
+(\cxxref{basic.types}).
 
 \pnum
 A type constraint \tcode{P} subsumes another type
 constraint \tcode{Q} if and only if the types in \tcode{P}
 and \tcode{Q} are equivalent 
-(\ref{temp.type}).
+(\cxxref{temp.type}).
 
 
 %%
@@ -1609,7 +1617,7 @@ specifies a requirement on the implicit conversion of an \grammarterm{expression
 \tcode{E} to a type \tcode{T}. 
 % 
 The constraint is satisfied if and only if \tcode{E} is implicitly convertible 
-to \tcode{T} (Clause~\ref{conv}).
+to \tcode{T} (Clause~\cxxref{conv}).
 
 \enternote
 A conversion constraint is introduced by a \grammarterm{trailing-return-type} 
@@ -1636,7 +1644,7 @@ convertible to \tcode{bool}.
 An implicit conversion constraint \tcode{P} subsumes another implicit 
 conversion constraint \tcode{Q} if and only if the \grammarterm{expression}{}s 
 of \tcode{P} and \tcode{Q} are equivalent (\ref{temp.over.link}) and the types
-of \tcode{P} and \tcode{Q} are equivalent (\ref{temp.type}).</p>
+of \tcode{P} and \tcode{Q} are equivalent (\cxxref{temp.type}).</p>
 
 
 %%
@@ -1693,7 +1701,7 @@ constraints are satisfied.
 An argument deduction constraint \tcode{P} subsumes another argument deduction 
 constraint \tcode{Q} if and only if the \grammarterm{expression}{}s of
 \tcode{P} and \tcode{Q} are equivalent (\ref{temp.over.link}), and the types
-of \tcode{P} and \tcode{Q} are equivalent (\ref{temp.type}). 
+of \tcode{P} and \tcode{Q} are equivalent (\cxxref{temp.type}). 
 
 
 %%
@@ -1705,7 +1713,7 @@ of \tcode{P} and \tcode{Q} are equivalent (\ref{temp.type}).
 An \defn{exception constraint} is an atomic constraint
 for an expression \tcode{E} that is satisfied if and only
 if the expression \tcode{noexcept(E)} is \tcode{true}
-(\ref{expr.unary.noexcept}).
+(\cxxref{expr.unary.noexcept}).
 % 
 \enternote
 Constant expression constraints are introduced by a
@@ -1718,7 +1726,7 @@ includes the \tcode{noexcept} specifier
 \pnum
 An exception constraint \tcode{P} subsumes another
 exception constraint \tcode{Q} if and only if the
-\grammarterm{expression}s of \tcode{P}
+\grammarterm{expression}{}s of \tcode{P}
 and \tcode{Q} are equivalent 
 (\ref{temp.over.link}).
 
@@ -1896,7 +1904,7 @@ of \tcode{C}.
 \item The normalized form of a 
 \grammarterm{requires-expression} 
 (\ref{expr.prim.req}) is
-the conjunction of constraints (\ref{temp.constr.op.conj}) 
+the conjunction of constraints (\ref{temp.constr.op}) 
 introduced by the body of that expression.
 
 
@@ -2134,7 +2142,7 @@ as follows.
 When the \grammarterm{constrained-type-specifier} is a 
 \grammarterm{partial-concept-id}, \tcode{TT} is 
 \tcode{C<A, Args>} where \tcode{Args} is the sequence of 
-\grammarterm{template-argument}s in the
+\grammarterm{template-argument}{}s in the
 \grammarterm{partial-concept-id}.
 % 
 Otherwise, \tcode{TT} is \tcode{C<A, Args>}.
@@ -2146,10 +2154,9 @@ If \tcode{C} refers to a function concept, \tcode{E} is the function call
 \tcode{TT()}.
 
 \pnum
-The formed constraint is the fold expression \tcode{(E \&\& ...)}
-(\ref{expr.prim.fold}) when the prototype parameter \tcode{P} declares a 
-template parameter pack and the target template parameter \tcode{X}
-does not. 
+The formed constraint is the fold expression \tcode{E1 \&\& E2 \&\& ... \&\& E$N$}
+when the prototype parameter \tcode{P} declares a template parameter pack and 
+the target template parameter \tcode{X} does not.
 % 
 Otherwise, the \grammarterm{constraint-expression} is \tcode{E}.
 
@@ -2164,13 +2171,14 @@ template<typename... Ts> concept bool C3;
 
 template<int> struct X { };
 
-void f1(C1&);     // associates C1<T1> with f1
-void f2(C2<int>); // associates C2<T2, int>() with f2
-void f3(C1...);   // associates (C1<T1> \&\& ...) with f3
-void f4(C3...);   // associates C3<T1...> with f4
+void f1(C1&);     // associates \tcode{C1<T1>} with \tcode{f1}
+void f2(C2<int>); // associates \tcode{C2<T2, int>()} with \tcode{f2}
+void f3(C1...);   // associates \tcode{(C1<T1> \&\& ...)} with \tcode{f3}
+void f4(C3...);   // associates \tcode{C3<T1...>} with \tcode{f4}
 \end{codeblock}
 % 
 Here, \tcode{T1} and \tcode{T2} are invented type template parameters 
 corresponding to the prototype parameter of their respective designated 
 concepts.
 
+\end{quote}

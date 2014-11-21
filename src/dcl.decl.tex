@@ -104,9 +104,9 @@ in the original document.
 \pnum
 The return type, the parameter-type-list, the \grammarterm{ref-qualifier}, 
 and the \grammarterm{cv-qualifier-seq}, but not the default arguments
-(\ref{dcl.fct.default})\added{, constraints associated by an 
+(\cxxref{dcl.fct.default})\added{, constraints associated by an 
 optional \grammarterm{requires-clause} (Clause~\ref{temp}),} or
-the exception specification (\ref{except.spec}), are part of the function 
+the exception specification (\cxxref{except.spec}), are part of the function 
 type.
 \end{quote}
 
@@ -147,7 +147,7 @@ Otherwise, the placeholder is designated by a
 \grammarterm{constrained-type-specifier}, and the corresponding invented 
 parameter matches the type and form of the prototype parameter 
 (\ref{dcl.spec.concept}) of the concept designated by the 
-\grammarterm{constrained-type-specifier} (\ref{temp.concept.resolve}).
+\grammarterm{constrained-type-specifier} (\ref{temp.constr.resolve}).
 % 
 The invented \grammarterm{template-parameter} is a parameter pack if 
 the corresponding \grammarterm{parameter-declaration} declares a function 
@@ -214,9 +214,9 @@ template<int N> void h(N*); // error: invalid type
 
 \pnum
 A function template can be an abbreviated function template. The 
-invented \grammarterm{template-parameter}s are appended to the 
+invented \grammarterm{template-parameter}{}s are appended to the 
 \grammarterm{template-parameter-list} after the explicitly declared 
-\grammarterm{template-parameter}s.
+\grammarterm{template-parameter}{}s.
 
 \enterexample
 \begin{codeblock}
@@ -236,7 +236,7 @@ This \grammarterm{constraint-expression} is formed according to the rules
 in \ref{temp.constr.form}.
 % 
 Two \grammarterm{constrained-type-specifier}{}s are said to be 
-\defn{equivalent} if their associated \grammarterm{constraint-expression}s are
+\defn{equivalent} if their associated \grammarterm{constraint-expression}{}s are
 equivalent according to the rules in \ref{temp.over.link}.
 
 
