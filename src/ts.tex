@@ -3,9 +3,7 @@
 
 %%--------------------------------------------------
 %% basics
-% \documentclass[letterpaper,oneside,openany]{memoir}
 \documentclass[ebook,10pt,oneside,openany,final]{memoir}
-% \includeonly{declarations}
 
 \usepackage[american]
            {babel}        % needed for iso dates
@@ -87,12 +85,12 @@
 
 \include{intro}
 \include{lex}
-\include{expr}
-\include{dcl.dcl}
-\include{dcl.decl}
-\include{class.derived}
-\include{over}
-\include{temp}
+\include{expressions}
+\include{declarations}
+\include{declarators}
+\include{derived}
+\include{overloading}
+\include{templates}
 
 %%--------------------------------------------------
 %% appendices
