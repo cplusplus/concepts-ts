@@ -34,31 +34,6 @@ parameters. These parameters are declared explicitly in a
 introduced by a \grammarterm{template-introduction} (\ref{temp.intro}).
 
 
-% TODO: Move this into 14.2
-\pnum
-A template declared by a \grammarterm{template-introduction}
-(\ref{temp.intro}) can also be an abbreviated function template (\ref{dcl.fct}). 
-% 
-The invented
-template parameters introduced by the placeholders in the abbreviated
-function template are appended to the list of template parameters declared
-by the \grammarterm{template-introduction}.
-
-\enterexample
-\begin{codeblock}
-template<typename T> concept bool C1 = true;
-template<typename T> concept bool C2 = true;
-
-C1{T} void f(T, auto);
-template<C T, typename U> void f(T, U); // OK: redeclaration of f(T, auto)
-\end{codeblock}
-\enternote
-  The second declaration of \tcode{f} is a redeclaration of the first
-  because their associated constraints are equivalent (\ref{temp.over.link}); 
-  this is described in the following paragraphs.
-\exitnote
-\exitexample
-
 \pnum
 The \defn{associated constraints} of a \grammarterm{template-declaration} are 
 defined to be a \grammarterm{constraint-expression} formed from the conjunction 
@@ -211,8 +186,8 @@ define the meaning of a constrained template parameter.
 \setcounter{Paras}{8}
 \pnum
 A \grammarterm{constrained-parameter} declares a template parameter whose 
-type and form match that of the prototype parameter of the concept designated 
-by its \grammarterm{constrained-type-specifier}.
+kind (type, non-type, template) and type match that of the prototype parameter 
+of the concept designated by its \grammarterm{constrained-type-specifier}.
 % 
 The designated concept is selected by concept resolution 
 (\ref{temp.constr.resolve}).
@@ -466,6 +441,31 @@ template<typename... Qs>
 \end{codeblock}
 \exitexample
 
+
+\pnum
+A template declared by a \grammarterm{template-introduction} can also be 
+an abbreviated function template (\ref{dcl.fct}). 
+% 
+The invented template parameters introduced by the placeholders in the 
+abbreviated function template are appended to the list of template parameters 
+declared by the \grammarterm{template-introduction}.
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C1 = true;
+template<typename T> concept bool C2 = true;
+
+C1{T} void f(T, auto);
+template<C1 T, typename U> void f(T, U); // OK: redeclaration of f(T, auto)
+\end{codeblock}
+% 
+\enternote
+The second declaration of \tcode{f} is a redeclaration of the first
+because the associated constraints of each are equivalent 
+(\ref{temp.over.link}).
+\exitnote
+\exitexample
+
 \end{quote}
 
 %%
@@ -560,8 +560,8 @@ When \tcode{P}’s \grammarterm{template-parameter-list}
 contains a template parameter pack (\cxxref{temp.variadic}), the template 
 parameter pack will match zero or more template parameters or template 
 parameter packs in the \grammarterm{template-parameter-list} of
-\tcode{A} with the same type and form as the template parameter
-pack in \tcode{P} (ignoring whether those template parameters are 
+\tcode{A} with the same kind (type, non-type, template) and type as the template 
+parameter pack in \tcode{P} (ignoring whether those template parameters are
 template parameter packs).
 \end{quote}
 
