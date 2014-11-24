@@ -6,3 +6,6 @@ the sources.
 An earlier version of the specification can be found in the `html` directory;
 it was written in HTML using a Javascript/CSS framework for formatting.
 This is *not* the current version of the document.
+
+This is a rewrite of the n4205 branch into Latex based on the previous
+rewrite of the master branch. 
