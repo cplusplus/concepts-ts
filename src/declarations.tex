@@ -67,7 +67,8 @@ is also used to signify that a lambda is a
 generic lambda (\ref{expr.prim.lambda}) \added{or
 that a function declaration is an 
 abbreviated function template (\ref{dcl.fct})}.
-
+% 
+\begin{addedblock}
 \enterexample
 \begin{codeblock}
 struct N {
@@ -88,6 +89,7 @@ auto::Wrap<int> x = N::make_wrap(0);    // error: failed to deduce value for \tc
 Size<sizeof(auto)> y = s;               // error: failed to deduce value for \tcode{auto}
 \end{codeblock}
 \exitexample
+\end{addedblock}
 \end{quote}
 
 Modify paragraph 2, allowing multiple occurrences of \tcode{auto}
@@ -265,9 +267,6 @@ template parameter} into \tcode{P}.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> struct Vec { };
-template<typename T> Vec<T> make_vec(std::initializer_list<T>) { return Vec<T>{}; } }
-
 auto x1 = { 1, 2 };                 // \added{OK:} \tcode{decltype(x1)} is \tcode{std::initializer_list<int>}
 auto x2 = { 1, 2.0 };               // error: cannot deduce element type
 \end{codeblock}
@@ -280,6 +279,9 @@ Add the following to the first example in paragraph 7.
 \begin{addedblock}
 \enterexample
 \begin{codeblock}
+template<typename T> struct Vec { };
+template<typename T> Vec<T> make_vec(std::initializer_list<T>) { return Vec<T>{}; } }
+
 auto& x3 = *x1.begin();             // OK: \tcode{decltype(x3)} is \tcode{int\&}
 const auto* p = &x3;                // OK: \tcode{decltype(p)} is const \tcode{int*}
 Vec<auto> v1 = make_vec({1, 2, 3}); // OK: \tcode{decltype(v1)} is \tcode{Vec<int>}
