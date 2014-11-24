@@ -796,7 +796,7 @@ template<typename T> struct S {
 template<typename T> 
   void S<T>::f() requires true { } // OK
 template<typename T> 
-  void S<T>::g() { }               // error: no matching function in S<T>
+  void S<T>::g() { }               // error: no matching function in \tcode{S<T>}
 \end{codeblock}
 \exitexample
 \end{addedblock}
@@ -889,7 +889,7 @@ template<C2 T> g2(T);
 template<typename T>
   struct S {
     void f1() requires true;  // OK
-    void f2() requires C1<T>; // error: constraints refer to T
+    void f2() requires C1<T>; // error: constraints refer to \tcode{T}
     void g1<T>(T);            // OK
     void g2<T>(T);            // error: constraints not satisfied
   };
@@ -977,9 +977,8 @@ to the (omitted) example in the original document.
 A partial specialization matches a given actual template 
 argument list if the template arguments of the partial 
 specialization can be deduced from the actual template argument 
-list (\cxxref{temp.deduct})
-\added{, and the deduced template arguments satisfy the constraints 
-of the partial specialization, if any 
+list (\cxxref{temp.deduct})\added{, and the deduced template arguments 
+satisfy the constraints of the partial specialization, if any
 (\ref{temp.constr})}.
 \enterexample
 \begin{codeblock}
@@ -1192,7 +1191,7 @@ template<typename T> struct S2 {
     void f() requires T::value == 1;
   };
 
-S2<int> s; // error: substitution failure in definition of S2<int>
+S2<int> s; // error: substitution failure in definition of \tcode{S2<int>}
 \end{codeblock}
 \exitexample
 \end{quote}    
@@ -1244,7 +1243,8 @@ template<C T>        void g(T) { } // \#3
 template void f(int);   // OK: refers to \#1
 template void f(void*); // error: no matching template
 template void g(int);   // OK: refers to \#3
-template void g(void*); // OK: refers to \#2\end{codeblock}
+template void g(void*); // OK: refers to \#2
+\end{codeblock}
 \exitexample
 \end{quote}
 
@@ -1964,12 +1964,12 @@ order constraints (\ref{temp.constr.order}).
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C1() { return sizeof(T) == 1; }
-template<typename T> concept bool C2 = C1<T>() \&\& 1 == 2; }
+template<typename T> concept bool C2 = C1<T>() && 1 == 2; }
 template<typename T> concept bool C3 = requires () { typename T::type; };
 
 // Expression      // Constraints
 C2<char>           sizeof(char) == 1 /* and */ 1 == 2
-C3<int>            /* type constraint for int::type */
+C3<int>            /* type constraint for \tcode{int::type} */
 3 + 4              // error: not a constraint
 (bool)(3 + 4)      (bool)(3 + 4)
 \end{codeblock}
