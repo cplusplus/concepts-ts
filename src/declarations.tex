@@ -365,9 +365,9 @@ template<typename T, int N> class Array { };
 template<typename T, template<typename> class A> class Stack { };
 template<typename T> class Alloc { };
 
-void f1(C1 c);            // C1 designates a placeholder type
-void f2(Array<auto, C2>); // C2 designates a placeholder for an integer value
-void f3(Stack<auto, C3>); // C3 designates a placeholder for a class template
+void f1(C1 c);            // \tcode{C1} designates a placeholder type
+void f2(Array<auto, C2>); // \tcode{C2} designates a placeholder for an integer value
+void f3(Stack<auto, C3>); // \tcode{C3} designates a placeholder for a class template
 \end{codeblock}
 \exitexample
 
@@ -464,8 +464,8 @@ template<typename T> concept bool C() { return true; }             // \#1
 template<typename T, typename U> concept bool C() { return true; } // \#2
 template<typename T> concept bool D = true;                        // \#3
 
-void f(C); // OK: the concept-name C refers to both \#1 and \#2
-void g(D); // OK: the concept-name D refers only to \#3
+void f(C); // OK: the concept-name \tcode{C} refers to both \#1 and \#2
+void g(D); // OK: the concept-name \tcode{D} refers only to \#3
 \end{codeblock}
 \exitexample
 

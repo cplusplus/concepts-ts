@@ -153,6 +153,7 @@ constrained template parameters.
 
 \begin{quote}
 \pnum
+
 \begin{bnf}
 \nontermdef{template-parameter}
   \added{constrained-parameter}
@@ -230,7 +231,7 @@ template<C2 X> void f2();     // OK: \tcode{X} is a template with one type-param
 template<C3 N> void f3();     // OK: \tcode{N} has type int
 template<C4... Ts> void f4(); // OK: \tcode{Ts} is a template parameter pack of types
 template<C4 Ts> void f5();    // error: \tcode{Ts} must be preceded by an ellipsis
-template<C5... Cs> f6();      // OK: \tcode{Cs} is a template parameter pack of chars
+template<C5... Cs> f6();      // OK: \tcode{Cs} is a template parameter pack of \tcode{char}{}s
 \end{codeblock}
 \exitexample
 
@@ -323,17 +324,17 @@ template<typename T, int N, typename... Xs> concept bool C1 = true;
 template<template<typename> class X> concept bool C2 = true;
 
 C1{A, B, ...C} // OK: \tcode{A} is declared as \tcode{typename A},
-struct s;      // \tcode{B} is declared as \tcode{int B}, and
+  struct s;    // \tcode{B} is declared as \tcode{int B}, and
                // \tcode{C} is declared as \tcode{typename... C}
 
 C1{X, Y, Z} // error: \tcode{Z} must be preceded by an ellipsis
-struct t;
+  struct t;
 
 C2{T} // OK: \tcode{T} is declared as \tcode{template<typename> class T}
-void foo();
+  void foo();
 
-C2{...X}    // error: the corresponding parameter is not a 
-void bar(); // template parameter pack
+C2{...X} // error: the corresponding parameter is not a template parameter pack
+  void bar();
 \end{codeblock}
 \exitexample
 
@@ -585,9 +586,9 @@ template<C> struct X { };
 template<D> struct Y { };
 template<typename T> struct Z { };
 
-S<X> s1; // OK: X has the same constraints as P
-S<Y> s2; // error: the constraints of P do not subsume those of Y
-S<Z> s3; // OK: the constraints of P subsume those of Z
+S<X> s1; // OK: \tcode{X} and \tcode{P} have equivalent constraints
+S<Y> s2; // error: \tcode{P} is not at least as constrained \tcode{Y} (\tcode{Y} is more constrained than \tcode{P})
+S<Z> s3; // OK: \tcode{P} is at least as constrained as \tcode{Z}
 \end{codeblock}
 \exitexample
 \end{addedblock}
@@ -662,7 +663,7 @@ template<C T> struct S {
   }
 
 template<typename T> requires C<T> void S<T>::f() { } // OK: parameters and constraints match
-template<typename T> void S<T>::g() { } // error: no matching declaration for S<T>
+template<typename T> void S<T>::g() { } // error: no matching declaration for \tcode{S<T>}
 
 template<C T> D{U} struct S<T>::Inner { }; // OK
 \end{codeblock}
@@ -689,7 +690,7 @@ template<typename T> struct S {
 template<typename T> 
   void S<T>::f() requires true { } // OK
 template<typename T> 
-  void S<T>::g() { }               // error: no matching function in S<T>
+  void S<T>::g() { }               // error: no matching function in \tcode{S<T>}
 \end{codeblock}
 \exitexample
 \end{addedblock}
@@ -783,11 +784,11 @@ template<C2 T> g2(T);
 
 template<typename T>
   struct S {
-    friend void f1() requires true;                  // OK
-    friend void f2() requires C1<T>;           // OK
+    friend void f1() requires true;      // OK
+    friend void f2() requires C1<T>;     // OK
     friend void g0<T>(T) requires C1<T<; // error: constrained friend specialization
-    friend void g1<T>(T);                      // OK
-    friend void g2<T>(T);                      // error: constraint can never be satisfied, no diagnostic required
+    friend void g1<T>(T);                // OK
+    friend void g2<T>(T);                // error: constraint can never be satisfied, no diagnostic required
   };
 
 void f1() requires true;    // friend of all S<T>
@@ -1837,7 +1838,7 @@ template<C1 T> void g(T);       // \#4
 
 f(0);       // selects \#1
 f((int*)0); // selects \#2
-g(true);    // selects \#3 because C1<bool> is not satisfied
+g(true);    // selects \#3 because \tcode{C1<bool>} is not satisfied
 g(0);       // selects \#4
 \end{codeblock}
 \exitexample
@@ -1857,6 +1858,7 @@ constrained than \tcode{D1}.
 \pnum
 Certain contexts require expressions that can be transformed
 into constraints through the process of \defn{normalization}.
+
 \begin{bnf}
 \nontermdef{constraint-expression}\br
     logical-or-expression
@@ -2162,8 +2164,7 @@ when the prototype parameter \tcode{P} declares a template parameter pack and
 the target template parameter \tcode{X} does not.
 % 
 Otherwise, the \grammarterm{constraint-expression} is \tcode{E}.
-
-
+% 
 % TODO: Add examples for constrained parameters 
 % TODO: Give an example with a nested name specifier.
 \enterexample
