@@ -18,8 +18,10 @@ allow a template declaration introduced by a concept.
     \added{requires-clause\opt} declaration\br
   \added{template-introduction declaration}
 
+\begin{addedblock}
 \nontermdef{requires-clause}\br
   \terminal{requires} constraint-expression
+\end{addedblock}
 \end{bnf}
 \end{quote}
   
@@ -532,6 +534,7 @@ constraints.
 
 %%
 %% Template template arguments
+%%
 \rSec2[temp.arg.template]{Template template arguments}
 
 Modify paragraph 3 to include rules for matching constrained template 
@@ -556,7 +559,7 @@ equivalent (\ref{temp.over.link}), and for template
 \grammarterm{template-parameter}{}s, each of their corresponding
 \grammarterm{template-parameter}{}s matches, recursively. 
 % 
-When \tcode{P}’s \grammarterm{template-parameter-list} 
+When \tcode{P}'s \grammarterm{template-parameter-list} 
 contains a template parameter pack (\cxxref{temp.variadic}), the template 
 parameter pack will match zero or more template parameters or template 
 parameter packs in the \grammarterm{template-parameter-list} of
@@ -1644,7 +1647,7 @@ convertible to \tcode{bool}.
 An implicit conversion constraint \tcode{P} subsumes another implicit 
 conversion constraint \tcode{Q} if and only if the \grammarterm{expression}{}s 
 of \tcode{P} and \tcode{Q} are equivalent (\ref{temp.over.link}) and the types
-of \tcode{P} and \tcode{Q} are equivalent (\cxxref{temp.type}).</p>
+of \tcode{P} and \tcode{Q} are equivalent (\cxxref{temp.type}).
 
 
 %%
@@ -2063,7 +2066,7 @@ If any template argument patterns or explicit template arguments do not
 match the corresponding parameter, \tcode{C} is removed from the set.
 % 
 If a single concept remains, it is the one selected by concept 
-resolution. Otherwise, the program is ill-formed. </p>
+resolution. Otherwise, the program is ill-formed. 
 % 
 \enterexample
 \begin{codeblock}
