@@ -461,7 +461,7 @@ void af(const Vec<C1>& x);              // OK: an abbreviated function
 void f1(N::Wrap<C1>);     // OK
 void f2(Pair<C1, C2<0>>); // OK
 void f3(Pred<C3>);        // OK
-void f4(C1::Wrap<C2<1>>); // OK: but deduction of C1 will always fail
+void f4(C1::Wrap<C2<1>>); // OK: but deduction of \tcode{C1} will always fail
 
 template<typename T> concept bool Iter() {
   return requires(T i) {
@@ -482,13 +482,12 @@ Unlike \tcode{auto}, a
 \grammarterm{constrained-type-specifier} cannot 
 be used in the type of a variable declaration or the return type of
 a function.
-<cxx-example>
 \begin{codeblock}
 template<typename T> concept bool C = true;
 template<typename T, int N> concept bool D = true;
 
-const C* x = 0;  // error: C used in a variable type
-D<0> fn(int x);  // error: D<0> used as a return type
+const C* x = 0;  // error: \tcode{C} used in a variable type
+D<0> fn(int x);  // error: \tcode{D<0>} used as a return type
 \end{codeblock}
 \exitexample
 \exitnote
@@ -514,8 +513,8 @@ template<typename T> concept bool C() { return true; }             // \#1
 template<typename T, typename U> concept bool C() { return true; } // \#2
 template<typename T> concept bool D = true;                        // \#3
 
-void f(C); // OK: the concept-name C may refer to both \#1 and \#2
-void g(D); // OK: the concept-name D refers only to \#3
+void f(C); // OK: the concept-name \tcode{C} may refer to both \#1 and \#2
+void g(D); // OK: the concept-name \tcode{D} refers only to \#3
 \end{codeblock}
 \exitexample
 
@@ -584,10 +583,10 @@ template<typename T, typename U> concept bool C() { return true; } // \#2
 template<typename T> concept bool P() { return true; }
 template<int T> concept bool P() { return true; }
 
-void f1(const C*); // OK: C designates \#1
-void f2(C<char>);  // OK: C<char> designates \#2
-void f3(C<3>);     // error: no matching concept for C<3> (mismatched template arguments)
-void g1(P);        // error: resolution of P is ambiguous (P refers to two concepts)
+void f1(const C*); // OK: \tcode{C} designates \#1
+void f2(C<char>);  // OK: \tcode{C<char>} designates \#2
+void f3(C<3>);     // error: no matching concept for \tcode{C<3>} (mismatched template arguments)
+void g1(P);        // error: resolution of \tcode{P} is ambiguous (\tcode{P} refers to two concepts)
 \end{codeblock}
 \exitexample
 
@@ -689,10 +688,10 @@ template<int N> concept bool Num = true;
 
 template<int> struct X { };
 
-void f(C&);              // associates C<T1> with f
-void g(D<int>);          // associates D<T2, int>() with g
-void h(X<Num>);          // associates Num<M> with h
-template<C T> struct s1; // associates C<T> with s1
+void f(C&);              // associates \tcode{C<T1>} with \tcode{f}
+void g(D<int>);          // associates \tcode{D<T2, int>()} with \tcode{g}
+void h(X<Num>);          // associates \tcode{Num<M>} with \tcode{h}
+template<C T> struct s1; // associates \tcode{C<T>} with \tcode{s1}
 \end{codeblock}
 Here, \tcode{T1} and \tcode{T2} are invented type template 
 parameters corresponding to the
@@ -798,7 +797,7 @@ are normalized (\ref{temp.constr.expr}).
 \enterexample
 \begin{codeblock}
 template<typename T> 
-  concept int F1() { return 0; }      // error: return type is not bool
+  concept int F1() { return 0; }      // error: return type is not \tcode{bool}
 template<typename T> 
   concept auto F3(T) { return true; } // error: return type is deduced
 template<typename T> 
