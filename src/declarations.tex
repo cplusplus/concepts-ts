@@ -50,24 +50,29 @@ to the grammar for \grammarterm{simple-type-specifier}{}s.
 \setcounter{subsubsection}{3}
 \rSec3[dcl.spec.auto]{\tcode{auto} specifier}
 
-Modify paragraph 1 to extend the use of \tcode{auto} to designate abbreviated 
-function templates.
+Modify paragraph 1 to extend the use of \tcode{auto} to
+designate abbreviated functions.
 
 \begin{quote}
+\setcounter{Paras}{0}
 \pnum
-The \tcode{auto} and \tcode{decltype(auto)} \grammarterm{type-specifier}{}s 
-\added{(as well as \grammarterm{constrained-type-specifier}{}s,
-\ref{dcl.spec.constr})} designate \removed{a} placeholder 
-\removed{type}\added{types} that will be replaced later, either by deduction 
-from an initializer or by explicit specification with a 
-\grammarterm{trailing-return-type}. 
-%
-The \tcode{auto} \grammarterm{type-specifier}
-is also used to signify that a lambda is a 
-generic lambda (\ref{expr.prim.lambda}) \added{or
-that a function declaration is an 
-abbreviated function template (\ref{dcl.fct})}.
-
+The \tcode{auto} and \tcode{decltype(auto)} 
+\grammarterm{type-specifier}s designate a 
+placeholder type that will be replaced later, either by deduction from 
+an initializer or by explicit specification with a 
+\grammarterm{trailing-return-type}. The 
+\tcode{auto} \grammarterm{type-specifier}
+is also used to signify that a lambda is a generic lambda\added{ or
+that a function declaration is an abbreviated function}.
+% 
+\enternote
+The use of the \tcode{auto} 
+\grammarterm{type-specifier} in a non-deduced 
+context (\cxxref{temp.deduct.type}) will cause the 
+deduction of a value for that placeholder type to fail, resulting
+in an ill-formed program.
+\exitnote
+% 
 \enterexample
 \begin{codeblock}
 struct N {
@@ -84,16 +89,17 @@ bool g(char, double);
 void (auto::*)(auto) p = &Size<0>::f;   // OK
 N::Wrap<auto> a = N::make_wrap(0.0);    // OK
 Pair<auto, auto> p = make_pair(0, 'a'); // OK
-auto::Wrap<int> x = N::make_wrap(0);    // error: failed to deduce value for \tcode{auto}
-Size<sizeof(auto)> y = s;               // error: failed to deduce value for \tcode{auto}
+auto::Wrap<int> x = N::make_wrap(0);    // error: failed to deduce value for auto
+Size<sizeof(auto)> y = s;               // error: failed to deduce value for auto
 \end{codeblock}
 \exitexample
 \end{quote}
 
-Modify paragraph 2, allowing multiple occurrences of \tcode{auto}
+Modfify paragraph 2, allowing multiple occurrences of \tcode{auto}
 in those contexts where it is valid.
 
 \begin{quote}
+\setcounter{Paras}{1}
 \pnum
 \removed{The}\added{A} placeholder type can appear with a function 
 declarator in the 
@@ -102,11 +108,12 @@ declarator in the
 \grammarterm{conversion-function-id}, or
 \grammarterm{trailing-return-type},
 in any context where such a declarator is valid. 
-%
+
 If the function declarator includes a 
-\grammarterm{trailing-return-type} (\ref{dcl.fct}),
+\grammarterm{trailing-return-type}
+(\ref{dcl.fct}),
 that specifies the declared return type of the function.
-%
+% 
 If the declared return type of the function contains a placeholder 
 type, the return type of the function is deduced from return 
 statements in the body of the function, if any.
@@ -116,27 +123,32 @@ Modify paragraph 3 to allow the use of \tcode{auto} within the
 parameter type of a lambda or function.
 
 \begin{quote}
+\setcounter{Paras}{2}
 \pnum
-If the \tcode{auto} \grammarterm{type-specifier} appears \removed{as one of 
-the \grammarterm{decl-specifier}{}s in the \grammarterm{decl-specifier-seq} of
-a \grammarterm{parameter-declaration}} \added{in a parameter type} of a
-\grammarterm{lambda-expression}, the lambda is a generic lambda 
-(\ref{expr.prim.lambda}).
-%
+If the \tcode{auto} \grammarterm{type-specifier}
+appears
+\removed{as one of the \grammarterm{decl-specifier}s
+in the \grammarterm{decl-specifier-seq} of
+a \grammarterm{parameter-declaration}}
+\added{in a parameter type} 
+of a
+\grammarterm{lambda-expression}, the lambda is
+a generic lambda (\ref{expr.prim.lambda}).
+% 
 \enterexample
 \begin{codeblock}
 auto glambda = [](int i, auto a) { return i; }; // OK: a generic lambda
 \end{codeblock}
 \exitexample
-%
+% 
 \begin{addedblock}
 Similarly, if the \tcode{auto} \grammarterm{type-specifier}
-appears in a parameter type of a function declaration, the function
-declaration declares an abbreviated function template (\ref{dcl.fct}).
-%
+appears in a parameter type of a function declarator, that is an 
+abbreviated function (\ref{dcl.fct}).
+% 
 \enterexample
 \begin{codeblock}
-void f(const auto&, int); // OK: an abbreviated function template
+void f(const auto&, int); // OK: an abbreviated function
 \end{codeblock}
 \exitexample
 \end{addedblock}
@@ -148,11 +160,13 @@ Add the following after paragraph 3 to allow the use of
 \grammarterm{compound-requirement}.
 
 \begin{quote}
+\setcounter{Paras}{2}
 \pnum
 If the \tcode{auto} \grammarterm{type-specifier} 
 appears in the \grammarterm{trailing-return-type} 
 of a \grammarterm{compound-requirement} in
-a \grammarterm{requires-expression} (\ref{expr.prim.req.compound}), that
+a \grammarterm{requires-expression}
+(\ref{expr.prim.req.compound}), that
 return type introduces an argument deduction constraint
 (\ref{temp.constr.atom.deduct}).
 % 
@@ -172,129 +186,164 @@ certain declarations. Note that the examples in the original text are
 unchanged and therefore omitted.
 
 \begin{quote}
+\setcounter{Paras}{3}
 \pnum
 The type of a variable declared using \tcode{auto} or 
-\tcode{decltype(auto)} is deduced from its initializer. 
+\tcode{decltype(auto)} is deduced from its initializer. This use 
+is allowed when declaring variables 
+in a block 
+(\cxxref{stmt.block}), 
+in namespace scope
+(\cxxref{basic.scope.namespace}), and 
+in a \grammarterm{for-init-statement} 
+(\cxxref{stmt.for}).
 % 
-This use is allowed when declaring 
-variables in a block (\cxxref{stmt.block}), 
-in namespace scope (\cxxref{basic.scope.namespace}), and
-in a \grammarterm{for-init-statement} (\cxxref{stmt.for}).
-%
 \removed{
-\tcode{auto} or \tcode{decltype(auto)} shall appear as one
-of the \grammarterm{decl-specifier}{}s in the \grammarterm{decl-specifier-seq}
+\tcode{auto} or \tcode{decltype(auto)} shall appear as one 
+of the \grammarterm{decl-specifier}s in the 
+\grammarterm{decl-specifier-seq}
 }
-%
+% 
 \added{
-\tcode{auto} can appear anywhere in the declared type of the variable, but 
-\tcode{decltype(auto)} shall appear only as one of the
-\grammarterm{decl-specifier}{}s of the \grammarterm{decl-specifier-seq}.
+Either \tcode{auto} shall appear in the 
+\grammarterm{decl-specifier-seq}, or
+\tcode{decltype(auto)} shall appear as one of the
+\grammarterm{decl-specifier}s of the
+\grammarterm{decl-specifier-seq}.
 }
+% 
 \removed{and the}\added{The} \grammarterm{decl-specifier-seq} 
-shall be followed by one or more \grammarterm{init-declarator}{}s,
+shall be followed by one or more \grammarterm{init-declarator}s,
 each of which shall have a non-empty initializer.
-%
+% 
 In an initializer of the form
 \begin{codeblock}
 ( expression-list )
 \end{codeblock}
-the \grammarterm{expression-list} shall be a single 
-\grammarterm{assignment-expression}.
+the \grammarterm{expression-list} shall be a 
+single \grammarterm{assignment-expression}.
 \end{quote}
 
-Update the rules in paragraph 7 to allow deduction of multiple occurrences 
-of \tcode{auto} in a declaration.
+Update the rules in paragraph 7 to allow deduction of multiple
+occurrences of \tcode{auto} in a declaration.
 
 \begin{quote}
 \setcounter{Paras}{6}
 \pnum
-When a variable declared using a placeholder type is initialized, or a 
-\tcode{return} statement occurs in a function declared with a return type 
-that contains a placeholder type, the deduced return type or variable type 
-is determined from the type of its initializer.
-%
-In the case of a return with no operand, the initializer is considered to 
-be \tcode{void()}.
-%
-Let \tcode{T} be the declared type of the variable or return type of the 
-function.
-%
+When a variable declared using a placeholder type is initialized, or 
+a \tcode{return} statement occurs in a function declared with a 
+return type that contains a placeholder type, the deduced return type 
+or variable type is determined from the type of its initializer. 
+% 
+In the case of a return with no operand, the initializer is
+considered to be \tcode{void()}. 
+% 
+Let \tcode{T} be the declared type of the variable or return 
+type of the function. 
+% 
 \removed{If the placeholder is the \tcode{auto} 
 \grammarterm{type-specifier},}
 \added{If \tcode{T} contains any occurrences of the \tcode{auto}
 \grammarterm{type-specifier},}
 the deduced type is determined using the rules for template argument
 deduction. 
-%
+% 
 If the deduction is for a return statement and the initializer is a 
-\grammarterm{braced-init-list} (\cxxref{dcl.init.list}), the program is
+\grammarterm{braced-init-list} 
+(\cxxref{dcl.init.list}), the program is 
 ill-formed. 
-%
+% 
 \removed{
-Otherwise, obtain \tcode{P} from \tcode{T} by replacing the occurrences of 
-\tcode{auto} with either a new invented type template parameter \tcode{U} or, 
-if the initializer is a \grammarterm{braced-init-list}, with 
+Otherwise, obtain \tcode{P} from \tcode{T} by replacing the 
+occurrences of \tcode{auto} with either a new invented type 
+template parameter \tcode{U} or, if the initializer is a 
+\grammarterm{braced-init-list}, with 
 \tcode{std::initializer_list<U>}.
 }
-
+% 
 \begin{addedblock}
 Otherwise, obtain \tcode{P} from \tcode{T} as follows:
+
 \begin{itemize}
-\item replace each occurrence of \tcode{auto} in the
-variable type with a new invented type template parameter,
-or
+\item replace each occurrence of \tcode{auto} in the variable type 
+with a new invented type template parameter, or 
+
 \item when the initializer is a \grammarterm{braced-init-list}
-and \tcode{auto} is a \grammarterm{decl-specifier} of the 
-\grammarterm{decl-specifier-seq} of the variable declaration, replace that 
-occurrence of \tcode{auto} with \tcode{std::initializer_list<U>}
+and \tcode{auto} is a \grammarterm{decl-specifier}
+of the \grammarterm{decl-specifier-seq} of
+the variable declaration, replace that occurrence of \tcode{auto} 
+with \tcode{std::initializer_list<U>}
 where \tcode{U} is an invented template type parameter.
 \end{itemize}
 \end{addedblock}
 % 
-Deduce a value for \removed{\tcode{U}} \added{each invented template type 
-parameter in \tcode{P}} using the rules of template argument deduction from 
-a function call (\cxxref{temp.deduct.call}), where \tcode{P} is a function 
-template parameter type and the initializer is the corresponding argument.
-%
+Deduce a value for 
+\removed{\tcode{U}}
+\added{each invented template type parameter in \tcode{P}}
+using the rules of template argument 
+deduction from a function call 
+(\cxxref{temp.deduct.call}),
+where \tcode{P} is a function template parameter type and the 
+initializer is the corresponding argument. 
+% 
 If the deduction fails, the declaration is ill-formed. 
 % 
-Otherwise, the type deduced for the variable or return type is obtained by 
-substituting the deduced \removed{\tcode{U}} \added{values for each invented 
-template parameter} into \tcode{P}.
+Otherwise, the type deduced for the variable or return type is obtained 
+by substituting the deduced 
+\removed{\tcode{U}}
+\added{values for each invented template parameter} 
+into \tcode{P}.
 % 
+
+% \enterexample
+% \begin{codeblock}
+% \added{template<typename T> struct Vec { };
+% template<typename T> Vec<T> make_vec(std::initalizer_list<T>) { return Vec<T>{}; } }
+
+% auto x1 = { 1, 2 };                 // \added{OK:} decltype(x1) is std::initializer_list<int>
+% auto x2 = { 1, 2.0 };               // error: cannot deduce element type
+% \end{codeblock}
+% \begin{addedblock}
+% \begin{codeblock}
+% auto& x3 = *x1.begin();             // OK: decltype(x3) is int\&
+% const auto* p = &x3;                // OK: decltype(p) is const int*
+% Vec<auto> v1 = make_vec({1, 2, 3}); // OK: decltype(v1) is Vec<int>
+% Vec<auto> v2 = {1, 2, 3};           // error: cannot deduce element type
+% \end{codeblock}
+% \end{addedblock}
+% \exitexample
+
+% NOTE: added/removed does not work in examples. The markup in this
+% example is lost...
 \enterexample
 \begin{codeblock}
 template<typename T> struct Vec { };
-template<typename T> Vec<T> make_vec(std::initializer_list<T>) { return Vec<T>{}; } }
+template<typename T> Vec<T> make_vec(std::initalizer_list<T>) { return Vec<T>{}; } }
 
-auto x1 = { 1, 2 };                 // \added{OK:} \tcode{decltype(x1)} is \tcode{std::initializer_list<int>}
+auto x1 = { 1, 2 };                 // OK: \tcode{decltype(x1)} is \tcode{std::initializer_list<int>}
 auto x2 = { 1, 2.0 };               // error: cannot deduce element type
-\end{codeblock}
-\exitexample
-\end{quote}
-
-Add the following to the first example in paragraph 7.
-
-\begin{quote}
-\begin{addedblock}
-\enterexample
-\begin{codeblock}
 auto& x3 = *x1.begin();             // OK: \tcode{decltype(x3)} is \tcode{int\&}
-const auto* p = &x3;                // OK: \tcode{decltype(p)} is const \tcode{int*}
+const auto* p = &x3;                // OK: \tcode{decltype(p)} is \tcode{const int*}
 Vec<auto> v1 = make_vec({1, 2, 3}); // OK: \tcode{decltype(v1)} is \tcode{Vec<int>}
 Vec<auto> v2 = {1, 2, 3};           // error: cannot deduce element type
 \end{codeblock}
 \exitexample
-\end{addedblock}
-\end{quote}
-
-Add the following after the second example in paragraph 7.
-
-\begin{quote}
+% 
+\enterexample
+\begin{codeblock}
+const auto& i = expr;
+\end{codeblock}
+The type of \tcode{i} is the deduced type of the parameter 
+\tcode{u} in the call \tcode{f(expr)} of the following 
+invented function template:
+\begin{codeblock}
+template <class U> void f(const U& u);
+\end{codeblock}
+\exitexample
+% 
 \begin{addedblock}
 \enterexample
-In the following program
+Similarly, the type of \tcode{p} in the following program
 \begin{codeblock}
 template<typename F, typename S> struct Pair;
 template<typename T, typename U> Pair<T, U> make_pair(T, U);
@@ -304,12 +353,12 @@ int fn(char, double);
 
 Pair<auto (*)(auto, auto), auto (auto::*)(auto)> p = make_pair(fn, &S::mfn);
 \end{codeblock}
-the declared type of \tcode{p} is the deduced type of the parameter 
-\tcode{x} in the call of \tcode{g(make_pair(fn, \&S::mfn))} of the following 
-invented function template:
+is the deduced type of the parameter \tcode{x} in the call of 
+\tcode{g(make_pair(fn, \&S::mfn))} of the following invented function 
+template:
 \begin{codeblock}
-template<class T1, class T2, class T2, class T3, class T4, class T5, class T6>
-void g(Pair< T1(*)(T2, T3), T4 (T5::*)(T6)> x);
+template<class T1, class T2, class T2, class T3, class T4, class T5, class T6> 
+  void g(Pair< T1(*)(T2, T3), T4 (T5::*)(T6)>);
 \end{codeblock}
 \exitexample
 \end{addedblock}
@@ -321,22 +370,23 @@ void g(Pair< T1(*)(T2, T3), T4 (T5::*)(T6)> x);
 %%
 \rSec3[dcl.spec.constr]{Constrained type specifiers}
 
-Add this section to \ref{dcl.type}.
-
-\begin{quote}
+Add this section to \cxxref{dcl.type}.
 
 \pnum
-Like the \tcode{auto} \grammarterm{type-specifier} (\ref{dcl.spec.auto}),
-a \grammarterm{constrained-type-specifier} designates a placeholder that 
-will be replaced later by deduction from the \grammarterm{expression} in a
-\grammarterm{compound-requirement} or a function argument.
+Like the \tcode{auto} \grammarterm{type-specifier}
+(\ref{dcl.spec.auto}),
+a \grammarterm{constrained-type-specifier}
+designates a placeholder that will be replaced later by deduction
+from the \grammarterm{expression} in a 
+\grammarterm{compound-requirement} or a
+function argument. 
 % 
-\grammarterm{constrained-type-specifier}{}s have
+\grammarterm{constrained-type-specifier}s have
 the form
-
+% 
 \begin{bnf}
 \nontermdef{constrained-type-specifier}\br
-		nested-name-specifier\opt constrained-type-name
+  nested-name-specifier\opt constrained-type-name
 
 \nontermdef{constrained-type-name}\br
   concept-name\br
@@ -346,13 +396,12 @@ the form
   identifier
 
 \nontermdef{partial-concept-id}\br
-		concept-name \terminal{<} template-argument-list\opt \terminal{>}
+    concept-name \terminal{<} template-argument-list\opt \terminal{>}
 \end{bnf}
-
+% 
 A \grammarterm{constrained-type-specifier}
 may also designate placeholders for deduced non-type and template 
 template arguments.
-% 
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C1 = false;
@@ -369,29 +418,26 @@ void f3(Stack<auto, C3>); // C3 designates a placeholder for a class template
 \end{codeblock}
 \exitexample
 
-
+\pnum
 A \grammarterm{constrained-type-specifier}
 can appear in many of the same places as the \tcode{auto}
 \grammarterm{type-specifier}, is subject
 to the same rules, and has equivalent meaning in those contexts. 
 In particular, a \grammarterm{constrained-type-specifier} 
 can appear in the following contexts with the given meaning:
-% 
 \begin{itemize}
 \item a parameter type of a function declaration, signifying an 
-     abbreviated function template (\ref{dcl.fct});
-
+     abbreviated function (\ref{dcl.fct});
 \item a parameter of a lambda, signifying a generic lambda 
      (\ref{expr.prim.lambda});
-
 \item the parameter type of a template parameter, signifying a
      constrained template parameter (\ref{temp.param});
-
 \item the \grammarterm{trailing-return-type} of
-     a \grammarterm{compound-requirement} (\ref{expr.prim.req.compound}),
-     signifying an argument deduction constraint (\ref{temp.constr.atom.deduct}).
+     a \grammarterm{compound-requirement}
+     (\ref{expr.prim.req.compound}),
+     signifying an argument deduction constraint 
+     (\ref{temp.constr.atom.deduct}). 
 \end{itemize}
-% 
 A program that includes a \grammarterm{constrained-type-specifier}
 in any other contexts is ill-formed.
 % 
@@ -405,16 +451,17 @@ template<typename T> class Vec;
 
 struct N {
   template<typename T> struct Wrap;
-};
+}
 template<typename T, typename U> struct Pair;
 template<bool (*)(int)> struct Pred;
 
 auto gl = [](C1& a, C1* b) { a = *b; }; // OK: a generic lambda
-void af(const Vec<C1>& x);              // OK: an abbreviated function template
+void af(const Vec<C1>& x);              // OK: an abbreviated function
 
 void f1(N::Wrap<C1>);     // OK
 void f2(Pair<C1, C2<0>>); // OK
 void f3(Pred<C3>);        // OK
+void f4(C1::Wrap<C2<1>>); // OK: but deduction of C1 will always fail
 
 template<typename T> concept bool Iter() {
   return requires(T i) {
@@ -425,17 +472,17 @@ template<typename T> concept bool Iter() {
 The declaration of \tcode{f4} is valid, but a value can never be deduced 
 for the placeholder designated by \tcode{C1} since it appears in a
 non-deduced context (\cxxref{temp.deduct.type}).
-% 
 However, a value may be explicitly given as a template argument in a
 \grammarterm{template-id}.
 \exitexample
 
 \pnum
 \enternote
-Unlike \tcode{auto}, a \grammarterm{constrained-type-specifier} cannot
+Unlike \tcode{auto}, a 
+\grammarterm{constrained-type-specifier} cannot 
 be used in the type of a variable declaration or the return type of
 a function.
-\enterexample
+<cxx-example>
 \begin{codeblock}
 template<typename T> concept bool C = true;
 template<typename T, int N> concept bool D = true;
@@ -447,81 +494,248 @@ D<0> fn(int x);  // error: D<0> used as a return type
 \exitnote
 
 \pnum
-An identifier is a \grammarterm{concept-name} if it refers to a set of 
-concept definitions (\ref{dcl.spec.concept}).
-%
+A \grammarterm{concept-name} refers to a
+set of concept definitions (\ref{dcl.spec.concept})
+called the \defn{candidate concept set}.
+% 
+If that set is empty, the program is ill-formed.
+% 
 \enternote
-The set of concepts has multiple members only when referring to a set of 
-overloaded function concepts. There is at most one member of this set when a
-\grammarterm{concept-name} refers to a variable concept.
+The candidate concept set has multiple members
+only when referring to a set of overloaded function concepts.
+There is at most one member of this set when a 
+\grammarterm{concept-name}
+refers to a variable concept.
 \exitnote
-%
+% 
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C() { return true; }             // \#1
 template<typename T, typename U> concept bool C() { return true; } // \#2
 template<typename T> concept bool D = true;                        // \#3
 
-void f(C); // OK: the concept-name C refers to both \#1 and \#2
+void f(C); // OK: the concept-name C may refer to both \#1 and \#2
 void g(D); // OK: the concept-name D refers only to \#3
 \end{codeblock}
 \exitexample
 
 \pnum
-A \grammarterm{partial-concept-id} is a \grammarterm{concept-name} followed 
-by a sequence of \grammarterm{template-argument}{}s.
-%
+A \grammarterm{partial-concept-id} is a
+\grammarterm{concept-name} followed by a
+sequence of \grammarterm{template-argument}s.
+% 
 \enterexample
 \begin{codeblock}
+template<typename T, typename U> concept bool C() { return true; }
 template<typename T, int N = 0> concept bool Seq = true;
 
-void f1(Seq<3>);
-void f2(Seq<>);
+void f(C<int>);
+void f(Seq<3>);
+void f(Seq<>);
 \end{codeblock}
 \exitexample
 
 \pnum
-The concept designated by a \grammarterm{constrained-type-specifier}
-is the one selected by concept resolution (\ref{temp.constr.resolve}).
+The concept designated by a 
+\grammarterm{constrained-type-specifier}
+is resolved by determining the viability of each concept in the
+candidate concept set.
+% 
+For each candidate concept in that set, \tcode{TT} is a 
+\grammarterm{template-id} formed as follows:
+% 
+let \tcode{C} be the \grammarterm{concept-name}
+for the candidate concept set, and let \tcode{X} be a template 
+argument that matches
+the type and form (\ref{temp.arg}) of the prototype 
+parameter (\ref{dcl.spec.concept})
+of the candidate concept. 
+% 
+The template \tcode{X} is called the 
+\defn{deduced concept argument}.
+% 
+If the \grammarterm{constrained-type-name} in
+the \grammarterm{constrained-type-specifier} is
+a \grammarterm{concept-name}, \tcode{TT} is
+formed as \tcode{C<X>}.
+% 
+Otherwise, the \grammarterm{constrained-type-name} is
+a \grammarterm{partial-concept-id} whose
+\grammarterm{template-argument-list} is
+\tcode{A$_1$, A$_2$, ..., A$_n$}, and
+\tcode{TT} is formed as
+\tcode{C<X, A$_1$, A$_2$, ..., A$_n$>}.
+% 
+The candidate concept is a \defn{viable candidate concept} when all
+\grammarterm{template-arguments} of \tcode{TT} 
+match the template parameters of that candidate 
+(\ref{temp.arg}).
+% 
+If, after determining the viability of each concept, there is a
+single viable candidate concept, that is the concept designated by the
+\grammarterm{constrained-type-specifier}.
+% 
+Otherwise, the program is ill-formed.
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C() { return true; }             // \#1
+template<typename T, typename U> concept bool C() { return true; } // \#2
+template<typename T> concept bool P() { return true; }
+template<int T> concept bool P() { return true; }
 
-\end{quote}
+void f1(const C*); // OK: C designates \#1
+void f2(C<char>);  // OK: C<char> designates \#2
+void f3(C<3>);     // error: no matching concept for C<3> (mismatched template arguments)
+void g1(P);        // error: resolution of P is ambiguous (P refers to two concepts)
+\end{codeblock}
+\exitexample
+
+
+\pnum
+The use of a \grammarterm{constrained-type-specifier}
+in the type of a \grammarterm{parameter-declaration}
+associates a \grammarterm{constraint-expression} 
+(\ref{temp.constr.expr}) with the 
+entity for which that parameter is declared. 
+% 
+In the case of a generic lambda, the association is with
+the member function call operator of the closure type 
+(\ref{expr.prim.lambda}).
+% 
+For an abbreviated function declaration, the association is with
+with that function (\ref{dcl.fct}).
+% 
+When a \grammarterm{constrained-type-specifier}
+appears in the 
+\grammarterm{trailing-return-type} of a 
+\grammarterm{compound-requirement} it
+associates a \grammarterm{constraint-expression} 
+with the invented function template of the introduced argument 
+deduction constraint (\ref{temp.constr.atom.deduct}).
+
+When a \grammarterm{constrained-type-specifier}
+is used in a \grammarterm{template-parameter},
+the constrained it associates a 
+\grammarterm{constraint-expression} with the
+\grammarterm{template-declaration} in which the
+\grammarterm{template-parameter} is declared.
+
+
+\pnum
+The \grammarterm{constraint-expression} 
+associated by a \grammarterm{constrained-type-specifier}
+is derived from the \grammarterm{template-id} 
+(called \tcode{TT} above) used to determine the viability of
+the designated concept (call it \tcode{D}).
+% 
+The constraint is formed by replacing the
+deduced concept argument \tcode{X} in \tcode{TT} with a 
+template argument, \tcode{A}. That template argument is
+defined as follows:
+% 
+\begin{itemize}
+\item when the \grammarterm{constrained-type-specifier}
+appears in the type of a \grammarterm{parameter-declaration}
+of a function or lambda, 
+% 
+or when the when the 
+\grammarterm{constrained-type-specifier}
+appears in the \grammarterm{trailing-return-type}
+of a \grammarterm{compound-requirement},
+% 
+\tcode{A} is the name of the
+invented template parameter corresponding to the 
+placeholder in that (possibly invented) function template 
+(\ref{dcl.fct});
+
+\item when the \grammarterm{constrained-type-specifier}
+appears in a \grammarterm{template-parameter}
+declaration, \tcode{A} is the name of the declared
+parameter (\ref{temp.param}). 
+\end{itemize}
+% 
+Let \tcode{TT2} be a \grammarterm{template-id}
+formed as follows. 
+% 
+If the template parameter \tcode{A} declares a template parameter 
+pack, and \tcode{D} is a variadic concept 
+(\ref{dcl.spec.concept}),
+\tcode{TT2} is formed by replacing the deduced concept
+argument \tcode{X} in 
+\tcode{TT} with the pack expansion \tcode{A...}.
+% 
+Otherwise \tcode{TT2} is formed by replacing \tcode{X}
+with \tcode{A}.
+% 
+Let \tcode{E} be the \grammarterm{id-expression}
+\tcode{TT2} when the \tcode{D} is a variable concept, and
+the function call \tcode{TT2()} when the \tcode{D} is a 
+function concept.
+% 
+If the template parameter \tcode{A} declares a template
+parameter pack, and \tcode{D} is not a variadic concept,
+then the associated constraint is the fold expression 
+\tcode{(E \& ...)}
+(\cxxref{expr.prim.fold}).
+% 
+Otherwise, the associated constraint is the expression \tcode{E}.
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = true;
+template<typename T, typename U> concept bool D() { return true; }
+template<int N> concept bool Num = true;
+
+template<int> struct X { };
+
+void f(C&);              // associates C<T1> with f
+void g(D<int>);          // associates D<T2, int>() with g
+void h(X<Num>);          // associates Num<M> with h
+template<C T> struct s1; // associates C<T> with s1
+\end{codeblock}
+Here, \tcode{T1} and \tcode{T2} are invented type template 
+parameters corresponding to the
+prototype parameter of their respective designated concepts.
+Likewise, \tcode{M} is an invented non-type template parameter
+corresponding to the prototype parameter of \tcode{Num}.
+
+\pnum
+Two \grammarterm{constrained-type-specifiers}
+are said to be equivalent if their associated
+\grammarterm{constraint-expression}s are
+equivalent according to the rules in 
+\ref{temp.constr.expr}.
+
+
 
 %%
 %% concept specifier
 %%
 \rSec2[dcl.spec.concept]{\tcode{concept} specifier}
 
-Add ths section to \ref{dcl.spec}.
-
-\begin{quote}
-
 \pnum
 The \tcode{concept} specifier shall be applied only to the 
 definition of a function template or variable template, declared
 in namespace scope (\cxxref{basic.scope.namespace}).
-%
+% 
 A function template definition having the \tcode{concept}
 specifier is called a \defn{function concept}. A function
-concept is a non-throwing function (\cxxref{except.spec}).
-%
-When a function is declared to be a concept, it shall be the only
-declaration of that function.
-%
+concept is a non-throwing function 
+(\cxxref{except.spec}).
+% 
 A variable template definition having the \tcode{concept} 
 specifier is called a \defn{variable concept}.
-%
+% 
 A \defn{concept definition} refers to either a function concept 
 and its definition or a variable concept and its initializer.
-%
+% 
 \enterexample
 \begin{codeblock}
 template<typename T> 
   concept bool F1() { return true; } // OK: declares a function concept
 template<typename T> 
   concept bool F2();                 // error: function concept is not a definition
-template<typename T> constexpr bool F3();
-template<typename T>
-  concept bool F3() { return true; } // error: redeclaration of a function as a concept
 template<typename T> 
   concept bool V1 = true;            // OK: declares a variable concept
 template<typename T> 
@@ -535,60 +749,52 @@ struct S {
 
 \pnum
 Every concept definition is implicitly defined to be a 
-\tcode{constexpr} declaration (\cxxref{dcl.constexpr}).
+\tcode{constexpr} declaration 
+(\cxxref{dcl.constexpr}). 
 
 \pnum
-A concept definition shall not be declared with the 
-\tcode{friend} or \tcode{constexpr} specifiers. 
+No storage specifiers shall appear in a declaration with the 
+\tcode{concept} specifier. Additionally, a concept definition
+shall not include the \tcode{friend} or \tcode{constexpr}
+specifiers. 
 
 \pnum
-Additionally, a concept definition shall not have associated constraints
-(Clause~\ref{temp}).
-
-\pnum
-The definition of a function concept or the initializer of
-a variable concept shall not include a reference to the concept being
-declared.
-%
-\enterexample
-\begin{codeblock}
-template<typename T>
-  concept bool F() { return F<typename T::type>(); } // error
-template<typename T>
-  concept bool V = V<T*>;                            // error
-\end{codeblock}
-\exitexample
+A concept definition shall be unconstrained.
+\enternote
+A concept defines a total mapping from its template arguments to the 
+values \tcode{true} and \tcode{false}.
+\exitnote
 
 \pnum
 The first declared template parameter of a concept definition is its
 \defn{prototype parameter}. 
-%
+% 
 A \defn{variadic concept} is a concept whose prototype parameter
 is a template parameter pack.
+
 
 \pnum
 A function concept has the following restrictions:
 \begin{itemize}
-\item No \grammarterm{function-specifier}{}s shall
-     appear in its declaration (\cxxref{dcl.fct.spec}).
-\item The declared return type shall be the non-deduced type \tcode{bool}.
-
-% FIXME: It's not equivalent to (). It shall be (). We don't want
-% void's in this list.
-\item The declaration shall have a \grammarterm{parameter-declaration-clause}
-equivalent to \tcode{()}.
-
-\item The function body shall consist of a single \tcode{return} 
-statement whose \grammarterm{expression} shall be a
-\grammarterm{constraint-expression} (\ref{temp.constr.expr}).
+  \item No \grammarterm{function-specifier}s shall
+       appear in its declaration (\ref{dcl.fct.spec}). 
+  \item The declared return type shall be the non-deduced type \tcode{bool}. 
+  \item The declaration shall have a 
+  \grammarterm{parameter-declaration-clause}
+  equivalent to \tcode{()}. 
+  \item The function shall not be recursive. 
+  \item The function body shall consist of a single \tcode{return} 
+  statement whose \grammarterm{expression} shall be a
+  \grammarterm{constraint-expression}
+  (\ref{temp.constr.expr}).
 \end{itemize}
-%
+% 
 \enternote
 Return type deduction requires the instantiation of the function 
 definition, but concept definitions are not instantiated; they
 are normalized (\ref{temp.constr.expr}).
 \exitnote
-%
+% 
 \enterexample
 \begin{codeblock}
 template<typename T> 
@@ -603,32 +809,31 @@ template<typename T>
 \pnum
 A variable concept has the following restrictions:
 \begin{itemize}
-\item The declared type shall be \tcode{bool}.
-\item The declaration shall have an initializer.
-\item The initializer shall be a \grammarterm{constraint-expression}.
+  \item The declared type shall be \tcode{bool}. 
+  \item The declaration shall have an initializer. 
+  \item The initializer shall be a 
+  \grammarterm{constraint-expression}. 
 \end{itemize}
-%
 \enterexample
 \begin{codeblock}
 template<typename T> 
-  concept bool V1 = 3 + 4; // error: initializer is not a constraint-expression
-concept bool V3 = 0;       // error: not a template
-
-template<typename T> concept bool C = true;
-
-template<C T> 
-  concept bool V2 = true;  // error: constrained template declared as a concept
+  concept bool V2 = 3 + 4; // error: initializer is not a constraint-expression
+template<Integral T> 
+  concept bool V3 = true;  // error: constrained template declared as a concept
+concept bool V4 = 0;       // error: not a template
 \end{codeblock}
 \exitexample
 
 \pnum
-A program shall not declare an explicit instantiation (\ref{temp.explicit}), 
-an explicit specialization (\ref{temp.expl.spec}), or a partial specialization
-of a concept definition.
-%
+A program that declares an explicit instantiation
+(\ref{temp.explicit}), an explicit specialization 
+(\ref{temp.expl.spec}), or a partial specialization 
+of a concept definition is ill-formed.
+
 \enternote
-This prevents users from subverting the constraint system by providing a 
-meaning for a concept that differs from its original definition.
+The prohibitions against overloading and specialization prevent
+users from subverting the constraint system by providing a meaning 
+for a concept that differs from the one computed by evaluating its 
+constraints.
 \exitnote
 
-\end{quote}

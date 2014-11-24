@@ -18,11 +18,6 @@ template declarations can be overloaded; variable and type declarations
 cannot be overloaded.
 \end{quote}
 
-%%
-%% OVerloadable declarations
-%%
-\rSec1[over.load]{Overloadable declarations}
-
 Update paragraph 3 to mention a function's overloaded constraints. 
 Note that the itemized list in the original text is omitted in this
 document.
@@ -85,19 +80,26 @@ if any (Clause~\ref{temp}), and} relationships between arguments and function
 parameters other than the ranking of conversion sequences.
 \end{quote}
 
-Insert a new paragraph after paragraph 2; this introduces new a criterion for 
-determining if a candidate is viable. Also, update the beginning of the 
-subsequent paragraph to account for the insertion.
+
+Insert the following paragraph after paragraph 1; this introduces
+new a criterion for determining if a candidate is viable. Also, update
+the beginning of the subsequent paragraphs to account for the
+insertion.
 
 \begin{quote}
-\setcounter{Paras}{2}
+\setcounter{Paras}{1}
 \pnum
-\added{Second, for a function to be viable, if it has associated constraints
-(Clause~\ref{temp}), those constraints shall be satisfied (\ref{temp.constr}).}
+First, for \tcode{F} to be a viable function, if \tcode{F} has 
+associated constraints (\ref{temp}), those 
+constraints shall be satisfied (\ref{temp.constr}).
 
 \pnum
-\removed{Second}\added{Third}, for \tcode{F} to be a viable function\ldots
+\removed{First}\added{Second}, to be a viable function ...
+
+\pnum
+\removed{Second}\added{Third}, for \tcode{F} to be a viable function ...
 \end{quote}
+
 
 %%
 %% Best viable function
@@ -119,10 +121,10 @@ for \tcode{F2} according to the partial ordering rules described in
 \ref{temp.func.order}\removed{.}\added{, or, if not that,}
 
 \item
-\added{\tcode{F1} and \tcode{F2} are non-template functions with the same 
-parameter-type-lists, and  \tcode{F1} is more constrained than \tcode{F2} 
-according to the partial ordering of constraints described in 
-\ref{temp.constr.order}.}
+The parameter-type-lists of \tcode{F1} and \tcode{F2} are
+the same and \tcode{F1} is more constrained than \tcode{F2} 
+according to the partial ordering of constraints described in
+\ref{temp.constr.order}.
 \end{itemize}
 \end{quote}
 
@@ -132,38 +134,45 @@ according to the partial ordering of constraints described in
 %%
 \rSec1[over.over]{Address of overloaded function}
 
-Modify paragraph 4 (paragraph 5 in this document) to incorporate 
-constraints in the selection of an overloaded function when its address is 
-taken.
+The introduction of constraints modifies the rules for determining
+which function is selected when taking the address of an overloaded
+function. Insert a new paragraph before paragraph 4.
 
-% TODO: Rewrite this as an itemized list of steps.
 \begin{quote}
 \setcounter{Paras}{3}
 \pnum
-\added{Eliminate from the set of selected functions all those whose constraints
-are not satisfied (\ref{temp.constr}).}
-%
-\removed{If more than one function is selected}
-\added{If more than one function in the set remains}, 
-any function template specializations in the set are eliminated if the 
-set also contains a function that is not a function template
-specialization\removed{, and}\added{.}
+If a single constrained function is selected, and the constraints are
+not satisfied (\ref{temp.constr}), the program
+is ill-formed. 
+\end{quote}
+
+Modify paragraph 4 (paragraph 5 in this document) to incorporate 
+constraints in the selection of an overloaded function when its address is 
+taken. Also add the following example after that in the original document 
+(not shown here).
+
+\begin{quote}
+\pnum
+If more than one function is selected, any function template 
+specializations in the set are eliminated if the set also contains a 
+function that is not a function template 
+specialization\removed{, and}\added{. 
 % 
-\added{Any given non-template function \tcode{F0} is eliminated if the set 
-contains a second non-template function that is more constrained than 
-\tcode{F0} according to the partial ordering rules of \ref{temp.constr.order}.}
-%
-\added{Additionally,} any given function template specialization
+Any given non-template function
+\tcode{F0} is eliminated if the set contains a second non-template
+function that is more constrained than \tcode{F0} according to
+the partial ordering rules of 
+\ref{temp.constr.order}.}
+
+\added{Furthermore,} any given function template specialization
 \tcode{F1} is eliminated if the set contains a second function 
 template specialization whose function template is more specialized than 
 the function template of \tcode{F1} according to the partial ordering 
 rules of \ref{temp.func.order}.
-%
-After such eliminations, if any, there shall remain exactly one 
-selected function.
 \end{quote}
 
-Add the following example at the end of paragraph 5.
+After such eliminations, if any, there shall remain exactly one 
+selected function.
 
 \begin{quote}
 \enterexample
