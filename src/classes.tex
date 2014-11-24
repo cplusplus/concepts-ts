@@ -1,0 +1,52 @@
+
+\setcounter{chapter}{8}
+\rSec0[class]{Classes}
+
+\setcounter{section}{1}
+\rSec1[class.mem]{Class members}
+
+Modify the grammar in 9.2 to allow a 
+\grammarterm{requires-clause} for member declarations.
+
+\begin{quote}
+\pnum
+\begin{bnf}
+\nontermdef{member-declarator}
+  declarator virt-specifier-seq\opt \added{requires-clause\opt} pure-specifier-seq\opt
+\end{bnf}
+\end{quote}
+
+Insert the following after paragraph 8, explaining where a
+\grammarterm{requires-clause} can appear
+and that its \grammarterm{constraint-expression}
+can refer to parameters.
+
+\begin{quote}
+\setcounter{Paras}{8}
+\pnum
+A \grammarterm{requires-clause} shall only appear
+in a \grammarterm{member-declarator} if its
+\grammarterm{declarator} is a function declarator.
+
+The \grammarterm{requires-clause} associates its 
+\grammarterm{constraint-expression} with the 
+member function.
+
+\enterexample
+\begin{codeblock}
+  struct A {
+    A(int*) requires true;  // <i>OK: constrained constructor</i>
+    ~A() requires true;     // <i>OK: constrained destructor</i>
+    void f() requires true; // <i>OK: constrained member function</i>
+    int x requires true;    // <i>error: constrained member variable</i>
+  };
+\end{codeblock}
+\exitexample
+\end{quote}
+
+\begin{quote}
+\pnum
+The names of parameters in a function declarator are visible in the
+\grammarterm{constraint-expression} of the
+\grammarterm{requires-clause}. 
+\end{quote}
