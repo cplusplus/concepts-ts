@@ -1,0 +1,103 @@
+
+\rSec0[intro]{General}
+
+\rSec1[intro.scope]{Scope}
+
+\pnum
+This Technical Specification describes extensions to the C++ 
+Programming Language \ref{intro.refs} that
+enable the specification and checking of constraints on template 
+arguments, and the ability to overload functions and specialize
+class templates based on those constraints. These extensions include 
+new syntactic forms and modifications to existing language semantics.
+
+\pnum
+The International Standard, ISO/IEC 14882, provides important context
+and specification for this Technical Specification. This document is 
+written as a set of changes against that specification. Instructions
+to modify or add paragraphs are written as explicit instructions. 
+Modifications made directly to existing text from the International
+Standard use \added{underlining} to represent added text and
+\removed{strikethrough} to represent deleted text.
+
+\pnum
+WG21 paper N4919 defines ``fold expressions'', which are used to define 
+constraint expressions resulting from the use of 
+\grammarterm{constrained-type-specifier}{}s in parameter packs 
+(\ref{temp.constr.form}). However, this feature is not present in ISO/IEC 14882. 
+% 
+That paper is currently under consideration for inclusion in the next version
+of the C++ Programming Language. After reivew, the relevant wording will
+be incorporated into this Technical Specification.
+
+
+\rSec1[intro.refs]{Normative references}
+
+\pnum
+The following referenced document is indispensable for the
+application of this document. For dated references, only the
+edition cited applies. For undated references, the latest edition
+of the referenced document (including any amendments) applies.
+
+\begin{itemize}
+\item ISO/IEC 14882:2014, \doccite{Programming Languages -- \Cpp}
+\end{itemize}
+
+ISO/IEC 14882:2014 is herein after called the \defn{\Cpp Standard}.
+
+\rSec1[intro.defs]{Terms and definitions}
+
+Modify the definitions of ``signature'' to include associated
+constraints (Clause~\ref{temp}).
+
+\begin{quote}
+\indexdefn{signature}%
+\definition{signature}{defns.signature}
+<function> name, parameter type list~(\ref{dcl.fct}), \removed{and} enclosing 
+namespace (if any)\added{, and any associated constraints~(Clause~\ref{temp})}\\
+\enternote Signatures are used as a basis for
+name mangling and linking.\exitnote
+
+\indexdefn{signature}%
+\definition{signature}{defns.signature.templ}
+<function template> name, parameter type list~(\ref{dcl.fct}), enclosing namespace (if any),
+return type, \removed{and} template parameter list\added{, and any associated
+constraints~(Clause~\ref{temp})}
+
+\indexdefn{signature}%
+\definition{signature}{defns.signature.member}
+<class member function> name, parameter type list~(\ref{dcl.fct}), class of which the
+function is a member, \cv-qualifiers (if any),
+\removed{and} \grammarterm{ref-qualifier} (if any)\added{, and any associated
+constraints~(Clause~\ref{temp})}
+
+\indexdefn{signature}%
+\definition{signature}{defns.signature.member.templ}
+<class member function template> name, parameter type list~(\ref{dcl.fct}), class of which the
+function is a member, \cv-qualifiers (if any),
+\grammarterm{ref-qualifier} (if any), return type, \removed{and} template 
+parameter list\added{, and any associated constraints~(Clause~\ref{temp})}
+\end{quote}
+
+\rSec1[intro.compliance]{Implementation compliance}
+
+\pnum
+Conformance requirements for this specification are the same as those 
+defined in \ref{intro.compliance} in the \Cpp Standard.
+\enternote 
+Conformance is defined in terms of the behavior of programs.
+\exitnote
+
+\rSec1[intro.ack]{Acknowledgments}
+
+\pnum
+The design of this specification is based, in part, on a concept 
+specification of the algorithms part of the C++ standard library, known 
+as ``The Palo Alto'' report (WG21 N3351), which was developed by a large 
+group of experts as a test of the expressive power of the idea of 
+concepts. Despite syntactic differences between the notation of the 
+Palo Alto report and this Technical Specification, the report can be seen as a 
+large-scale test of the expressiveness of this Technical Specification.
+
+\pnum
+This work was funded by NSF grant ACI-1148461.

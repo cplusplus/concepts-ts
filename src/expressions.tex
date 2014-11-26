@@ -1,0 +1,491 @@
+
+
+\setcounter{chapter}{4}
+\rSec0[expr]{Expressions}
+
+Modify paragraph 8 to include a reference to \grammarterm{requires-expression}{}s.
+
+\begin{quote}
+\pnum
+In some contexts, unevaluated operands appear
+(\cxxref{expr.typeid}, \cxxref{expr.sizeof}, 
+\cxxref{expr.unary.noexcept}\added{, \ref{expr.prim.req}}).
+\end{quote}
+
+%%
+%% Primary Expressions
+%%
+\rSec1[expr.prim]{Primary expressions}
+
+%%
+%% General (primary expressions)
+%%
+\rSec2[expr.prim.general]{General}
+
+In this section, add the
+\grammarterm{requires-expression} to the rule for 
+\grammarterm{primary-expression}.
+
+\begin{quote}
+\begin{bnf}
+\nontermdef{primary-expression}\br
+    \added{requires-expression}
+\end{bnf}
+\end{quote}
+
+In paragraph 8, add \tcode{auto} to \grammarterm{nested-name-specifier}:
+
+\begin{quote}
+\setcounter{Paras}{7}
+\pnum
+\begin{bnf}
+\nontermdef{nested-name-specifier}\br
+    \terminal{auto} \terminal{::}
+\end{bnf}
+\end{quote}
+
+Add a new paragraph after paragraph 11:
+
+\begin{quote}
+\setcounter{Paras}{11}
+\pnum
+In a \grammarterm{nested-name-specifier} of the form \tcode{auto::}, 
+the \tcode{auto} specifier is a placeholder for a type to be deduced
+(\ref{dcl.spec.auto}).
+\end{quote}
+
+Add a new paragraph after paragraph 13:
+
+% TODO: The wording "non-overloaded function declaration" is not right.
+\begin{quote}
+\setcounter{Paras}{13}
+\pnum
+If an \grammarterm{id-expression} denotes a non-overloaded function 
+declaration that was declared with a \grammarterm{requires-clause}
+(\ref{dcl.fct}), its associated constraints shall be satisfied
+(\ref{temp.constr}).
+\enterexample
+\begin{codeblock}
+void f(int) requires false;
+
+f(0);               // error: constraints not satisfied
+void (*p)(int) = f; // error: constraints not satisfied
+\end{codeblock}
+\exitexample
+\end{quote}
+
+%   <!-- ==================
+%        Lambda expressions
+%        ================== -->
+
+%%
+%% Lambda expressions
+%%
+\rSec2[expr.prim.lambda]{Lambda expressions}
+
+Insert the following paragraph after paragraph 4 to define the
+term ``generic lambda''. 
+
+\begin{quote}
+\setcounter{Paras}{4}
+\pnum
+A \defn{generic lambda} is a \grammarterm{lambda-expression} where either the
+\tcode{auto} \grammarterm{type-specifier} (\ref{dcl.spec.auto})
+or a \grammarterm{constrained-type-specifier} (\ref{dcl.spec.constr})
+appears in a parameter type of the \grammarterm{lambda-declarator}.
+\end{quote}
+
+Modify paragraph 5 so that the meaning of a generic lambda is defined 
+in terms of its abbreviated member function template call operator.
+
+\begin{quote}
+The closure type for a non-generic
+\grammarterm{lambda-expression} has a public inline 
+function call operator (\cxxref{over.call})
+whose parameters and return type are described by the 
+\grammarterm{lambda-expression}'s 
+\grammarterm{parameter-declaration-clause} and 
+\grammarterm{trailing-return-type}, respectively.
+%
+\removed{
+For a generic lambda, the closure type has a public inline function call
+operator member template (\cxxref{temp.mem}) whose 
+\grammarterm{template-parameter-list} consists of 
+one invented type \grammarterm{template-parameter} 
+for each occurrence of \tcode{auto} in the lambda's 
+\grammarterm{parameter-declaration-clause}, in order 
+of appearance.
+%
+The invented type \grammarterm{template-parameter} is 
+a parameter pack if the corresponding 
+\grammarterm{parameter-declaration declares} a 
+function parameter pack (\ref{dcl.fct}). 
+%
+The return type and function parameters of the function call operator 
+template are derived from the 
+\grammarterm{lambda-expression}'s 
+\grammarterm{trailing-return-type} and 
+\grammarterm{parameter-declaration-clause} by 
+replacing each occurrence of \tcode{auto} in the 
+\grammarterm{decl-specifier}{}s of the 
+\grammarterm{parameter-declaration-clause}
+with the name of the corresponding invented template-parameter.
+}
+%
+\added{
+For a generic lambda, the function call operator (\cxxref{over.call}) 
+is an abbreviated function template (\ref{dcl.fct}).
+}
+\end{quote}
+
+Add the following example after those in paragraph 5 in the 
+original document.
+
+\begin{quote}
+\begin{addedblock}
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = true;
+
+auto gl = [](C& a, C* b) { a = *b }; // OK: denotes a generic lambda
+
+struct Fun {
+  auto operator()(C& a, C* b) const { a = *b; }
+} fun;
+\end{codeblock}
+\tcode{C} is a 
+\grammarterm{constrained-type-specifier},
+signifying that the lambda is generic. The generic lambda \tcode{gl}
+and the function object \tcode{fun} have equivalent behavior when 
+called with the same arguments.
+\exitexample
+\end{addedblock}
+\end{quote}
+
+%%
+%% Requires expressions
+%%
+\rSec2[expr.prim.req]{Requires expressions}
+
+Add this section to 5.1.
+
+\begin{quote}
+
+\pnum
+A \grammarterm{requires-expression} provides a concise way to express 
+syntactic requirements on template arguments.
+A syntactic requirement is one that can be checked by name lookup 
+(\cxxref{basic.lookup}) or by checking properties of types and expressions.
+
+\begin{bnf}
+\nontermdef{requires-expression}\br
+    \terminal{requires} requirement-parameter-list requirement-body
+
+\nontermdef{requirement-parameter-list}\br
+    \terminal{(} parameter-declaration-clause\opt \terminal{)}
+  
+\nontermdef{requirement-body}\br
+    \terminal{\{} requirement-list \terminal{\}}
+
+\nontermdef{requirement-list}\br
+    requirement\br
+    requirement-list requirement
+
+\nontermdef{requirement}\br
+    simple-requirement\br
+    type-requirement\br
+    compound-requirement\br
+    nested-requirement
+\end{bnf}
+
+\pnum
+A \grammarterm{requires-expression} defines a conjunction of the constraints 
+(\ref{temp.constr}) introduced by its \grammarterm{requirement}{}s.
+
+\pnum
+A \grammarterm{requires-expression} has type \tcode{bool} and is an 
+unevaluated operand (\ref{expr}).
+
+\pnum
+A \grammarterm{requires-expression} shall appear
+only within a concept definition (\ref{dcl.spec.constr}),
+or a \grammarterm{requires-clause} following a
+\grammarterm{template-parameter-list} 
+(\ref{temp}) or function declaration (\ref{dcl.fct}).
+
+% FIXME: The example names an undeclared entity.
+\enterexample
+A common use of \grammarterm{requires-expression}{}s is to define
+syntactic requirements in concepts such as the one below:
+\begin{codeblock}
+template<typename T>
+  concept bool R() {
+    return requires (T i) {
+      typename A<T>;
+      {*i} -> const A<T>&;
+    };
+  }
+\end{codeblock}
+A \grammarterm{requires-expression} can also be used in a 
+\grammarterm{requires-clause} templates as a way of writing ad hoc 
+constraints on template arguments such as the one below:
+\begin{codeblock}
+template<typename T>
+  requires requires (T x) { x + x; }
+    T add(T a, T b) { return a + b; }
+\end{codeblock}
+The first \tcode{requires} introduces the 
+\grammarterm{requires-clause}, and the second
+introduces the \grammarterm{requires-expression}.
+\exitexample
+\enternote
+Such requirements can also be written using by defining them within
+a concept.
+\begin{codeblock}
+template<typename T>
+  concept bool C = requires (T x) { x + x; };
+
+template<typename T> requires C<T> 
+  T add(T a, T b) { return a + b; }
+\end{codeblock}
+\exitnote
+
+\pnum
+A \grammarterm{requires-expression} may introduce local parameters using a
+\grammarterm{parameter-declaration-clause}
+(\ref{dcl.fct}). 
+%
+A local parameter of a \grammarterm{requires-expression} shall not have a 
+default argument.
+%
+Each name introduced by a local parameter is in scope from the point
+of its declaration until the closing brace of the
+\grammarterm{requirement-body}.
+%
+These parameters have no linkage, storage, or lifetime; they are only used
+as notation for the purpose of defining \grammarterm{requirement}{}s.
+%
+The \grammarterm{requirement-parameter-list} shall
+not include an ellipsis.
+
+\pnum
+The \grammarterm{requirement-body} is comprised of 
+a sequence of \grammarterm{requirement}{}s.
+%
+These \grammarterm{requirement}{}s may refer to local 
+parameters, template parameters, and any other declarations visible from the 
+enclosing context. 
+%
+Each \grammarterm{requirement} appends one or more atomic constraints
+(\ref{temp.constr}) to the conjunction of constraints defined by the 
+\grammarterm{requires-expression}{}s.
+
+\pnum
+The substitution of template arguments into a \grammarterm{requirement} may 
+result in an invalid type or expression, in which case the constraint is not
+satisfied; it does not cause the program to be ill-formed.
+%
+\enternote
+But if the substitution of template arguments into
+a \grammarterm{requirement} would always result in
+a substitution failure, the program is ill-formed; no diagnostic
+required (\ref{temp.res}).
+\exitnote
+%
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C =
+  requires () {
+    new int[(int)-sizeof(T)]; // ill-formed, no diagnostic required
+  };
+\end{codeblock}
+\exitexample
+
+
+%%
+%% Simple requirements
+%%
+\rSec3[expr.prim.req.simple]{Simple requirements}
+
+\begin{bnf}
+\nontermdef{simple-requirement}
+    expression \terminal{;}
+\end{bnf}
+
+\pnum
+A \grammarterm{simple-requirement} introduces an expression 
+constraint (\ref{temp.constr.atom.expr}) for its 
+\grammarterm{expression}.
+
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C =
+  requires (T a, T b) {
+    a + b;  // a simple requirement
+  };
+\end{codeblock}
+\exitexample
+
+
+%%
+%% Type requirements
+%%
+\rSec3[expr.prim.req.type]{Type requirements}
+
+\begin{bnf}
+\nontermdef{type-requirement}\br
+    typename-specifier \terminal{;}
+\end{bnf}
+
+\pnum
+A \grammarterm{type-requirement} introduces type 
+constraint (\ref{temp.constr.atom.type}) for the type named by its
+\grammarterm{typename-specifier}.
+%
+\enternote
+A type requirement asserts the validity of an associated
+type, either as a member type, a class template specialization,
+or an alias template. It is not used to specify requirements for
+arbitrary \grammarterm{type-specifiers}.
+\exitnote
+%
+\enterexample
+\begin{codeblock}
+template<typename T> struct S { };
+template<typename T> using Ref = T&;
+
+template<typename T> concept bool C =
+  requires () {
+    typename T::inner; // required nested type name
+    typename S<T>;     // required class template specialization
+    typename Ref<T>;   // required alias template substitution
+  };
+\end{codeblock}
+\exitexample
+
+
+%%
+%% Compound requirements
+%%
+\rSec3[expr.prim.req.compound]{Compound requirements}
+      
+\begin{bnf}
+\nontermdef{compound-requirement}\br
+  \terminal{\{} expression \terminal{\}} \terminal{noexcept}\opt 
+    trailing-return-type\opt~\terminal{;}
+\end{bnf}
+
+\pnum
+A \grammarterm{compound-requirement} introduces 
+a conjunction of one or more atomic constraints for the
+\grammarterm{expression} \tcode{E}:
+%
+\begin{itemize}
+\item the \grammarterm{compound-requirement} introduces an expression 
+constraint for \tcode{E} (\ref{temp.constr.atom.expr});
+
+\item if the the \tcode{noexcept} specifier is present, the 
+\grammarterm{compound-requirement} appends an exception constraint for 
+\tcode{E} (\ref{temp.constr.atom.noexcept});
+
+\item if the \grammarterm{trailing-return-type} is given and its 
+type \tcode{T} contains no placeholders (\ref{dcl.spec.auto}, 
+\ref{dcl.spec.constr}), the requirement appends two constraints to the 
+conjunction of constraints:
+a type constraint on the formation of \tcode{T} (\ref{temp.constr.atom.type}) and
+an implicit conversion constraint from \tcode{E} to \tcode{T}
+(\ref{temp.constr.atom.conv}).
+%
+Otherwise, if \tcode{T} contains placeholders, an argument deduction 
+constraint (\ref{temp.constr.atom.deduct}) of \tcode{E} against the 
+type \tcode{T} is appended to the conjunction of constraints.
+\end{itemize}
+%
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C1 =
+  requires(T x) {
+    {x++};
+  };
+\end{codeblock}
+The \grammarterm{compound-requirement} in \tcode{C1} 
+introduces an expression constraint on \tcode{x++}.
+It is equivalent to a \grammarterm{simple-requirement}
+with the same \grammarterm{expression}.
+
+\begin{codeblock}
+template<typename T> concept bool C2 =
+  requires(T x) {
+    {*x} -> typename T::inner;
+  };
+\end{codeblock}
+
+The \grammarterm{compound-requirement} in \tcode{C2} 
+introduces three constraints: an expression constraint for \tcode{*x}, 
+a type constraint for \tcode{typename T::inner}, and a conversion 
+constraint requiring \tcode{*x} to be implicitly convertible to
+\tcode{typename T::inner}.
+
+\begin{codeblock}
+template<typename T> concept bool C3 =
+  requires(T x) {
+    {g(x)} noexcept;
+  };
+\end{codeblock}
+
+The \grammarterm{compound-requirement} in \tcode{C3} 
+introduces two constraints: an expression constraint for \tcode{g(x)} 
+and an exception constraint on \tcode{g(x)}.
+
+\begin{codeblock}
+template<typename T> concept bool C() { return true; }
+
+template<typename T> concept bool C5 =
+  requires(T x) {
+    {f(x)} -> const C&;
+  };
+\end{codeblock}
+
+The \grammarterm{compound-requirement} in \tcode{C5} 
+introduces two constraints: expression constraint for \tcode{f(x)}, 
+and a deduction constraint requiring that overload resolution succeeds for the
+call \tcode{g(f(x))} where \tcode{g} is the following
+invented abbreviated function template.
+\begin{codeblock}
+void g(const C&);
+\end{codeblock}
+\exitexample
+
+%%
+%% Nested requirements
+%%
+\rSec3[expr.prim.req.nested]{Nested requirements}
+
+\begin{bnf}
+\nontermdef{nested-requirement}\br
+    requires-clause \terminal{;}
+  \end{bnf}
+
+\pnum
+A \grammarterm{nested-requirement} can be used
+to specify additional constraints in terms of local parameters.
+%
+A \grammarterm{nested-requirement} appends the normalized form 
+(\ref{temp.constr.expr}) of its \grammarterm{constraint-expression} 
+to the conjunction of constraints introduced by its enclosing
+\grammarterm{requires-expression}.
+
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C() { return sizeof(T) == 1; }
+
+template<typename T> concept bool D =
+  requires (T t) {
+    requires C<decltype (+t)>();
+  };
+\end{codeblock}
+The \grammarterm{nested-requirement} appends the predicate constraint 
+\tcode{sizeof(decltype (+t)) == 1} (\ref{temp.constr.atom.pred}).
+\exitexample
+
+\end{quote}
