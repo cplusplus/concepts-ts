@@ -596,9 +596,9 @@ are normalized (\ref{temp.constr.expr}).
 template<typename T> 
   concept int F1() { return 0; }      // error: return type is not bool
 template<typename T> 
-  concept auto F3(T) { return true; } // error: return type is deduced
+  concept auto F2() { return true; }  // error: return type is deduced
 template<typename T> 
-  concept bool F2(T) { return true; } // error: must have no parameters
+  concept bool F3(T) { return true; } // error: must have no parameters
 \end{codeblock}
 \exitexample
 
@@ -614,12 +614,12 @@ A variable concept has the following restrictions:
 \begin{codeblock}
 template<typename T> 
   concept bool V1 = 3 + 4; // error: initializer is not a constraint-expression
-concept bool V3 = 0;       // error: not a template
+concept bool V2 = 0;       // error: not a template
 
 template<typename T> concept bool C = true;
 
 template<C T> 
-  concept bool V2 = true;  // error: constrained template declared as a concept
+  concept bool V3 = true;  // error: constrained template declared as a concept
 \end{codeblock}
 \exitexample
 
