@@ -53,7 +53,12 @@ the original, unmodified text in the \Cpp Standard.
 \rSec1[intro.defs]{Terms and definitions}
 
 Modify the definitions of ``signature'' to include associated
-constraints (Clause~\ref{temp}).
+constraints (Clause~\ref{temp}). This allows different translation units
+to contain definitions of functions with the same signature, excluding 
+associated constraints, without violating the one definition rule 
+(\cxxref{basic.def.odr}). That is, without incorporating the constraints
+in the signature, such functions would have the same mangled name, thus
+appearing as multiple definitions of the same function.
 
 \begin{quote}
 \indexdefn{signature}%
