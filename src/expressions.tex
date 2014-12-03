@@ -185,11 +185,11 @@ A syntactic requirement is one that can be checked by name lookup
     \terminal{(} parameter-declaration-clause\opt \terminal{)}
   
 \nontermdef{requirement-body}\br
-    \terminal{\{} requirement-list \terminal{\}}
+    \terminal{\{} requirement-seq \terminal{\}}
 
-\nontermdef{requirement-list}\br
+\nontermdef{requirement-seq}\br
     requirement\br
-    requirement-list requirement
+    requirement-seq requirement
 
 \nontermdef{requirement}\br
     simple-requirement\br
@@ -204,14 +204,17 @@ A \grammarterm{requires-expression} defines a conjunction of the constraints
 
 \pnum
 A \grammarterm{requires-expression} has type \tcode{bool} and is an 
-unevaluated operand (\ref{expr}).
+unevaluated expression (\ref{expr}).
+\enternote
+A \grammarterm{requires-expression} is normalized.
+\exitnote
 
 \pnum
 A \grammarterm{requires-expression} shall appear
 only within a concept definition (\ref{dcl.spec.constr}),
-or a \grammarterm{requires-clause} following a
+or within a \grammarterm{requires-clause} following a
 \grammarterm{template-parameter-list} 
-(\ref{temp}) or function declaration (\ref{dcl.fct}).
+(Clause~\ref{temp}) or function declaration (\ref{dcl.fct}).
 
 % FIXME: The example names an undeclared entity.
 \enterexample
