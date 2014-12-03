@@ -139,7 +139,7 @@ is an abbreviated function template (\ref{dcl.fct}).
 \end{quote}
 
 Add the following example after those in paragraph 5 in the 
-original document.
+\Cpp Standard.
 
 \begin{quote}
 \begin{addedblock}
@@ -150,7 +150,7 @@ template<typename T> concept bool C = true;
 auto gl = [](C& a, C* b) { a = *b }; // OK: denotes a generic lambda
 
 struct Fun {
-  auto operator()(C& a, C* b) const { a = *b; }
+  auto operator()(C& a, C* b) const { return a = *b; }
 } fun;
 \end{codeblock}
 \tcode{C} is a 
