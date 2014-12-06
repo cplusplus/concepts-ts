@@ -278,10 +278,11 @@ template<typename T>
     requires(T t, ...) { t; }; // error: terminates with an ellipsis
   }
 
-template<typenamem F, typename... Args>
-  concept bool C1() { 
-    requires(F f, Args... args) { f(args...); }; // OK: declares function parameter pack
-  }
+template<typenamem T>
+  concept bool C2() { 
+    requires(T t, void (*p)(const char*, ...)) // OK: the parameter-declaration-clause of
+    { p(t); };                                 // the requires-expression does not terminate 
+  }                                            // with an ellipsis
 \end{codeblock}
 \exitexample
 
