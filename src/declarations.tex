@@ -285,7 +285,7 @@ template<typename T> Vec<T> make_vec(std::initializer_list<T>) { return Vec<T>{}
 auto& x3 = *x1.begin();             // OK: \tcode{decltype(x3)} is \tcode{int\&}
 const auto* p = &x3;                // OK: \tcode{decltype(p)} is \tcode{const int*}
 Vec<auto> v1 = make_vec({1, 2, 3}); // OK: \tcode{decltype(v1)} is \tcode{Vec<int>}
-Vec<auto> v2 = {1, 2, 3};           // error: cannot deduce element type
+Vec<auto> v2 = {1, 2, 3};           // error: type deduction fails
 \end{codeblock}
 \exitexample
 \end{addedblock}
@@ -296,7 +296,6 @@ Add the following after the second example in paragraph 7.
 \begin{quote}
 \begin{addedblock}
 \enterexample
-In the following program
 \begin{codeblock}
 template<typename F, typename S> struct Pair;
 template<typename T, typename U> Pair<T, U> make_pair(T, U);
