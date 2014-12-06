@@ -173,8 +173,8 @@ void f() requires true ; // \#2
 void g() requires false;
 void g() requires false and true;
 
-void (*pf)() = &amp;f;         // selects \#2
-void (*pg)() = &amp;g;         // error: no matching function
+void (*pf)() = &f;         // selects \#2
+void (*pg)() = &g;         // error: no matching function
 \end{codeblock}
 \exitexample
 \end{quote}
