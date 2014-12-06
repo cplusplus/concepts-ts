@@ -361,7 +361,8 @@ template<typename T> concept bool C =
 
 \begin{bnf}
 \nontermdef{type-requirement}\br
-    typename-specifier \terminal{;}
+    \terminal{typename} nested-name-specifier\opt type-name\br
+    \terminal{typename} nested-name-specifier \terminal{template} simple-template-id\br
 \end{bnf}
 
 \pnum
@@ -373,7 +374,7 @@ constraint (\ref{temp.constr.atom.type}) for the type named by its
 A type requirement asserts the validity of an associated
 type, either as a member type, a class template specialization,
 or an alias template. It is not used to specify requirements for
-arbitrary \grammarterm{type-specifier}s.
+arbitrary \grammarterm{type-specifier}{}s.
 \exitnote
 %
 \enterexample
