@@ -155,16 +155,18 @@ constrained template parameters.
 \pnum
 
 \begin{bnf}
-\nontermdef{template-parameter}
+\nontermdef{template-parameter}\br
   \added{constrained-parameter}
 
-\added{
+\begin{addedblock}
 \nontermdef{constrained-parameter}\br
-  constrained-type-specifier ...\opt identifier\opt\br
-  constrained-type-specifier ...\opt identifier\opt \terminal{=} type-id\br
-  constrained-type-specifier ...\opt identifier\opt \terminal{=} id-expression\br
-  constrained-type-specifier ...\opt identifier\opt \terminal{=} initializer-clause\br
-}
+  constrained-type-specifier ...\opt identifier\opt default-argument\opt\br
+
+\nontermdef{default-argument}\br
+  \terminal{=} type-id\br
+  \terminal{=} id-expression\br
+  \terminal{=} initializer-clause\br
+\end{addedblock}
 \end{bnf}
 \end{quote}
 
@@ -173,7 +175,7 @@ Insert a new paragraph after paragraph 1.
 \begin{quote}
 \pnum
 There is an ambiguity in the syntax of a template parameter between the
-declaration of a \grammarterm{constrained-parameter} and 
+declaration of a \grammarterm{constrained-parameter} and a
 \grammarterm{parameter-declaration}.
 % 
 If the \grammarterm{type-specifier-seq} of a \grammarterm{parameter-declaration} 
@@ -244,8 +246,9 @@ This \grammarterm{constraint-expression} is formed according to the rules
 in \ref{temp.constr.form}.
 \end{quote}
 
-Insert the following paragraph after paragraph 9 to restrict the forms 
-of default template argument for \grammarterm{constrained-parameter}.
+Insert the following paragraph after paragraph 9 to require that the
+kind of a \grammarterm{default-argument} matches the kind of its
+\grammarterm{constrained-parameter}.
 
 \begin{quote}
 \setcounter{Paras}{11}
@@ -253,7 +256,7 @@ of default template argument for \grammarterm{constrained-parameter}.
 The default \grammarterm{template-argument} of
 a \grammarterm{constrained-parameter} shall match
 the kind (type, non-type, template) of the declared parameter.
-
+% 
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C1 = true;
