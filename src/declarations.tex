@@ -566,10 +566,7 @@ A function concept has the following restrictions:
      appear in its declaration (\cxxref{dcl.fct.spec}).
 \item The declared return type shall be the non-deduced type \tcode{bool}.
 
-% FIXME: It's not equivalent to (). It shall be (). We don't want
-% void's in this list.
-\item The declaration shall have a \grammarterm{parameter-declaration-clause}
-equivalent to \tcode{()}.
+\item The declaration shall be equivalent to an empty parameter list.
 
 \item The function body shall consist of a single \tcode{return} 
 statement whose \grammarterm{expression} shall be a
@@ -589,7 +586,7 @@ template<typename T>
 template<typename T> 
   concept auto F2() { return true; }  // error: return type is deduced
 template<typename T> 
-  concept bool F3(T) { return true; } // error: must have no parameters
+  concept bool F3(T) { return true; } // error: not an empty parameter list
 \end{codeblock}
 \exitexample
 
