@@ -186,7 +186,6 @@ is a \grammarterm{constrained-type-specifier}, then the
 Insert the following paragraphs after paragraph 8. These paragraphs
 define the meaning of a constrained template parameter.
 
-% FIXME: Replace "type and form"
 \begin{quote}
 \setcounter{Paras}{8}
 \pnum
@@ -197,10 +196,11 @@ of the concept designated by its \grammarterm{constrained-type-specifier}.
 The designated concept is selected by concept resolution 
 (\ref{temp.constr.resolve}).
 % 
-Let \tcode{P} be the prototype parameter of the designated
-concept. The declared template parameter is determined by the type
-and form of \tcode{P} and the optional ellipsis in the
-\grammarterm{template-parameter}.
+Let \tcode{P} be the prototype parameter of the designated concept. 
+% 
+The declared template parameter is determined by the kind of \tcode{P} 
+(type, non-type, template) and the optional ellipsis in the
+\grammarterm{template-parameter} as follows:
 % 
 \begin{itemize}
 \item If \tcode{P} is a type \grammarterm{template-parameter} the declared
@@ -512,19 +512,19 @@ S3<int> x;                   // error: constraints not satisfied
 
 template<template<C T> class X>
   struct S4 {
-    X<int> x; // error: constraints not satisfied
+    X<int> x; // error: constraints not satisfied (\#1)
   };
 
 template<typename T>
   struct S5 {
-    using Type = typename T::template MT<char>;
+    using Type = typename T::template MT<char>; // \#2
   };
 \end{codeblock}
-The error in \tcode{S4} is caused by the substitution of \tcode{int} into 
+In \#1, the error is caused by the substitution of \tcode{int} into 
 the associated constraints of the template parameter \tcode{X}.
 % 
-In the \tcode{S5}, there are no constraints can be checked for the 
-type \tcode{typename Y::template MT<char>} because \tcode{MT} is a member
+In \#2, there are no constraints can be checked for 
+\tcode{typename Y::template MT<char>} because \tcode{MT} is a member
 of an unknown specialization.
 \exitexample
 \end{quote}
