@@ -481,16 +481,16 @@ associated constraints on the formation of the \grammarterm{simple-template-id}.
 \begin{quote}
 \setcounter{Paras}{7}
 \pnum
-When a \grammarterm{simple-template-id} names
+When the \grammarterm{template-name} of a \grammarterm{simple-template-id} names
 a constrained non-function template or a template template parameter,
 but not a member template that is a member of an unknown specialization
 \ref{temp.res}, and all \grammarterm{template-argument}{}s in the
-\grammarterm{template-id} are non-dependent \cxxref{temp.dep.temp}, the template
-arguments are substituted into the associated constraints
+\grammarterm{simple-template-id} are non-dependent \cxxref{temp.dep.temp}, the 
+template arguments are substituted into the associated constraints
 (Clause~\ref{temp}). 
 % 
 If, as a result of substitution, the associated constraints are not 
-satisfied (\ref{temp.constr}), the \grammarterm{template-id} is ill-formed.
+satisfied (\ref{temp.constr}), the \grammarterm{simple-template-id} is ill-formed.
 % 
 \enterexample
 \begin{codeblock}
@@ -513,16 +513,19 @@ S3<int> x;                   // error: constraints not satisfied
 template<template<C T> class X>
   struct S4 {
     X<int> x; // error: constraints not satisfied
+  };
 
-    using Type = T::template MT<char>;
+template<typename T>
+  struct S5 {
+    using Type = typename T::template MT<char>;
   };
 \end{codeblock}
-The error in the instantiation of \tcode{S4<int>} is caused
-by the substitution into the type of the member \tcode{x}.
-
-Because there is no declaration for the template named by 
-\tcode{T::template MT<char>}, it cannot have associated
-constraints.
+The error in \tcode{S4} is caused by the substitution of \tcode{int} into 
+the associated constraints of the template parameter \tcode{X}.
+% 
+In the \tcode{S5}, there are no constraints can be checked for the 
+type \tcode{typename Y::template MT<char>} because \tcode{MT} is a member
+of an unknown specialization.
 \exitexample
 \end{quote}
 
