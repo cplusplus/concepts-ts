@@ -3,5 +3,5 @@
 old=$1
 new=$2
 
-flags="--flatten --config PICTUREENV=codeblock"
+flags="--flatten --type CULINECHBAR --config PICTUREENV=codeblock"
 latexdiff $flags $old $new
