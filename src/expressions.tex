@@ -340,12 +340,15 @@ template arguments are not substituted into the introduced constraints.
 A \grammarterm{simple-requirement} introduces an expression 
 constraint (\ref{temp.constr.atom.expr}) for its 
 \grammarterm{expression}.
+\enternote
+An expression constraint asserts the validity of an expression.
+\exitnote
 
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C =
   requires (T a, T b) {
-    a + b;  // a simple requirement
+    a + b;  // an expression constraint for \tcode{a + b}
   };
 \end{codeblock}
 \exitexample
@@ -362,7 +365,7 @@ template<typename T> concept bool C =
 \end{bnf}
 
 \pnum
-A \grammarterm{type-requirement} introduces type 
+A \grammarterm{type-requirement} introduces a type 
 constraint (\ref{temp.constr.atom.type}) for the type named by its
 \grammarterm{typename-specifier}.
 %
@@ -370,7 +373,7 @@ constraint (\ref{temp.constr.atom.type}) for the type named by its
 A type requirement asserts the validity of an associated
 type, either as a member type, a class template specialization,
 or an alias template. It is not used to specify requirements for
-arbitrary \grammarterm{type-specifiers}.
+arbitrary \grammarterm{type-specifier}s.
 \exitnote
 %
 \enterexample
@@ -380,7 +383,7 @@ template<typename T> using Ref = T&;
 
 template<typename T> concept bool C =
   requires () {
-    typename T::inner; // required nested type name
+    typename T::inner; // required nested member name
     typename S<T>;     // required class template specialization
     typename Ref<T>;   // required alias template substitution
   };
