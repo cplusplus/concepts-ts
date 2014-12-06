@@ -420,15 +420,14 @@ constraint for \tcode{E} (\ref{temp.constr.atom.expr});
 from the type \tcode{T} named by the \grammarterm{trailing-return-type}:
 
 \begin{itemize}
-\item if \tcode{T} contains no placeholders (\ref{dcl.spec.auto}, 
-\ref{dcl.spec.constr}), the requirement appends two constraints:
+\item if \tcode{T} contains one or more placeholders (\ref{dcl.spec.auto}, 
+\ref{dcl.spec.constr}), the requirement appends a deduction constraint 
+(\ref{temp.constr.atom.deduct}) of \tcode{E} against the type \tcode{T}.
+
+\item otherwise, the requirement appends two constraints:
 a type constraint on the formation of \tcode{T} (\ref{temp.constr.atom.type}) and
 an implicit conversion constraint from \tcode{E} to \tcode{T}
 (\ref{temp.constr.atom.conv});
-
-\item otherwise, \tcode{T} contains one or more placeholders, and the
-requirement appends a deduction constraint (\ref{temp.constr.atom.deduct}) of 
-\tcode{E} against the type \tcode{T}.
 \end{itemize}
 \end{itemize}
 %
