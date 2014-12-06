@@ -457,7 +457,8 @@ template<typename T> concept bool C() { return true; }             // \#1
 template<typename T, typename U> concept bool C() { return true; } // \#2
 template<typename T> concept bool D = true;                        // \#3
 
-void f(C); // OK: the concept-name \tcode{C} refers to both \#1 and \#2
+void f(C); // OK: the set of concepts referred to by C includes both \#1 and \#2;
+           // concept resolution (\ref{temp.constr.resolve}) selects \#1.
 void g(D); // OK: the concept-name \tcode{D} refers only to \#3
 \end{codeblock}
 \exitexample
