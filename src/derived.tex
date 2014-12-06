@@ -28,14 +28,6 @@ program is ill-formed.
 struct A {
   virtual void f() requires true; // error: constrained virtual function
 };
-
-struct B {
-  virtual void f();
-};
-
-struct D : B {
-  void f() requires true; // error: constrained override
-};
 \end{codeblock}
 \exitexample
 \end{addedblock}
