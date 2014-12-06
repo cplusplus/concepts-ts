@@ -230,7 +230,7 @@ template<typename T>
   }
 \end{codeblock}
 A \grammarterm{requires-expression} can also be used in a 
-\grammarterm{requires-clause} templates as a way of writing ad hoc 
+\grammarterm{requires-clause} as a way of writing ad hoc 
 constraints on template arguments such as the one below:
 \begin{codeblock}
 template<typename T>
@@ -242,7 +242,7 @@ The first \tcode{requires} introduces the
 introduces the \grammarterm{requires-expression}.
 \exitexample
 \enternote
-Such requirements can also be written using by defining them within
+Such requirements can also be written by defining them within
 a concept.
 \begin{codeblock}
 template<typename T>
@@ -268,8 +268,22 @@ of its declaration until the closing brace of the
 These parameters have no linkage, storage, or lifetime; they are only used
 as notation for the purpose of defining \grammarterm{requirement}{}s.
 %
-The \grammarterm{requirement-parameter-list} shall
-not include an ellipsis.
+The \grammarterm{parameter-declaration-clause} of a 
+\grammarterm{requirement-parameter-list} shall
+not terminate with an ellipsis.
+\enterexample
+\begin{codeblock}
+template<typename T>
+  concept bool C1() { 
+    requires(T t, ...) { t; }; // error: terminates with an ellipsis
+  }
+
+template<typenamem F, typename... Args>
+  concept bool C1() { 
+    requires(F f, Args... args) { f(args...); }; // OK: declares function parameter pack
+  }
+\end{codeblock}
+\exitexample
 
 \pnum
 The \grammarterm{requirement-body} is comprised of 
@@ -284,9 +298,10 @@ Each \grammarterm{requirement} appends one or more atomic constraints
 \grammarterm{requires-expression}{}s.
 
 \pnum
-The substitution of template arguments into a \grammarterm{requirement} may 
-result in an invalid type or expression, in which case the constraint is not
-satisfied; it does not cause the program to be ill-formed.
+The substitution of template arguments into a \grammarterm{requires-expression} 
+may result in the formation of  invalid types or expressions, in its
+requirements. In such cases, the constraints corresponding to those
+requirements are not satisfied; it does not cause the program to be ill-formed.
 %
 \enternote
 But if the substitution of template arguments into
@@ -303,6 +318,12 @@ template<typename T> concept bool C =
   };
 \end{codeblock}
 \exitexample
+
+\pnum If the substitution of template arguments into the type of
+a local parameter of a \grammarterm{requires-expression}
+results in an ill-formed type, the conjunction of constraints introduced 
+by that \grammarterm{requires-expression} is not satisfied, and the
+template arguments are not substituted into the introduced constraints.
 
 
 %%
