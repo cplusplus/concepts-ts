@@ -568,8 +568,8 @@ A function concept has the following restrictions:
 
 \item The declaration shall be equivalent to an empty parameter list.
 
-\item The function body shall consist of a single \tcode{return} 
-statement whose \grammarterm{expression} shall be a
+\item The declaration shall have a \grammarterm{function-body} equivalent
+to \tcode{\{ return E; \}} where \tcode{E} is a 
 \grammarterm{constraint-expression} (\ref{temp.constr.expr}).
 \end{itemize}
 %
