@@ -415,17 +415,21 @@ constraint for \tcode{E} (\ref{temp.constr.atom.expr});
 \grammarterm{compound-requirement} appends an exception constraint for 
 \tcode{E} (\ref{temp.constr.atom.noexcept});
 
-\item if the \grammarterm{trailing-return-type} is given and its 
-type \tcode{T} contains no placeholders (\ref{dcl.spec.auto}, 
-\ref{dcl.spec.constr}), the requirement appends two constraints to the 
-conjunction of constraints:
+\item if the \grammarterm{trailing-return-type} is present, the
+\grammarterm{compound-requirement} appends one or more constraints derived 
+from the type \tcode{T} named by the \grammarterm{trailing-return-type}:
+
+\begin{itemize}
+\item if \tcode{T} contains no placeholders (\ref{dcl.spec.auto}, 
+\ref{dcl.spec.constr}), the requirement appends two constraints:
 a type constraint on the formation of \tcode{T} (\ref{temp.constr.atom.type}) and
 an implicit conversion constraint from \tcode{E} to \tcode{T}
-(\ref{temp.constr.atom.conv}).
-%
-Otherwise, if \tcode{T} contains placeholders, an argument deduction 
-constraint (\ref{temp.constr.atom.deduct}) of \tcode{E} against the 
-type \tcode{T} is appended to the conjunction of constraints.
+(\ref{temp.constr.atom.conv});
+
+\item otherwise, \tcode{T} contains one or more placeholders, and the
+requirement appends a deduction constraint (\ref{temp.constr.atom.deduct}) of 
+\tcode{E} against the type \tcode{T}.
+\end{itemize}
 \end{itemize}
 %
 \enterexample
