@@ -305,7 +305,7 @@ int fn(char, double);
 
 Pair<auto (*)(auto, auto), auto (auto::*)(auto)> p = make_pair(fn, &S::mfn);
 \end{codeblock}
-the declared type of \tcode{p} is the deduced type of the parameter 
+The declared type of \tcode{p} is the deduced type of the parameter 
 \tcode{x} in the call of \tcode{g(make_pair(fn, \&S::mfn))} of the following 
 invented function template:
 \begin{codeblock}
@@ -351,7 +351,7 @@ the form
 \end{bnf}
 
 A \grammarterm{constrained-type-specifier}
-may also designate placeholders for deduced non-type and template 
+may also designate a placeholder for deduced non-type and template 
 template arguments.
 % 
 \enterexample
@@ -394,7 +394,7 @@ can appear in the following contexts with the given meaning:
 \end{itemize}
 % 
 A program that includes a \grammarterm{constrained-type-specifier}
-in any other contexts is ill-formed.
+in any other context is ill-formed.
 % 
 \enterexample
 \begin{codeblock}
