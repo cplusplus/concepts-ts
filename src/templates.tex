@@ -282,22 +282,22 @@ Add this section after \ref{temp.param}.
 \begin{quote}
 
 \pnum
-A \defn{template introduction} provides a more concise way of declaring
-different templates that have the same template parameters and constraints.
+A \grammarterm{template-introduction} provides a more concise way of declaring
+templates that have the same template parameters and constraints.
 
 \begin{bnf}
 \nontermdef{template-introduction}\br
   nested-name-specifier\opt concept-name \terminal{\{} introduction-list \terminal{\}}
 
 \nontermdef{introduction-list}\br
-  introduced-parameter
+  introduced-parameter\br
   introduction-list \terminal{,} introduced-parameter
 
 \nontermdef{introduced-parameter}\br
     \terminal{...}\opt identifier
 \end{bnf}
 
-A template introduction declares a sequence of 
+A \grammarterm{template-introduction} declares a sequence of 
 \grammarterm{template-parameter}{}s, which are derived from a 
 \grammarterm{concept-name} and the sequence of \grammarterm{identifier}{}s in
 its \grammarterm{introduction-list}.
@@ -382,27 +382,26 @@ Array<double> s2;    // error: \tcode{Array} takes two template arguments
 %  TODO: Unify with temp.constr.form
 
 \pnum
-A \grammarterm{template-introduction} associates a 
-\grammarterm{constraint-expression} with its
+A \grammarterm{template-introduction} associates a constraint with its
 \grammarterm{template-declaration}.
-
+% 
 The constraint is formed from the concept \tcode{C}, designated by the
 \grammarterm{constrained-type-specifier} (including its
 \grammarterm{nested-name-specifier}), 
 and the sequence of introduced parameters.
-
+% 
 Form a sequence of \grammarterm{template-argument}{}s
 \tcode{Args} from the template parameters declared by the
 \grammarterm{introduced-parameter}{}s as follows. 
 % 
 If an introduced template parameter \tcode{T} is declared as a template 
-parameter pack, its corresponding \grammarterm{template-argument} is a pack
+parameter pack, its corresponding \grammarterm{template-argument} is the pack
 expansion of \tcode{T}. 
 % 
 % FIXME: Replace type and form
 % 
 Otherwise, its corresponding \grammarterm{template-argument} matches the 
-type and form of \tcode{T}.
+kind (type, non-type, template) of \tcode{T}.
 % 
 Let \tcode{TT} be a \grammarterm{template-id}
 formed as \tcode{C<Args>}.
