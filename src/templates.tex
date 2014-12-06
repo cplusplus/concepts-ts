@@ -427,19 +427,19 @@ C3{P} void f(P);
 C4{...Qs} void g(Qs&&...);
 
 template<typename A, typename B> 
-  requires C1<A, B> // constraint associated by \tcode{C1{A, B}}
+  requires C1<A, B> // constraint associated by \tcode{C1\{A, B\}}
     struct X;       // OK: redeclaration of \tcode{X}
 
 template<typename A, typename B> 
-  requires C2<A, B>()  // constraint associated by \tcode{C2{A, B}}
+  requires C2<A, B>()  // constraint associated by \tcode{C2\{A, B\}}
     struct Y;          // OK: redeclaration of \tcode{Y}
 
 template<class P>
-  requires C3<P> // constraint associated by \tcode{C3{P}}
+  requires C3<P> // constraint associated by \tcode{C3\{P\}}
     void f(P);   // OK: redeclaration of \tcode{f(P)}
 
 template<typename... Qs>
-  requires C4<Qs...> // constraint associated by \tcode{C4{...Qs}}
+  requires C4<Qs...> // constraint associated by \tcode{C4\{...Qs\}}
     void g(Qs&&...); // OK: redeclaration of \tcode{g(Qs\&\&...)}
 \end{codeblock}
 \exitexample
@@ -456,7 +456,6 @@ declared by the \grammarterm{template-introduction}.
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C1 = true;
-template<typename T> concept bool C2 = true;
 
 C1{T} void f(T, auto);
 template<C1 T, typename U> void f(T, U); // OK: redeclaration of f(T, auto)
