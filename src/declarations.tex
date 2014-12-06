@@ -487,7 +487,7 @@ is the one selected by concept resolution (\ref{temp.constr.resolve}).
 %%
 \rSec2[dcl.spec.concept]{\tcode{concept} specifier}
 
-Add ths section to \ref{dcl.spec}.
+Add this section to \ref{dcl.spec}.
 
 \begin{quote}
 
@@ -532,14 +532,11 @@ struct S {
 \pnum
 Every concept definition is implicitly defined to be a 
 \tcode{constexpr} declaration (\cxxref{dcl.constexpr}).
-
-\pnum
+% 
 A concept definition shall not be declared with the 
-\tcode{friend} or \tcode{constexpr} specifiers. 
-
-\pnum
-Additionally, a concept definition shall not have associated constraints
-(Clause~\ref{temp}).
+\tcode{thread_local}, \tcode{inline}, \tcode{friend}, or 
+\tcode{constexpr} specifiers, nor shall a concept definition have associated 
+constraints (Clause~\ref{temp}).
 
 \pnum
 The definition of a function concept or the initializer of
