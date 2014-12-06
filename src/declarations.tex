@@ -423,12 +423,6 @@ template<typename T> concept bool Iter() {
   };
 }
 \end{codeblock}
-The declaration of \tcode{f4} is valid, but a value can never be deduced 
-for the placeholder designated by \tcode{C1} since it appears in a
-non-deduced context (\cxxref{temp.deduct.type}).
-% 
-However, a value may be explicitly given as a template argument in a
-\grammarterm{template-id}.
 \exitexample
 
 \pnum
