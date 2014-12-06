@@ -9,36 +9,39 @@ allow the specification of constraints on function declarations.
 
 \begin{quote}
 \setcounter{Paras}{3}
+
+
 \begin{bnf}
 \nontermdef{declarator}\br
-    \removed{ptr-declarator}\br
-    \removed{noptr-declarator parameters-and-qualifiers trailing-return-type}\br
-    \added{basic-declarator requires-clause\opt}
-
-\added{
-\nontermdef{basic-declarator}\br
     ptr-declarator\br
-    noptr-declarator parameters-and-qualifiers trailing-return-type
-}
+    noptr-declarator parameters-and-qualifiers trailing-return-type \added{requires-clause\opt}
+
+
+\nontermdef{parameters-and-qualifiers}\br
+  \terminal{(} parameter-declaration-clause \terminal{)} cv-qualifier-seq\opt\br
+    \hspace*{\bnfindentinc}ref-qualifier\opt exception-specification\opt attribute-specifier-seq\opt \added{requires-clause}\opt
 \end{bnf}
 \end{quote}
 
 
-Add the following paragraph at the end of this section.
+Add the following paragraphs at the end of this section.
 
 \begin{quote}
-The optional \grammarterm{requires-clause} (Clause~\ref{temp}) in a
-\grammarterm{declarator} shall be present only when
-the declarator declares a function (\ref{dcl.fct}).
+\pnum
+The optional \grammarterm{requires-clause} (Clause~\ref{temp}) in a 
+\grammarterm{declarator} shall be present only when the declarator declares a 
+function (\ref{dcl.fct}), and the \grammarterm{requires-clause} shall not precede a 
+\grammarterm{trailing-return-type}.
 
 \enterexample
 \begin{codeblock}
 void f1(int a) requires true;         // OK
 auto f2(int a) -> bool requires true; // OK
+auto f3(int a) requires true -> bool; // error: requires-clause precedes trailing-return-type
 void (*pf)() requires true;           // error: constraint on a variable
-void g(int (*)() requires true);      // error: constraint on a parameter
+void g(int (*)() requires true);      // error: constraint on a parameter-declaration
   
-auto* p = new void(*[3])(char) requires true; // error: not a function declaration
+auto* p = new void(*)(char) requires true; // error: not a function declaration
 \end{codeblock}
 \exitexample
 \end{quote}
@@ -63,9 +66,9 @@ Modify the matching condition in paragraph 1 to accept a
 \begin{quote}
 \pnum
 \begin{bnf}
-\terminal{D1} \terminal{(} parameter-declaration-clause \terminal{)}
-  cv-qualifier-seq\opt ref-qualifier\opt exception-specification\opt
-  attribute-specifier-seq\opt \added{requires-clause\opt}
+\terminal{D1} \terminal{(} parameter-declaration-clause \terminal{)} cv-qualifier-seq\opt\br
+  \hspace*{\bnfindentinc}ref-qualifier\opt exception-specification\opt attribute-specifier-seq\opt\br
+  \hspace*{\bnfindentinc}\added{requires-clause\opt}
 \end{bnf}
 \end{quote}
 
@@ -75,9 +78,9 @@ Modify the matching condition in paragraph 2 to accept a
 \begin{quote}
 \pnum
 \begin{bnf}
-\terminal{D1} \terminal{(} parameter-declaration-clause \terminal{)}
-  cv-qualifier-seq\opt ref-qualifier\opt exception-specification\opt
-  attribute-specifier-seq\opt trailing-return-type \added{requires-clause\opt}
+\terminal{D1} \terminal{(} parameter-declaration-clause \terminal{)} cv-qualifier-seq\opt\br 
+  \hspace*{\bnfindentinc}ref-qualifier\opt exception-specification\opt attribute-specifier-seq\opt\br
+  \hspace*{\bnfindentinc}trailing-return-type \added{requires-clause\opt}
 \end{bnf}
 \end{quote}
 
