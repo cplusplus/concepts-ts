@@ -124,7 +124,7 @@ There is a syntactic ambiguity when an ellipsis occurs at the end of a
 case, the ellipsis is parsed as part of the \grammarterm{abstract-declarator} 
 if the type of the parameter either names a template parameter pack that has 
 not been expanded or contains \added{either} \tcode{auto} \added{or a
-\grammarterm{constrained-type-specifier}}; otherwise, it is parsed as part 
+\grammarterm{constrained-type-specifier}{}}; otherwise, it is parsed as part 
 of the \grammarterm{parameter-declaration-clause}.
 \end{quote}
 
@@ -226,7 +226,7 @@ invented \grammarterm{template-parameter}{}s are appended to the
 template<typename T, int N> class Array { };
 
 template<int N> void f(Array<auto, N>*);
-template<int N, typename T> void f(Array<T, N>*); // OK: equivalent to \tcode{f(Array<auto, N>*)}
+template<int N, typename T> void f(Array<T, N>*); // OK: redeclaration of \tcode{f(Array<auto, N>*)}
 \end{codeblock}
 \exitexample
 
