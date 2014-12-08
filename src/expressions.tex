@@ -40,7 +40,8 @@ In paragraph 8, add \tcode{auto} to \grammarterm{nested-name-specifier}:
 \pnum
 \begin{bnf}
 \nontermdef{nested-name-specifier}\br
-    \terminal{auto} \terminal{::}
+    \terminal{auto} \terminal{::}\br
+    constrained-type-name \terminal{::}
 \end{bnf}
 \end{quote}
 
@@ -49,9 +50,33 @@ Add a new paragraph after paragraph 11:
 \begin{quote}
 \setcounter{Paras}{11}
 \pnum
-In a \grammarterm{nested-name-specifier} of the form \tcode{auto::}, 
-the \tcode{auto} specifier is a placeholder for a type to be deduced
-(\ref{dcl.spec.auto}).
+In a \grammarterm{nested-name-specifier} of the form \tcode{auto::} or
+\tcode{C::} where \tcode{C} is a \grammarterm{constrained-type-name},
+\tcode{auto} and \tcode{C} designate a placeholder type that will be
+replaced later according to the rules for placeholder deduction in
+\ref{dcl.spec.auto}.
+%
+The replacement type for the placeholder shall be a class or enumeration type.
+\enterexample
+\begin{codeblock}
+struct S1 { int n; };
+struct S2 { char c; };
+struct S3 { struct X { using Y = int; }; };
+
+auto::* p1 = &S1::n; // \tcode{auto} deduced as \tcode{S1}
+
+template<typename T> concept bool C = sizeof(T) == sizeof(int);
+C::* p2 = &S1::n; // OK: \tcode{C} deduced as \tcode{S1}
+C::* p3 = &S1::c; // error: deduction fails because constraints are not satisfied
+
+void f(auto::X::Y);
+f(S1);       // error: \tcode{auto} cannot be deduced from \tcode{S1}
+f<S3>(S3{}); // OK
+\end{codeblock}
+In the declaration of \tcode{f}, the placeholder appears in a non-deduced 
+context (\cxxref{temp.deduct.type}). It may be replaced later through the
+the explicit specification of template arguments.
+\exitexample
 \end{quote}
 
 Add a new paragraph after paragraph 13:
@@ -68,9 +93,13 @@ declaration that was declared with a \grammarterm{requires-clause}
 \begin{codeblock}
 void f(int) requires false;
 
-f(0);               // error: constraints not satisfied
-void (*p)(int) = f; // error: constraints not satisfied
+f(0);                      // error: cannot call \tcode{f}
+void (*p1)(int) = f;       // error: cannot take the address of \tcode{f}
+decltype(f)* p2 = nullptr; // error: the type \tcode{decltype(f)} is invalid
 \end{codeblock}
+In each case the associated constraints of \tcode{f} are not satisfied. In the 
+declaration of \tcode{p2}, those constraints are required to be satisfied even 
+though \tcode{f} is an unevaluated operand (Clause~\ref{expr}).
 \exitexample
 \end{quote}
 
