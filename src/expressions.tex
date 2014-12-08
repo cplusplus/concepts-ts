@@ -118,10 +118,9 @@ term ``generic lambda''.
 \begin{quote}
 \setcounter{Paras}{4}
 \pnum
-A \defn{generic lambda} is a \grammarterm{lambda-expression} where either the
-\tcode{auto} \grammarterm{type-specifier} (\ref{dcl.spec.auto})
-or a \grammarterm{constrained-type-specifier} (\ref{dcl.spec.constr})
-appears in a parameter type of the \grammarterm{lambda-declarator}.
+A \defn{generic lambda} is a \grammarterm{lambda-expression} where a
+placeholder (\ref{dcl.spec.auto}) appears in a parameter type of the 
+\grammarterm{lambda-declarator}.
 \end{quote}
 
 Modify paragraph 5 so that the meaning of a generic lambda is defined 
@@ -240,7 +239,7 @@ A \grammarterm{requires-expression} is normalized.
 
 \pnum
 A \grammarterm{requires-expression} shall appear
-only within a concept definition (\ref{dcl.spec.constr}),
+only within a concept definition (\ref{dcl.spec.concept}),
 or within a \grammarterm{requires-clause} following a
 \grammarterm{template-parameter-list} 
 (Clause~\ref{temp}) or function declaration (\ref{dcl.fct}).
@@ -451,9 +450,9 @@ constraint for \tcode{E} (\ref{temp.constr.atom.expr});
 from the type \tcode{T} named by the \grammarterm{trailing-return-type}:
 
 \begin{itemize}
-\item if \tcode{T} contains one or more placeholders (\ref{dcl.spec.auto}, 
-\ref{dcl.spec.constr}), the requirement appends a deduction constraint 
-(\ref{temp.constr.atom.deduct}) of \tcode{E} against the type \tcode{T}.
+\item if \tcode{T} contains one or more placeholders (\ref{dcl.spec.auto}), 
+the requirement appends a deduction constraint (\ref{temp.constr.atom.deduct}) 
+of \tcode{E} against the type \tcode{T}.
 
 \item otherwise, the requirement appends two constraints:
 a type constraint on the formation of \tcode{T} (\ref{temp.constr.atom.type}) and

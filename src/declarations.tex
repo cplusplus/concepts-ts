@@ -44,74 +44,67 @@ to the grammar for \grammarterm{simple-type-specifier}{}s.
 \end{bnf}
 \end{quote}
 
+
 %%
 %% Auto specifier
 %%
 \setcounter{subsubsection}{3}
 \rSec3[dcl.spec.auto]{\tcode{auto} specifier}
 
-Modify paragraph 1 to extend the use of \tcode{auto} to designate abbreviated 
-function templates.
+Replace paragraph 1 with the text below.
 
 \begin{quote}
 \pnum
-The \tcode{auto} and \tcode{decltype(auto)} \grammarterm{type-specifier}{}s 
-\added{(as well as \grammarterm{constrained-type-specifier}{}s,
-\ref{dcl.spec.constr})} designate \removed{a} placeholder 
-\removed{type}\added{types} that will be replaced later, either by deduction 
-from an initializer or by explicit specification with a 
-\grammarterm{trailing-return-type}. 
+The \tcode{auto} and \tcode{decltype(auto)} \grammarterm{type-specifier}{}s and
+\grammarterm{constrained-type-specifier}{}s designate a placeholder
+(type, non-type, or template) that will be replaced by later, either through 
+deduction or an explicit specification.
 %
-The \tcode{auto} \grammarterm{type-specifier}
-is also used to signify that a lambda is a 
-generic lambda (\ref{expr.prim.lambda}) \added{or
-that a function declaration is an 
-abbreviated function template (\ref{dcl.fct})}.
+The \tcode{auto} and \tcode{decltype(auto)} \grammarterm{type-specifier}{}s 
+designate placeholder types; a \grammarterm{constrained-type-specifier} can 
+also designate placeholders for values and templates. 
+%
+Placeholders are also used to signify that a lambda is a generic lambda 
+(\ref{expr.prim.lambda}), that a function declaration is an
+abbreviated function template (\ref{dcl.fct}), or that a 
+\grammarterm{trailing-return-type} in a \grammarterm{compound-requirement}
+(\ref{expr.prim.req.compound}) introduces an argument deduction constraint 
+(\ref{temp.constr.atom.deduct}).
+%
+\enternote
+A \grammarterm{nested-name-specifier} can also include placeholders (\ref{expr.prim}).
+Replacements for those placeholders are determined according to the rules
+in this section.
+\exitnote
 % 
-\begin{addedblock}
-\enterexample
-\begin{codeblock}
-struct N {
-  template<typename T> struct Wrap;
-  template<typename T> static Wrap<T> make_wrap(T);
-};
-template<typename T, typename U> struct Pair;
-template<typename T, typename U> Pair<T, U> make_pair(T, U);
-
-template<int N> struct Size { void f(int) { }  };
-Size<0> s;
-bool g(char, double);
-
-void (auto::*)(auto) p = &Size<0>::f;   // OK
-N::Wrap<auto> a = N::make_wrap(0.0);    // OK
-Pair<auto, auto> p = make_pair(0, 'a'); // OK
-auto::Wrap<int> x = N::make_wrap(0);    // error: failed to deduce value for \tcode{auto}
-Size<sizeof(auto)> y = s;               // error: failed to deduce value for \tcode{auto}
-\end{codeblock}
-\exitexample
-\end{addedblock}
 \end{quote}
 
-Modify paragraph 2, allowing multiple occurrences of \tcode{auto}
-in those contexts where it is valid.
+Modify paragraph two to allow \grammarterm{constrained-type-specifier}{}s
+with function declarators, except in the declared return type.
 
 \begin{quote}
 \pnum
-\removed{The}\added{A} placeholder type can appear with a function 
-declarator in the 
-\grammarterm{decl-specifier-seq}, 
-\grammarterm{type-specifier-seq},
-\grammarterm{conversion-function-id}, or
-\grammarterm{trailing-return-type},
+\removed{The placeholder type}\added{Placeholders} can appear with a function 
+declarator in the \grammarterm{decl-specifier-seq}, \grammarterm{type-specifier-seq},
+\grammarterm{conversion-function-id}, or \grammarterm{trailing-return-type}, 
 in any context where such a declarator is valid. 
+% 
+If the function declarator includes a \grammarterm{trailing-return-type} 
+(\ref{dcl.fct}), that specifies the declared return type of the function.
+% 
+If the declared return type of the function contains a placeholder type, the 
+return type of the function is deduced from return statements in the body of 
+the function, if any.
 %
-If the function declarator includes a 
-\grammarterm{trailing-return-type} (\ref{dcl.fct}),
-that specifies the declared return type of the function.
+\added{The declared return type of a function shall not include a
+\grammarterm{constrained-type-specifier}{}}.
 %
-If the declared return type of the function contains a placeholder 
-type, the return type of the function is deduced from return 
-statements in the body of the function, if any.
+\added{\enternote
+If a function declarator has the form \tcode{auto D -> T}, where
+\tcode{D -> T} is a declarator with a \grammarterm{trailing-return-type} 
+\tcode{D} and \tcode{T} contains placeholders, the initial \tcode{auto} does 
+not designate a placeholder.
+\exitnote}
 \end{quote}
 
 Modify paragraph 3 to allow the use of \tcode{auto} within the 
@@ -119,10 +112,11 @@ parameter type of a lambda or function.
 
 \begin{quote}
 \pnum
-If the \tcode{auto} \grammarterm{type-specifier} appears \removed{as one of 
-the \grammarterm{decl-specifier}{}s in the \grammarterm{decl-specifier-seq} of
-a \grammarterm{parameter-declaration}} \added{in a parameter type} of a
-\grammarterm{lambda-expression}, the lambda is a generic lambda 
+If \removed{the \tcode{auto} \grammarterm{type-specifier}} \added{a placeholder}
+appears \removed{as one of the \grammarterm{decl-specifier}{}s in the 
+\grammarterm{decl-specifier-seq} of a \grammarterm{parameter-declaration}} 
+\added{in a parameter type} of a \grammarterm{lambda-expression}, the lambda 
+is a generic lambda
 (\ref{expr.prim.lambda}).
 %
 \enterexample
@@ -132,9 +126,9 @@ auto glambda = [](int i, auto a) { return i; }; // OK: a generic lambda
 \exitexample
 %
 \begin{addedblock}
-Similarly, if the \tcode{auto} \grammarterm{type-specifier}
-appears in a parameter type of a function declaration, the function
-declaration declares an abbreviated function template (\ref{dcl.fct}).
+Similarly, if a placeholder appears in a parameter type of a function 
+declaration, the function declaration declares an abbreviated function 
+template (\ref{dcl.fct}).
 %
 \enterexample
 \begin{codeblock}
@@ -144,19 +138,18 @@ void f(const auto&, int); // OK: an abbreviated function template
 \end{addedblock}
 \end{quote}
 
-Add the following after paragraph 3 to allow the use of 
-\tcode{auto} in the 
-\grammarterm{trailing-return-type} of a 
-\grammarterm{compound-requirement}.
+
+Add the following after paragraph 3 to allow the use of \tcode{auto} in the
+\grammarterm{trailing-return-type} of a \grammarterm{compound-requirement}.
+Also, disallow the use of \tcode{decltype(auto)} with function parameters
+and deduction constraints.
 
 \begin{quote}
 \pnum
-If the \tcode{auto} \grammarterm{type-specifier} 
-appears in the \grammarterm{trailing-return-type} 
-of a \grammarterm{compound-requirement} in
-a \grammarterm{requires-expression} (\ref{expr.prim.req.compound}), that
-return type introduces an argument deduction constraint
-(\ref{temp.constr.atom.deduct}).
+If a placeholder appears in the \grammarterm{trailing-return-type}
+of a \grammarterm{compound-requirement} in a \grammarterm{requires-expression} 
+(\ref{expr.prim.req.compound}), that return type introduces an argument 
+deduction constraint (\ref{temp.constr.atom.deduct}).
 % 
 \enterexample
 \begin{codeblock}
@@ -167,34 +160,41 @@ template<typename T> concept bool C() {
 }
 \end{codeblock}
 \exitexample
+
+\pnum
+The \tcode{decltype(auto)} \grammarterm{type-specifier} shall not appear
+in the declared type of a \grammarterm{parameter-declaration} or the
+\grammarterm{trailing-return-type} of a \grammarterm{compound-requirement}.
 \end{quote}
 
-Modify paragraph 4 to allow multiple uses of \tcode{auto} within
-certain declarations. Note that the examples in the original text are 
-unchanged and therefore omitted.
+
+Modify paragraph 4 (paragraph 6, here) to allow multiple placeholders within a 
+variable declaration, but disallowing \grammarterm{constrained-type-specifier}{}s.
 
 \begin{quote}
 \pnum
-The type of a variable declared using \tcode{auto} or 
-\tcode{decltype(auto)} is deduced from its initializer. 
+The type of a variable declared using 
+\added{a placeholder} 
+\removed{\tcode{auto} or \tcode{decltype(auto)}} 
+is deduced from its initializer.
 % 
-This use is allowed when declaring 
-variables in a block (\cxxref{stmt.block}), 
-in namespace scope (\cxxref{basic.scope.namespace}), and
-in a \grammarterm{for-init-statement} (\cxxref{stmt.for}).
+This use is allowed when declaring variables in a block (\cxxref{stmt.block}),
+in namespace scope (\cxxref{basic.scope.namespace}), and in a 
+\grammarterm{for-init-statement} (\cxxref{stmt.for}).
 %
-\removed{
-\tcode{auto} or \tcode{decltype(auto)} shall appear as one
-of the \grammarterm{decl-specifier}{}s in the \grammarterm{decl-specifier-seq}
-}
+\removed{\tcode{auto} or \tcode{decltype(auto)} shall appear as one
+of the \grammarterm{decl-specifier}{}s in the \grammarterm{decl-specifier-seq} }
 %
 \added{
-\tcode{auto} can appear anywhere in the declared type of the variable, but 
+A placeholder can appear anywhere in the declared type of the variable, but 
 \tcode{decltype(auto)} shall appear only as one of the
 \grammarterm{decl-specifier}{}s of the \grammarterm{decl-specifier-seq}.
+%
+A \grammarterm{constrained-type-specifier} shall not appear in the declared
+type of a variable.
 }
-\removed{and the}\added{The} \grammarterm{decl-specifier-seq} 
-shall be followed by one or more \grammarterm{init-declarator}{}s,
+\removed{and the}\added{The} \grammarterm{decl-specifier-seq} \added{of such a
+variable} shall be followed by one or more \grammarterm{init-declarator}{}s,
 each of which shall have a non-empty initializer.
 %
 In an initializer of the form
@@ -203,13 +203,68 @@ In an initializer of the form
 \end{codeblock}
 the \grammarterm{expression-list} shall be a single 
 \grammarterm{assignment-expression}.
+
+\enterexample
+\begin{codeblock}
+auto x = 5;                // OK: \tcode{x} has type int
+const auto *v = &x, u = 6; // OK: \tcode{v} has type \tcode{const int*}, \tcode{u} has type \tcode{const int}
+static auto y = 0.0;       // OK: \tcode{y} has type \tcode{double}
+auto int r;                // error: \tcode{auto} is not a storage-class-specifier
+auto f() -> int;           // OK: \tcode{f} returns \tcode{int}
+auto g() { return 0.0; }   // OK: \tcode{g} returns \tcode{double}
+auto h();                  // OK: \tcode{h}'s return type will be deduced when it is defined
+\end{codeblock}
+\exitexample
 \end{quote}
 
-Update the rules in paragraph 7 to allow deduction of multiple occurrences 
-of \tcode{auto} in a declaration.
+Add the following declarations to the example in the previous paragraph.
 
 \begin{quote}
-\setcounter{Paras}{6}
+\begin{codeblock}
+struct N {
+  template<typename T> struct Wrap;
+  template<typename T> static Wrap<T> make_wrap(T);
+};
+template<typename T, typename U> struct Pair;
+template<typename T, typename U> Pair<T, U> make_pair(T, U);
+template<int N> struct Size { void f(int) { }  };
+
+void (auto::*)(auto) p1 = &Size<0>::f;   // OK: \tcode{p} has type \tcode{void(Size<0>::*)(int)}
+Pair<auto, auto> p2 = make_pair(0, 'a'); // OK: \tcode{p} has type \tcode{Pair<int, char>}
+N::Wrap<auto> a = N::make_wrap(0.0);     // OK: \tcode{a} has type \tcode{Wrap<double>}
+auto::Wrap<int> x = N::make_wrap(0);     // error: failed to deduce value for \tcode{auto}
+Size<sizeof(auto)> y = Size<0>{};        // error: failed to deduce value for \tcode{auto}
+
+template<typename T> concept bool C = true;
+C z = 0;        // error: constrained-type-specifier in declaration of \tcode{z}
+auto cf() -> C; // error: constrained-type-specifier declared in return type of \tcode{cf}
+\end{codeblock}
+\end{quote}
+
+
+Update paragraph 5 (paragraph 7, here) to disallow 
+\grammarterm{constrained-type-specifier}{}s in other statements 
+and expressions.
+
+\begin{quote}
+\pnum
+A placeholder type can also be used in declaring a variable in the 
+condition of a selection statement (\cxxref{stmt.select}) or an iteration 
+statement (\cxxref{stmt.iter}), in the \grammarterm{type-specifier-seq} in the 
+\grammarterm{new-type-id} or \grammarterm{type-id} of a \grammarterm{new-expression}
+(\cxxref{expr.new}), in a \grammarterm{for-range-declaration}, and in declaring a 
+static data member with a \grammarterm{brace-or-equal-initializer} that appears
+within the member-specification of a class definition (\cxxref{class.static.data}).
+% 
+\added{A \grammarterm{constrained-type-specifier} shall not appear in those
+contexts.}
+\end{quote}
+
+\rSec4[dcl.spec.auto.deduct]{\tcode{auto} deduction}
+
+Factor the deduction rules for \tcode{auto} into a new subsection.
+
+\begin{quote}
 \pnum
 When a variable declared using a placeholder type is initialized, or a 
 \tcode{return} statement occurs in a function declared with a return type 
@@ -273,7 +328,7 @@ auto x2 = { 1, 2.0 };               // error: cannot deduce element type
 \exitexample
 \end{quote}
 
-Add the following to the first example in paragraph 7.
+Add the following to the first example in paragraph 7 in the \Cpp Standard.
 
 \begin{quote}
 \begin{addedblock}
@@ -291,7 +346,8 @@ Vec<auto> v2 = {1, 2, 3};           // error: type deduction fails
 \end{addedblock}
 \end{quote}
 
-Add the following after the second example in paragraph 7.
+
+Add the following after the second example in paragraph 7 in the \Cpp Standard.
 
 \begin{quote}
 \begin{addedblock}
@@ -316,24 +372,20 @@ void g(Pair< T1(*)(T2, T3), T4 (T5::*)(T6)> x);
 \end{addedblock}
 \end{quote}
 
+Copy paragraphs 8-15 from \ref{dcl.spec.auto} in the \Cpp Standard into
+this section.
 
 %%
 %% Constrained type specifiers
 %%
-\rSec3[dcl.spec.constr]{Constrained type specifiers}
+\rSec4[dcl.spec.constr]{Constrained type specifiers}
 
-Add this section to \ref{dcl.type}.
+Add this section to \ref{dcl.spec.auto}.
 
 \begin{quote}
-
-\pnum
-Like the \tcode{auto} \grammarterm{type-specifier} (\ref{dcl.spec.auto}),
-a \grammarterm{constrained-type-specifier} designates a placeholder that 
-will be replaced later by deduction from the \grammarterm{expression} in a
-\grammarterm{compound-requirement} or a function argument.
-% 
-\grammarterm{constrained-type-specifier}{}s have
-the form
+A \grammarterm{constrained-type-specifier} designates a placeholder
+(type, non-type, or template) and introduces an associated constraint that 
+must be satisfied by that placeholder's eventual replacement.
 
 \begin{bnf}
 \nontermdef{constrained-type-specifier}\br
@@ -350,10 +402,6 @@ the form
 		concept-name \terminal{<} template-argument-list\opt \terminal{>}
 \end{bnf}
 
-A \grammarterm{constrained-type-specifier}
-may also designate a placeholder for deduced non-type and template 
-template arguments.
-% 
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C1 = false;
@@ -369,77 +417,6 @@ void f2(Array<auto, C2>); // \tcode{C2} designates a placeholder for an integer 
 void f3(Stack<auto, C3>); // \tcode{C3} designates a placeholder for a class template
 \end{codeblock}
 \exitexample
-
-
-A \grammarterm{constrained-type-specifier}
-can appear in many of the same places as the \tcode{auto}
-\grammarterm{type-specifier}, is subject
-to the same rules, and has equivalent meaning in those contexts. 
-In particular, a \grammarterm{constrained-type-specifier} 
-can appear in the following contexts with the given meaning:
-% 
-\begin{itemize}
-\item a parameter type of a function declaration, signifying an 
-     abbreviated function template (\ref{dcl.fct});
-
-\item a parameter of a lambda, signifying a generic lambda 
-     (\ref{expr.prim.lambda});
-
-\item the parameter type of a template parameter, signifying a
-     constrained template parameter (\ref{temp.param});
-
-\item the \grammarterm{trailing-return-type} of
-     a \grammarterm{compound-requirement} (\ref{expr.prim.req.compound}),
-     signifying an argument deduction constraint (\ref{temp.constr.atom.deduct}).
-\end{itemize}
-% 
-A program that includes a \grammarterm{constrained-type-specifier}
-in any other context is ill-formed.
-% 
-\enterexample
-\begin{codeblock}
-template<typename T> concept bool C1 = true;
-template<typename T, int N> concept bool C2 = true;
-template<bool (*)(int)> concept bool C3 = true;
-
-template<typename T> class Vec;
-
-struct N {
-  template<typename T> struct Wrap;
-};
-template<typename T, typename U> struct Pair;
-template<bool (*)(int)> struct Pred;
-
-auto gl = [](C1& a, C1* b) { a = *b; }; // OK: a generic lambda
-void af(const Vec<C1>& x);              // OK: an abbreviated function template
-
-void f1(N::Wrap<C1>);     // OK
-void f2(Pair<C1, C2<0>>); // OK
-void f3(Pred<C3>);        // OK
-
-template<typename T> concept bool Iter() {
-  return requires(T i) {
-    {*i} -> const C1&; // OK: an argument deduction constraint
-  };
-}
-\end{codeblock}
-\exitexample
-
-\pnum
-\enternote
-Unlike \tcode{auto}, a \grammarterm{constrained-type-specifier} cannot
-be used in the type of a variable declaration or the return type of
-a function.
-\enterexample
-\begin{codeblock}
-template<typename T> concept bool C = true;
-template<typename T, int N> concept bool D = true;
-
-const C* x = 0;  // error: C used in a variable type
-D<0> fn(int x);  // error: D<0> used as a return type
-\end{codeblock}
-\exitexample
-\exitnote
 
 \pnum
 An identifier is a \grammarterm{concept-name} if it refers to a set of 
@@ -478,9 +455,59 @@ void f2(Seq<>);
 
 \pnum
 The concept designated by a \grammarterm{constrained-type-specifier}
-is the one selected by concept resolution (\ref{temp.constr.resolve}).
+is the one selected according to the rules for concept resolution in
+\ref{temp.constr.resolve}.
 
+\pnum
+When a \grammarterm{constrained-type-specifier} appears in the type of a 
+\grammarterm{parameter-declaration} of a \grammarterm{lambda-expression}
+(\ref{expr.prim.lambda}) or function declaration (signifying a generic lambda
+or abbreviated function template, respectively), the associated constraint is 
+formed according to the rules in \ref{dcl.fct}.
+%
+\enternote
+In a generic lambda, the member function template call operator of the
+closure type is an abbreviated function template.
+\exitnote
+% 
+When a \grammarterm{constrained-type-specifier} appears in the 
+\grammarterm{trailing-return-type} of a \grammarterm{compound-requirement},
+(\ref{expr.prim.req.compound}), the associated constraint is formed according
+to the rules in \ref{temp.constr.atom.deduct}.
 \end{quote}
+
+
+% % 
+% \enterexample
+% \begin{codeblock}
+% template<typename T> concept bool C1 = true;
+% template<typename T, int N> concept bool C2 = true;
+% template<bool (*)(int)> concept bool C3 = true;
+
+% template<typename T> class Vec;
+
+% struct N {
+%   template<typename T> struct Wrap;
+% };
+% template<typename T, typename U> struct Pair;
+% template<bool (*)(int)> struct Pred;
+
+% auto gl = [](C1& a, C1* b) { a = *b; }; // OK: a generic lambda
+% void af(const Vec<C1>& x);              // OK: an abbreviated function template
+
+% void f1(N::Wrap<C1>);     // OK
+% void f2(Pair<C1, C2<0>>); // OK
+% void f3(Pred<C3>);        // OK
+
+% template<typename T> concept bool Iter() {
+%   return requires(T i) {
+%     {*i} -> const C1&; // OK: an argument deduction constraint
+%   };
+% }
+% \end{codeblock}
+% \exitexample
+
+
 
 %%
 %% concept specifier
