@@ -141,23 +141,34 @@ includes one invented \grammarterm{template-parameter} for each occurrence
 of a placeholder in the \grammarterm{parameter-declaration-clause},
 in order of appearance. 
 % 
-If the placeholder is designated by the \tcode{auto}
+Each template parameter is invented as follows:
+\begin{itemize}
+\item if the placeholder is designated by the \tcode{auto}
 \grammarterm{type-specifier}, then the corresponding invented template 
-parameter is a type \grammarterm{template-parameter}.
-% 
-Otherwise, the placeholder is designated by a 
+parameter is a type \grammarterm{template-parameter};
+
+\item otherwise, the placeholder is designated by a 
 \grammarterm{constrained-type-specifier}, and the corresponding invented 
-parameter matches the type and form of the prototype parameter 
+parameter matches the kind (type, non-type, template) of the prototype parameter 
 (\ref{dcl.spec.concept}) of the concept designated by the 
 \grammarterm{constrained-type-specifier} (\ref{temp.constr.resolve}).
+\end{itemize}
 % 
-The invented \grammarterm{template-parameter} is a parameter pack if 
-the corresponding \grammarterm{parameter-declaration} declares a function 
-parameter pack and the type of the parameter contains only one placeholder.
-% 
-If the prototype parameter of the designated concept declares a template 
-parameter pack, the corresponding \grammarterm{parameter-declaration} shall
-declare a function parameter pack.
+The invented template parameter may be required or adjusted to declare a
+template parameter pack:
+\begin{itemize}
+\item if the invented template parameter corresponds to a 
+\grammarterm{constrained-type-specifier}, and the prototype parameter of its 
+designated concept declares a template parameter pack, the 
+\grammarterm{constrained-type-specifier} shall be followed by a
+\grammarterm{declarator-id} or \grammarterm{abstract-declarator} beginning with 
+an ellipsis;
+
+\item otherwise, if the invented \grammarterm{template-parameter} is a parameter 
+pack if the \grammarterm{simple-type-specifier} designating the placeholder 
+is followed by a \grammarterm{declarator-id} or \grammarterm{abstract-declarator}
+that begins with an ellipsis.
+\end{itemize}
 % 
 The adjusted function parameters of an abbreviated function template are derived
 from the \grammarterm{parameter-declaration-clause} by replacing each 
@@ -171,34 +182,38 @@ results in an invalid parameter declaration, the program is ill-formed.
 \begin{codeblock}
 template<typename T> class Vec { };
 template<typename T, typename U> class Pair { };
+template<typename... Args> class Tuple { };
 
 void f1(const auto&, auto);
 void f2(Vec<auto*>...);
-void f3(auto (auto::*)(auto));
+void f3(Tuple<auto...>);
+void f4(auto (auto::*)(auto));
 
-template<typename T, typename U> 
-  void f1(const T&, U);        // redeclaration of \tcode{f1(const auto\&, auto)}
-template<typename... T> 
-  void f2(Vec<T*>...);         // redeclaration of \tcode{f2(Vec<auto*>...)}
-template<typename T, typename U, typename V>
-  void f3(T (U::*)(V));        // redeclaration of \tcode{f3(auto (auto::*)(auto))}
+template<typename T, typename U> void f1(const T&, U);             // redeclaration of \tcode{f1}
+template<typename... T> void f2(Vec<T*>...);                       // redeclaration of \tcode{f2}
+template<typename... Ts> void f3(Tuple<Ts...>);                    // redeclaration of \tcode{f3}
+template<typename T, typename U, typename V> void f4(T (U::*)(V)); // redeclaration of \tcode{f4}
 
 template<typename T> concept bool C1 = true;
 template<typename T> concept bool C2 = true;
-template<typename T, typename U> concept bool D = true;
-template<<typename... Ts> concept bool E = true;
+template<typename T, typename U> concept bool C3 = true;
+template<typename... Ts> concept bool C4 = true;
 
 void g1(const C1*, C2&);
 void g2(Vec<C1>&);
 void g3(C1&...);
-void g4(Vec<D<int>>);
-void g5(E...); // OK
-void g6(E);    // error: E does not declare a function parameter pack
+void g4(Vec<C3<int>>);
+void g5(C4...);
+void g6(Tuple<C4...>);
+void g7(C4 p);      // error: \tcode{p} does not declare a function parameter pack
+void g8(Tuple<C4>); // error: \tcode{C4} is not a pack expansion
 
-template<C1 T, C2 U> void g1(const T*, U&); // redeclaration of \tcode{g1(const C1*, C2\&)}
-template<C1 T> void g2(Vec<T>&);            // redeclaration of \tcode{g2(Vec<C1>\&)}
-template<C1... Ts> void g3(Ts&...);         // redeclaration of \tcode{g3(C1\&...)}
-template<D<int> T> void g4(Vec<T>);         // redeclaration of \tcode{g4(Vec<D<int>>)}
+template<C1 T, C2 U> void g1(const T*, U&); // redeclaration of \tcode{g1}
+template<C1 T> void g2(Vec<T>&);            // redeclaration of \tcode{g2}
+template<C1... Ts> void g3(Ts&...);         // redeclaration of \tcode{g3}
+template<C3<int> T> void g4(Vec<T>);        // redeclaration of \tcode{g4}
+template<C4... Ts> void g5(Ts...);          // redeclaration of \tcode{g5}
+template<C4... Ts> void g5(Tuple<Ts...>);   // redeclaration of \tcode{g6}
 \end{codeblock}
 \exitexample
 
