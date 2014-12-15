@@ -28,6 +28,11 @@ A \defn{constraint} is a sequence of logical operations and
 operands that specifies requirements on template arguments.
 \enternote The operands of a logical operation are constraints. \exitnote
 
+
+
+
+
+
 \pnum
 A constrained declaration can be used only when its associated
 constraints (\ref{temp.constr.decl}) are \defn{satisfied}. 
@@ -381,6 +386,114 @@ exception constraint \tcode{Q} if and only if the
 \grammarterm{expression}{}s of \tcode{P}
 and \tcode{Q} are equivalent 
 (\ref{temp.over.link}).
+
+
+%%
+%% Constrained declarations
+%^
+\rSec2[temp.constr.decl]{Constrained declarations}
+
+\pnum
+The \defn{associated constraints} of a \grammarterm{template-declaration} are 
+the conjunction of constraints introduced by:
+% 
+\begin{itemize}
+\item a template introduction (\ref{temp.intro}), and
+
+\item any constrained template parameters (\ref{temp.param}) in the 
+declaration's \grammarterm{template-parameter-list}, and
+
+\item a \grammarterm{requires-clause} following a
+\grammarterm{template-parameter-list}, and
+
+\item any \grammarterm{constrained-type-specifier}{}s in the type of a 
+\grammarterm{parameter-declaration} in a function declaration 
+(\ref{dcl.spec.constr}), and
+
+\item a \grammarterm{requires-clause} appearing in the \grammarterm{declarator} 
+of a function declaration (\ref{dcl.fct}).
+\end{itemize}
+% 
+The formation of the associated constraints for a template declaration
+gives a definite ordering on subexpressions for the purpose of determining
+when one template redeclares another, and 
+
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C = true;
+
+// all of the following declare the same function:
+void f(C);
+template<C T> void f(T);
+C{T} void f(T);
+template<typename T> requires C<T> void f(T);
+template<typename T> void f(T) requires C<T>;
+\end{codeblock}
+\exitexample
+
+% FIXME: This is not strong enough. It might be better to define this
+% when we enumerate where associated constraints come from. That is,
+% introductions, constrained parameters (in the order in which they
+% appear), a requires clause after a template parameter list,
+% constrained-type-specifiers (in the order in which they appear), and
+% a requires clause in a function declarator.
+\pnum
+The order in which the subexpressions of the associated constraints
+are composed is the left-to-right order in which 
+\grammarterm{template-introduction}{}s,
+\grammarterm{constrained-type-specifier}{}s, and
+\grammarterm{requires-clause}{}s occur in the declaration.
+% 
+\enternote
+A program containing two declarations whose associated constraints are 
+functionally equivalent but not equivalent (\ref{temp.over.link}) is 
+ill-formed, no diagnostic required.
+\exitnote
+% 
+\enterexample
+\begin{codeblock}
+template<typename T> concept bool C1 = true;
+template<typename T> concept bool C2 = true;
+
+C1{T} void f1(C2);                                                      // \#1
+template<typename T, typename U> requires C1<T> && C2<U> void f1(T, U); // \#2
+\end{codeblock}
+% 
+In the associated constraints of \#1, the constraint associated by the 
+\grammarterm{template-introduction} \tcode{C1{T}} occurs before the 
+constraint associated by the \grammarterm{constrained-type-specifier} in the
+\grammarterm{parameter-declaration} \tcode{C2}.
+% 
+The resulting \grammarterm{constraint-expression} is equivalent to the 
+\grammarterm{requires-clause} in \#2.
+% 
+\begin{codeblock}
+C1{T} void f2(T) requires C2<T>;                        // \#1
+template<typename T> requires C1<T> && C2<T> void f2(); // \#2
+\end{codeblock}
+The associated constraints of \#1 and \#2 are equivalent.
+
+\begin{codeblock}
+template<C1 T> requires C2<T> void f3(T);                // \#1
+template<C1 T> void f3(T) requires C2<T>;                // \#2
+template<typename T> requires C1<T> && C2<T> void f3(T); // \#3
+template<typename T> void f3(T) requires C1<T> && C2<T>; // \#4
+\end{codeblock}
+The associated constraints of \#1, \#2, \#3, and \#4 are equivalent. The 
+\grammarterm{constraint-expression} associated by \tcode{C1} occurs before 
+the constraint associated by \tcode{C2} in each declaration.
+% 
+\begin{codeblock}
+template<C1 T> requires C2<T> void f5();
+template<C2 T> requires C1<T> void f5(); // error: constraints are functionally equivalent but not equivalent
+\end{codeblock}
+% 
+The associated constraints of the first declaration are
+\tcode{C1<T> \&\& C2<T>}, and those of the second are
+\tcode{C2<T> \&\& C1<T>}.
+\exitexample
+\end{quote}
+
 
 
 
