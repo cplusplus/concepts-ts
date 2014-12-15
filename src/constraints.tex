@@ -13,9 +13,15 @@ Add this section after 14.8.
 This section defines the meaning of constraints on template arguments, including
 the translation of \grammarterm{constraint-expression}{}s
 into constraints (\ref{temp.constr.expr}),
-and also the abstract syntax, satisfaction, and subsumption of those 
-constraints (\ref{temp.constr.op}, \ref{temp.constr.atom}).
+and also the abstract syntax, satisfaction, equivalence, and 
+subsumption of those constraints (\ref{temp.constr.op}, \ref{temp.constr.atom}).
 \exitnote
+
+
+%%
+%% Constraints
+%%
+\rSec2[temp.constr.constr]{Constraints}
 
 \pnum
 A \defn{constraint} is a sequence of logical operations and 
@@ -23,26 +29,41 @@ operands that specifies requirements on template arguments.
 \enternote The operands of a logical operation are constraints. \exitnote
 
 \pnum
-After substitution, a constraint is \defn{satisfied} if and only if 
-it and all of its operands are satisfied according to the evaluation 
-rules described in \ref{temp.constr.op} and \ref{temp.constr.atom}.
+A constrained declaration can be used only when its associated
+constraints (\ref{temp.constr.decl}) are \defn{satisfied}. 
 % 
-If the substitution of template arguments into a constraint fails, 
-that constraint is not satisfied.
+Determining if a constraint is satisfied entails the the substitution 
+of template arguments into its types and expressions. If that substitution
+results in an invalid type or expression, the constraint is not satisfied.
 % 
-\enternote
-Substitution into a constraint may yield a well-formed constraint that
-contains ill-formed expressions or types. This may happen, for
-example, in the substitution into expression constraints
-(\ref{temp.constr.atom.expr}) and type constraints
-(\ref{temp.constr.atom.type}).
-\exitnote
+The rules for determining the satisfaction of different kinds of 
+constraints are defined in the following sections.
+
+% \pnum
+% After substitution, a constraint is \defn{satisfied} if and only if 
+% it and all of its operands are satisfied according to the evaluation 
+% rules described in \ref{temp.constr.op} and \ref{temp.constr.atom}.
+% % 
+% If the substitution of template arguments into a constraint fails, 
+% that constraint is not satisfied.
+% % 
+% \enternote
+% Substitution into a constraint may yield a well-formed constraint that
+% contains ill-formed expressions or types. This may happen, for
+% example, in the substitution into expression constraints
+% (\ref{temp.constr.atom.expr}) and type constraints
+% (\ref{temp.constr.atom.type}).
+% \exitnote
+
+\pnum Two constraints \tcode{P} and \tcode{Q} are equivalent if and
+only if they are of the same kind and their their operands are equivalent. 
+The rules for determining the equivalence of different kinds of constraints
+are defined in \ref{temp.constr.constr}.
 
 \pnum
 A constraint \tcode{P} is said to \defn{subsume} another constraint \tcode{Q} 
 if, informally, it can be determined that \tcode{P} implies \tcode{Q}, up to 
-the equivalence of types and expressions in atomic constraints.
-\ref{temp.constr.atom}. 
+the equivalence of types and expressions. 
 % 
 \enternote
 Subsumption does not determine, for example, if the predicate 
@@ -60,49 +81,65 @@ rules for each kind of atomic constraint are given in
 %%
 %% Logical operations
 %%
-\rSec2[temp.constr.op]{Logical operations}
+\rSec3[temp.constr.op]{Logical operations}
 
 \pnum
-There are two logical operations on constraints: conjunction
+There are two binary logical operations on constraints: conjunction
 and disjunction.
 % 
 \enternote 
 These logical operations have no corresponding C++ syntax.
 For the purpose of exposition, conjunction is spelled
 using the symbol $\land$ and disjunction is spelled using the 
-symbol $\lor$. Grouping of constraints is shown using parentheses.
+symbol $\lor$. 
+% 
+The operands of these operations are called the left 
+and right operands. In the constraint \tcode{P} $land$ \tcode{Q},
+\tcode{P} is the left operand and \tcode{Q} is the right operand.
+% 
+Grouping of constraints is shown using parentheses.
 \exitnote
 
 \pnum
 A \defn{conjunction} is a logical operation taking two 
 operands. A conjunction of constraints is satisfied if and only 
-if both operands are satisfied.
+if both operands are satisfied. 
+% 
+The satisfaction of a conjunction's operands are evaluated left-to-right; 
+if the left operand is not satisfied, template arguments are not 
+substituted into the right operand, and the constraint is not satisfied.
+
+\pnum
+A conjunction \tcode{P} is equivalent to another conjunction \tcode{Q}
+if and only if the left operands of \tcode{P} and \tcode{Q} are equivalent
+and the right operands of \tcode{P} and \tcode{Q} are equivalent.
 
 \pnum
 A \defn{disjunction} is a logical operation taking two 
 operands. A disjunction of constraints is satisfied if and only 
 if either operand is satisfied or both operands are satisfied.
+% 
+The satisfaction of a disjunction's operands are evaluated left-to-right; 
+if the left operand is satisfied, template arguments are not 
+substituted into the right operand, and the constraint is satisfied.
 
-%%
-%% Atomic constraints
-%%
-\rSec2[temp.constr.atom]{Atomic constraints}
+\pnum
+A disjunction \tcode{P} is equivalent to another disjunction \tcode{Q}
+if and only if the left operands of \tcode{P} and \tcode{Q} are equivalent
+and the right operands of \tcode{P} and \tcode{Q} are equivalent.
 
-Any constraint that is not a conjunction or disjunction is an
-\defn{atomic constraint}.
 
 %%
 %% Predicate constraints
 %%
-\rSec3[temp.constr.atom.pred]{Predicate constraints}
+\rSec3[temp.constr.pred]{Predicate constraints}
 
 \pnum
-A \defn{predicate constraint} is an atomic constraint
-that evaluates a prvalue constant expression of type \tcode{bool}
-(\cxxref{expr.const}).
+A \defn{predicate constraint} is a constraint that evaluates a prvalue 
+constant expression \tcode{E} of type \tcode{bool} (\cxxref{expr.const}).
 % 
-The constraint is satisfied if and only if the expression 
-evaluates to \tcode{true}.
+The constraint is satisfied if and only if \tcode{E} evaluates to 
+\tcode{true}.
 % 
 \enternote
 Predicate constraints allow the definition of template requirements
@@ -120,14 +157,18 @@ predicate constraints required by the concept, \tcode{C}.
 \exitexample
 
 \pnum
+A predicate constraint \tcode{P} is equivalent to another predicate
+\tcode{Q} if and only if the expressions of \tcode{P} and \tcode{Q}
+are equivalent using the rules described in \ref{temp.over.link} to compare
+expressions.
+
+\pnum
 A predicate constraint \tcode{P} subsumes another predicate constraint 
-\tcode{Q} if and only if \tcode{P} and \tcode{Q} are equivalent 
-\grammarterm{constraint-expression}{}s (\ref{temp.constr.expr}).
+\tcode{Q} if and only if they are equivalent constraints.
 % 
 \enterexample
 The predicate \tcode{M >= 0} does not subsume the predicate
-\tcode{M > 0} because they are not equivalent
-\grammarterm{constraint-expressions}.
+\tcode{M > 0} because they are not equivalent.
 \exitexample
 
 
@@ -135,7 +176,7 @@ The predicate \tcode{M >= 0} does not subsume the predicate
 %%
 %% Expression constraints
 %%
-\rSec3[temp.constr.atom.expr]{Expression constraints}
+\rSec3[temp.constr.expr]{Expression constraints}
 
 \pnum
 An \defn{expression constraint} is an atomic constraint
@@ -177,7 +218,7 @@ and \tcode{Q} are equivalent (\ref{temp.over.link}).
 %%
 %% Type constraints
 %%
-\rSec3[temp.constr.atom.type]{Type constraints}
+\rSec3[temp.constr.type]{Type constraints}
 
 \pnum
 A \defn{type constraint} is an atomic constraint that specifies a requirement 
@@ -220,7 +261,7 @@ and \tcode{Q} are equivalent
 %%
 %% Implicit conversion constraints
 %%
-\rSec3[temp.constr.atom.conv]{Implicit conversion constraints}
+\rSec3[temp.constr.conv]{Implicit conversion constraints}
 
 \pnum
 An \defn{implicit conversion constraint} is an atomic constraint that 
@@ -261,7 +302,7 @@ of \tcode{P} and \tcode{Q} are equivalent (\cxxref{temp.type}).
 %%
 %% Argument deduction constraints
 %%
-\rSec3[temp.constr.atom.deduct]{Argument deduction constraints}
+\rSec3[temp.constr.deduct]{Argument deduction constraints}
 
 \pnum
 An \defn{argument deduction constraint} is an atomic
@@ -318,7 +359,7 @@ of \tcode{P} and \tcode{Q} are equivalent (\cxxref{temp.type}).
 %%
 %% Exception constraints
 %%
-\rSec3[temp.constr.atom.noexcept]{Exception constraints}
+\rSec3[temp.constr.noexcept]{Exception constraints}
 
 \pnum
 An \defn{exception constraint} is an atomic constraint
