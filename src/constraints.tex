@@ -10,11 +10,15 @@ Add this section after 14.8.
 
 \pnum
 \enternote
-This section defines the meaning of constraints on template arguments, including
-the translation of \grammarterm{constraint-expression}{}s
-into constraints (\ref{temp.constr.expr}),
-and also the abstract syntax, satisfaction, equivalence, and 
-subsumption of those constraints (\ref{temp.constr.op}, \ref{temp.constr.atom}).
+This section defines the meaning of constraints on template arguments.
+% 
+The abstract syntax, satisfaction rules, and equivalence rules are defined
+in \ref{temp.constr.constr}. 
+% 
+Constraints are associated with declarations in \ref{temp.constr.decl}.
+% 
+Declarations are partially ordered by their associated constraints 
+(\ref{temp.constr.order}).
 \exitnote
 
 
@@ -27,10 +31,6 @@ subsumption of those constraints (\ref{temp.constr.op}, \ref{temp.constr.atom}).
 A \defn{constraint} is a sequence of logical operations and 
 operands that specifies requirements on template arguments.
 \enternote The operands of a logical operation are constraints. \exitnote
-
-
-
-
 
 
 \pnum
@@ -60,27 +60,12 @@ constraints are defined in the following sections.
 % (\ref{temp.constr.atom.type}).
 % \exitnote
 
-\pnum Two constraints \tcode{P} and \tcode{Q} are equivalent if and
-only if they are of the same kind and their their operands are equivalent. 
-The rules for determining the equivalence of different kinds of constraints
-are defined in \ref{temp.constr.constr}.
-
-\pnum
-A constraint \tcode{P} is said to \defn{subsume} another constraint \tcode{Q} 
-if, informally, it can be determined that \tcode{P} implies \tcode{Q}, up to 
-the equivalence of types and expressions. 
-% 
-\enternote
-Subsumption does not determine, for example, if the predicate 
-constraint (\ref{temp.constr.atom.pred}) 
-\tcode{N \% 2 == 1} subsumes \tcode{N \& 1} for 
-some integral template argument, \tcode{N}. 
-\exitnote
-% 
-The rules determining when one constraint subsumes another is given
-in \ref{temp.constr.order}, and subsumption
-rules for each kind of atomic constraint are given in
-\ref{temp.constr.atom}.
+\pnum 
+In certain contexts, it is necessary to know when two constraints are equivalent
+(\ref{temp.constr.decl}). Two constraints \tcode{P} and \tcode{Q} are
+equivalent if and only if they are of the same kind and their their operands are
+equivalent. The rules for determining the equivalence of different kinds of
+constraints are defined in the following expressions.
 
 
 %%
@@ -167,14 +152,10 @@ A predicate constraint \tcode{P} is equivalent to another predicate
 are equivalent using the rules described in \ref{temp.over.link} to compare
 expressions.
 
-\pnum
-A predicate constraint \tcode{P} subsumes another predicate constraint 
-\tcode{Q} if and only if they are equivalent constraints.
-% 
-\enterexample
-The predicate \tcode{M >= 0} does not subsume the predicate
-\tcode{M > 0} because they are not equivalent.
-\exitexample
+% \enterexample
+% The predicate \tcode{M >= 0} does not subsume the predicate
+% \tcode{M > 0} because they are not equivalent.
+% \exitexample
 
 
 
@@ -220,10 +201,6 @@ constraint \tcode{Q} if and only if the \tcode{expression}{}s of
 \tcode{P} and \tcode{Q} are equivalent using the rules described 
 in \ref{temp.over.link} to compare expressions.
 
-\pnum
-An expression constraint \tcode{P} subsumes another expression constraint 
-\tcode{Q} if and only if \tcode{P} and \tcode{Q} are equivalent constraints.
-
 
 %%
 %% Type constraints
@@ -262,10 +239,10 @@ does not require that type to be complete
 (\cxxref{basic.types}).
 
 \pnum
-A type constraint \tcode{P} subsumes another type
+A type constraint \tcode{P} is equivalent to another type
 constraint \tcode{Q} if and only if the types in \tcode{P}
-and \tcode{Q} are equivalent 
-(\cxxref{temp.type}).
+and \tcode{Q} are equivalent according to the rules in
+\cxxref{temp.type}.
 
 
 %%
@@ -303,10 +280,12 @@ convertible to \tcode{bool}.
 \exitexample
 
 \pnum
-An implicit conversion constraint \tcode{P} subsumes another implicit 
+An implicit conversion constraint \tcode{P} is equivalent to another implicit 
 conversion constraint \tcode{Q} if and only if the \grammarterm{expression}{}s 
-of \tcode{P} and \tcode{Q} are equivalent (\ref{temp.over.link}) and the types
-of \tcode{P} and \tcode{Q} are equivalent (\cxxref{temp.type}).
+of \tcode{P} and \tcode{Q} are equivalent using the rules in
+\ref{temp.over.link} to compare expressions, and the the types
+of \tcode{P} and \tcode{Q} are equivalent according to the rules in
+\cxxref{temp.type}.
 
 
 %%
@@ -360,10 +339,12 @@ constraints are satisfied.
 \exitnote
 
 \pnum
-An argument deduction constraint \tcode{P} subsumes another argument deduction 
-constraint \tcode{Q} if and only if the \grammarterm{expression}{}s of
-\tcode{P} and \tcode{Q} are equivalent (\ref{temp.over.link}), and the types
-of \tcode{P} and \tcode{Q} are equivalent (\cxxref{temp.type}). 
+An argument deduction constraint \tcode{P} is equivalent to another 
+argument deduction constraint \tcode{Q} if and only if the 
+\grammarterm{expression}{}s of \tcode{P} and \tcode{Q} are equivalent
+using the rules in \ref{temp.over.link} to compare expressions, and the types
+of \tcode{P} and \tcode{Q} are equivalent according to the rules in 
+\cxxref{temp.type}).
 
 
 %%
@@ -384,13 +365,12 @@ includes the \tcode{noexcept} specifier
 (\ref{expr.prim.req.compound}).
 \exitnote
 
-
 \pnum
 An exception constraint \tcode{P} subsumes another
 exception constraint \tcode{Q} if and only if the
 \grammarterm{expression}{}s of \tcode{P}
-and \tcode{Q} are equivalent 
-(\ref{temp.over.link}).
+and \tcode{Q} are equivalent using the rules in \ref{temp.over.link}
+to compare expressions.
 
 
 %%
@@ -399,7 +379,7 @@ and \tcode{Q} are equivalent
 \rSec2[temp.constr.decl]{Constrained declarations}
 
 \pnum
-The \defn{associated constraints} of a \grammarterm{template-declaration} are 
+The \defn{associated constraints} of a template declaration are 
 the conjunction of constraints introduced by:
 % 
 \begin{itemize}
@@ -420,8 +400,9 @@ of a function declaration (\ref{dcl.fct}).
 \end{itemize}
 % 
 The formation of the associated constraints for a template declaration
-gives a definite ordering on subexpressions for the purpose of determining
-when one template redeclares another, and 
+defines the order in which constraints are compared for equivalence
+(to determine when one template redeclares another) and evaluated for
+satisfaction.
 
 \enterexample
 \begin{codeblock}
@@ -508,6 +489,21 @@ The associated constraints of the first declaration are
 \rSec2[temp.constr.order]{Partial ordering by constraints}
 
 \pnum
+A constraint \tcode{P} is said to \defn{subsume} another constraint \tcode{Q} 
+if, informally, it can be determined that \tcode{P} implies \tcode{Q}, up to 
+the equivalence of types and expressions. 
+% 
+\enternote
+Subsumption does not determine, for example, if the predicate 
+constraint (\ref{temp.constr.pred}) \tcode{N \% 2 == 1} subsumes 
+\tcode{N \& 1} for some integral template argument, \tcode{N}.
+\exitnote
+
+
+% TODO: If I add a quantified constraint (which I will), then this
+% rewriting needs to lift its conjunctions out of it.
+
+\pnum
 In order to determine if a constraint \tcode{P} subsumes a constraint
 \tcode{Q}, transform \tcode{P} into disjunctive normal form, 
 and transform \tcode{Q} into conjunctive normal form\footnote{
@@ -535,29 +531,31 @@ Its disjunctive clauses are (\tcode{A} $\land$ \tcode{B}) and
 \exitexample
 }.
 % 
-The disjunctive normal form of \tcode{P} subsumes the conjunctive normal 
-form of \tcode{Q} if and only if every disjunctive clause in \tcode{P$i$} 
-subsumes each conjunctive clause in \tcode{Q$j$}.
-% 
-A disjunctive clause \tcode{P$i$} subsumes a conjunctive clause
-\tcode{Q$j$} when each atomic constraint in \tcode{P$i$} subsumes any atomic 
-constraint in \tcode{Q$j$}.
-% 
-The rules for determining whether one atomic constraint subsumes
-another are defined for each kind of atomic constraint
-(\ref{temp.constr.atom}).
+Then, \tcode{P} subsumes \tcode{Q} if and only if
+\begin{itemize}
+\item for every disjunctive clause \tcode{P$i$} in the disjunctive normal 
+form of \tcode{P}, \tcode{P$i$} subsumes every conjunctive clause \tcode{Q$j$} 
+in the conjuctive normal form of \tcode{Q}, where
+
+\item a disjunctive clause \tcode{P$i$} subsumes a conjunctive clause
+\tcode{Q$j$} if and only if each atomic constraint in \tcode{P$i$} subsumes 
+any atomic constraint \tcode{Q$j$}, where
+
+\item an atomic constraint \tcode{A} subsumes another atomic constraint
+\tcode{B} if and only if the \tcode{A} and \tcode{B} are equivalent using the
+rules described in \ref{temp.constr.constr} to compare constraints.
+\end{itemize}
 % 
 \enterexample
-Let \tcode{A} and \tcode{B} be
-predicate constraints (\ref{temp.constr.atom.pred}).
+Let \tcode{A} and \tcode{B} be atomic constraints (\ref{temp.constr.pred}).
 % 
 The constraint \tcode{A $\land$ B} subsumes \tcode{A}, 
 but \tcode{A} does not subsume \tcode{A $\land$ B}. 
 % 
 The constraint \tcode{A} subsumes \tcode{A $\lor$ B}, but
-\tcode{A $\lor$ B} does not subsume code \tcode{A}. 
+\tcode{A $\lor$ B} does not subsume \tcode{A}. 
 % 
-Also, any constraint \tcode{P} subsumes itself.
+Also note that every constraint subsumes itself.
 \exitexample
 
 
