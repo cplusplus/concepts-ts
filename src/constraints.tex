@@ -215,9 +215,14 @@ for \tcode{T}.
 \exitexample
 
 \pnum
+An expression constraint \tcode{P} is equivalent to another expression
+constraint \tcode{Q} if and only if the \tcode{expression}{}s of
+\tcode{P} and \tcode{Q} are equivalent using the rules described 
+in \ref{temp.over.link} to compare expressions.
+
+\pnum
 An expression constraint \tcode{P} subsumes another expression constraint 
-\tcode{Q} if and only if the \grammarterm{expression}{}s of \tcode{P}
-and \tcode{Q} are equivalent (\ref{temp.over.link}). 
+\tcode{Q} if and only if \tcode{P} and \tcode{Q} are equivalent constraints.
 
 
 %%
