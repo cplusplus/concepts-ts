@@ -1,4 +1,4 @@
-
+template
 %%
 %% Template constraints
 %%
@@ -512,7 +512,8 @@ the constraint associated by \tcode{C2} in each declaration.
 % 
 \begin{codeblock}
 template<C1 T> requires C2<T> void f5();
-template<C2 T> requires C1<T> void f5(); // error: constraints are functionally equivalent but not equivalent
+template<C2 T> requires C1<T> void f5(); // error: constraints are functionally
+                                         // equivalent but not equivalent
 \end{codeblock}
 % 
 The associated constraints of the first declaration are
@@ -524,80 +525,99 @@ The associated constraints of the first declaration are
 
 % FIXME: Normalize in two steps. First, inline all references to
 % concepts; then decompose predicate expressions.
-
+% 
+% FIXME: Does normalization apply only to predicate constraints?
+% Yes and no... We have to transform predicate constraints, but
+% that entails a transformation on constraint as a whole.
 
 \pnum
 Determining if a declaration's associated constraints are satisfied,
 and partially ordering declarations by their associated constraints
-requires the normalization of the associate constraints. 
+requires the \defn{normalization} of the associated constraints. 
 % 
-The normalization of a constraint decomposes predicate constraints into 
-conjunctions and disjunctions of \defn{atomic constraints}. An atomic constraint
-is a predicate constraint that is in normal form (i.e., it cannot be further
-normalized).
+The normalization of a constraint transforms that the constraint into a
+sequence of conjunctions and disjunctions of \defn{atomic constraints}.
+An atomic constraint (as defined below) is one that cannot be expressed
+as a conjunction or disjunction of its operands.
 % 
-The \defn{normal form} of a predicate constraint \tcode{P} is defined as 
-follows:
+The \defn{normal form} of a constraint is defined as follows:
 % 
 \begin{itemize}
-\item The normal form of \tcode{(P)} is the normal form of \tcode{P}.
+\item The normal form of the disjunction \tcode{P} $\lor$ \tcode{Q} is the 
+disjunction of the normal form of \tcode{P} and the normal form \tcode{Q}.
 
-\item The normal form of \tcode{P || Q} is the disjunction (\ref{temp.constr.op}) 
-of the normal form of \tcode{P} and the normal form of \tcode{Q}.
+\item The normal form of the conjunction \tcode{P} $\land$ \tcode{Q} is the 
+conjunction of the normal form of \tcode{P} and the normal form \tcode{Q}.
 
-\item The normal form of \tcode{P \&\& Q} is the conjunction (\ref{temp.constr.op}) 
-of the normal form of \tcode{P} and the normal form of \tcode{Q}.
+\item The normal form of a predicate constraint \tcode{P} is formed by
+first creating a new expression \tcode{E} from the expression of \tcode{P} by 
+replacing all subexpressions in \tcode{P} that refer to concepts with their 
+corresponding definitions. In particular,
+% 
+\begin{itemize}
+\item replace all function calls of the form 
+\tcode{C<A$1$, A$2$, ..., A$N$>()}, where the \grammarterm{template-id}
+\tcode{C<A$1$, A$2$, ..., A$N$>} refers to a function concept \tcode{D}, 
+with the result of substituting \tcode{A$1$, A$2$, ..., A$N$} into the 
+expression returned by the function concept \tcode{D}, and
 
-\item The normal form of a function call of the form
-\tcode{C<A$1$, A$2$, ..., A$N$>()},
-where \tcode{A$1$, A$2$, ..., A$N$}
-is a sequence of template arguments and \tcode{C} names a function
-concept (\ref{dcl.spec.concept}), is the result of 
-substituting the template arguments into the expression
-returned by \tcode{C}.
+\item replace all \grammarterm{id-expression}{}s of the form 
+\tcode{C<A$1$, A$2$, ..., A$N$>()}, where the \grammarterm{template-id} 
+\tcode{C<A$1$, A$2$, ..., A$N$>}, refers to a variable concept \tcode{D}, 
+with the result of substituting \tcode{A$1$, A$2$, ..., A$N$} 
+into the initializer of the variable concept \tcode{D}.
+\end{itemize}
+If any such substitution fails, the program is ill-formed.
+% 
+Second, transform the expression \tcode{E} into a sequence of conjunctions
+and disjunctions of constraints as follows:
+\begin{itemize}
+\item An expression \tcode{(P)} is transformed into the normalized predicate 
+constraint \tcode{P}.
 
-\item The normal form of an \grammarterm{id-expression}
-of the form \tcode{C<A$1$, A$2$, ..., A$N$>}
-where \tcode{A$1$, A$2$, ..., A$N$}
-is a sequence of template arguments and \tcode{C} names a variable
-concept (\ref{dcl.spec.concept}) is the result of 
-substituting the template arguments into the initializer
-of \tcode{C}.
+\item An expression \tcode{P || Q} is transformed into the normalized 
+disjunction the predicate constraints \tcode{P} and \tcode{Q}.
 
-\item The normal form of a \grammarterm{requires-expression}
-(\ref{expr.prim.req}) is the conjunction of constraints (\ref{temp.constr.op})
-introduced by the body of that expression.
+\item An expression \tcode{P \&\& Q} is transformed into the normalized
+conjunction of the predicate constraints \tcode{P} and \tcode{Q}.
 
-\item Otherwise, \tcode{E} is an atomic predicate constraint 
-(\ref{temp.constr.pred}). 
+\item A requires expression is transformed into its normalized conjunction of
+constraints.
+
+\item Otherwise, the expression \tcode{E} is an atomic predicate constraint.
 \end{itemize}
 
-
-% FIXME: Make this a table.
+\item Expression constraints (\ref{temp.constr.expr}), 
+type constraints (\ref{temp.constr.type}), 
+implicit conversion constraints (\ref{temp.constr.conv}), 
+argument deduction constraints (\ref{temp.constr.deduct}), and 
+exception constraints (\ref{temp.constr.expr})
+are all atomic constraints and in normal form.
+\end{itemize}
+% 
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C1() { return sizeof(T) == 1; }
 template<typename T> concept bool C2 = C1<T>() && 1 == 2;
-template<typename T> concept bool C3 = requires () { typename T::type; };
-
-// Expression      // Constraints
-C2<char>           sizeof(char) == 1 /* and */ 1 == 2
-C3<int>            /* type constraint for int::type */
-3 + 4              // error: not a constraint
-(bool)(3 + 4)      (bool)(3 + 4)
+template<typename T> concept bool C3 = requires { typename T::type; };
 \end{codeblock}
-In the normalized constraints, the expressions \tcode{sizeof(char) == 1}, 
-\tcode{1 == 2}, and \tcode{(bool)(3 + 4)} are predicate 
-constraints (\ref{temp.constr.pred}). 
-
-The concept \tcode{C3} is normalized to a single type constraint
-(\ref{temp.constr.type}) for the (ill-formed) 
-type \tcode{int::type}.
-
-The expression \tcode{3 + 4} is not a 
-\grammarterm{constraint-expression} because it does
-not meet the requirements for satisfying a predicate 
-constraint.
+% 
+When used in \grammarterm{constraint-expression}{s}, the concepts above
+have the following normal forms:
+% 
+\begin{simpletypetable}
+{Expressions and their normalized constraints}
+{tab:temp.constr.normal}
+{ll}
+\topline
+Expression            & Constraint \\ \capsep
+\tcode{C2<char>}      & \tcode{sizeof(char) == 1} $\land$ \tcode{1 == 2} \\
+\tcode{C3<int>}       & type constraint for \tcode{int::type}     \\
+\tcode{(bool)(3 + 4)} & \tcode{(bool)(3 + 4)}                     \\
+\end{simpletypetable}
+% 
+Note that the normalized constraint for \tcode{C2<char>} has two atomic 
+constraints: \tcode{sizeof(char) == 1} and \tcode{1 == 2}.
 \exitexample
 
 
