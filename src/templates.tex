@@ -2078,7 +2078,7 @@ template<typename T> concept bool C() { return true; }             // \#1
 template<typename T, typename U> concept bool C() { return true; } // \#2
 template<typename T> concept bool P() { return true; }
 template<int T> concept bool P() { return true; }
-template<<typename... Ts> concept bool Q = true;
+template<typename... Ts> concept bool Q = true;
 
 void f1(const C*);  // OK: \tcode{C} selects \#1
 void f2(C<char>);   // OK: \tcode{C<char>} selects \#2
