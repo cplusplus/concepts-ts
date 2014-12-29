@@ -51,6 +51,13 @@ to the grammar for \grammarterm{simple-type-specifier}{}s.
 \setcounter{subsubsection}{3}
 \rSec3[dcl.spec.auto]{\tcode{auto} specifier}
 
+Extend this section to allow for \grammarterm{constrained-type-specifier}{s}
+as a new syntax for designating placeholders. The section is refactored so
+that placeholders are introduced in this section, deduction rules are
+defined in subsection \ref{dcl.spec.auto.deduct}, and the meaning of
+\grammarterm{constrained-type-specifier}{s} are described in
+\ref{dcl.spec.auto.constr}.
+
 Replace paragraph 1 with the text below.
 
 \begin{quote}
@@ -378,7 +385,7 @@ this section.
 %%
 %% Constrained type specifiers
 %%
-\rSec4[dcl.spec.constr]{Constrained type specifiers}
+\rSec4[dcl.spec.auto.constr]{Constrained type specifiers}
 
 Add this section to \ref{dcl.spec.auto}.
 
