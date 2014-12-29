@@ -99,12 +99,11 @@ the function, if any.
 \added{The declared return type of a function shall not include a
 \grammarterm{constrained-type-specifier}{}}.
 %
-\added{\enternote
-If a function declarator has the form \tcode{auto D -> T}, where
-\tcode{D -> T} is a declarator with a \grammarterm{trailing-return-type} 
-\tcode{D} and \tcode{T} contains placeholders, the initial \tcode{auto} does 
+\added{
+In a function declarator of the form \tcode{auto D -> T} where
+\tcode{T} contains placeholders, the initial \tcode{auto} does 
 not designate a placeholder.
-\exitnote}
+}
 \end{quote}
 
 Modify paragraph 3 to allow the use of \tcode{auto} within the 
