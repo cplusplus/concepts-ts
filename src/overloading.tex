@@ -12,7 +12,7 @@ Modify paragraph 1 to allow overloading based on constraints.
 When two or more different declarations are specified for a single name 
 in the same scope, that name is said to be overloaded. By extension, two 
 declarations in the same scope that declare the same name but with
-different types \added{or different associated constraints (Clause~\ref{temp})}
+different types \added{or different associated constraints (\ref{temp.constr.decl})}
 are called \defn{overloaded declarations}. Only function and function 
 template declarations can be overloaded; variable and type declarations 
 cannot be overloaded.
@@ -33,7 +33,7 @@ document.
 \enternote
 As specified in \ref{dcl.fct}, function declarations that have equivalent 
 parameter declarations \added{and associated constraints, if any 
-(Clause~\ref{temp})}, declare the same function and therefore cannot be 
+(\ref{temp.constr.decl})}, declare the same function and therefore cannot be 
 overloaded: ...
 \exitnote
 \end{quote}
@@ -52,7 +52,7 @@ example in the original text is omitted in this document.
 Two function declarations of the same name refer to the same function if 
 they are in the same scope and have equivalent parameter declarations 
 (\ref{over.load}) \added{and equivalent associated constraints, if any 
-(Clause~\ref{temp})}.
+(\ref{temp.constr.decl})}.
 \end{quote}
 
 
@@ -81,7 +81,7 @@ sequences and associated constraints for the best fit
 (\ref{over.match.best}).
 %
 The selection of viable functions considers \added{associated constraints, 
-if any (Clause~\ref{temp}), and} relationships between arguments and function 
+if any (\ref{temp.constr.decl}), and} relationships between arguments and function 
 parameters other than the ranking of conversion sequences.
 \end{quote}
 
@@ -92,8 +92,8 @@ subsequent paragraph to account for the insertion.
 \begin{quote}
 \setcounter{Paras}{2}
 \pnum
-\added{Second, for a function to be viable, if it has associated constraints
-(Clause~\ref{temp}), those constraints shall be satisfied (\ref{temp.constr}).}
+\added{Second, for a function to be viable, if it has associated constraints, 
+those constraints shall be satisfied (\ref{temp.constr}).}
 
 \pnum
 \removed{Second}\added{Third}, for \tcode{F} to be a viable function\ldots

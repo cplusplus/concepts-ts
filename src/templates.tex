@@ -34,7 +34,10 @@ A \grammarterm{template-declaration} is written in terms of its template
 parameters. These parameters are declared explicitly in a 
 \grammarterm{template-parameter-list} (\ref{temp.param}), or they are
 introduced by a \grammarterm{template-introduction} (\ref{temp.intro}).
-
+%
+The optional \grammarterm{requires-clause} following a
+\grammarterm{template-parameter-list} allows the specification of
+constraints (\ref{temp.constr.decl}) on template arguments (\ref{temp.arg}).
 
 %%
 %% Template parameters
@@ -380,7 +383,7 @@ but not a member template that is a member of an unknown specialization
 \ref{temp.res}, and all \grammarterm{template-argument}{}s in the
 \grammarterm{simple-template-id} are non-dependent \cxxref{temp.dep.temp}, the 
 template arguments are substituted into the associated constraints
-(Clause~\ref{temp}). 
+(\ref{temp.constr.decl}). 
 % 
 If, as a result of substitution, the associated constraints are not 
 satisfied (\ref{temp.constr}), the \grammarterm{simple-template-id} is ill-formed.
@@ -502,7 +505,7 @@ instantiated separately from the template they are associated with.
 \begin{quote}
 \setcounter{Paras}{1}
 For purposes of name lookup and instantiation, default 
-arguments\added{, associated constraints (Clause~\ref{temp}),} and
+arguments\added{, associated constraints (\ref{temp.constr.decl}),} and
 \grammarterm{exception-specification}{}s of function templates and default
 arguments\added{, associated constraints,} and 
 \grammarterm{exception-specification}{}s of member functions of class
@@ -529,8 +532,9 @@ definitions of members of constrained templates.
 When a member function, a member class, a member enumeration, a static 
 data member or a member template of a class template is defined outside 
 of the class template definition, the member definition is defined as a 
-template definition in which the \grammarterm{template-parameter}{}s
-\added{and associated constraints} are those of the class template.
+template definition in which the \grammarterm{template-parameter}{s}
+\added{and associated constraints} (\ref{temp.constr.decl}) are those of 
+the class template.
 % 
 The names of the template parameters used in the definition of the 
 member may be different from the template parameter names used in the 
@@ -610,9 +614,10 @@ or class template definition.
 
 A member template of a class template that is defined outside of its 
 class template definition shall be specified with the 
-\grammarterm{template-parameter}{}s \added{and associated constraints}
-of the class template followed by the \grammarterm{template-parameter}{}s
-\added{and associated constraints} (Clause~\ref{temp}) of the member template.
+\grammarterm{template-parameter}{s} \added{and associated constraints}
+(\ref{temp.constr.decl}) of the class template followed by the 
+\grammarterm{template-parameter}{s}
+\added{and associated constraints} of the member template.
 \end{quote}
 
 
@@ -654,8 +659,8 @@ Modify paragraph 9 to restrict constrained friend declarations.
 \pnum
 When a friend declaration refers to a specialization of a function
 template, the function parameter declarations shall not include
-default arguments, \added{the declaration shall not be
-constrained,} nor shall the inline specifier be used in such a
+default arguments, \added{the declaration shall not have associated constraints
+(\ref{temp.constr.decl}),} nor shall the inline specifier be used in such a
 declaration.
 \end{quote}
 
@@ -822,15 +827,15 @@ rules for function templates
 % 
 \begin{itemize}
 \item the first function template has the same template 
-parameters \added{and associated constraints} as the first partial 
-specialization, and has a single function parameter whose
-type is a class template specialization with the template 
+parameters \added{and associated constraints (\ref{temp.constr.decl})} 
+as the first partial specialization, and has a single function parameter 
+whose type is a class template specialization with the template
 arguments of the first partial specialization, and
 
 \item the second function template has the same template 
-parameters \added{and associated constraints} as the second partial 
-specialization, and has a single function parameter whose
-type is a class template specialization with the template 
+parameters \added{and associated constraints (\ref{temp.constr.decl})} 
+as the second partial specialization, and has a single function parameter 
+whose type is a class template specialization with the template
 arguments of the second partial specialization.
 \end{itemize}
 \end{quote}
@@ -894,7 +899,7 @@ Two function templates are \defn{equivalent} if they:
 \item have return types and parameter lists that are equivalent using the 
 rules described above to compare expressions involving template parameters, and
 
-\item have associated constraints (Clause~\ref{temp}) that are equivalent 
+\item have associated constraints (\ref{temp.constr.decl}) that are equivalent 
 using the rules above to compare expressions involving template parameters.
 \end{itemize}
 \end{addedblock}
@@ -902,7 +907,7 @@ using the rules above to compare expressions involving template parameters.
 Two function templates are \defn{functionally equivalent} if they 
 are equivalent except that one or more expressions that involve 
 template parameters in the return types and parameter lists\added{, or the
-associated constraints (Clause~\ref{temp})} are functionally equivalent using 
+associated constraints (\ref{temp.constr.decl})} are functionally equivalent using 
 the rules described above to compare expressions involving template parameters.
 % 
 If a program contains declarations of function templates that are 
@@ -954,9 +959,15 @@ specialization can be generated for a template, and that template is
 not instantiated, the template is ill-formed, no diagnostic
 required. If every valid specialization of a variadic template
 requires an empty template parameter pack, the template is
-ill-formed, no diagnostic required. \added{If no instantiation of
-the associated constraints of a template would result in a valid
-expression, the template is ill-formed, no diagnostic required.}
+ill-formed, no diagnostic required. 
+% 
+% TODO: "would result in a valid expression" should probably be
+% "would always result in substitution failure".
+% 
+\added{If no instantiation of
+the associated constraints (\ref{temp.constr.decl}) of a template would result 
+in a valid expression, the template is ill-formed, no diagnostic required.}
+% 
 If a hypothetical instantiation of a template immediately following
 its definition would be ill-formed due to a construct that does not
 depend on a template parameter, the program is ill-formed; no
@@ -1021,7 +1032,7 @@ declared.
 % 
 The implicit instantiation of a class template specialization causes the 
 implicit instantiation of the declarations, but not of the definitions, default
-arguments, \added{associated constraints (Clause~\ref{temp}),} or
+arguments, \added{associated constraints (\ref{temp.constr.decl}),} or
 \grammarterm{exception-specification}{}s of the class member functions,
 member classes, scoped member enumerations, static data members and
 member templates; and it causes the implicit instantiation of the
@@ -1111,9 +1122,10 @@ also an explicit instantiation of the same kind (declaration or
 definition) of each of its members (not including members inherited from 
 base classes and members that are templates) that has not been previously 
 explicitly specialized in the translation unit containing the explicit 
-instantiation, \added{and provided that the associated constraints (\ref{temp}),
-if any, of that member are satisfied (\ref{temp.constr}) by the template 
-arguments of the explicit instantiation, } except as described below.
+instantiation, \added{and provided that the associated constraints 
+(\ref{temp.constr.decl}), if any, of that member are satisfied 
+(\ref{temp.constr}) by the template arguments of the explicit instantiation, } 
+except as described below.
 \end{quote}
 
 Add the following paragraphs to this section. These require an explicit
@@ -1245,7 +1257,7 @@ the corresponding deduced or default argument values.
 If the substitution results in an invalid type, as described above, type 
 deduction fails.
 
-\added{If the function template has associated constraints (Clause~\ref{temp}),
+\added{If the function template has associated constraints (\ref{temp.constr.decl}),
 the template arguments are substituted into the associated constraints
 without evaluating the resulting expression. If this substitution
 results in an invalid type or expression, type deduction fails.
