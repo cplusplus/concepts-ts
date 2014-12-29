@@ -123,8 +123,10 @@ There is a syntactic ambiguity when an ellipsis occurs at the end of a
 \grammarterm{parameter-declaration-clause} without a preceding comma. In this 
 case, the ellipsis is parsed as part of the \grammarterm{abstract-declarator} 
 if the type of the parameter either names a template parameter pack that has 
-not been expanded or contains \added{either} \tcode{auto} \added{or a
-\grammarterm{constrained-type-specifier}{}}; otherwise, it is parsed as part 
+not been expanded or contains 
+\removed{\tcode{auto}}
+\added{a placeholder (\ref{dcl.spec.auto})}; 
+otherwise, it is parsed as part
 of the \grammarterm{parameter-declaration-clause}.
 \end{quote}
 
