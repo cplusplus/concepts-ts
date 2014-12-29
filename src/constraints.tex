@@ -38,10 +38,10 @@ A constrained declaration can be used only when its associated
 constraints (\ref{temp.constr.decl}) are \defn{satisfied}. 
 % 
 Determining if a constraint is satisfied entails the the substitution 
-of template arguments into its types and expressions. If that substitution
-results in an invalid type or expression, the constraint is not satisfied.
+of template arguments. If that substitution results in an invalid type or 
+expression, the constraint is not satisfied.
 % 
-The rules for determining the satisfaction of different kinds of 
+Specific rules for determining the satisfaction of different kinds of 
 constraints are defined in the following sections.
 
 % \pnum
@@ -65,7 +65,7 @@ In certain contexts, it is necessary to know when two constraints are equivalent
 (\ref{temp.constr.decl}). Two constraints \tcode{P} and \tcode{Q} are
 equivalent if and only if they are of the same kind and their their operands are
 equivalent. The rules for determining the equivalence of different kinds of
-constraints are defined in the following expressions.
+constraints are defined in the following sections.
 
 
 %%
@@ -78,7 +78,7 @@ There are two binary logical operations on constraints: conjunction
 and disjunction.
 % 
 \enternote 
-These logical operations have no corresponding C++ syntax.
+These logical operations have no corresponding \Cpp syntax.
 For the purpose of exposition, conjunction is spelled
 using the symbol $\land$ and disjunction is spelled using the 
 symbol $\lor$. 
@@ -134,11 +134,12 @@ and the right operands of \tcode{P} and \tcode{Q} are equivalent.
 \pnum
 \enternote
 The prohibition against user-declared logical operators disallows
-\grammarterm{constraint-expression}{}s (\ref{temp.constr.decl}) whose 
-evaluation disagrees with the satisfaction of its derived constraint. 
+\grammarterm{constraint-expression}{s} (\ref{temp.constr.decl}) whose 
+evaluation disagrees with the satisfaction of its derived constraint.
 That is, whenever a \grammarterm{constraint-expression} \tcode{P \&\& Q} 
-evaluates to \tcode{true}, its constraint is also satisfied.
+evaluates to \tcode{true}, its constraint is satisfied.
 \exitnote
+
 
 %%
 %% Predicate constraints
@@ -391,9 +392,87 @@ and \tcode{Q} are equivalent using the rules in \ref{temp.over.link}
 to compare expressions.
 
 
+
+%%
+%% Universal quantification
+%%
+\rSec3[temp.constr.forall]{Universal quantification}
+
+% FIXME:
+\pnum
+A \defn{universally quantified constraint} is one that declares a sequence
+of parameters (\ref{dcl.fct}), called \defn{constraint variables}, and has a 
+single operand. 
+% 
+Informally, a universally quantified constraint is one that can be satisfied
+for all values of its constraint variables.
+% 
+\enternote
+Universally quantified constraints are introduced by 
+\grammarterm{requires-expression}{s} (\ref{expr.prim.req}). The constraint 
+variables of a universally quantified constraint correspond to the local 
+parameters declared in the \grammarterm{requirement-parameter-list} of a
+\grammarterm{requires-expression}, and the operand of that constraint
+is the expression's conjunction of constraints.
+\exitnote
+% 
+\enternote 
+Universal quantifiers have no corresponding C++ syntax. For the purpose of 
+exposition, universal quantification is written as, e.g.,
+\tcode{$\forall$(T x, U b) P(x, y)}, where \tcode{x} and \tcode{y} are
+the constraint variables, and \tcode{P(x, y)} is the constraint's operand
+written in terms of \tcode{x} and \tcode{y}.
+\exitnote
+% 
+\enterexample
+\begin{codeblock}
+template<typename T>
+  concept bool Eq = requires (T a, T b) {
+    a == b;
+    a != b;
+  };
+\end{codeblock}
+The concept \tcode{Eq} defines the universally quantified constraint
+\tcode{$\forall$(T a, T b) P(a, b)} where \tcode{P(a, b)} is the conjunction
+of two expression constraints: \tcode{a == b} and \tcode{a != b} must be
+valid expressions.
+\exitexample
+
+\pnum
+A universally quantified constraint is satisfied if and only substitution into 
+the types of its constraint variables does not result in an invalid type, and its
+operand is satisfied. Template arguments are substituted into the declared
+constraint variables in the order in which they are declared. If substitution 
+into a constraint variable fails, no more substitutions are performed, and
+the constraint is not satisfied.
+
+\pnum
+Two universally quantified constraints \tcode{P} and \tcode{Q} are equivalent 
+if and only if their operands are equivalent.
+% 
+Two expressions involving constraint variables are equivalent if they
+are equivalent according to the rules for expressions described in 
+\ref{temp.over.link}, except that any \grammarterm{identifier}{s} referring to 
+constraint variables are equivalent if and only if the types of their 
+corresponding declarations are equivalent (\cxxref{temp.type}).
+
+\pnum
+A quantified parameter shall not appear in an evaluated operand 
+(\ref{expr}) of a predicate constraint (\ref{temp.constr.pred}).
+\enterexample
+\begin{codeblock}
+template<typename T> 
+  concept bool C = requires (T a) {
+    requires sizeof(a) == 4; // OK
+    requires a == 0;         // error: evaluation of a constraint variable
+  }
+\end{codeblock}
+\exitexample
+
+
 %%
 %% Constrained declarations
-%^
+%%
 \rSec2[temp.constr.decl]{Constrained declarations}
 
 \pnum
@@ -523,13 +602,6 @@ The associated constraints of the first declaration are
 \end{quote}
 
 
-% FIXME: Normalize in two steps. First, inline all references to
-% concepts; then decompose predicate expressions.
-% 
-% FIXME: Does normalization apply only to predicate constraints?
-% Yes and no... We have to transform predicate constraints, but
-% that entails a transformation on constraint as a whole.
-
 \pnum
 Determining if a declaration's associated constraints are satisfied,
 and partially ordering declarations by their associated constraints
@@ -569,8 +641,7 @@ into the initializer of the variable concept \tcode{D}.
 \end{itemize}
 If any such substitution fails, the program is ill-formed.
 % 
-Second, transform the expression \tcode{E} into a sequence of conjunctions
-and disjunctions of constraints as follows:
+Second, transform the expression \tcode{E} into a constraint as follows:
 \begin{itemize}
 \item An expression \tcode{(P)} is transformed into the normalized predicate 
 constraint \tcode{P}.
@@ -581,8 +652,17 @@ disjunction the predicate constraints \tcode{P} and \tcode{Q}.
 \item An expression \tcode{P \&\& Q} is transformed into the normalized
 conjunction of the predicate constraints \tcode{P} and \tcode{Q}.
 
-\item A requires expression is transformed into its normalized conjunction of
-constraints.
+\item An expression of the form 
+\tcode{requires (\grammarterm{parameter-declaration-clause}) P},
+where \tcode{P} is the constraint of the \grammarterm{requires-expression} 
+(\ref{expr.prim.req}), is transformed into
+a universally quantified constraint (\ref{temp.constr.forall})
+with the same parameters as the \grammarterm{requires-expression} and whose
+operand is the normal form of the constraint \tcode{P}. 
+
+\item An expression of the form \tcode{requires P} where \tcode{P} is the
+conjunction of constraints introduced by the \grammarterm{requires-expression}
+is transformed into the normal form of the constraint \tcode{P}.
 
 \item Otherwise, the expression \tcode{E} is an atomic predicate constraint.
 \end{itemize}
@@ -600,6 +680,7 @@ are all atomic constraints and in normal form.
 template<typename T> concept bool C1() { return sizeof(T) == 1; }
 template<typename T> concept bool C2 = C1<T>() && 1 == 2;
 template<typename T> concept bool C3 = requires { typename T::type; };
+template<typename T> concept bool C4 = requires (T x) { ++x; }
 \end{codeblock}
 % 
 When used in \grammarterm{constraint-expression}{s}, the concepts above
@@ -612,7 +693,8 @@ have the following normal forms:
 \topline
 Expression            & Constraint \\ \capsep
 \tcode{C2<char>}      & \tcode{sizeof(char) == 1} $\land$ \tcode{1 == 2} \\
-\tcode{C3<int>}       & type constraint for \tcode{int::type}     \\
+\tcode{C3<int>}       & \tcode{\textit{type constraint for} int::type}     \\
+\tcode{C4<int>}       & \tcode{$\forall$(T x) \textit{expression constraint for} ++x} \\
 \tcode{(bool)(3 + 4)} & \tcode{(bool)(3 + 4)}                     \\
 \end{simpletypetable}
 % 
@@ -636,7 +718,7 @@ the equivalence of types and expressions in \tcode{P} and \tcode{Q}.
 \enternote
 Subsumption does not determine, for example, if the predicate 
 constraint (\ref{temp.constr.pred}) \tcode{N >= 0} subsumes 
-\tcode{N > 0} for some integral template argument, \tcode{N}.
+\tcode{N > 0} for some integral template argument \tcode{N}.
 \exitnote
 
 % TODO: If I add a quantified constraint (which I will), then this
@@ -651,9 +733,9 @@ clauses where each clause is a conjunction of atomic constraints.
 % 
 Similarly, a constraint is in conjunctive normal form when it is a conjunction 
 of clauses where each each clause is disjunction of atomic constraints.
+% 
 \enterexample
-Let \tcode{A}, \tcode{B}, and \tcode{C} be atomic
-constraints. 
+Let \tcode{A}, \tcode{B}, and \tcode{C} be atomic constraints.
 % 
 The constraint \tcode{A} $\land$ (\tcode{B} $\lor$ \tcode{C}) is in 
 conjunctive normal form.
@@ -669,6 +751,10 @@ Its disjunctive clauses are (\tcode{A} $\land$ \tcode{B}) and
 (\tcode{A} $\land$ \tcode{C}).
 \exitexample
 }.
+% 
+Universal quantifiers do not appear in conjunctive or disjunctive normal
+form. For the purpose of this transformation, the constraint
+\tcode{$\forall$(T x) P(x)} is equivalent to the constraint \tcode{P(x)}.
 % 
 Then, \tcode{P} subsumes \tcode{Q} if and only if
 \begin{itemize}
