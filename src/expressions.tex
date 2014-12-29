@@ -367,7 +367,7 @@ template arguments are not substituted into the introduced constraints.
 
 \pnum
 A \grammarterm{simple-requirement} introduces an expression 
-constraint (\ref{temp.constr.atom.expr}) for its 
+constraint (\ref{temp.constr.expr}) for its 
 \grammarterm{expression}.
 \enternote
 An expression constraint asserts the validity of an expression.
@@ -395,7 +395,7 @@ template<typename T> concept bool C =
 
 \pnum
 A \grammarterm{type-requirement} introduces a type 
-constraint (\ref{temp.constr.atom.type}) for the type named by its
+constraint (\ref{temp.constr.type}) for the type named by its
 \grammarterm{typename-specifier}.
 %
 \enternote
@@ -438,11 +438,11 @@ a conjunction of one or more atomic constraints for the
 %
 \begin{itemize}
 \item the \grammarterm{compound-requirement} introduces an expression 
-constraint for \tcode{E} (\ref{temp.constr.atom.expr});
+constraint for \tcode{E} (\ref{temp.constr.expr});
 
 \item if the \tcode{noexcept} specifier is present, the 
 \grammarterm{compound-requirement} appends an exception constraint for 
-\tcode{E} (\ref{temp.constr.atom.noexcept});
+\tcode{E} (\ref{temp.constr.noexcept});
 
 \item if the \grammarterm{trailing-return-type} is present, the
 \grammarterm{compound-requirement} appends one or more constraints derived 
@@ -450,13 +450,13 @@ from the type \tcode{T} named by the \grammarterm{trailing-return-type}:
 
 \begin{itemize}
 \item if \tcode{T} contains one or more placeholders (\ref{dcl.spec.auto}), 
-the requirement appends a deduction constraint (\ref{temp.constr.atom.deduct}) 
+the requirement appends a deduction constraint (\ref{temp.constr.deduct}) 
 of \tcode{E} against the type \tcode{T}.
 
 \item otherwise, the requirement appends two constraints:
-a type constraint on the formation of \tcode{T} (\ref{temp.constr.atom.type}) and
+a type constraint on the formation of \tcode{T} (\ref{temp.constr.type}) and
 an implicit conversion constraint from \tcode{E} to \tcode{T}
-(\ref{temp.constr.atom.conv});
+(\ref{temp.constr.conv});
 \end{itemize}
 \end{itemize}
 %
@@ -544,7 +544,7 @@ template<typename T> concept bool D =
   };
 \end{codeblock}
 The \grammarterm{nested-requirement} appends the predicate constraint 
-\tcode{sizeof(decltype (+t)) == 1} (\ref{temp.constr.atom.pred}).
+\tcode{sizeof(decltype (+t)) == 1} (\ref{temp.constr.pred}).
 \exitexample
 
 \end{quote}
