@@ -319,8 +319,7 @@ the usability of an \grammarterm{expression}
 \tcode{E} as an argument to an invented abbreviated
 function template \tcode{F} (\ref{dcl.fct}),
 where \tcode{F} has a single parameter formed from a type that 
-includes placeholders 
-(\ref{dcl.spec.auto}, \ref{dcl.spec.constr}).
+includes placeholders (\ref{dcl.spec.auto}).
 % 
 \enternote
 An argument deduction constraint is introduced by a
@@ -504,15 +503,15 @@ the conjunction of constraints introduced by:
 \begin{itemize}
 \item a \grammarterm{template-introduction} (\ref{temp.intro}), and
 
-\item any \grammarterm{constrained-parameter}{}s (\ref{temp.param}) in the 
+\item any \grammarterm{constrained-parameter}{s} (\ref{temp.param}) in the 
 declaration's \grammarterm{template-parameter-list}, and
 
 \item the \grammarterm{constraint-expression} of a \grammarterm{requires-clause} 
 following a \grammarterm{template-parameter-list} (\ref{temp}), and
 
-\item any \grammarterm{constrained-type-specifier}{}s in the type of a 
-\grammarterm{parameter-declaration} in a function declaration 
-(\ref{dcl.spec.constr}), and
+\item any \grammarterm{constrained-type-specifier}{s} (\ref{dcl.spec.auto.constr}) 
+in the type of a \grammarterm{parameter-declaration} in a function declaration
+(\ref{dcl.fct}).
 
 \item the \grammarterm{constraint-expression} of a \grammarterm{requires-clause} 
 appearing in the \grammarterm{declarator} of a function declaration (\ref{dcl.fct}).
