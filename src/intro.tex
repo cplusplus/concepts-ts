@@ -53,7 +53,7 @@ the original, unmodified text in the \Cpp Standard.
 \rSec1[intro.defs]{Terms and definitions}
 
 Modify the definitions of ``signature'' to include associated
-constraints (Clause~\ref{temp}). This allows different translation units
+constraints (\ref{temp.constr.decl}). This allows different translation units
 to contain definitions of functions with the same signature, excluding 
 associated constraints, without violating the one definition rule 
 (\cxxref{basic.def.odr}). That is, without incorporating the constraints
@@ -64,7 +64,7 @@ appearing as multiple definitions of the same function.
 \indexdefn{signature}%
 \definition{signature}{defns.signature}
 <function> name, parameter type list~(\ref{dcl.fct}), \removed{and} enclosing 
-namespace (if any)\added{, and any associated constraints~(Clause~\ref{temp})}\\
+namespace (if any)\added{, and any associated constraints~(\ref{temp.constr.decl})}\\
 \enternote Signatures are used as a basis for
 name mangling and linking.\exitnote
 
@@ -86,7 +86,7 @@ constraints~(Clause~\ref{temp})}
 <class member function template> name, parameter type list~(\ref{dcl.fct}), class of which the
 function is a member, \cv-qualifiers (if any),
 \grammarterm{ref-qualifier} (if any), return type, \removed{and} template 
-parameter list\added{, and any associated constraints~(Clause~\ref{temp})}
+parameter list\added{, and any associated constraints~(\ref{temp.constr.decl})}
 \end{quote}
 
 \rSec1[intro.compliance]{Implementation compliance}
