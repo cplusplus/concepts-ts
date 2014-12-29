@@ -466,54 +466,25 @@ is the one selected according to the rules for concept resolution in
 \ref{temp.constr.resolve}.
 
 \pnum
-When a \grammarterm{constrained-type-specifier} appears in the type of a 
-\grammarterm{parameter-declaration} of a \grammarterm{lambda-expression}
-(\ref{expr.prim.lambda}) or function declaration (signifying a generic lambda
-or abbreviated function template, respectively), the associated constraint is 
-formed according to the rules in \ref{dcl.fct}.
-%
-\enternote
-In a generic lambda, the member function template call operator of the
-closure type is an abbreviated function template.
-\exitnote
+The constraint introduced by a \grammarterm{constrained-type-specifier}
+is formed according to the rules in \ref{temp.constr.form}. 
 % 
-When a \grammarterm{constrained-type-specifier} appears in the 
-\grammarterm{trailing-return-type} of a \grammarterm{compound-requirement},
-(\ref{expr.prim.req.compound}), the associated constraint is formed according
-to the rules in \ref{temp.constr.deduct}.
+When a \grammarterm{constrained-type-specifier} appears in the
+\begin{itemize}
+\item type of a \grammarterm{parameter-declaration} of a 
+\grammarterm{lambda-expression} (\ref{expr.prim.lambda}), the introduced 
+constraint is associated with the function call operator of that lambda's 
+closure type.
+
+\item type of a \grammarterm{parameter-declaration} of a 
+function declaration (\ref{dcl.fct}), the introduced constraint is 
+associated with the function call operator of that lambda's closure type.
+
+\item \grammarterm{trailing-return-type} of a \grammarterm{compound-requirement},
+(\ref{expr.prim.req.compound}), the introduced constraint is associated with
+the argument deduction constraint (\ref{temp.constr.deduct}).
+\end{itemize}
 \end{quote}
-
-
-% % 
-% \enterexample
-% \begin{codeblock}
-% template<typename T> concept bool C1 = true;
-% template<typename T, int N> concept bool C2 = true;
-% template<bool (*)(int)> concept bool C3 = true;
-
-% template<typename T> class Vec;
-
-% struct N {
-%   template<typename T> struct Wrap;
-% };
-% template<typename T, typename U> struct Pair;
-% template<bool (*)(int)> struct Pred;
-
-% auto gl = [](C1& a, C1* b) { a = *b; }; // OK: a generic lambda
-% void af(const Vec<C1>& x);              // OK: an abbreviated function template
-
-% void f1(N::Wrap<C1>);     // OK
-% void f2(Pair<C1, C2<0>>); // OK
-% void f3(Pred<C3>);        // OK
-
-% template<typename T> concept bool Iter() {
-%   return requires(T i) {
-%     {*i} -> const C1&; // OK: an argument deduction constraint
-%   };
-% }
-% \end{codeblock}
-% \exitexample
-
 
 
 %%
