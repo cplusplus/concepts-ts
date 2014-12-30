@@ -841,136 +841,120 @@ constrained than \tcode{D1}.
 %%
 %% Resolution of constrained-type-specifiers
 %%
-\rSec2[temp.constr.resolve]{Resolution of \grammarterm{constrained-type-specifier}{}s}
+\rSec2[temp.constr.resolve]{Resolution of \grammarterm{constrained-type-name}{s}}
 
 \pnum
-Whenever an \grammarterm{identifier} is a \grammarterm{concept-name}, it is 
-necessary to determine a single concept referred to by the use of that name.
-% 
 \defn{Concept resolution} is the process of selecting a concept 
-from a set of concept definitions referred to by a concept name.
-
-Concept resolution is performed when a 
-\grammarterm{constrained-type-specifier} appears in
-the declaration of an abbreviated function (\ref{dcl.fct})
-or generic lambda (\ref{expr.prim.lambda}),
-in the \grammarterm{trailing-return-type} of a
-\grammarterm{compound-requirement}, the
-\grammarterm{constrained-type-specifier} of a
-\grammarterm{constrained-parameter}, or
-in a \grammarterm{template-introduction}.
-
-\pnum
-A concept is selected from a set of concepts based on a sequence
-of template argument patterns and a sequence of explicit
-template arguments. 
+from a set of concept definitions referred to by a 
+\grammarterm{concept-name}.
 % 
-A \defn{template argument pattern} is a kind of template argument 
-that is used to match the type and form of a template parameter from a 
-concept definition. A template argument pattern can be a pack expansion.
+Concept resolution is performed when a \grammarterm{concept-name} 
+appears
+\begin{itemize}
+\item as part of a \grammarterm{constrained-type-specifier},
+\item in a \grammarterm{constrained-parameter} declaration, or
+\item in a \grammarterm{template-introduction} (\ref{temp.intro}). 
+\end{itemize}
 % 
-A concept is selected from the set by matching the template
-argument patterns and explicit template arguments against the template 
-parameters of that concept.
+% TODO: This is hacky and indicative of an incomplete feature.
+% It might be better to make concept-name a simple-template-id,
+% and then explain what happens whenever it appears.
+% 
+Additionally, concept resolution is performed during constraint normalization 
+(\ref{temp.constr.decl}) to resolve \grammarterm{template-name}{s} of
+\grammarterm{template-id}{s} in predicate constraints. In that context,
+\grammarterm{template-name} that refers to a set of concept definitions is
+a \grammarterm{concept-name}.
 
 \pnum
-When selecting a concept for a \grammarterm{constrained-type-specifier},
-there is a single template argument pattern. 
+Concept resolution selects a concept from a set referred to by a
+\grammarterm{concept-name} by matching the template parameters of each 
+concept in that set to a sequence of template arguments and \defn{wildcard}{s}.
 % 
-If the \grammarterm{constrained-type-specifier} appears in the declaration 
-of a \grammarterm{constrained-parameter} (\ref{temp.param}) and is
-followed by an ellipsis, the template argument pattern is a pack
-expansion.
+This sequence is called the \defn{concept argument list}, and its elements
+are called \defn{concept argument}{s}.
 % 
-If the \grammarterm{constrained-type-specifier}
-is a \grammarterm{partial-concept-id} the explicit
-\grammarterm{template-arguments} are those in
-the \grammarterm{partial-concept-id}.
+For the purpose this matching, a wildcard can match a template 
+parameter of any kind (type, non-type, template) as described below.
+
+\pnum
+The method for determining the concept argument list depends on the
+context in which \grammarterm{concept-name} \tcode{C} appears.
 % 
-When selecting a concept for a \grammarterm{concept-name} in a 
-\grammarterm{template-introduction}, there is one template argument pattern 
-for each \grammarterm{introduced-parameter}.
+\begin{itemize}
+\item If \tcode{C} is part of a \grammarterm{constrained-type-specifier} or 
+\grammarterm{constrained-parameter},
+then
+  \begin{itemize}
+  \item if \tcode{C} is a \grammarterm{constrained-type-name}, the concept 
+  argument list is comprised of a single wildcard, or
+  \item if \tcode{C} is the \grammarterm{concept-name} of a 
+  \grammarterm{partial-concept-id}, the concept argument list is comprised of a
+  single wildcard followed by the \grammarterm{template-argument}{s} of that 
+  \grammarterm{partial-concept-id}.
+  \end{itemize}
+
+\item If \tcode{C} is the \grammarterm{concept-name} in a
+\grammarterm{template-introduction}. the concept argument list is a sequence 
+wildcards of the same length as the \grammarterm{introduction-list} of
+the \grammarterm{template-introduction}.
+
+\item If \tcode{C} appears as a \grammarterm{template-name} of a
+\grammarterm{template-id}, the concept argument list is the sequence of
+\grammarterm{template-argument}{s} of the \grammarterm{template-id}.
+\end{itemize}
+
+
+\pnum
+The selection of a concept from the set referred to by the 
+\grammarterm{concept-name} \tcode{C} is done by matching the
+concept argument list against the template parameter lists of each
+concept in that set.
 % 
-If an \grammarterm{introduced-parameter} is
-preceded by an ellipsis, its corresponding template argument pattern
-is a pack expansion.
+For a concept \tcode{CC} in that set to be a viable selection, each 
+argument in the concept argument list is matched against the corresponding 
+template parameter declared in the template parameter list of \tcode{CC}
+using the following rules:
+% 
+\begin{itemize}
+\item a template argument matches a template parameter if and only if
+it matches in kind (type, non-type, template) and type according to the
+rules in \ref{temp.arg};
+
+\item a wildcard matches a template parameter of any kind;
+
+\item a template parameter pack (\cxxref{temp.variadic}), matches zero or more 
+concept arguments, provided that each of those arguments matches the pattern 
+of the template parameter pack using the rules above for matching matching 
+concept arguments and template parameters.
+\end{itemize}
+% 
+If any concept arguments do not match a corresponding template parameter,
+the concept \tcode{CC} is not a viable selection.
+% 
+The concept selected by concept resolution shall be the single viable selection
+in the set of concepts referred by \tcode{C}.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1() { return true; }
-template<typename T, typename U> concept bool C1() { return true; }
-template<typename... T> concept bool C2() { return true; }
-% 
-void f1(C1); 
-void f2(C1<int>);
-\end{codeblock}
-% 
-In the resolution of \tcode{C1} required by the declaration of \tcode{f1}, 
-there is a single template argument pattern and zero explicit template 
-arguments.
-% 
-For \tcode{f2} there is a single template argument pattern and the 
-single explicit template argument, \tcode{int}.
-\begin{codeblock}
-C1{T} void f3(T);
-C1{T, U} void f4(T);
-\end{codeblock}
-In the resolution required by the declaration of \tcode{f3}, there
-is a single template argument pattern; there are two in the resolution
-required by \tcode{f2}. There are zero explicit template arguments
-in the resolutions of \tcode{f1} and \tcode{f2}.
-\begin{codeblock}
-C2{...T} void f5();
-\end{codeblock}
-There is a single template argument pattern in the resolution of
-\tcode{f2}, and it is a pack expansion.
-\exitexample
+template<typename T> concept bool C1() { return true; }             // \#1
+template<typename T, typename U> concept bool C1() { return true; } // \#2
+template<typename T> concept bool C2() { return true; }
+template<int T> concept bool C2() { return true; }
+template<typename... Ts> concept bool C3 = true;
 
-\pnum
-For each concept \tcode{C} in the concept set, each template 
-argument in the combined sequence of template argument patterns and explicit 
-template arguments is matched against the corresponding template parameter
-in the \grammarterm{template-parameter-list} of 
-\tcode{C} as follows.
-% 
-A template argument pattern that is not a parameter pack matches a 
-non-pack template parameter of any type and form. A template argument 
-pattern that is a parameter pack matches a template parameter pack
-whose pattern is any form.
-% 
-The remaining explicit arguments are matched against parameters
-as specified in \ref{temp.arg}.
-% 
-If any template argument patterns or explicit template arguments do not 
-match the corresponding parameter, \tcode{C} is removed from the set.
-% 
-If a single concept remains, it is the one selected by concept 
-resolution. Otherwise, the program is ill-formed. 
-% 
-\enterexample
-\begin{codeblock}
-template<typename T> concept bool C() { return true; }             // \#1
-template<typename T, typename U> concept bool C() { return true; } // \#2
-template<typename T> concept bool P() { return true; }
-template<int T> concept bool P() { return true; }
-template<<typename... Ts> concept bool Q = true;
+void f1(const C1*); // OK: \tcode{C1} selects \#1
+void f2(C1<char>);  // OK: \tcode{C1<char>} selects \#2
 
-void f1(const C*);  // OK: \tcode{C} selects \#1
-void f2(C<char>);   // OK: \tcode{C<char>} selects \#2
-void f3(C<3>);      // error: no matching concept for \tcode{C<3>} (mismatched template arguments)
-void g1(P);         // error: resolution of \tcode{P} is ambiguous (\tcode{P} refers to two concepts)
+template<C2<0> T> struct S1; // error: no matching concept for \tcode{C<0>},
+                             // mismatched template arguments
+template<C2 T> structd S2;   // error: resolution of \tcode{C2} is ambiguous,
+                             // both concepts are viable
+
 Q{...Ts} void q1(); // OK: selects \tcode{Q}
-Q{T} void q2();     // error: no matching concept (mismatched template arguments)
+Q{T} void q2();     // OK: selects \tcode{Q}
 \end{codeblock}
 \exitexample
-
-\pnum
-For the selected template, the set of template parameters corresponding
-to the matched template argument patterns are called the
-\defn{selected template parameters}. 
-% 
-In a \grammarterm{template-introduction} (\ref{temp.intro}), these
-are used to derive the declarations of introduced parameters.
 
 
 %%
