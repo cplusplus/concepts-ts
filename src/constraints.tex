@@ -418,8 +418,8 @@ is the expression's conjunction of constraints.
 \enternote 
 Universal quantifiers have no corresponding C++ syntax. For the purpose of 
 exposition, universal quantification is written as, e.g.,
-\tcode{$\forall$(T x, U b) P(x, y)}, where \tcode{x} and \tcode{y} are
-the constraint variables, and \tcode{P(x, y)} is the constraint's operand
+\tcode{$\forall$(T x, U y) P(x, y)}, where \tcode{x} and \tcode{y} are
+constraint variables, and \tcode{P(x, y)} is the constraint's operand
 written in terms of \tcode{x} and \tcode{y}.
 \exitnote
 % 
@@ -626,18 +626,22 @@ replacing all subexpressions in \tcode{P} that refer to concepts with their
 corresponding definitions. In particular,
 % 
 \begin{itemize}
-\item replace all function calls of the form 
-\tcode{C<A$1$, A$2$, ..., A$N$>()}, where the \grammarterm{template-id}
-\tcode{C<A$1$, A$2$, ..., A$N$>} refers to a function concept \tcode{D}, 
-with the result of substituting \tcode{A$1$, A$2$, ..., A$N$} into the 
-expression returned by the function concept \tcode{D}, and
 
-\item replace all \grammarterm{id-expression}{}s of the form 
-\tcode{C<A$1$, A$2$, ..., A$N$>()}, where the \grammarterm{template-id} 
-\tcode{C<A$1$, A$2$, ..., A$N$>}, refers to a variable concept \tcode{D}, 
+\item replace all function calls of the form 
+\tcode{C<A$1$, A$2$, ..., A$N$>()}, where concept resolution of the
+\grammarterm{template-id} \tcode{C<A$1$, A$2$, ..., A$N$>} designates 
+the function concept \tcode{D} (\ref{temp.constr.decl}),
+with the result of substituting \tcode{A$1$, A$2$, ..., A$N$} into the 
+expression returned by \tcode{D}, and
+
+\item replace all \grammarterm{id-expression}{s} of the form 
+\tcode{C<A$1$, A$2$, ..., A$N$>}, where concept resolution of the 
+\grammarterm{template-id} \tcode{C<A$1$, A$2$, ..., A$N$>} designates
+the variable concept \tcode{D} (\ref{temp.constr.decl}),
 with the result of substituting \tcode{A$1$, A$2$, ..., A$N$} 
-into the initializer of the variable concept \tcode{D}.
+into the initializer of \tcode{D}.
 \end{itemize}
+% 
 If any such substitution fails, the program is ill-formed.
 % 
 Second, transform the expression \tcode{E} into a constraint as follows:
@@ -657,11 +661,11 @@ where \tcode{P} is the constraint of the \grammarterm{requires-expression}
 (\ref{expr.prim.req}), is transformed into
 a universally quantified constraint (\ref{temp.constr.forall})
 with the same parameters as the \grammarterm{requires-expression} and whose
-operand is the normal form of the constraint \tcode{P}. 
+operand is the normal form of \tcode{P}. 
 
 \item An expression of the form \tcode{requires P} where \tcode{P} is the
 conjunction of constraints introduced by the \grammarterm{requires-expression}
-is transformed into the normal form of the constraint \tcode{P}.
+is transformed into the normal form \tcode{P}.
 
 \item Otherwise, the expression \tcode{E} is an atomic predicate constraint.
 \end{itemize}
@@ -849,11 +853,12 @@ from a set of concept definitions referred to by a
 \grammarterm{concept-name}.
 % 
 Concept resolution is performed when a \grammarterm{concept-name} 
-appears
+is a \grammarterm{constrained-type-name} or is the \grammarterm{concept-name} 
+of a \grammarterm{partial-concept-id} that
 \begin{itemize}
-\item as part of a \grammarterm{constrained-type-specifier},
-\item in a \grammarterm{constrained-parameter} declaration, or
-\item in a \grammarterm{template-introduction} (\ref{temp.intro}). 
+\item is a \grammarterm{constrained-type-specifier} (\ref{dcl.spec.auto.constr}), 
+\item declares a \grammarterm{constrained-parameter} (\ref{temp.param}), or 
+\item appears in a \grammarterm{template-introduction} (\ref{temp.intro}).
 \end{itemize}
 % 
 % TODO: This is hacky and indicative of an incomplete feature.
@@ -862,9 +867,10 @@ appears
 % 
 Additionally, concept resolution is performed during constraint normalization 
 (\ref{temp.constr.decl}) to resolve \grammarterm{template-name}{s} of
-\grammarterm{template-id}{s} in predicate constraints. In that context,
-\grammarterm{template-name} that refers to a set of concept definitions is
-a \grammarterm{concept-name}.
+\grammarterm{template-id}{s} in predicate constraints. 
+% 
+In that context, a \grammarterm{template-name} that refers to a set of concept 
+definitions is a \grammarterm{concept-name}.
 
 \pnum
 Concept resolution selects a concept from a set referred to by a

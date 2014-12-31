@@ -87,16 +87,21 @@ define the meaning of a constrained template parameter.
 \pnum
 A \grammarterm{constrained-parameter} declares a template parameter whose 
 kind (type, non-type, template) and type match that of the prototype parameter 
-of the concept designated by its \grammarterm{constrained-type-specifier}.
+of the concept designated by its \grammarterm{concept-name}.
 % 
-The designated concept is selected by concept resolution 
-(\ref{temp.constr.resolve}).
+The designated concept is selected by the rules for concept resolution 
+described in \ref{temp.constr.resolve}.
 % 
-Let \tcode{P} be the prototype parameter of the designated concept. 
+Let \tcode{P} be the prototype parameter of the designated concept.
+\enternote
+The prototype parameter is matched by the wildcard in the matching argument 
+list for the \grammarterm{constrained-type-name} of 
+the \grammarterm{constrained-parameter}.
+\exitnote
 % 
 The declared template parameter is determined by the kind of \tcode{P} 
 (type, non-type, template) and the optional ellipsis in the
-\grammarterm{template-parameter} as follows:
+\grammarterm{constrained-parameter} as follows.
 % 
 \begin{itemize}
 \item If \tcode{P} is a type \grammarterm{template-parameter} the declared
@@ -111,9 +116,8 @@ parameter is a template \grammarterm{template-parameter} having the same
 \grammarterm{template-parameter-list} as \tcode{P}, excluding default template 
 arguments.
 
-\item If \tcode{P} declares a template parameter pack, the 
-\grammarterm{constrained-type-specifier} shall be followed by an ellipsis,
-and the declared parameter is a template parameter pack. 
+\item If \tcode{P} declares a template parameter pack, the declared 
+template parameter is a template parameter pack.
 \end{itemize}
 % 
 \enterexample
@@ -128,7 +132,7 @@ template<C1 T> void f1();     // OK: \tcode{T} is a type template-parameter
 template<C2 X> void f2();     // OK: \tcode{X} is a template with one type-parameter
 template<C3 N> void f3();     // OK: \tcode{N} has type int
 template<C4... Ts> void f4(); // OK: \tcode{Ts} is a template parameter pack of types
-template<C4 Ts> void f5();    // error: \tcode{Ts} must be preceded by an ellipsis
+template<C4 T> void f5();     // OK: \tcode{T} is a type template-parameter
 template<C5... Cs> f6();      // OK: \tcode{Cs} is a template parameter pack of \tcode{char}{}s
 \end{codeblock}
 \exitexample
@@ -194,57 +198,69 @@ templates that have the same template parameters and constraints.
 \end{bnf}
 
 A \grammarterm{template-introduction} declares a sequence of 
-\grammarterm{template-parameter}{}s, which are derived from a 
-\grammarterm{concept-name} and the sequence of \grammarterm{identifier}{}s in
-its \grammarterm{introduction-list}.
+\grammarterm{template-parameter}{s}, which are derived from a 
+\grammarterm{concept-name} and the sequence of \grammarterm{introduced-parameter}{s} 
+in its \grammarterm{introduction-list}.
 
 \pnum
-The concept designated by the \grammarterm{concept-name} is selected by 
-concept resolution (\ref{temp.constr.resolve}).
+The concept designated by the \grammarterm{concept-name} is selected by the
+concept resolution rules described in \ref{temp.constr.resolve}. Let
+\tcode{C} be the designated concept.
 
 \pnum
-For each \grammarterm{introduced-parameter} \tcode{I} in an
-\grammarterm{introduction-list}, and for its corresponding selected template 
-parameter \tcode{P} from the designated concept, declare a new template
-parameter using the rules for declaring a constrained parameter in
-\ref{temp.param} by using \tcode{I} as a \grammarterm{declarator-id} and 
-\tcode{P} as the prototype parameter.
+The template parameters declared by a \grammarterm{template-introduction}
+are derived from its \grammarterm{introduced-parameter}{s} and the
+template parameter declarations in \tcode{C} to which those
+\grammarterm{introduced-parameter}{s} are matched as wildcards according to 
+the rules in \ref{temp.constr.resolve}.
 % 
-% FIXME: This condition is broken. P shall declare a template pack?
-% 
-If \tcode{I} contains an ellipsis, \tcode{P} declares a template 
-parameter pack.
+For each \grammarterm{introduced-parameter} \tcode{I}, declare a template
+parameter using the following rules:
+\begin{itemize}
+\item Let \tcode{P} be the template parameter declaration in \tcode{C} 
+      corresponding to \tcode{I}. If \tcode{P} does not declare a template 
+      parameter pack (\cxxref{temp.variadic}), \tcode{I} shall not include 
+      an ellipsis.
+
+\item If \tcode{P} declares a template parameter pack, adjust \tcode{P} 
+      to be the pattern of that pack.
+
+\item Declare a template parameter according to the rules for declaring a
+      \grammarterm{constrained-parameter} in \ref{temp.param}, using
+      \tcode{P} as the prototype parameter.
+
+\item If \tcode{I} includes an ellipsis, then the declared template parameter 
+      is a template parameter pack.
+\end{itemize}
 % 
 \enterexample
 \begin{codeblock}
 template<typename T, int N, typename... Xs> concept bool C1 = true;
 template<template<typename> class X> concept bool C2 = true;
+template<typename... Ts> concept bool C3 = true;
 
 C1{A, B, ...C} // OK: \tcode{A} is declared as \tcode{typename A},
-  struct s;    // \tcode{B} is declared as \tcode{int B}, and
-               // \tcode{C} is declared as \tcode{typename... C}
+  struct S1;   // \tcode{B} is declared as \tcode{int B}, and
+               // \tcode{C} is declared as \tcode{typename ... C}
 
-C1{X, Y, Z} // error: \tcode{Z} must be preceded by an ellipsis
-  struct t;
+C2{T} void f();    // OK: \tcode{T} is declared as \tcode{template<typename> class T}
+C2{...Ts} void g(); // error: the template parameter corresponding to \tcode{Ts}
+                    // is not a template parameter pack
 
-C2{T} // OK: \tcode{T} is declared as \tcode{template<typename> class T}
-  void foo();
-
-C2{...X} // error: the corresponding parameter is not a template parameter pack
-  void bar();
+C3{T} struct S2;     // OK: \tcode{T} is declared as \tcode{typename T}
+C3{...Ts} struct S2; // OK: \tcode{T} is declared as \tcode{typename ... T}
 \end{codeblock}
 \exitexample
 
 
 \pnum
-\enternote
 A concept referred to by a \grammarterm{concept-name} may have template 
 parameters with default template arguments. An \grammarterm{introduction-list} 
 may omit \grammarterm{identifier}{}s for a corresponding template
 parameter if it has a default argument. 
 % 
-However, only the \grammarterm{introduced-parameter}{}s are declared
-as template parameters. 
+Only the \grammarterm{introduced-parameter}{}s are declared as template 
+parameters.
 % 
 \enterexample
 \begin{codeblock}
@@ -253,12 +269,7 @@ template<typename A, typename B = bool> concept bool C() { return true; }
 C{T} void f(T); // OK: \tcode{f(T)} is a function template with
                 // a single template type parameter \tcode{T}
 \end{codeblock}
-There is no \grammarterm{introduced-parameter} that corresponds to the 
-template parameter \tcode{B} in the \tcode{C} concept, so \tcode{f(T)} is 
-declared with only one template parameter.
 \exitexample
-\exitnote
-
 
 \pnum
 An introduced template parameter does not have a default template argument 
