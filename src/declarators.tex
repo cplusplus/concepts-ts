@@ -143,33 +143,23 @@ includes one invented \grammarterm{template-parameter} for each occurrence
 of a placeholder in the \grammarterm{parameter-declaration-clause},
 in order of appearance. 
 % 
-Each template parameter is invented as follows:
+Each template parameter is invented as follows.
 \begin{itemize}
-\item if the placeholder is designated by the \tcode{auto}
+\item If the placeholder is designated by the \tcode{auto}
 \grammarterm{type-specifier}, then the corresponding invented template 
-parameter is a type \grammarterm{template-parameter};
+parameter is a type \grammarterm{template-parameter}.
 
-\item otherwise, the placeholder is designated by a 
+\item Otherwise, the placeholder is designated by a 
 \grammarterm{constrained-type-specifier}, and the corresponding invented 
-parameter matches the kind (type, non-type, template) of the prototype parameter 
-(\ref{dcl.spec.concept}) of the concept designated by the 
-\grammarterm{constrained-type-specifier} (\ref{temp.constr.resolve}).
-\end{itemize}
-% 
-The invented template parameter may be required or adjusted to declare a
-template parameter pack:
-\begin{itemize}
-\item if the invented template parameter corresponds to a 
-\grammarterm{constrained-type-specifier}, and the prototype parameter of its 
-designated concept declares a template parameter pack, the 
-\grammarterm{constrained-type-specifier} shall be followed by a
-\grammarterm{declarator-id} or \grammarterm{abstract-declarator} beginning with 
-an ellipsis;
+parameter is a \grammarterm{constrained-parameter} (\ref{temp.param}) whose 
+\grammarterm{nested-name-specifier} and \grammarterm{constrained-type-name} 
+are those of the \grammarterm{constrained-type-specifier}.
 
-\item otherwise, if the invented \grammarterm{template-parameter} is a parameter 
-pack if the \grammarterm{simple-type-specifier} designating the placeholder 
-is followed by a \grammarterm{declarator-id} or \grammarterm{abstract-declarator}
-that begins with an ellipsis.
+\item If the placeholder appears in the \grammarterm{decl-specifier-seq} of a 
+function parameter pack (\cxxref{temp.variadic}), or the 
+\grammarterm{type-specifier-seq} of a \grammarterm{type-id} that is a pack 
+expansion (\cxxref{temp.variadic}), the invented template parameter is a 
+template parameter pack (\cxxref{temp.variadic}).
 \end{itemize}
 % 
 The adjusted function parameters of an abbreviated function template are derived
@@ -179,7 +169,10 @@ occurrence of a placeholder with the name of the corresponding invented
 % 
 If the replacement of a placeholder with the name of a template parameter
 results in an invalid parameter declaration, the program is ill-formed.
-
+% 
+% FIXME: There are a lot of redundancies in this list. Prune a couple
+% of examples to only those that are informationally dense.
+% 
 \enterexample
 \begin{codeblock}
 template<typename T> class Vec { };
@@ -207,26 +200,28 @@ void g3(C1&...);
 void g4(Vec<C3<int>>);
 void g5(C4...);
 void g6(Tuple<C4...>);
-void g7(C4 p);      // error: \tcode{p} does not declare a function parameter pack
-void g8(Tuple<C4>); // error: \tcode{C4} is not a pack expansion
+void g7(C4 p);
+void g8(Tuple<C4>);
 
 template<C1 T, C2 U> void g1(const T*, U&); // redeclaration of \tcode{g1}
 template<C1 T> void g2(Vec<T>&);            // redeclaration of \tcode{g2}
 template<C1... Ts> void g3(Ts&...);         // redeclaration of \tcode{g3}
 template<C3<int> T> void g4(Vec<T>);        // redeclaration of \tcode{g4}
 template<C4... Ts> void g5(Ts...);          // redeclaration of \tcode{g5}
-template<C4... Ts> void g5(Tuple<Ts...>);   // redeclaration of \tcode{g6}
+template<C4... Ts> void g6(Tuple<Ts...>);   // redeclaration of \tcode{g6}
+template<C4 T> void g7(T);                  // redeclaration of \tcode{g7}
+template<C4 T> void g8(Tuple<T>);           // redeclaration of \tcode{g8}
 \end{codeblock}
 \exitexample
-
+% 
 \enterexample
 \begin{codeblock}
 template<int N> concept bool Num = true;
 
 void h(Num*); // error: invalid type in parameter declaration
-      \end{codeblock}
+\end{codeblock}
 The equivalent declaration would have this form:
-      \begin{codeblock}
+\begin{codeblock}
 template<int N> void h(N*); // error: invalid type
 \end{codeblock}
 \exitexample

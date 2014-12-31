@@ -306,8 +306,10 @@ if the initializer is a \grammarterm{braced-init-list}, with
 Otherwise, obtain \tcode{P} from \tcode{T} as follows:
 \begin{itemize}
 \item replace each occurrence of \tcode{auto} in the
-variable type with a new invented type template parameter,
-or
+variable type with a new invented type template parameter
+according to the rules for inventing template parameters
+for placeholders in \ref{dcl.fct}, or
+
 \item when the initializer is a \grammarterm{braced-init-list}
 and \tcode{auto} is a \grammarterm{decl-specifier} of the 
 \grammarterm{decl-specifier-seq} of the variable declaration, replace that 
@@ -344,10 +346,14 @@ Add the following to the first example in paragraph 7 in the \Cpp Standard.
 template<typename T> struct Vec { };
 template<typename T> Vec<T> make_vec(std::initializer_list<T>) { return Vec<T>{}; } }
 
-auto& x3 = *x1.begin();             // OK: \tcode{decltype(x3)} is \tcode{int\&}
-const auto* p = &x3;                // OK: \tcode{decltype(p)} is \tcode{const int*}
-Vec<auto> v1 = make_vec({1, 2, 3}); // OK: \tcode{decltype(v1)} is \tcode{Vec<int>}
-Vec<auto> v2 = {1, 2, 3};           // error: type deduction fails
+template<typename... Ts> struct Tuple { };
+template<typename... Ts> struct make_tup(Ts... args) { return Tuple<Ts...>{}; }
+
+auto& x3 = *x1.begin();               // OK: \tcode{decltype(x3)} is \tcode{int\&}
+const auto* p = &x3;                  // OK: \tcode{decltype(p)} is \tcode{const int*}
+Vec<auto> v1 = make_vec({1, 2, 3});   // OK: \tcode{decltype(v1)} is \tcode{Vec<int>}
+Vec<auto> v2 = {1, 2, 3};             // error: type deduction fails
+Tuple<auto...> v3 = make_tup(0, 'a'); // OK: \tcode{decltype(v3)} is \tcode{Tuple<int, char>}
 \end{codeblock}
 \exitexample
 \end{addedblock}
