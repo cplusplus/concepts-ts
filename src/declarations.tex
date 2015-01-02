@@ -425,7 +425,7 @@ template<typename T, int N> class Array { };
 template<typename T, template<typename> class A> class Stack { };
 template<typename T> class Alloc { };
 
-void f1(C1 c);            // \tcode{C1} designates a placeholder type
+void f1(C1);              // \tcode{C1} designates a placeholder type
 void f2(Array<auto, C2>); // \tcode{C2} designates a placeholder for an integer value
 void f3(Stack<auto, C3>); // \tcode{C3} designates a placeholder for a class template
 \end{codeblock}
@@ -470,26 +470,6 @@ void f2(Seq<>);
 The concept designated by a \grammarterm{constrained-type-specifier}
 is the one selected according to the rules for concept resolution in
 \ref{temp.constr.resolve}.
-
-\pnum
-The constraint introduced by a \grammarterm{constrained-type-specifier}
-is formed according to the rules in \ref{temp.constr.form}. 
-% 
-When a \grammarterm{constrained-type-specifier} appears in the
-\begin{itemize}
-\item type of a \grammarterm{parameter-declaration} of a 
-\grammarterm{lambda-expression} (\ref{expr.prim.lambda}), the introduced 
-constraint is associated with the function call operator of that lambda's 
-closure type.
-
-\item type of a \grammarterm{parameter-declaration} of a 
-function declaration (\ref{dcl.fct}), the introduced constraint is 
-associated with the function call operator of that lambda's closure type.
-
-\item \grammarterm{trailing-return-type} of a \grammarterm{compound-requirement},
-(\ref{expr.prim.req.compound}), the introduced constraint is associated with
-the argument deduction constraint (\ref{temp.constr.deduct}).
-\end{itemize}
 \end{quote}
 
 

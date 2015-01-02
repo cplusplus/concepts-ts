@@ -242,21 +242,15 @@ template<int N, typename T> void f(Array<T, N>*); // OK: redeclaration of \tcode
 \exitexample
 
 \pnum
-The use of a \grammarterm{constrained-type-specifier} in a 
-\grammarterm{parameter-declaration} associates a 
-\grammarterm{constraint-expression} with the abbreviated function template. 
-% 
-This \grammarterm{constraint-expression} is formed according to the rules 
-in \ref{temp.constr.form}.
-% 
 Two \grammarterm{constrained-type-specifier}{}s are said to be 
-\defn{equivalent} if their associated \grammarterm{constraint-expression}{}s are
-equivalent according to the rules in \ref{temp.over.link}.
-
+\defn{equivalent} if constraints associated by their corresponding
+invented \grammarterm{constrained-parameter}{s} are
+equivalent according to the rules for comparing constraints described in 
+\ref{temp.constr.constr}.
 
 \pnum
 All placeholders introduced by equivalent 
-\grammarterm{constrained-type-specifier}{}s
+\grammarterm{constrained-type-specifier}{s}
 have the same invented template parameter.
 % 
 \enterexample
@@ -277,8 +271,7 @@ type parameter.
 void f1(C& a, C* b);
 \end{codeblock}
 The type of \tcode{a} is a reference to an invented template type parameter 
-(call it \tcode{T}), and the type of \tcode{b} is a pointer to 
-\tcode{T}.
+\tcode{T}, and the type of \tcode{b} is a pointer to \tcode{T}.
 % 
 \begin{codeblock}
 void f2(N::C a, C b);
@@ -292,8 +285,8 @@ void f4(E a, E<> b, E<0> c);
 \end{codeblock}
 The types of \tcode{a}, \tcode{b}, and \tcode{c} are the same because the 
 \grammarterm{constrained-type-specifier}{}s \tcode{E}, \tcode{E<>}, and 
-\tcode{E<0>} all associate the \grammarterm{constraint-expression}
-\tcode{E<T, 0>}, where \tcode{T} is an invented template type parameter.
+\tcode{E<0>} all associate the predicate constraint \tcode{E<T, 0>}, where 
+\tcode{T} is an invented template type parameter.
 \end{quote}
 
 % TODO: Add this as an example:
