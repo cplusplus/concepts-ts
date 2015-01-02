@@ -919,8 +919,18 @@ concept in that set.
 % 
 For a concept \tcode{CC} in that set to be a viable selection, each 
 argument in the concept argument list is matched against the corresponding 
-template parameter declared in the template parameter list of \tcode{CC}
-using the following rules:
+template parameters of \tcode{CC}.
+% 
+Default template arguments (if present) are instantiated for each template 
+parameter that does not correspond to a concept argument. Instantiated
+default arguments are appended to the concept argument list.
+% 
+If the last declared template parameter of \tcode{CC} is not a parameter pack
+and the number of template parameters of \tcode{CC} is greater than the
+number of concept arguments, \tcode{CC} is not a viable selection.
+% 
+Otherwise, concept arguments are matched to template parameters using the 
+following rules:
 % 
 \begin{itemize}
 \item a template argument matches a template parameter if and only if
