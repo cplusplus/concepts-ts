@@ -330,68 +330,42 @@ Array<double> s2;    // error: \tcode{Array} takes two template arguments
 %  TODO: Unify with temp.constr.form
 
 \pnum
-A \grammarterm{template-introduction} associates a constraint with its
-\grammarterm{template-declaration}.
+A \grammarterm{template-introduction} associates a predicate constraint with 
+its \grammarterm{template-declaration}. This constraint is derived from
+the \tcode{concept-name} \tcode{C} in the \grammarterm{template-introduction} 
+and the sequence of \grammarterm{introduced-parameter}{s}.
+
+\begin{itemize}
+\item First, form a sequence of template arguments \tcode{A1, A2, ..., A$N$} 
+corresponding to the \grammarterm{introduced-parameter}{s}
+\tcode{P1, P2, ..., P$N$}.
 % 
-The constraint is formed from the concept \tcode{C}, designated by the
-\grammarterm{constrained-type-specifier} (including its
-\grammarterm{nested-name-specifier}), 
-and the sequence of introduced parameters.
+For each \grammarterm{introduced-parameter} \tcode{P}, form a corresponding 
+template argument \tcode{A} as follows. If \tcode{P} includes an ellipsis,
+then \tcode{A} is the pack expansion \tcode{P...} (\cxxref{temp.variadic}). 
+Otherwise, \tcode{A} is the \grammarterm{id-expression} \tcode{P}.
+
+\item Then, form an expression \tcode{E} as follows. If \tcode{C} is
+a variable concept (\ref{dcl.spec.concept}), then \tcode{E} is the
+\grammarterm{id-expression}
+\tcode{C<A1, ..., A$N$>}. Otherwise, \tcode{C} is a function concept and
+\tcode{E} is the function call C<A1, ..., A$N$>.
+\end{itemize}
 % 
-Form a sequence of \grammarterm{template-argument}{}s
-\tcode{Args} from the template parameters declared by the
-\grammarterm{introduced-parameter}{}s as follows. 
-% 
-If an introduced template parameter \tcode{T} is declared as a template 
-parameter pack, its corresponding \grammarterm{template-argument} is the pack
-expansion of \tcode{T}. 
-% 
-% FIXME: Replace type and form
-% 
-Otherwise, its corresponding \grammarterm{template-argument} matches the 
-kind (type, non-type, template) of \tcode{T}.
-% 
-Let \tcode{TT} be a \grammarterm{template-id}
-formed as \tcode{C<Args>}.
-% 
-The associated \grammarterm{constraint-expression} is
-the \grammarterm{id-expression} \tcode{TT}
-if \tcode{C} refers to a variable concept. 
-% 
-The associated \grammarterm{constraint-expression} is
-the function call \tcode{TT()} if \tcode{C} refers to a function 
-concept.
+\tcode{E} is the expression of the associated predicate constraint.
 % 
 \enterexample
 \begin{codeblock}
 template<typename T, typename U> concept bool C1 = true;
 template<typename T, typename U> concept bool C2() { return true; }
-template<typename T, typename U = char> concept bool C3 = true;
-template<typename... Ts> concept bool C4 = true;
+template<typename... Ts> concept bool C3 = true;
 
-C1{A, B} struct X;
-C2{A, B} struct Y;
-C3{P} void f(P);
-C4{...Qs} void g(Qs&&...);
-
-template<typename A, typename B> 
-  requires C1<A, B> // constraint associated by \tcode{C1\{A, B\}}
-    struct X;       // OK: redeclaration of \tcode{X}
-
-template<typename A, typename B> 
-  requires C2<A, B>()  // constraint associated by \tcode{C2\{A, B\}}
-    struct Y;          // OK: redeclaration of \tcode{Y}
-
-template<class P>
-  requires C3<P> // constraint associated by \tcode{C3\{P\}}
-    void f(P);   // OK: redeclaration of \tcode{f(P)}
-
-template<typename... Qs>
-  requires C4<Qs...> // constraint associated by \tcode{C4\{...Qs\}}
-    void g(Qs&&...); // OK: redeclaration of \tcode{g(Qs\&\&...)}
+C1{A, B} struct s1;    // associates \tcode{C1<A, B>}
+C2{A, B} struct s2;    // associates \tcode{C2<A, B>()}
+C3{...Ts} struct s3;   // associates \tcode{C3<Ts...>}
+C3{X, ...Y} struct s4; // associates \tcode{C3<X, Y...>}
 \end{codeblock}
 \exitexample
-
 
 \pnum
 A template declared by a \grammarterm{template-introduction} can also be 
