@@ -1,2 +1,36 @@
+%!TEX root = std.tex
+\infannex{diff}{Compatibility}
 
-%
+\rSec1[diff.iso]{\Cpp extensions for Concepts and ISO \Cpp 2014}
+
+\pnum
+This subclause lists the differences between \Cpp with Concepts
+and ISO \Cpp, by the chapters of this document.
+
+\rSec2[diff.lex]{Clause~\ref{lex}: lexical conventions}
+
+\ref{lex.key}
+\change New Keywords\\
+New keywords are added to \Cpp extensions for Concepts;
+see \ref{lex.key}.
+\rationale
+These keywords were added in order to implement the semantics of the
+new features. In particular, the \tcode{requires} keyword is added
+to introduce constraints through a \grammarterm{requires-clause} or
+a \grammarterm{requires-expression}. The \tcode{concept} keyword is
+added to enable the definition of concepts (\ref{dcl.spec.concept}),
+the normalization of constraints (\ref{temp.constr.decl}), and the 
+semantic differentiation of \grammarterm{concept-name}{s} from other
+\grammarterm{identifier}{s}.
+\effect
+Change to semantics of well-defined feature.
+Any ISO \Cpp programs that used any of these keywords as identifiers
+are not valid \Cpp programs with Concepts.
+\difficulty
+Syntactic transformation.
+Converting one specific program is easy.
+Converting a large collection
+of related programs takes more work.
+\howwide
+Seldom.
+
