@@ -490,108 +490,88 @@ The \defn{associated constraints} of a template declaration are
 the conjunction of constraints introduced by:
 % 
 \begin{itemize}
-\item a \grammarterm{template-introduction} (\ref{temp.intro}), and
+\item a \grammarterm{template-introduction} (\ref{temp.intro}), 
+      and
 
-\item any \grammarterm{constrained-parameter}{s} (\ref{temp.param}) in the 
-declaration's \grammarterm{template-parameter-list}, and
+\item all \grammarterm{constrained-parameter}{s} 
+      (\ref{temp.param}) in the declaration's 
+      \grammarterm{template-parameter-list}, in 
+      order of appearance, and
 
-\item the \grammarterm{constraint-expression} of a \grammarterm{requires-clause} 
-following a \grammarterm{template-parameter-list} (\ref{temp}), and
+\item the predicate constraint (\ref{temp.constr.pred}) 
+      of a \grammarterm{requires-clause} following a 
+      \grammarterm{template-parameter-list} (\ref{temp}), and
 
-\item any \grammarterm{constrained-type-specifier}{s} (\ref{dcl.spec.auto.constr}) 
-in the type of a \grammarterm{parameter-declaration} in a function declaration
-(\ref{dcl.fct}).
+\item all \grammarterm{constrained-type-specifier}{s} 
+      (\ref{dcl.spec.auto.constr}) in the type of a 
+      \grammarterm{parameter-declaration} in a function declaration
+      (\ref{dcl.fct}), in order of appearance, and
 
-\item the \grammarterm{constraint-expression} of a \grammarterm{requires-clause} 
-appearing in the \grammarterm{declarator} of a function declaration (\ref{dcl.fct}).
+\item the predicate constraint of a trailing 
+      \grammarterm{requires-clause} (\ref{dcl.decl}) 
+      of a function declaration (\ref{dcl.fct}).
 \end{itemize}
 % 
 The formation of the associated constraints for a template declaration
 defines the order in which constraints are compared for equivalence
-(to determine when one template redeclares another) and evaluated for
-satisfaction.
+(to determine when one template redeclares another), and the order in
+which template arguments are substituted when checking for satisfaction
+(\ref{temp.constr.constr}).
+% 
+A program containing two declarations whose associated constraints are 
+functionally equivalent but not equivalent (\ref{temp.constr.constr}) is 
+ill-formed, no diagnostic required.
 % 
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C = true;
 
 // all of the following declare the same function:
-void f(C);
-template<C T> void f(T);
-C{T} void f(T);
-template<typename T> requires C<T> void f(T);
-template<typename T> void f(T) requires C<T>;
+void f1(C);
+template<C T> void f1(T);
+C{T} void f1(T);
+template<typename T> requires C<T> void f1(T);
+template<typename T> void f1(T) requires C<T>;
 \end{codeblock}
 \exitexample
-
-
-% FIXME: This is not strong enough. It might be better to define this
-% when we enumerate where associated constraints come from. That is,
-% introductions, constrained parameters (in the order in which they
-% appear), a requires clause after a template parameter list,
-% constrained-type-specifiers (in the order in which they appear), and
-% a requires clause in a function declarator.
-\pnum
-The order in which the subexpressions of the associated constraints
-are composed is the left-to-right order in which 
-\grammarterm{template-introduction}{}s,
-\grammarterm{constrained-type-specifier}{}s, and
-\grammarterm{requires-clause}{}s occur in the \grammarterm{template-declaration}.
-% 
-\enternote
-A program containing two declarations whose associated constraints are 
-functionally equivalent but not equivalent (\ref{temp.over.link}) is 
-ill-formed, no diagnostic required.
-\exitnote
 % 
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C1 = true;
 template<typename T> concept bool C2 = true;
 
-C1{T} void f1(C2);                                                      // \#1
-template<typename T, typename U> requires C1<T> && C2<U> void f1(T, U); // \#2
+C1{T} void f2(C2);                                                      // \#1
+template<typename T, typename U> requires C1<T> && C2<U> void f2(T, U); // \#2
 \end{codeblock}
 % 
-In the associated constraints of \#1, the constraint associated by the 
-\grammarterm{template-introduction} \tcode{C1{T}} occurs before the 
-constraint associated by the \grammarterm{constrained-type-specifier} in the
-\grammarterm{parameter-declaration} \tcode{C2}.
-% 
-The resulting \grammarterm{constraint-expression} is equivalent to the 
-\grammarterm{requires-clause} in \#2.
+In the associated constraints of \#1 and \#2 are equivalent; the constraint
+associated by the \grammarterm{template-introduction} in \#1 precedes the
+constraint associated by the \grammarterm{constrained-type-specifier} in
+the \grammarterm{parameter-declaration-clause}.
 % 
 \begin{codeblock}
-C1{T} void f2(T) requires C2<T>;                        // \#1
-template<typename T> requires C1<T> && C2<T> void f2(); // \#2
+template<C1 T> void f3(T) requires C2<T>;                // \#1
+template<typename T> requires C1<T> && C2<T> void f3(T); // \#2
 \end{codeblock}
-The associated constraints of \#1 and \#2 are equivalent.
-
-\begin{codeblock}
-template<C1 T> requires C2<T> void f3(T);                // \#1
-template<C1 T> void f3(T) requires C2<T>;                // \#2
-template<typename T> requires C1<T> && C2<T> void f3(T); // \#3
-template<typename T> void f3(T) requires C1<T> && C2<T>; // \#4
-\end{codeblock}
-The associated constraints of \#1, \#2, \#3, and \#4 are equivalent. The 
-\grammarterm{constraint-expression} associated by \tcode{C1} occurs before 
-the constraint associated by \tcode{C2} in each declaration.
+The associated constraints of \#1 and \#2 are equivalent. The constraint
+associated by the \grammarterm{constrained-parameter} in \#1 precedes the
+the constraint associated by the trailing \grammarterm{requires-clause}.
 % 
 \begin{codeblock}
-template<C1 T> requires C2<T> void f5();
-template<C2 T> requires C1<T> void f5(); // error: constraints are functionally
+template<C1 T> requires C2<T> void f4();
+template<C2 T> requires C1<T> void f4(); // error: constraints are functionally
                                          // equivalent but not equivalent
 \end{codeblock}
 % 
 The associated constraints of the first declaration are
-\tcode{C1<T> \&\& C2<T>}, and those of the second are
-\tcode{C2<T> \&\& C1<T>}.
+\tcode{C1<T> $\land$ C2<T>}, and those of the second are
+\tcode{C2<T> $\land$ C1<T>}.
 \exitexample
 \end{quote}
 
 
 \pnum
-Determining if a declaration's associated constraints are satisfied,
+Determining if a declaration's associated constraints are satisfied
 and partially ordering declarations by their associated constraints
 requires the \defn{normalization} of the associated constraints. 
 % 
@@ -675,8 +655,8 @@ template<typename T> concept bool C3 = requires { typename T::type; };
 template<typename T> concept bool C4 = requires (T x) { ++x; }
 \end{codeblock}
 % 
-When used in \grammarterm{constraint-expression}{s}, the concepts above
-have the following normal forms:
+When used as \grammarterm{constraint-expression}{s}, the concepts
+above, have the following normal forms.
 % 
 \begin{simpletypetable}
 {Expressions and their normalized constraints}
@@ -684,10 +664,10 @@ have the following normal forms:
 {ll}
 \topline
 Expression            & Constraint \\ \capsep
-\tcode{C2<char>}      & \tcode{sizeof(char) == 1} $\land$ \tcode{1 == 2} \\
-\tcode{C3<int>}       & \tcode{\textit{type constraint for} int::type}     \\
+\tcode{C2<char>}      & \tcode{sizeof(char) == 1} $\land$ \tcode{1 == 2}              \\
+\tcode{C3<int>}       & \tcode{\textit{type constraint for} int::type}                \\
 \tcode{C4<int>}       & \tcode{$\forall$(T x) \textit{expression constraint for} ++x} \\
-\tcode{(bool)(3 + 4)} & \tcode{(bool)(3 + 4)}                     \\
+\tcode{(bool)(3 + 4)} & \tcode{(bool)(3 + 4)}                                         \\
 \end{simpletypetable}
 % 
 Note that the normalized constraint for \tcode{C2<char>} has two atomic 
