@@ -521,7 +521,7 @@ The formation of the associated constraints for a template declaration
 defines the order in which constraints are compared for equivalence
 (to determine when one template redeclares another) and evaluated for
 satisfaction.
-
+% 
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C = true;
@@ -547,7 +547,7 @@ The order in which the subexpressions of the associated constraints
 are composed is the left-to-right order in which 
 \grammarterm{template-introduction}{}s,
 \grammarterm{constrained-type-specifier}{}s, and
-\grammarterm{requires-clause}{}s occur in the declaration.
+\grammarterm{requires-clause}{}s occur in the \grammarterm{template-declaration}.
 % 
 \enternote
 A program containing two declarations whose associated constraints are 

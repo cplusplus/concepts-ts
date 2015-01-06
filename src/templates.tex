@@ -380,14 +380,9 @@ declared by the \grammarterm{template-introduction}.
 template<typename T> concept bool C1 = true;
 
 C1{T} void f(T, auto);
-template<C1 T, typename U> void f(T, U); // OK: redeclaration of f(T, auto)
+template<C1 T, typename U> void f(T, U); // OK: redeclaration of \tcode{f(T, auto)}
 \end{codeblock}
 % 
-\enternote
-The second declaration of \tcode{f} is a redeclaration of the first
-because the associated constraints of each are equivalent 
-(\ref{temp.over.link}).
-\exitnote
 \exitexample
 
 \end{quote}
