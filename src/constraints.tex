@@ -42,30 +42,19 @@ of template arguments. If that substitution results in an invalid type or
 expression, the constraint is not satisfied.
 % 
 Specific rules for determining the satisfaction of different kinds of 
-constraints are defined in the following sections.
+constraints are defined in the following subsections.
 
-% \pnum
-% After substitution, a constraint is \defn{satisfied} if and only if 
-% it and all of its operands are satisfied according to the evaluation 
-% rules described in \ref{temp.constr.op} and \ref{temp.constr.atom}.
-% % 
-% If the substitution of template arguments into a constraint fails, 
-% that constraint is not satisfied.
-% % 
-% \enternote
-% Substitution into a constraint may yield a well-formed constraint that
-% contains ill-formed expressions or types. This may happen, for
-% example, in the substitution into expression constraints
-% (\ref{temp.constr.atom.expr}) and type constraints
-% (\ref{temp.constr.atom.type}).
-% \exitnote
 
 \pnum 
 In certain contexts, it is necessary to know when two constraints are equivalent
 (\ref{temp.constr.decl}). Two constraints \tcode{P} and \tcode{Q} are
 equivalent if and only if they are of the same kind and their their operands are
 equivalent. The rules for determining the equivalence of different kinds of
-constraints are defined in the following sections.
+constraints are defined in the following subsections.
+% 
+Two constraints that are not equivalent are \defn{functionally equivalent} if,
+for any given set of template arguments, either both constraints are satisfied
+or both constraints are unsatisfied.
 
 
 %%
