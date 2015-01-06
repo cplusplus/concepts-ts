@@ -659,15 +659,15 @@ When used as \grammarterm{constraint-expression}{s}, the concepts
 above, have the following normal forms.
 % 
 \begin{simpletypetable}
-{Expressions and their normalized constraints}
+{Predicate constraints and their normal form}
 {tab:temp.constr.normal}
 {ll}
 \topline
-Expression            & Constraint \\ \capsep
-\tcode{C2<char>}      & \tcode{sizeof(char) == 1} $\land$ \tcode{1 == 2}              \\
-\tcode{C3<int>}       & \tcode{\textit{type constraint for} int::type}                \\
-\tcode{C4<int>}       & \tcode{$\forall$(T x) \textit{expression constraint for} ++x} \\
-\tcode{(bool)(3 + 4)} & \tcode{(bool)(3 + 4)}                                         \\
+Predicate constraint            & Normal form \\ \capsep
+\tcode{C2<char>}                & \tcode{sizeof(char) == 1} $\land$ \tcode{1 == 2}              \\
+\tcode{C3<int>}                 & \tcode{\textit{type constraint for} int::type}                \\
+\tcode{C4<int>}                 & \tcode{$\forall$(T x) \textit{expression constraint for} ++x} \\
+\tcode{(bool)(3 + 4)}           & \tcode{(bool)(3 + 4)}                                         \\
 \end{simpletypetable}
 % 
 Note that the normalized constraint for \tcode{C2<char>} has two atomic 
@@ -908,7 +908,7 @@ rules in \ref{temp.arg};
 
 \item a wildcard matches a template parameter of any kind;
 
-\item a template parameter pack (\cxxref{temp.variadic}), matches zero or more 
+\item a template parameter pack (\ref{temp.variadic}), matches zero or more 
 concept arguments, provided that each of those arguments matches the pattern 
 of the template parameter pack using the rules above for matching matching 
 concept arguments and template parameters.
