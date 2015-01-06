@@ -470,7 +470,26 @@ void f2(Seq<>);
 The concept designated by a \grammarterm{constrained-type-specifier}
 is the one selected according to the rules for concept resolution in
 \ref{temp.constr.resolve}.
+
+\pnum
+\enternote
+The constraint introduced by a \grammarterm{constrained-type-name} is
+introduced by the invention of template parameter. 
+% 
+The rules for inventing template parameters corresponding to placeholders
+in the \grammarterm{parameter-declaration-clause} of a
+\grammarterm{lambda-expression} (\ref{expr.prim.lambda})
+or function declaration (\ref{dcl.fct}) are described in
+\ref{dcl.fct}.
+% 
+The rules for inventing a template parameter corresponding to placeholders
+in the \grammarterm{trailing-return-type} of a 
+\grammarterm{compound-requirement} are described in 
+\ref{temp.constr.deduct}.
+\exitnote
+
 \end{quote}
+
 
 
 %%
