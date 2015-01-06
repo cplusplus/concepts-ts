@@ -5,7 +5,6 @@
 \setcounter{chapter}{13}
 \rSec0[temp]{Templates}
 
-
 Modify the \grammarterm{template-declaration} grammar in paragraph 1 to 
 allow a template declaration introduced by a concept.
 
@@ -164,8 +163,8 @@ If \tcode{C} is variable concept (\ref{dcl.spec.concept}), then \tcode{E} is the
 concept and \tcode{E} is the function call \tcode{TT()}.
 
 \item Finally, If \tcode{P} declares a template parameter pack and 
-\tcode{C} is not a variadic concept, \tcode{E} is adjusted to be the pack 
-expansion \tcode{E...}.
+\tcode{C} is not a variadic concept, \tcode{E} is adjusted to be 
+\grammarterm{fold-expression} \tcode{E \&\& ...} (\ref{expr.prim.fold}).
 \end{itemize}
 % 
 \tcode{E} is the expression of the associated predicate constraint.
