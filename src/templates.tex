@@ -331,8 +331,9 @@ Array<double> s2;    // error: \tcode{Array} takes two template arguments
 \pnum
 A \grammarterm{template-introduction} associates a predicate constraint with 
 its \grammarterm{template-declaration}. This constraint is derived from
-the \tcode{concept-name} \tcode{C} in the \grammarterm{template-introduction} 
-and the sequence of \grammarterm{introduced-parameter}{s}.
+the \grammarterm{concept-name} \tcode{C} in the 
+\grammarterm{template-introduction} and the sequence of 
+\grammarterm{introduced-parameter}{s}.
 
 \begin{itemize}
 \item First, form a sequence of template arguments \tcode{A1, A2, ..., A$N$} 
@@ -348,7 +349,7 @@ Otherwise, \tcode{A} is the \grammarterm{id-expression} \tcode{P}.
 a variable concept (\ref{dcl.spec.concept}), then \tcode{E} is the
 \grammarterm{id-expression}
 \tcode{C<A1, ..., A$N$>}. Otherwise, \tcode{C} is a function concept and
-\tcode{E} is the function call C<A1, ..., A$N$>.
+\tcode{E} is the function call \tcode{C<A1, ..., A$N$>}.
 \end{itemize}
 % 
 \tcode{E} is the expression of the associated predicate constraint.
@@ -627,12 +628,13 @@ Modify paragraph 1 in order to account for constrained member templates
 of (possibly) constrained class templates. 
 
 \begin{quote}
+\pnum
 A template can be declared within a class or class template; such a 
 template is called a member template. 
-
+% 
 A member template can be defined within or outside its class definition 
 or class template definition. 
-
+% 
 A member template of a class template that is defined outside of its 
 class template definition shall be specified with the 
 \grammarterm{template-parameter}{s} \added{and associated constraints}
@@ -1035,16 +1037,25 @@ Two function templates are \defn{equivalent} if they:
 \item have return types and parameter lists that are equivalent using the 
 rules described above to compare expressions involving template parameters, and
 
-\item have associated constraints (\ref{temp.constr.decl}) that are equivalent 
-using the rules above to compare expressions involving template parameters.
+\item have associated constraints that are equivalent using the rules 
+described in \ref{temp.constr.decl} to compare constraints.
 \end{itemize}
 \end{addedblock}
 % 
 Two function templates are \defn{functionally equivalent} if they 
-are equivalent except that one or more expressions that involve 
-template parameters in the return types and parameter lists\added{, or the
-associated constraints (\ref{temp.constr.decl})} are functionally equivalent using 
-the rules described above to compare expressions involving template parameters.
+are equivalent except that \removed{one or more expressions that involve 
+template parameters in the return types and parameter lists are functionally 
+equivalent using the rules described above to compare expressions involving 
+template parameters.}
+\begin{addedblock}
+\begin{itemize}
+\item one or more expressions that involve template parameters in the return 
+      types and parameter lists are functionally equivalent using the rules 
+      described above to compare expressions involving template parameters, or
+\item the associated constraints are functionally equivalent using the rules 
+      described in \ref{temp.constr.decl} to compare constraints.
+\end{itemize}
+\end{addedblock}
 % 
 If a program contains declarations of function templates that are 
 functionally equivalent but not equivalent, the program is ill-formed; 
@@ -1366,7 +1377,7 @@ template.
 \begin{addedblock}
 \setcounter{Paras}{12}
 \pnum
-The \grammarterm{template-arguments} in the
+The \grammarterm{template-argument}{s} in the
 \grammarterm{template-id} of an explicit 
 specialization of a constrained non-function template shall satisfy the 
 associated constraints of that template, if any 
