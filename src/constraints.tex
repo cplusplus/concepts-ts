@@ -1,10 +1,10 @@
-template
+
 %%
 %% Template constraints
 %%
 \rSec1[temp.constr]{Template constraints}
 
-Add this section after 14.8.
+Add this section after 14.9.
 
 \begin{quote}
 
@@ -31,25 +31,35 @@ Declarations are partially ordered by their associated constraints
 A \defn{constraint} is a sequence of logical operations and 
 operands that specifies requirements on template arguments.
 \enternote The operands of a logical operation are constraints. \exitnote
-
+% 
+There are several different kinds of constraints:
+\begin{itemize}
+\item conjunctions (\ref{temp.constr.op}),
+\item disjunctions (\ref{temp.constr.op}),
+\item predicate constraints (\ref{temp.constr.pred}),
+\item expression constraints (\ref{temp.constr.expr}),
+\item type constraints (\ref{temp.constr.type}),
+\item implicit conversion constraints (\ref{temp.constr.conv}),
+\item argument deduction constraints (\ref{temp.constr.deduct}),
+\item exception constraints (\ref{temp.constr.noexcept}), and
+\item parameterized constraints (\ref{temp.constr.param})
+\end{itemize}
 
 \pnum
 A constrained declaration can be used only when its associated
 constraints (\ref{temp.constr.decl}) are \defn{satisfied}. 
 % 
 Determining if a constraint is satisfied entails the the substitution 
-of template arguments. If that substitution results in an invalid type or 
-expression, the constraint is not satisfied.
+of template arguments. 
 % 
-Specific rules for determining the satisfaction of different kinds of 
+The rules for determining the satisfaction of different kinds of 
 constraints are defined in the following subsections.
-
 
 \pnum 
 In certain contexts, it is necessary to know when two constraints are equivalent
-(\ref{temp.constr.decl}). Two constraints \tcode{P} and \tcode{Q} are
-equivalent if and only if they are of the same kind and their their operands are
-equivalent. The rules for determining the equivalence of different kinds of
+(\ref{temp.constr.decl}). 
+% 
+The rules for determining the equivalence of different kinds of
 constraints are defined in the following subsections.
 % 
 Two constraints that are not equivalent are \defn{functionally equivalent} if,
@@ -73,14 +83,14 @@ using the symbol $\land$ and disjunction is spelled using the
 symbol $\lor$. 
 % 
 The operands of these operations are called the left 
-and right operands. In the constraint \tcode{P} $land$ \tcode{Q},
+and right operands. In the constraint \tcode{P $\land$ Q},
 \tcode{P} is the left operand and \tcode{Q} is the right operand.
 % 
 Grouping of constraints is shown using parentheses.
 \exitnote
 
 \pnum
-A \defn{conjunction} is a logical operation taking two 
+A \defn{conjunction} is a constraint taking two 
 operands. A conjunction of constraints is satisfied if and only 
 if both operands are satisfied. 
 % 
@@ -94,14 +104,13 @@ of those constraints resulting from substitution. If the expression
 \tcode{P \&\& Q} results in a call to a user-declared \tcode{operator\&\&},
 the program is ill-formed.
 
-
-\pnum
+% \pnum
 A conjunction \tcode{P} is equivalent to another conjunction \tcode{Q}
 if and only if the left operands of \tcode{P} and \tcode{Q} are equivalent
 and the right operands of \tcode{P} and \tcode{Q} are equivalent.
 
 \pnum
-A \defn{disjunction} is a logical operation taking two 
+A \defn{disjunction} is a constraint taking two 
 operands. A disjunction of constraints is satisfied if and only 
 if either operand is satisfied or both operands are satisfied.
 % 
@@ -115,7 +124,7 @@ of those constraints resulting from substitution. If the expression
 \tcode{P || Q} results in a call to a user-declared \tcode{operator||},
 the program is ill-formed.
 
-\pnum
+% \pnum
 A disjunction \tcode{P} is equivalent to another disjunction \tcode{Q}
 if and only if the left operands of \tcode{P} and \tcode{Q} are equivalent
 and the right operands of \tcode{P} and \tcode{Q} are equivalent.
@@ -161,7 +170,7 @@ The constraint is satisfied if and only if \tcode{E} evaluates to
 template<typename T> concept bool C = sizeof(T) == 4 && !true;
 \end{codeblock}
 Here, \tcode{sizeof(T) == 4} and \tcode{!true} are 
-predicate constraints required by the concept, \tcode{C}.
+predicate constraints required by the concept \tcode{C}.
 \exitexample
 
 \pnum
@@ -177,7 +186,7 @@ expressions.
 \rSec3[temp.constr.expr]{Expression constraints}
 
 \pnum
-An \defn{expression constraint} is an atomic constraint
+An \defn{expression constraint} is a constraint
 that specifies a requirement on the formation of an
 \grammarterm{expression} \tcode{E}
 through substitution of template arguments.
@@ -220,11 +229,11 @@ in \ref{temp.over.link} to compare expressions.
 \rSec3[temp.constr.type]{Type constraints}
 
 \pnum
-A \defn{type constraint} is an atomic constraint that specifies a requirement 
+A \defn{type constraint} is a constraint that specifies a requirement 
 on the formation of a type \tcode{T} through the substitution of template 
 arguments.
 % 
-A type constraint is satisfied if and only \tcode{T} is non-dependent, meaning 
+A type constraint is satisfied if and only \tcode{T} is not ill-formed, meaning 
 that the substitution yielding \tcode{T} did not fail.
 % 
 \enternote
@@ -263,7 +272,7 @@ and \tcode{Q} are equivalent according to the rules in
 \rSec3[temp.constr.conv]{Implicit conversion constraints}
 
 \pnum
-An \defn{implicit conversion constraint} is an atomic constraint that 
+An \defn{implicit conversion constraint} is a constraint that 
 specifies a requirement on the implicit conversion of an \grammarterm{expression}
 \tcode{E} to a type \tcode{T}. 
 % 
@@ -306,7 +315,7 @@ of \tcode{P} and \tcode{Q} are equivalent according to the rules in
 \rSec3[temp.constr.deduct]{Argument deduction constraints}
 
 \pnum
-An \defn{argument deduction constraint} is an atomic
+An \defn{argument deduction constraint} is a
 constraint that specifies a requirement on 
 the usability of an \grammarterm{expression} 
 \tcode{E} as an argument to an invented abbreviated
@@ -377,12 +386,10 @@ includes the \tcode{noexcept} specifier
 \exitnote
 
 \pnum
-An exception constraint \tcode{P} subsumes another
-exception constraint \tcode{Q} if and only if the
-\grammarterm{expression}{}s of \tcode{P}
-and \tcode{Q} are equivalent using the rules in \ref{temp.over.link}
-to compare expressions.
-
+An exception constraint \tcode{P} is equivalent to another predicate
+\tcode{Q} if and only if the expressions of \tcode{P} and \tcode{Q}
+are equivalent using the rules described in \ref{temp.over.link} to compare
+expressions.
 
 
 %%
@@ -392,7 +399,7 @@ to compare expressions.
 
 % FIXME:
 \pnum
-A \defn{universally quantified constraint} is one that declares a sequence
+A \defn{universally quantified constraint} is a constraint that declares a sequence
 of parameters (\ref{dcl.fct}), called \defn{constraint variables}, and has a 
 single operand. 
 % 
@@ -400,7 +407,7 @@ Informally, a universally quantified constraint is one that can be satisfied
 for all values of its constraint variables.
 % 
 \enternote
-Universally quantified constraints are introduced by 
+Universally quantified constraints are introduced by
 \grammarterm{requires-expression}{s} (\ref{expr.prim.req}). The constraint 
 variables of a universally quantified constraint correspond to the local 
 parameters declared in the \grammarterm{requirement-parameter-list} of a
@@ -449,7 +456,7 @@ constraint variables are equivalent if and only if the types of their
 corresponding declarations are equivalent (\cxxref{temp.type}).
 
 \pnum
-A constraint variable shall not appear in an evaluated operand 
+A constraint variable shall not appear as an evaluated operand 
 (\ref{expr}) of a predicate constraint (\ref{temp.constr.pred}).
 \enterexample
 \begin{codeblock}
@@ -468,8 +475,10 @@ template<typename T>
 \rSec2[temp.constr.decl]{Constrained declarations}
 
 \pnum
-A template declaration \ref{temp} or function declaration \ref{dcl.fct} can 
-be constrained by the use of a \grammarterm{requires-clause}.
+A template declaration (Clause~\ref{temp}) or function declaration 
+(\ref{dcl.fct}) can be constrained by the use of a 
+\grammarterm{requires-clause}. 
+% 
 This allows the specification of constraints for that declaration as
 an expression:
 
@@ -491,7 +500,7 @@ Constraints can also be associated through the use of
 of a function template.
 % 
 The \defn{associated constraints} of a template declaration are 
-the conjunction of constraints introduced by:
+the conjunction of constraints introduced in the following order:
 % 
 \begin{itemize}
 \item a \grammarterm{template-introduction} (\ref{temp.intro}), 
@@ -504,7 +513,7 @@ the conjunction of constraints introduced by:
 
 \item the predicate constraint (\ref{temp.constr.pred}) 
       of a \grammarterm{requires-clause} following a 
-      \grammarterm{template-parameter-list} (\ref{temp}), and
+      \grammarterm{template-parameter-list} (Clause~\ref{temp}), and
 
 \item all \grammarterm{constrained-type-specifier}{s} 
       (\ref{dcl.spec.auto.constr}) in the type of a 
@@ -512,7 +521,7 @@ the conjunction of constraints introduced by:
       (\ref{dcl.fct}), in order of appearance, and
 
 \item the predicate constraint of a trailing 
-      \grammarterm{requires-clause} (\ref{dcl.decl}) 
+      \grammarterm{requires-clause} (Clause~\ref{dcl.decl}) 
       of a function declaration (\ref{dcl.fct}).
 \end{itemize}
 % 
@@ -558,8 +567,8 @@ template<C1 T> void f3(T) requires C2<T>;                // \#1
 template<typename T> requires C1<T> && C2<T> void f3(T); // \#2
 \end{codeblock}
 The associated constraints of \#1 and \#2 are equivalent. The constraint
-associated by the \grammarterm{constrained-parameter} in \#1 precedes the
-the constraint associated by the trailing \grammarterm{requires-clause}.
+associated by the \grammarterm{constrained-parameter} in \#1 precedes the 
+constraint associated by the trailing \grammarterm{requires-clause}.
 % 
 \begin{codeblock}
 template<C1 T> requires C2<T> void f4();
@@ -692,11 +701,11 @@ A constraint \tcode{P} is said to \defn{subsume} another constraint \tcode{Q}
 if, informally, it can be determined that \tcode{P} implies \tcode{Q}, up to 
 the equivalence of types and expressions in \tcode{P} and \tcode{Q}.
 % 
-\enternote
-Subsumption does not determine, for example, if the predicate 
-constraint (\ref{temp.constr.pred}) \tcode{N >= 0} subsumes 
-\tcode{N > 0} for some integral template argument \tcode{N}.
-\exitnote
+\enterexample
+Subsumption does not determine if the predicate constraint 
+(\ref{temp.constr.pred}) \tcode{N >= 0} subsumes \tcode{N > 0} for some 
+integral template argument \tcode{N}.
+\exitexample
 
 % TODO: If I add a quantified constraint (which I will), then this
 % rewriting needs to lift its conjunctions out of it.
