@@ -354,56 +354,69 @@ of \tcode{P} and \tcode{Q} are equivalent according to the rules in
 \rSec3[temp.constr.deduct]{Argument deduction constraints}
 
 \pnum
-An \defn{argument deduction constraint} is a
-constraint that specifies a requirement on 
-the usability of an \grammarterm{expression} 
-\tcode{E} as an argument to an invented abbreviated
-function template \tcode{F} (\ref{dcl.fct}),
-where \tcode{F} has a single parameter formed from a type that 
-includes placeholders (\ref{dcl.spec.auto}).
+An \defn{argument deduction constraint} is a constraint that specifies 
+a requirement that the type of an \grammarterm{expression} \tcode{E}
+can be deduced from a type \tcode{T}, when \tcode{T} includes one or more 
+placeholders (\ref{dcl.spec.auto}).
 % 
 \enternote
 An argument deduction constraint is introduced by a
-\grammarterm{trailing-return-type} in a
-\grammarterm{compound-requirement} when the
-\grammarterm{trailing-type-specifier-seq}
-contains at least one placeholder
-(\ref{expr.prim.req.compound}).
+\grammarterm{compound-requirement} (\ref{expr.prim.req.compound}) having a
+\grammarterm{trailing-return-type} that contains one ore more placeholders.
+% 
+In such a constraint, \tcode{E} is the \grammarterm{expression} of the 
+\grammarterm{compound-requirement}, and \tcode{T} is the type specified
+by the \grammarterm{trailing-return-type}.
 \exitnote
-% 
-\enterexample
-\begin{codeblock}
-template<typename T>
-concept bool C1() { return true; }
 
-template<typename T>
-concept bool C2() { return requires(T t) { {*t} -> const C1& x; }; }
-\end{codeblock}
-The invented function template for the
-\grammarterm{compound-requirement} in
-\tcode{C2} is:
-\begin{codeblock}
-void F(const C1& x);
-\end{codeblock}
-\exitexample
+\pnum
+To determine if an argument deduction constraint is satisfied, invent
+an abbreviated function template \tcode{f} with one parameter whose
+type is \tcode{T} (\ref{dcl.fct}). 
 % 
-The constraint is satisfied if and only if \tcode{F}
-is selected by overload resolution for the call \tcode{F(E)}
-(\ref{over.match}).
+The constraint is satisfied if the resolution of the function call 
+\tcode{f(E)} succeeds (\ref{over.match}).
 % 
 \enternote
-Overload resolution selects \tcode{F} only when template 
-argument deduction succeeds and \tcode{F}'s associated 
-constraints are satisfied.
+Overload resolution succeeds when values are deduced for all invented
+template parameters in \tcode{f} that correspond to the placeholders in 
+\tcode{T}, and the constraints associated by any 
+\grammarterm{constrained-type-specifier}{s} are satisfied.
 \exitnote
+
+\enterexample
+\begin{codeblock}
+template<typename T, typename U>
+  struct Pair;
+
+template<typename T>
+  concept bool C1() { return true; }
+
+template<typename T>
+  concept bool C2() { return requires(T t) { {*t} -> Pair<C1&, auto>; }; }
+
+template<typename T>
+  void g(T);
+
+g((int*)nullptr); // error: constraints not satisfied.
+\end{codeblock}
+The invented abbreviated function template \tcode{f} for the 
+\grammarterm{compound-requirement} in \tcode{C2} is:
+\begin{codeblock}
+void f(Pair<C1&, auto>);
+\end{codeblock}
+In the call \tcode{g((int*)nullptr)}, the constraints are not satisfied 
+because no values can be deduced for the placeholders \tcode{C1} and 
+\tcode{auto} from the expression \tcode{*t} when \tcode{t} has type
+``pointer-to-\tcode{int}''.
+\exitexample
 
 \pnum
 An argument deduction constraint \tcode{P} is equivalent to another 
 argument deduction constraint \tcode{Q} if and only if the 
-\grammarterm{expression}{}s of \tcode{P} and \tcode{Q} are equivalent
+\grammarterm{expression}{s} of \tcode{P} and \tcode{Q} are equivalent
 using the rules in \ref{temp.over.link} to compare expressions, and the types
-of \tcode{P} and \tcode{Q} are equivalent according to the rules in 
-\cxxref{temp.type}).
+of \tcode{P} and \tcode{Q} are equivalent (\cxxref{temp.type}).
 
 
 %%
@@ -412,16 +425,14 @@ of \tcode{P} and \tcode{Q} are equivalent according to the rules in
 \rSec3[temp.constr.noexcept]{Exception constraints}
 
 \pnum
-An \defn{exception constraint} is an atomic constraint
+An \defn{exception constraint} is a constraint
 for an expression \tcode{E} that is satisfied if and only
 if the expression \tcode{noexcept(E)} is \tcode{true}
 (\cxxref{expr.unary.noexcept}).
 % 
 \enternote
-Constant expression constraints are introduced by a
-\grammarterm{compound-requirement} that
-includes the \tcode{noexcept} specifier
-(\ref{expr.prim.req.compound}).
+Exception constraints are introduced by a \grammarterm{compound-requirement} 
+that includes the \tcode{noexcept} specifier (\ref{expr.prim.req.compound}).
 \exitnote
 
 \pnum
@@ -432,33 +443,29 @@ expressions.
 
 
 %%
-%% Universal quantification
+%% Parameterized constraints
 %%
-\rSec3[temp.constr.forall]{Universal quantification}
+\rSec3[temp.constr.param]{Parameterized constraints}
 
-% FIXME:
 \pnum
-A \defn{universally quantified constraint} is a constraint that declares a sequence
+A \defn{parameterized constraint} is a constraint that declares a sequence
 of parameters (\ref{dcl.fct}), called \defn{constraint variables}, and has a 
 single operand. 
 % 
-Informally, a universally quantified constraint is one that can be satisfied
-for all values of its constraint variables.
-% 
 \enternote
-Universally quantified constraints are introduced by
-\grammarterm{requires-expression}{s} (\ref{expr.prim.req}). The constraint 
-variables of a universally quantified constraint correspond to the local 
+Parameterized constraints are introduced by 
+\grammarterm{requires-expression}{s} (\ref{expr.prim.req}). The constraint
+variables of a parameterized constraint correspond to the 
 parameters declared in the \grammarterm{requirement-parameter-list} of a
-\grammarterm{requires-expression}, and the operand of that constraint
-is the expression's conjunction of constraints.
+\grammarterm{requires-expression}, and the operand of the constraint
+is the conjunction of constraints.
 \exitnote
 % 
 \enternote 
-Universal quantifiers have no corresponding C++ syntax. For the purpose of 
-exposition, universal quantification is written as, e.g.,
-\tcode{$\forall$(T x, U y) P(x, y)}, where \tcode{x} and \tcode{y} are
-constraint variables, and \tcode{P(x, y)} is the constraint's operand
+Parameterized constraints have no corresponding C++ syntax. For the purpose of 
+exposition, a parameterized constraint is written as, e.g.,
+\tcode{$\lambda$(T x, U y) P(x, y)}, where \tcode{x} and \tcode{y} are
+constraint variables, and \tcode{P(x, y)} is that constraint's operand
 written in terms of \tcode{x} and \tcode{y}.
 \exitnote
 % 
@@ -470,14 +477,14 @@ template<typename T>
     a != b;
   };
 \end{codeblock}
-The concept \tcode{Eq} defines the universally quantified constraint
-\tcode{$\forall$(T a, T b) P(a, b)} where \tcode{P(a, b)} is the conjunction
+The concept \tcode{Eq} defines the parameterized constraint
+\tcode{$\lambda$(T a, T b) P(a, b)} where \tcode{P(a, b)} is the conjunction
 of two expression constraints: \tcode{a == b} and \tcode{a != b} must be
-valid expressions.
+valid expressions (\ref{temp.constr.expr}).
 \exitexample
 
 \pnum
-A universally quantified constraint is satisfied if and only substitution into 
+A parameterized constraint is satisfied if and only substitution into 
 the types of its constraint variables does not result in an invalid type, and its
 operand is satisfied. Template arguments are substituted into the declared
 constraint variables in the order in which they are declared. If substitution 
@@ -485,7 +492,7 @@ into a constraint variable fails, no more substitutions are performed, and
 the constraint is not satisfied.
 
 \pnum
-Two universally quantified constraints \tcode{P} and \tcode{Q} are equivalent 
+Two parameterized constraints \tcode{P} and \tcode{Q} are equivalent 
 if and only if their operands are equivalent.
 % 
 Two expressions involving constraint variables are equivalent if they
@@ -538,12 +545,13 @@ Constraints can also be associated through the use of
 \grammarterm{constrained-type-specifier}{}s in the parameter-type-list
 of a function template.
 % 
-The \defn{associated constraints} of a template declaration are 
-the conjunction of constraints introduced in the following order:
+A template's \defn{associated constraints} are the conjunction of 
+constraints introduced in its \grammarterm{template-declaration}. 
+% 
+The ordering of operands in the that conjunction is:
 % 
 \begin{itemize}
-\item a \grammarterm{template-introduction} (\ref{temp.intro}), 
-      and
+\item a \grammarterm{template-introduction} (\ref{temp.intro}), and
 
 \item all \grammarterm{constrained-parameter}{s} 
       (\ref{temp.param}) in the declaration's 
@@ -578,13 +586,13 @@ ill-formed, no diagnostic required.
 \begin{codeblock}
 template<typename T> concept bool C = true;
 
-// all of the following declare the same function:
 void f1(C);
 template<C T> void f1(T);
 C{T} void f1(T);
 template<typename T> requires C<T> void f1(T);
 template<typename T> void f1(T) requires C<T>;
 \end{codeblock}
+All declarations of \tcode{f1} declare the same function.
 \exitexample
 % 
 \enterexample
