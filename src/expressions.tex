@@ -52,12 +52,19 @@ Add a new paragraph after paragraph 11:
 \setcounter{Paras}{11}
 \pnum
 In a \grammarterm{nested-name-specifier} of the form \tcode{auto::} or
-\tcode{C::} where \tcode{C} is a \grammarterm{constrained-type-name},
-\tcode{auto} and \tcode{C} designate a placeholder type that will be
-replaced later according to the rules for placeholder deduction in
+\tcode{C::}, where \tcode{C} is a \grammarterm{constrained-type-name},
+that \grammarterm{nested-name-specifier} designates a placeholder type that 
+will be replaced later according to the rules for placeholder deduction in
 \ref{dcl.spec.auto}.
 %
-The replacement type for the placeholder shall be a class or enumeration type.
+If the designated placeholder is not a placeholder type, the program is
+ill-formed.
+% 
+\enternote
+A \grammarterm{constrained-type-specifier} can designate a placeholder for
+a non-type or template (\ref{dcl.spec.auto.constr}).
+\exitnote
+% 
 \enterexample
 \begin{codeblock}
 struct S1 { int n; };
@@ -73,6 +80,9 @@ C::* p3 = &S1::c; // error: deduction fails because constraints are not satisfie
 void f(auto::X::Y);
 f(S1);       // error: \tcode{auto} cannot be deduced from \tcode{S1}
 f<S3>(S3{}); // OK
+
+template<int N> concept bool D = true;
+D::* p4 = &S1::n; // error: \tcode{D} does not designate a placeholder type
 \end{codeblock}
 In the declaration of \tcode{f}, the placeholder appears in a non-deduced 
 context (\cxxref{temp.deduct.type}). It may be replaced later through the
