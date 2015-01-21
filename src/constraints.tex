@@ -110,6 +110,29 @@ If the left and right operands of a conjunction are predicate constraints
 of those constraints resulting from substitution. If the expression
 \tcode{P \&\& Q} results in a call to a user-declared \tcode{operator\&\&},
 the program is ill-formed.
+% 
+\enterexample
+\begin{codeblock}
+template<typename T>
+  constexpr bool fail() { return T::value; }
+
+template<typename T>
+  requires sizeof(T) > 1 && get_value<T>()
+    void f(T);   // has associated constraint \tcode{sizeof(T) > 1 $\land$ get_value<T>()}
+
+void f(int);
+
+f('a'); // OK: calls \tcode{f(int)}
+\end{codeblock}
+In the satisfaction of the associated constraints (\ref{temp.constr.decl}) 
+of \tcode{f}, the constraint \tcode{sizeof(char) > 1} is not satisfied; 
+arguments are not substituted into the right operand of the conjunction.
+% 
+Such a substitution would cause this program to be ill-formed since 
+\tcode{get_value<char>()} produces an invalid expression that is not in
+the immediate context (\ref{temp.deduct}.
+\exitexample
+
 
 % \pnum
 A conjunction \tcode{P} is equivalent to another conjunction \tcode{Q}
