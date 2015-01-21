@@ -87,6 +87,9 @@ function is a member, \cv-qualifiers (if any),
 parameter list\added{, and any associated constraints~(\ref{temp.constr.decl})}
 \end{quote}
 
+%%
+%% Implementation compliance
+%%
 \rSec1[intro.compliance]{Implementation compliance}
 
 \pnum
@@ -95,6 +98,39 @@ defined in \ref{intro.compliance} in the \Cpp Standard.
 \enternote 
 Conformance is defined in terms of the behavior of programs.
 \exitnote
+
+%%
+%% Feature-testing recommendations
+%%
+\rSec1[intro.features]{Feature-testing recommendations (Informative)}
+
+For the sake of improved portability between partial implementations of various
+C++ standards, WG21 (the ISO Technical Committee for the \Cpp Programming
+Language) recommends that implementers and programmers follow the guidelines in
+this section concerning feature-test macros. 
+\enternote 
+WG21's SD-6 makes similar recommendations for the \Cpp Standard.
+\exitnote
+
+Implementers who provide a new standard feature should define a macro with the
+recommended name, in the same circumstances under which the feature is available
+(for example, taking into account relevant command-line options), to indicate
+the presence of support for that feature. Implementers should define that macro
+with the value specified in the most recent version of this technical
+specification that they have implemented. The recommended macro name is
+\tcode{__cpp_experimental_} followed by the string in the ``Macro name suffix''
+column in Table~\ref{tab:info.features}.
+
+No header files should be required to test macros describing the presence
+of support for language features.
+
+\begin{floattable}{Feature-test macros for concepts}{tab:info.features}
+{ll}
+\topline
+\lhdr{Macro name suffix} & \rhdr{Value} \\
+\capsep
+\tcode{concepts}  & \tcode{TBD}      \\
+\end{floattable}
 
 \rSec1[intro.ack]{Acknowledgments}
 
