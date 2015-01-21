@@ -310,8 +310,7 @@ only within a concept definition (\ref{dcl.spec.concept}),
 or within a \grammarterm{requires-clause} following a
 \grammarterm{template-parameter-list} 
 (Clause~\ref{temp}) or function declaration (\ref{dcl.fct}).
-
-% FIXME: The example names an undeclared entity.
+% 
 \enterexample
 A common use of \grammarterm{requires-expression}{}s is to define
 syntactic requirements in concepts such as the one below:
@@ -319,8 +318,8 @@ syntactic requirements in concepts such as the one below:
 template<typename T>
   concept bool R() {
     return requires (T i) {
-      typename A<T>;
-      {*i} -> const A<T>&;
+      typename T::type;
+      {*i} -> const T::type&;
     };
   }
 \end{codeblock}
