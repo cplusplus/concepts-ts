@@ -294,7 +294,7 @@ A syntactic requirement is one that can be checked by name lookup
     \terminal{requires} requirement-parameter-list\opt requirement-body
 
 \nontermdef{requirement-parameter-list}\br
-    \terminal{(} parameter-declaration-clause\opt \terminal{)}
+    \terminal{(} parameter-declaration-clause\opt~\terminal{)}
   
 \nontermdef{requirement-body}\br
     \terminal{\{} requirement-seq \terminal{\}}
@@ -311,8 +311,8 @@ A syntactic requirement is one that can be checked by name lookup
 \end{bnf}
 
 \pnum
-A \grammarterm{requires-expression} defines a conjunction of the constraints 
-(\ref{temp.constr}) introduced by its \grammarterm{requirement}{}s.
+A \grammarterm{requires-expression} defines a constraint (\ref{temp.constr})
+based on its paremeters (if any) and its nested \grammarterm{requirement}{s}.
 
 \pnum
 A \grammarterm{requires-expression} has type \tcode{bool} and is an 
@@ -407,7 +407,8 @@ enclosing context.
 %
 Each \grammarterm{requirement} appends one or more atomic constraints
 (\ref{temp.constr}) to the conjunction of constraints defined by the 
-\grammarterm{requires-expression}{}s.
+\grammarterm{requires-expression}{s} in the order in which the
+\grammarterm{requirement}{s} are written.
 
 \pnum
 The substitution of template arguments into a \grammarterm{requires-expression} 
@@ -425,17 +426,11 @@ required (\ref{temp.res}).
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C =
-  requires () {
+  requires {
     new int[(int)-sizeof(T)]; // ill-formed, no diagnostic required
   };
 \end{codeblock}
 \exitexample
-
-\pnum If the substitution of template arguments into the type of
-a local parameter of a \grammarterm{requires-expression}
-results in an ill-formed type, the conjunction of constraints introduced 
-by that \grammarterm{requires-expression} is not satisfied, and the
-template arguments are not substituted into the introduced constraints.
 
 
 %%
@@ -517,7 +512,8 @@ template<typename T> concept bool C =
 \pnum
 A \grammarterm{compound-requirement} introduces 
 a conjunction of one or more atomic constraints for the
-\grammarterm{expression} \tcode{E}:
+\grammarterm{expression} \tcode{E}. The order in which
+those constraints are introduce is:
 %
 \begin{itemize}
 \item the \grammarterm{compound-requirement} introduces an expression 

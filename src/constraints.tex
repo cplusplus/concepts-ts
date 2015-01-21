@@ -670,22 +670,26 @@ disjunction of the predicate constraints \tcode{P} and \tcode{Q}.
 \item An expression \tcode{P \&\& Q} is transformed into the normalized
 conjunction of the predicate constraints \tcode{P} and \tcode{Q}.
 
-\item A \grammarterm{requires-expression} (\ref{expr.prim.req}) having the
+\item A \grammarterm{requires-expression}, (\ref{expr.prim.req}) having the
 form
  
 \begin{ncsimplebnf}
 \terminal{requires} \terminal{(} parameter-declaration-clause \terminal{)} requirement-body
 \end{ncsimplebnf}
 % 
+where the \grammarterm{parameter-declaration-clause} is not equivalent to
+an empty parameter list, 
 is transformed into a parameterized constraint (\ref{temp.constr.param})
 with the same parameters as those in the \grammarterm{parameter-declaration-clause} 
 and whose operand is the normal form of conjunction of constraints introduced
 by \grammarterm{requirement}{s} in the \grammarterm{requirement-body}.
 
-\item A \grammarterm{requires-expression} having the form
+\item A \grammarterm{requires-expression} having one of the following forms
 
 \begin{ncsimplebnf}
-\terminal{requires} requirement-body
+\terminal{requires} \terminal{( void )} requirement-body\br
+\terminal{requires} \terminal{()} requirement-body\br
+\terminal{requires} requirement-body\br
 \end{ncsimplebnf}
 % 
 is transformed into the normal form of conjunction of constraints introduced
