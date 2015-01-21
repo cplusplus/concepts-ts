@@ -405,10 +405,10 @@ These \grammarterm{requirement}{}s may refer to local
 parameters, template parameters, and any other declarations visible from the 
 enclosing context. 
 %
-Each \grammarterm{requirement} appends one or more atomic constraints
-(\ref{temp.constr}) to the conjunction of constraints defined by the 
-\grammarterm{requires-expression}{s} in the order in which the
-\grammarterm{requirement}{s} are written.
+Each \grammarterm{requirement} appends a constraint (\ref{temp.constr}) to 
+the conjunction of constraints defined by the
+\grammarterm{requires-expression}. Constraints are appended in the order
+in which they are written.
 
 \pnum
 The substitution of template arguments into a \grammarterm{requires-expression} 
