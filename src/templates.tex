@@ -88,37 +88,35 @@ define the meaning of a constrained template parameter.
 \pnum
 A \grammarterm{constrained-parameter} declares a template parameter whose 
 kind (type, non-type, template) and type match that of the prototype parameter 
-of the concept designated by its \grammarterm{concept-name}.
+of the concept designated by the \grammarterm{concept-name} of the
+\grammarterm{constrained-type-specifier}.
 % 
 The designated concept is selected by the rules for concept resolution 
 described in \ref{temp.constr.resolve}.
 % 
-Let \tcode{P} be the prototype parameter of the designated concept.
+Let \tcode{X} be the prototype parameter of the designated concept.
 \enternote
 The prototype parameter is matched by the wildcard in the matching argument 
 list for the \grammarterm{constrained-type-name} of 
 the \grammarterm{constrained-parameter}.
 \exitnote
 % 
-The declared template parameter is determined by the kind of \tcode{P} 
+The declared template parameter is determined by the kind of \tcode{X} 
 (type, non-type, template) and the optional ellipsis in the
 \grammarterm{constrained-parameter} as follows.
 % 
 \begin{itemize}
-\item If \tcode{P} is a type \grammarterm{template-parameter} the declared
+\item If \tcode{X} is a type \grammarterm{template-parameter} the declared
 parameter is a type \grammarterm{template-parameter}. 
 
-\item If \tcode{P} is a non-type \grammarterm{template-parameter}, the declared
+\item If \tcode{X} is a non-type \grammarterm{template-parameter}, the declared
 parameter is a non-type \grammarterm{template-parameter} having the same 
-type as \tcode{P}.
+type as \tcode{X}.
 
-\item If \tcode{P} is a template \grammarterm{template-parameter}, the declared
+\item If \tcode{X} is a template \grammarterm{template-parameter}, the declared
 parameter is a template \grammarterm{template-parameter} having the same 
-\grammarterm{template-parameter-list} as \tcode{P}, excluding default template 
+\grammarterm{template-parameter-list} as \tcode{X}, excluding default template 
 arguments.
-
-\item If \tcode{P} declares a template parameter pack, the declared 
-template parameter is a template parameter pack.
 \end{itemize}
 % 
 \enterexample
