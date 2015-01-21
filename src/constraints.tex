@@ -593,33 +593,20 @@ template<typename T> requires C<T> void f1(T);
 template<typename T> void f1(T) requires C<T>;
 \end{codeblock}
 All declarations of \tcode{f1} declare the same function.
-\exitexample
 % 
-\enterexample
 \begin{codeblock}
 template<typename T> concept bool C1 = true;
-template<typename T> concept bool C2 = true;
+template<typename T> concept bool C2 = sizeof(T) > 0;
 
-C1{T} void f2(C2);                                                      // \#1
-template<typename T, typename U> requires C1<T> && C2<U> void f2(T, U); // \#2
+template<C1 T> void f2(T) requires C2<T>;                // \#1
+template<typename T> requires C1<T> && C2<T> void f2(T); // \#2, redeclaration of \#1
 \end{codeblock}
-% 
-In the associated constraints of \#1 and \#2 are equivalent; the constraint
-associated by the \grammarterm{template-introduction} in \#1 precedes the
-constraint associated by the \grammarterm{constrained-type-specifier} in
-the \grammarterm{parameter-declaration-clause}.
+The associated constraints of \#1 are \tcode{C1<T> $\land$ C2<T>}, and
+those of \#2 are also \tcode{C1<T> $\land$ C2<T>}.
 % 
 \begin{codeblock}
-template<C1 T> void f3(T) requires C2<T>;                // \#1
-template<typename T> requires C1<T> && C2<T> void f3(T); // \#2
-\end{codeblock}
-The associated constraints of \#1 and \#2 are equivalent. The constraint
-associated by the \grammarterm{constrained-parameter} in \#1 precedes the 
-constraint associated by the trailing \grammarterm{requires-clause}.
-% 
-\begin{codeblock}
-template<C1 T> requires C2<T> void f4();
-template<C2 T> requires C1<T> void f4(); // error: constraints are functionally
+template<C1 T> requires C2<T> void f3();
+template<C2 T> requires C1<T> void f3(); // error: constraints are functionally
                                          // equivalent but not equivalent
 \end{codeblock}
 % 
@@ -683,17 +670,26 @@ disjunction of the predicate constraints \tcode{P} and \tcode{Q}.
 \item An expression \tcode{P \&\& Q} is transformed into the normalized
 conjunction of the predicate constraints \tcode{P} and \tcode{Q}.
 
-\item An expression of the form 
-\tcode{requires (\grammarterm{parameter-declaration-clause}) P},
-where \tcode{P} is the constraint of the \grammarterm{requires-expression} 
-(\ref{expr.prim.req}), is transformed into
-a universally quantified constraint (\ref{temp.constr.forall})
-with the same parameters as the \grammarterm{requires-expression} and whose
-operand is the normal form of \tcode{P}. 
+\item A \grammarterm{requires-expression} (\ref{expr.prim.req}) having the
+form
+ 
+\begin{ncsimplebnf}
+\terminal{requires} \terminal{(} parameter-declaration-clause \terminal{)} requirement-body
+\end{ncsimplebnf}
+% 
+is transformed into a parameterized constraint (\ref{temp.constr.param})
+with the same parameters as those in the \grammarterm{parameter-declaration-clause} 
+and whose operand is the normal form of conjunction of constraints introduced
+by \grammarterm{requirement}{s} in the \grammarterm{requirement-body}.
 
-\item An expression of the form \tcode{requires P} where \tcode{P} is the
-conjunction of constraints introduced by the \grammarterm{requires-expression}
-is transformed into the normal form \tcode{P}.
+\item A \grammarterm{requires-expression} having the form
+
+\begin{ncsimplebnf}
+\terminal{requires} requirement-body
+\end{ncsimplebnf}
+% 
+is transformed into the normal form of conjunction of constraints introduced
+by \grammarterm{requirement}{s} in the \grammarterm{requirement-body}.
 
 \item Otherwise, the expression \tcode{E} is an atomic predicate constraint.
 \end{itemize}
@@ -712,28 +708,25 @@ template<typename T> concept bool C1() { return sizeof(T) == 1; }
 template<typename T> concept bool C2 = C1<T>() && 1 == 2;
 template<typename T> concept bool C3 = requires { typename T::type; };
 template<typename T> concept bool C4 = requires (T x) { ++x; }
+
+template<C2 T> void f1(T);                            // \#1
+template<C3 T> void f2(T);                            // \#2
+template<C4 T> void f3(T);                            // \#3
+template<typename T> requires (bool)3 + 4 void f4(T); // \#4
 \end{codeblock}
+The normalized associated constraints of \#1 are 
+\tcode{sizeof(T) == 1 $\land$ 1 == 2},
 % 
-When used as \grammarterm{constraint-expression}{s}, the concepts
-above, have the following normal forms.
+those of \#2 are the type constraint for \tcode{T::type},
+%
+those of \#3 are are the parameterized constraint
+\tcode{$\lambda$(T x)} the expression constraint \tcode{++x}, and
 % 
-\begin{simpletypetable}
-{Predicate constraints and their normal form}
-{tab:temp.constr.normal}
-{ll}
-\topline
-Predicate constraint            & Normal form \\ \capsep
-\tcode{C2<char>}                & \tcode{sizeof(char) == 1} $\land$ \tcode{1 == 2}              \\
-\tcode{C3<int>}                 & \tcode{\textit{type constraint for} int::type}                \\
-\tcode{C4<int>}                 & \tcode{$\forall$(T x) \textit{expression constraint for} ++x} \\
-\tcode{(bool)(3 + 4)}           & \tcode{(bool)(3 + 4)}                                         \\
-\end{simpletypetable}
+those of \#4 are simply the predicate constraint \tcode{(bool)3 + 4}.
 % 
-Note that the normalized constraint for \tcode{C2<char>} has two atomic 
+Note that the normalized constraints of \#2 includes two atomic 
 constraints: \tcode{sizeof(char) == 1} and \tcode{1 == 2}.
 \exitexample
-
-
 
 
 %%
@@ -748,7 +741,7 @@ the equivalence of types and expressions in \tcode{P} and \tcode{Q}.
 % 
 \enterexample
 Subsumption does not determine if the predicate constraint 
-(\ref{temp.constr.pred}) \tcode{N >= 0} subsumes \tcode{N > 0} for some 
+\tcode{N >= 0} (\ref{temp.constr.pred}) subsumes \tcode{N > 0} for some 
 integral template argument \tcode{N}.
 \exitexample
 
@@ -783,9 +776,9 @@ Its disjunctive clauses are (\tcode{A} $\land$ \tcode{B}) and
 \exitexample
 }.
 % 
-Universal quantifiers do not appear in conjunctive or disjunctive normal
-form. For the purpose of this transformation, the constraint
-\tcode{$\forall$(T x) P(x)} is equivalent to the constraint \tcode{P(x)}.
+Parameterized constraints do not appear in conjunctive or disjunctive normal
+forms. For the purpose of this transformation, the constraint
+\tcode{$\lambda$(T x) P(x)} is equivalent to the constraint \tcode{P(x)}.
 % 
 Then, \tcode{P} subsumes \tcode{Q} if and only if
 \begin{itemize}
