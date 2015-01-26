@@ -30,9 +30,11 @@ Add the following paragraphs at the end of this section.
 \pnum
 The optional \grammarterm{requires-clause} (\ref{temp.constr.decl}) in a 
 \grammarterm{declarator} shall be present only when the declarator declares a 
-function (\ref{dcl.fct}), and the \grammarterm{requires-clause} shall not precede a 
-\grammarterm{trailing-return-type}. When present, this 
-\grammarterm{requires-clause} is called the \defn{trailing \grammarterm{requires-clause}{}}.
+function (\ref{dcl.fct}), and that \grammarterm{requires-clause} shall not 
+precede a \grammarterm{trailing-return-type}. 
+% 
+When present in a \grammarterm{declarator}, the \grammarterm{requires-clause} 
+is called the \defn{trailing \grammarterm{requires-clause}{}}.
 
 \enterexample
 \begin{codeblock}
@@ -108,8 +110,7 @@ in the \Cpp Standard.
 \pnum
 The return type, the parameter-type-list, the \grammarterm{ref-qualifier}, 
 and the \grammarterm{cv-qualifier-seq}, but not the default arguments
-(\cxxref{dcl.fct.default})\added{, constraints associated by an 
-optional \grammarterm{requires-clause} (\ref{temp.constr.decl}),} or
+(\cxxref{dcl.fct.default})\added{, associated constraints (\ref{temp.constr.decl}),} or
 the exception specification (\cxxref{except.spec}), are part of the function 
 type.
 \end{quote}
@@ -177,8 +178,10 @@ occurrence of a placeholder with the name of the corresponding invented
 If the replacement of a placeholder with the name of a template parameter
 results in an invalid parameter declaration, the program is ill-formed.
 % 
-% FIXME: There are a lot of redundancies in this list. Prune a couple
-% of examples to only those that are informationally dense.
+\enternote
+Equivalent function template declaraitons delare the same function template
+(\ref{temp.over.link}).
+\exitnote
 % 
 \enterexample
 \begin{codeblock}
