@@ -322,7 +322,9 @@ based on its paremeters (if any) and its nested \grammarterm{requirement}{s}.
 A \grammarterm{requires-expression} has type \tcode{bool} and is an 
 unevaluated expression (\ref{expr}).
 \enternote
-A \grammarterm{requires-expression} is normalized.
+A \grammarterm{requires-expression} is transformed into a constraint 
+(\ref{temp.constr.decl}) to in order determine if it is 
+satisfied (\ref{temp.constr}).
 \exitnote
 
 \pnum
