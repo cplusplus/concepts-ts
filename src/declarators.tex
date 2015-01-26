@@ -142,8 +142,9 @@ An abbreviated function template is equivalent to a function template
 (\ref{temp.fct}) whose \grammarterm{template-parameter-list}
 includes one invented \grammarterm{template-parameter} for each occurrence 
 of a placeholder in the \grammarterm{parameter-declaration-clause},
-in order of appearance. 
-% 
+in order of appearance, according to the rules below.
+
+\pnum
 Each template parameter is invented as follows.
 \begin{itemize}
 \item If the placeholder is designated by the \tcode{auto}
@@ -162,7 +163,12 @@ function parameter pack (\ref{temp.variadic}), or the
 expansion, the invented template parameter is a 
 template parameter pack.
 \end{itemize}
-% 
+\enternote
+Template parameters are also invented to deduce the type of a variable
+whose declared type contains placeholders (\ref{dcl.spec.auto.deduct}).
+\exitnote
+
+\pnum 
 The adjusted function parameters of an abbreviated function template are derived
 from the \grammarterm{parameter-declaration-clause} by replacing each 
 occurrence of a placeholder with the name of the corresponding invented 

@@ -49,10 +49,10 @@ Modify paragraph 2 to begin:
 \begin{quote}
 \pnum
 \removed{The \tcode{auto} specifier is a placeholder for a type to be deduced 
-\ref{dcl.spec.auto}.}
+(\ref{dcl.spec.auto}).}
 \added{The \tcode{auto} specifier and \grammarterm{constrained-type-specifier}{s} 
 are placeholders for values (type, non-type, kind) to be deduced 
-\ref{dcl.spec.auto}.}
+(\ref{dcl.spec.auto}).}
 \end{quote}
 
 Add \grammarterm{constrained-type-specifier}{s} to the table of
@@ -64,7 +64,7 @@ Add \grammarterm{constrained-type-specifier}{s} to the table of
 {ll}
 \topline
 Specifier(s)                    &   Type                 \\ \capsep
-\added{\grammarterm{constrained-type-specifier}} &   \added{placeholder to be deduced}\\
+\added{\grammarterm{constrained-type-specifier}} &   \added{placeholder for value (type, non-type, kind) to be deduced}\\
 \end{simpletypetable}
 
 
@@ -332,16 +332,16 @@ if the initializer is a \grammarterm{braced-init-list}, with
 \begin{addedblock}
 Otherwise, obtain \tcode{P} from \tcode{T} as follows:
 \begin{itemize}
-\item replace each occurrence of \tcode{auto} in the
-variable type with a new invented type template parameter
-according to the rules for inventing template parameters
-for placeholders in \ref{dcl.fct}, or
-
 \item when the initializer is a \grammarterm{braced-init-list}
 and \tcode{auto} is a \grammarterm{decl-specifier} of the 
 \grammarterm{decl-specifier-seq} of the variable declaration, replace that 
 occurrence of \tcode{auto} with \tcode{std::initializer_list<U>}
-where \tcode{U} is an invented template type parameter.
+where \tcode{U} is an invented template type parameter;
+
+\item otherwise, replace each occurrence of \tcode{auto} in the
+variable type with a new invented type template parameter
+according to the rules for inventing template parameters
+for placeholders in \ref{dcl.fct}, or
 \end{itemize}
 \end{addedblock}
 % 
@@ -371,10 +371,10 @@ Add the following to the first example in paragraph 7 in the \Cpp Standard.
 \enterexample
 \begin{codeblock}
 template<typename T> struct Vec { };
-template<typename T> Vec<T> make_vec(std::initializer_list<T>) { return Vec<T>{}; } }
+template<typename T> Vec<T> make_vec(std::initializer_list<T>) { return Vec<T>{}; }
 
 template<typename... Ts> struct Tuple { };
-template<typename... Ts> struct make_tup(Ts... args) { return Tuple<Ts...>{}; }
+template<typename... Ts> auto make_tup(Ts... args) { return Tuple<Ts...>{}; }
 
 auto& x3 = *x1.begin();               // OK: \tcode{decltype(x3)} is \tcode{int\&}
 const auto* p = &x3;                  // OK: \tcode{decltype(p)} is \tcode{const int*}
@@ -405,7 +405,7 @@ The declared type of \tcode{p} is the deduced type of the parameter
 \tcode{x} in the call of \tcode{g(make_pair(fn, \&S::mfn))} of the following 
 invented function template:
 \begin{codeblock}
-template<class T1, class T2, class T2, class T3, class T4, class T5, class T6>
+template<class T1, class T2, class T3, class T4, class T5, class T6>
 void g(Pair< T1(*)(T2, T3), T4 (T5::*)(T6)> x);
 \end{codeblock}
 \exitexample
@@ -413,7 +413,16 @@ void g(Pair< T1(*)(T2, T3), T4 (T5::*)(T6)> x);
 \end{quote}
 
 Copy paragraphs 8-15 from \ref{dcl.spec.auto} in the \Cpp Standard into
-this section.
+this section. Modify paragraph 15 (paragraph 8 here) to read:
+
+\begin{quote}
+\setcounter{Paras}{7}
+\pnum
+An explicit instantiation declaration (\ref{temp.explicit}) does not cause the 
+instantiation of an entity declared using a placeholder \removed{type}, but it 
+also does not prevent that entity from being instantiated as needed to 
+determine its type. 
+\end{quote}
 
 %%
 %% Constrained type specifiers
@@ -423,6 +432,7 @@ this section.
 Add this section to \ref{dcl.spec.auto}.
 
 \begin{quote}
+\pnum
 A \grammarterm{constrained-type-specifier} designates a placeholder
 (type, non-type, or template) and introduces an associated constraint
 (\ref{temp.constr.decl}).
@@ -488,8 +498,8 @@ by a sequence of \grammarterm{template-argument}{}s.
 \begin{codeblock}
 template<typename T, int N = 0> concept bool Seq = true;
 
-void f1(Seq<3>);
-void f2(Seq<>);
+void f1(Seq<3>); // OK
+void f2(Seq<>);  // OK
 \end{codeblock}
 \exitexample
 
@@ -534,8 +544,11 @@ definition of a function template or variable template, declared
 in namespace scope (\cxxref{basic.scope.namespace}).
 %
 A function template definition having the \tcode{concept}
-specifier is called a \defn{function concept}. A function
-concept is a non-throwing function (\cxxref{except.spec}).
+specifier is called a \defn{function concept}. 
+% 
+A function concept shall have no \grammarterm{exception-specification} 
+and is treated as if it were specified with \tcode{noexcept(true)} 
+(\cxxref{except.spec}).
 %
 When a function is declared to be a concept, it shall be the only
 declaration of that function.
@@ -601,9 +614,11 @@ A function concept has the following restrictions:
 \begin{itemize}
 \item No \grammarterm{function-specifier}{}s shall
      appear in its declaration (\cxxref{dcl.fct.spec}).
-\item The declared return type shall be the non-deduced type \tcode{bool}.
 
-\item The declaration shall be equivalent to an empty parameter list.
+\item The declared return type shall have the type \tcode{bool}.
+
+\item The declaration's parameter list shall be equivalent to an empty 
+      parameter list.
 
 \item The declaration shall have a \grammarterm{function-body} equivalent
 to \tcode{\{ return E; \}} where \tcode{E} is a 
@@ -613,7 +628,7 @@ to \tcode{\{ return E; \}} where \tcode{E} is a
 \enternote
 Return type deduction requires the instantiation of the function 
 definition, but concept definitions are not instantiated; they
-are normalized (\ref{temp.constr.expr}).
+are normalized (\ref{temp.constr.decl}).
 \exitnote
 %
 \enterexample
@@ -630,7 +645,7 @@ template<typename T>
 \pnum
 A variable concept has the following restrictions:
 \begin{itemize}
-\item The declared type shall be \tcode{bool}.
+\item The declared type shall have the type \tcode{bool}.
 \item The declaration shall have an initializer.
 \item The initializer shall be a \grammarterm{constraint-expression}.
 \end{itemize}
