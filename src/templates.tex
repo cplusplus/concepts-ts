@@ -188,7 +188,7 @@ kind of a \grammarterm{default-argument} matches the kind of its
 \pnum
 The default \grammarterm{template-argument} of
 a \grammarterm{constrained-parameter} shall match
-the kind (type, non-type, template) of the declared parameter.
+the kind (type, non-type, template) of the declared template parameter.
 % 
 \enterexample
 \begin{codeblock}
@@ -262,7 +262,7 @@ parameter using the following rules:
 
 \item Declare a template parameter according to the rules for declaring a
       \grammarterm{constrained-parameter} in \ref{temp.param}, using
-      \tcode{P} as the prototype parameter.
+      \tcode{P} as the prototype parameter without ellipsis (if any).
 
 \item If \tcode{I} includes an ellipsis, then the declared template parameter 
       is a template parameter pack.
@@ -283,7 +283,7 @@ C2{...Ts} void g(); // error: the template parameter corresponding to \tcode{Ts}
                     // is not a template parameter pack
 
 C3{T} struct S2;     // OK: \tcode{T} is declared as \tcode{typename T}
-C3{...Ts} struct S2; // OK: \tcode{T} is declared as \tcode{typename ... T}
+C3{...Ts} struct S2; // OK: \tcode{Ts} is declared as \tcode{typename... Ts}
 \end{codeblock}
 \exitexample
 
