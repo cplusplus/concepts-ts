@@ -29,7 +29,7 @@ In this section, add the
 \begin{quote}
 \begin{bnf}
 \nontermdef{primary-expression}\br
-    \added{fold-expression}
+    \added{fold-expression}\br
     \added{requires-expression}
 \end{bnf}
 \end{quote}
@@ -60,6 +60,9 @@ will be replaced later according to the rules for placeholder deduction in
 If the designated placeholder is not a placeholder type, the program is
 ill-formed.
 % 
+The replacement type deduced for a placeholder shall be a class or
+enumeration type.
+% 
 \enternote
 A \grammarterm{constrained-type-specifier} can designate a placeholder for
 a non-type or template (\ref{dcl.spec.auto.constr}).
@@ -77,9 +80,9 @@ template<typename T> concept bool C = sizeof(T) == sizeof(int);
 C::* p2 = &S1::n; // OK: \tcode{C} deduced as \tcode{S1}
 C::* p3 = &S1::c; // error: deduction fails because constraints are not satisfied
 
-void f(auto::X::Y);
-f(S1);       // error: \tcode{auto} cannot be deduced from \tcode{S1}
-f<S3>(S3{}); // OK
+void f(typename auto::X::Y);
+f(S1);    // error: \tcode{auto} cannot be deduced from \tcode{S1}
+f<S3>(0); // OK
 
 template<int N> concept bool D = true;
 D::* p4 = &S1::n; // error: \tcode{D} does not designate a placeholder type
@@ -183,7 +186,7 @@ Add the following example after those in paragraph 5 in the
 \begin{codeblock}
 template<typename T> concept bool C = true;
 
-auto gl = [](C& a, C* b) { a = *b }; // OK: denotes a generic lambda
+auto gl = [](C& a, C* b) { a = *b; }; // OK: denotes a generic lambda
 
 struct Fun {
   auto operator()(C& a, C* b) const { return a = *b; }
