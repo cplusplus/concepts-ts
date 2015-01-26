@@ -406,7 +406,10 @@ A \grammarterm{constrained-type-specifier} designates a placeholder
 
 \begin{bnf}
 \nontermdef{constrained-type-specifier}\br
-		nested-name-specifier\opt constrained-type-name
+	qualified-concept-name
+
+\nontermdef{qualified-concept-name}\br
+	nested-name-specifier\opt constrained-type-name
 
 \nontermdef{constrained-type-name}\br
   concept-name\br
