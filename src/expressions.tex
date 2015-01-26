@@ -288,8 +288,9 @@ Add this section to 5.1.
 
 \pnum
 A \grammarterm{requires-expression} provides a concise way to express 
-syntactic requirements on template arguments.
-A syntactic requirement is one that can be checked by name lookup 
+requirements on template arguments. 
+% 
+A requirement is one that can be checked by name lookup
 (\cxxref{basic.lookup}) or by checking properties of types and expressions.
 
 \begin{bnf}
@@ -333,7 +334,7 @@ or within a \grammarterm{requires-clause} following a
 % 
 \enterexample
 A common use of \grammarterm{requires-expression}{}s is to define
-syntactic requirements in concepts such as the one below:
+requirements in concepts such as the one below:
 \begin{codeblock}
 template<typename T>
   concept bool R() {
