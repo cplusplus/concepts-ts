@@ -53,7 +53,7 @@ Add a new paragraph after paragraph 11:
 \pnum
 In a \grammarterm{nested-name-specifier} of the form \tcode{auto::} or
 \tcode{C::}, where \tcode{C} is a \grammarterm{constrained-type-name},
-that \grammarterm{nested-name-specifier} designates a placeholder type that 
+that \grammarterm{nested-name-specifier} designates a placeholder that 
 will be replaced later according to the rules for placeholder deduction in
 \ref{dcl.spec.auto}.
 %
@@ -99,10 +99,10 @@ Add a new paragraph after paragraph 13:
 \begin{quote}
 \setcounter{Paras}{13}
 \pnum
-If an \grammarterm{id-expression} denotes a non-overloaded function 
-declaration that was declared with a \grammarterm{requires-clause}
-(\ref{dcl.fct}), its associated constraints shall be satisfied
-(\ref{temp.constr}).
+A program that refers explicitly or implicitly to a function with associated 
+constraints that are not satisfied (\ref{temp.constr}), other than to declare 
+it, is ill-formed.
+% 
 \enterexample
 \begin{codeblock}
 void f(int) requires false;
@@ -172,8 +172,13 @@ with the name of the corresponding invented template-parameter.
 }
 %
 \added{
-For a generic lambda, the function call operator (\cxxref{over.call}) 
-is an abbreviated function template (\ref{dcl.fct}).
+The closure type for a generic lambda has a public inline
+function call operator template that is an abbreviated function template
+whose parameters and return type are derived from the 
+\grammarterm{lambda-expression}'s 
+\grammarterm{parameter-declaration-clause} and 
+\grammarterm{trailing-return-type} according to the
+rules in (\ref{dcl.fct}).
 }
 \end{quote}
 
