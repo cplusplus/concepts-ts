@@ -44,6 +44,29 @@ to the grammar for \grammarterm{simple-type-specifier}{}s.
 \end{bnf}
 \end{quote}
 
+Modify paragraph 2 to begin:
+
+\begin{quote}
+\pnum
+\removed{The \tcode{auto} specifier is a placeholder for a type to be deduced 
+\ref{dcl.spec.auto}.}
+\added{The \tcode{auto} specifier and \grammarterm{constrained-type-specifier}{s} 
+are placeholders for values (type, non-type, kind) to be deduced 
+\ref{dcl.spec.auto}.}
+\end{quote}
+
+Add \grammarterm{constrained-type-specifier}{s} to the table of
+\grammarterm{simple-type-specifier}{s} in Table 10.
+
+\begin{simpletypetable}
+{\grammarterm{simple-type-specifier}{s} and the types they specify}
+{tab:simple.type.specifiers}
+{ll}
+\topline
+Specifier(s)                    &   Type                 \\ \capsep
+\added{\grammarterm{constrained-type-specifier}} &   \added{placeholder to be deduced}\\
+\end{simpletypetable}
+
 
 %%
 %% Auto specifier
@@ -64,7 +87,7 @@ Replace paragraph 1 with the text below.
 \pnum
 The \tcode{auto} and \tcode{decltype(auto)} \grammarterm{type-specifier}{}s and
 \grammarterm{constrained-type-specifier}{}s designate a placeholder
-(type, non-type, or template) that will be replaced by later, either through 
+(type, non-type, or template) that will be replaced later, either through 
 deduction or an explicit specification.
 %
 The \tcode{auto} and \tcode{decltype(auto)} \grammarterm{type-specifier}{}s 
