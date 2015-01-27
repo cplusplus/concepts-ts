@@ -29,7 +29,7 @@ In this section, add the
 \begin{quote}
 \begin{bnf}
 \nontermdef{primary-expression}\br
-    \added{fold-expression}
+    \added{fold-expression}\br
     \added{requires-expression}
 \end{bnf}
 \end{quote}
@@ -53,12 +53,15 @@ Add a new paragraph after paragraph 11:
 \pnum
 In a \grammarterm{nested-name-specifier} of the form \tcode{auto::} or
 \tcode{C::}, where \tcode{C} is a \grammarterm{constrained-type-name},
-that \grammarterm{nested-name-specifier} designates a placeholder type that 
+that \grammarterm{nested-name-specifier} designates a placeholder that 
 will be replaced later according to the rules for placeholder deduction in
 \ref{dcl.spec.auto}.
 %
 If the designated placeholder is not a placeholder type, the program is
 ill-formed.
+% 
+The replacement type deduced for a placeholder shall be a class or
+enumeration type.
 % 
 \enternote
 A \grammarterm{constrained-type-specifier} can designate a placeholder for
@@ -77,9 +80,9 @@ template<typename T> concept bool C = sizeof(T) == sizeof(int);
 C::* p2 = &S1::n; // OK: \tcode{C} deduced as \tcode{S1}
 C::* p3 = &S1::c; // error: deduction fails because constraints are not satisfied
 
-void f(auto::X::Y);
-f(S1);       // error: \tcode{auto} cannot be deduced from \tcode{S1}
-f<S3>(S3{}); // OK
+void f(typename auto::X::Y);
+f(S1);    // error: \tcode{auto} cannot be deduced from \tcode{S1}
+f<S3>(0); // OK
 
 template<int N> concept bool D = true;
 D::* p4 = &S1::n; // error: \tcode{D} does not designate a placeholder type
@@ -96,10 +99,10 @@ Add a new paragraph after paragraph 13:
 \begin{quote}
 \setcounter{Paras}{13}
 \pnum
-If an \grammarterm{id-expression} denotes a non-overloaded function 
-declaration that was declared with a \grammarterm{requires-clause}
-(\ref{dcl.fct}), its associated constraints shall be satisfied
-(\ref{temp.constr}).
+A program that refers explicitly or implicitly to a function with associated 
+constraints that are not satisfied (\ref{temp.constr}), other than to declare 
+it, is ill-formed.
+% 
 \enterexample
 \begin{codeblock}
 void f(int) requires false;
@@ -169,8 +172,13 @@ with the name of the corresponding invented template-parameter.
 }
 %
 \added{
-For a generic lambda, the function call operator (\cxxref{over.call}) 
-is an abbreviated function template (\ref{dcl.fct}).
+The closure type for a generic lambda has a public inline
+function call operator template that is an abbreviated function template
+whose parameters and return type are derived from the 
+\grammarterm{lambda-expression}'s 
+\grammarterm{parameter-declaration-clause} and 
+\grammarterm{trailing-return-type} according to the
+rules in (\ref{dcl.fct}).
 }
 \end{quote}
 
@@ -183,7 +191,7 @@ Add the following example after those in paragraph 5 in the
 \begin{codeblock}
 template<typename T> concept bool C = true;
 
-auto gl = [](C& a, C* b) { a = *b }; // OK: denotes a generic lambda
+auto gl = [](C& a, C* b) { a = *b; }; // OK: denotes a generic lambda
 
 struct Fun {
   auto operator()(C& a, C* b) const { return a = *b; }
@@ -285,8 +293,9 @@ Add this section to 5.1.
 
 \pnum
 A \grammarterm{requires-expression} provides a concise way to express 
-syntactic requirements on template arguments.
-A syntactic requirement is one that can be checked by name lookup 
+requirements on template arguments. 
+% 
+A requirement is one that can be checked by name lookup
 (\cxxref{basic.lookup}) or by checking properties of types and expressions.
 
 \begin{bnf}
@@ -318,19 +327,21 @@ based on its paremeters (if any) and its nested \grammarterm{requirement}{s}.
 A \grammarterm{requires-expression} has type \tcode{bool} and is an 
 unevaluated expression (\ref{expr}).
 \enternote
-A \grammarterm{requires-expression} is normalized.
+A \grammarterm{requires-expression} is transformed into a constraint 
+(\ref{temp.constr.decl}) to in order determine if it is 
+satisfied (\ref{temp.constr}).
 \exitnote
 
 \pnum
 A \grammarterm{requires-expression} shall appear
 only within a concept definition (\ref{dcl.spec.concept}),
-or within a \grammarterm{requires-clause} following a
-\grammarterm{template-parameter-list} 
+or within the \grammarterm{requires-clause} of a
+\grammarterm{template-declaration} 
 (Clause~\ref{temp}) or function declaration (\ref{dcl.fct}).
 % 
 \enterexample
 A common use of \grammarterm{requires-expression}{}s is to define
-syntactic requirements in concepts such as the one below:
+requirements in concepts such as the one below:
 \begin{codeblock}
 template<typename T>
   concept bool R() {
@@ -391,9 +402,9 @@ template<typename T>
 
 template<typenamem T>
   concept bool C2() { 
-    requires(T t, void (*p)(const char*, ...)) // OK: the parameter-declaration-clause of
-    { p(t); };                                 // the requires-expression does not terminate 
-  }                                            // with an ellipsis
+    requires(T t, void (*p)(T*, ...)) // OK: the parameter-declaration-clause of
+    { p(t); };                        // the requires-expression does not terminate 
+  }                                   // with an ellipsis
 \end{codeblock}
 \exitexample
 
@@ -412,7 +423,7 @@ in which they are written.
 
 \pnum
 The substitution of template arguments into a \grammarterm{requires-expression} 
-may result in the formation of  invalid types or expressions, in its
+may result in the formation of  invalid types or expressions in its
 requirements. In such cases, the constraints corresponding to those
 requirements are not satisfied; it does not cause the program to be ill-formed.
 %
@@ -439,7 +450,7 @@ template<typename T> concept bool C =
 \rSec3[expr.prim.req.simple]{Simple requirements}
 
 \begin{bnf}
-\nontermdef{simple-requirement}
+\nontermdef{simple-requirement}\br
     expression \terminal{;}
 \end{bnf}
 
@@ -474,7 +485,7 @@ template<typename T> concept bool C =
 \pnum
 A \grammarterm{type-requirement} introduces a type 
 constraint (\ref{temp.constr.type}) for the type named by its
-\grammarterm{typename-specifier}.
+optional \grammarterm{nested-name-specifier} and \grammarterm{type-name}.
 %
 \enternote
 A type requirement asserts the validity of an associated
@@ -511,9 +522,9 @@ template<typename T> concept bool C =
 
 \pnum
 A \grammarterm{compound-requirement} introduces 
-a conjunction of one or more atomic constraints for the
+a conjunction of one or more constraints for the
 \grammarterm{expression} \tcode{E}. The order in which
-those constraints are introduce is:
+those constraints are introduced is:
 %
 \begin{itemize}
 \item the \grammarterm{compound-requirement} introduces an expression 
@@ -535,7 +546,7 @@ of \tcode{E} against the type \tcode{T}.
 \item otherwise, the requirement appends two constraints:
 a type constraint on the formation of \tcode{T} (\ref{temp.constr.type}) and
 an implicit conversion constraint from \tcode{E} to \tcode{T}
-(\ref{temp.constr.conv});
+(\ref{temp.constr.conv}).
 \end{itemize}
 \end{itemize}
 %
@@ -547,7 +558,7 @@ template<typename T> concept bool C1 =
   };
 \end{codeblock}
 The \grammarterm{compound-requirement} in \tcode{C1} 
-introduces an expression constraint on \tcode{x++}.
+introduces an expression constraint for \tcode{x++}.
 It is equivalent to a \grammarterm{simple-requirement}
 with the same \grammarterm{expression}.
 
@@ -573,7 +584,7 @@ template<typename T> concept bool C3 =
 
 The \grammarterm{compound-requirement} in \tcode{C3} 
 introduces two constraints: an expression constraint for \tcode{g(x)} 
-and an exception constraint on \tcode{g(x)}.
+and an exception constraint for \tcode{g(x)}.
 
 \begin{codeblock}
 template<typename T> concept bool C() { return true; }
@@ -608,8 +619,8 @@ void g(const C&);
 A \grammarterm{nested-requirement} can be used
 to specify additional constraints in terms of local parameters.
 %
-A \grammarterm{nested-requirement} appends the normalized form 
-(\ref{temp.constr.expr}) of its \grammarterm{constraint-expression} 
+A \grammarterm{nested-requirement} appends a predicate constraint 
+(\ref{temp.constr.pred}) for its \grammarterm{constraint-expression} 
 to the conjunction of constraints introduced by its enclosing
 \grammarterm{requires-expression}.
 
