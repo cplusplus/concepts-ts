@@ -1338,7 +1338,7 @@ except as described below.
 %%
 %% Explicit specialization
 %%
-\rSec2[temp.explicit]{Explicit specialization}
+\rSec2[temp.expl.spec]{Explicit specialization}
 
 Add the following note after paragraph 10.
 
@@ -1381,10 +1381,10 @@ When all template arguments have been deduced or obtained from default
 template arguments, all uses of template parameters in the template 
 parameter list of the template and the function type are replaced with
 the corresponding deduced or default argument values. 
-
+% 
 If the substitution results in an invalid type, as described above, type 
 deduction fails.
-
+% 
 \added{If the function template has associated constraints (\ref{temp.constr.decl}),
 the template arguments are substituted into the associated constraints
 without evaluating the resulting expression. If this substitution
