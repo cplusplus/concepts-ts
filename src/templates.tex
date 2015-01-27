@@ -250,7 +250,7 @@ by the concept resolution rules described in \ref{temp.constr.resolve}. Let
 \pnum
 The template parameters declared by a \grammarterm{template-introduction}
 are derived from its \grammarterm{introduced-parameter}{s} and the
-template parameter declarations in \tcode{C} to which those
+template parameter declarations of \tcode{C} to which those
 \grammarterm{introduced-parameter}{s} are matched as wildcards according to 
 the rules in \ref{temp.constr.resolve}.
 % 
@@ -347,7 +347,7 @@ Otherwise, \tcode{A} is the \grammarterm{id-expression} \tcode{P}.
 a variable concept (\ref{dcl.spec.concept}), then \tcode{E} is the
 \grammarterm{id-expression}
 \tcode{C<A1, ..., A$N$>}. Otherwise, \tcode{C} designates a function concept and
-\tcode{E} is the function call \tcode{C<A1, ..., A$N$>}.
+\tcode{E} is the function call \tcode{C<A1, ..., A$N$>()}.
 \end{itemize}
 % 
 \tcode{E} is the expression of the associated predicate constraint.
@@ -397,12 +397,12 @@ associated constraints on the formation of the \grammarterm{simple-template-id}.
 \setcounter{Paras}{7}
 \pnum
 When the \grammarterm{template-name} of a \grammarterm{simple-template-id} names
-a constrained non-function template or a constrained template template parameter,
-but not a member template that is a member of an unknown specialization
-(\ref{temp.res}), and all \grammarterm{template-argument}{s} in the
-\grammarterm{simple-template-id} are non-dependent \cxxref{temp.dep.temp}, the 
-associated constraints of the constrained template shall be satisfied.
-(\ref{temp.constr}). 
+a constrained non-function template or a constrained template 
+\grammarterm{template-parameter}, but not a member template that is a member 
+of an unknown specialization (\ref{temp.res}), and all 
+\grammarterm{template-argument}{s} in the \grammarterm{simple-template-id} 
+are non-dependent \cxxref{temp.dep.temp}, the associated constraints of the 
+constrained template shall be satisfied. (\ref{temp.constr}).
 % 
 \enterexample
 \begin{codeblock}
@@ -442,9 +442,8 @@ template<> struct S<char[2]> { }; // error: constraints not satisifed
 In \#1, the error is caused by the substitution of \tcode{int} into 
 the associated constraints of the template parameter \tcode{X}.
 % 
-In \#2, there are no constraints that can be checked for 
-\tcode{typename Y::template MT<char>} because \tcode{MT} is a member
-of an unknown specialization.
+In \#2, no constraints can be checked for \tcode{typename Y::template MT<char>} 
+because \tcode{MT} is a member of an unknown specialization.
 \exitexample
 \end{quote}
 
@@ -459,7 +458,7 @@ of an unknown specialization.
 \rSec2[temp.arg.template]{Template template arguments}
 
 Modify paragraph 3 to include rules for matching constrained template 
-\grammarterm{template parameter}{}s. Note that the examples following this 
+\grammarterm{template-parameter}{s}. Note that the examples following this 
 paragraph in the \Cpp Standard are omitted.
 
 \begin{quote}
@@ -810,7 +809,7 @@ Add examples following that paragraph.
 \pnum
 \enternote
 Other friend declarations can be constrained. In a constrained friend 
-declaration that is not a definition, the constraints are used for declaration
+declaration that is not a definition, the constraints are used for declaration.
 \exitnote
 \enterexample
 \begin{codeblock}
@@ -825,13 +824,13 @@ template<typename T>
   struct S {
     friend void f1() requires true;      // OK
     friend void f2() requires C1<T>;     // OK
-    friend void g0<T>(T) requires C1<T<; // error: constrained friend specialization
+    friend void g0<T>(T) requires C1<T>; // error: constrained friend specialization
     friend void g1<T>(T);                // OK
     friend void g2<T>(T);                // error: constraint can never be satisfied, no diagnostic required
   };
 
 void f1() requires true;    // friend of all S<T>
-void f2() requires C1<int>; // friend of S<int>
+void f2() requires C1<int>; // friend of only S<int>
 \end{codeblock}
 The friend declaration of \tcode{g2} is ill-formed, no
 diagnostic required, because no valid specialization of \tcode{S}
@@ -854,11 +853,11 @@ template<typename T>
   };
 \end{codeblock}
 \exitexample
-In the instantiation of such a class template, the template
-arguments are substituted into the constraints but not evaluated.
+In the instantiation of such a class template (\ref{temp.spec}), the 
+template arguments are substituted into the constraints but not evaluated.
 Constraints are checked (\ref{temp.constr}) only when
 that function is considered as a viable candidate for overload resolution
-(\ref{over.match.viable}).
+(\ref{over.match.viable}). If substitution fails, the program is ill-formed.
 \exitnote
 \end{addedblock}
 \end{quote}
@@ -896,6 +895,7 @@ the 4th item. Note that all other items in that list are elided.
 
 \begin{quote}
 \setcounter{Paras}{7}
+\pnum
 Within the argument list of a class template partial specialization, 
 the following restrictions apply:
 \begin{itemize}
@@ -939,7 +939,6 @@ Add the following example to the end of paragraph 2.
 struct S { void f(); };
 
 A<S, S, 1>    a6; // uses \#6
-A<S, int, 2>  a7; // error: constraints not satisfied
 A<int, S*, 3> a8; // uses \#7
 \end{codeblock}
 \exitexample
@@ -997,8 +996,7 @@ template<C T> void f(S<T>); // A
 template<D T> void f(S<T>); // B
 \end{codeblock}
 The partial specialization \#2 is more specialized than 
-\#1 for template arguments that satisfy both constraints because 
-\tcode{B} is more specialized than \tcode{A}.
+\#1 because \tcode{B} is more specialized than \tcode{A}.
 \exitexample
 \end{addedblock}
 \end{quote}
@@ -1180,10 +1178,12 @@ Add a new paragraph after paragraph 4.
 
 \begin{quote}
 \setcounter{Paras}{4}
+\begin{addedblock}
 \pnum
 The point of instantiation of a \grammarterm{constraint-expression} of a
 specialization immediately precedes the point of instantiation of
 the specialization.
+\end{addedblock}
 \end{quote}
 
 
@@ -1242,7 +1242,7 @@ instantiated only to determine if they are satisfied
 (\ref{temp.constr}).
 % 
 \enternote
-The satisfaction of constraints is determined during lookup or overload
+The satisfaction of constraints is determined during name lookup or overload
 resolution (\ref{over.match}). Preserving the spelling
 of the substituted constraint also allows constrained member function
 to be partially ordered by those constraints according to the rules
@@ -1264,7 +1264,8 @@ S<char[8]> s2; // OK: calls \#2
 \end{codeblock}
 
 Even though neither constructor for \tcode{S<char>} will be selected by
-overload resolution, they remain a part of the class template specialization. 
+overload resolution, both constructors remain a part of the class template 
+specialization. 
 % 
 This also has the effect of suppressing the implicit generation of a default
 constructor (\cxxref{class.ctor}).
@@ -1278,7 +1279,7 @@ template<typename T> struct S1 {
 
 template<typename T> struct S2 {
   template<typename U> 
-    requires sizeof(T[(int)-sizeof(T)]) > 1 // error: ill-formed, no diagnostic required
+    requires sizeof(T[-(int)sizeof(T)]) > 1 // error: ill-formed, no diagnostic required
       struct Inner2;
 };
 \end{codeblock}
