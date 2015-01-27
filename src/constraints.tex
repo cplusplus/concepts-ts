@@ -726,7 +726,7 @@ template<typename T> concept bool C4 = requires (T x) { ++x; }
 template<C2 T> void f1(T);                            // \#1
 template<C3 T> void f2(T);                            // \#2
 template<C4 T> void f3(T);                            // \#3
-template<typename T> requires (bool)3 + 4 void f4(T); // \#4
+template<typename T> requires (bool)3 + 4 void f4(T); // error: invalid constraints (\#4)
 \end{codeblock}
 The normalized associated constraints of \#1 are 
 \tcode{sizeof(T) == 1 $\land$ 1 == 2},
@@ -734,12 +734,13 @@ The normalized associated constraints of \#1 are
 those of \#2 are the type constraint for \tcode{T::type},
 %
 those of \#3 are are the parameterized constraint
-\tcode{$\lambda$(T x)} the expression constraint \tcode{++x}, and
-% 
-those of \#4 are simply the predicate constraint \tcode{(bool)3 + 4}.
+\tcode{$\lambda$(T x)} the expression constraint \tcode{++x}.
 % 
 Note that the normalized constraints of \#2 includes two atomic 
 constraints: \tcode{sizeof(char) == 1} and \tcode{1 == 2}.
+% 
+In \#4, the \grammarterm{constraint-expression} \tcode{(bool)3 + 4}
+is not a valid predicate constraint because it does not have type \tcode{bool}.
 \exitexample
 
 
