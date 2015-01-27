@@ -207,7 +207,7 @@ The constraint is satisfied if and only if \tcode{E} evaluates to
 \begin{codeblock}
 template<typename T> 
   concept bool C = sizeof(T) == 4 && !true; // requires predicate constraints
-                                            // \tcode{sizeof(T)} == 4 and \tcode{!t}
+                                            // \tcode{sizeof(T) == 4} and \tcode{!t}
 
 template<typename T>
   struct S {
@@ -395,7 +395,7 @@ template parameters in \tcode{f} that correspond to the placeholders in
 \tcode{T}, and the constraints associated by any 
 \grammarterm{constrained-type-specifier}{s} are satisfied.
 \exitnote
-
+% 
 \enterexample
 \begin{codeblock}
 template<typename T, typename U>
