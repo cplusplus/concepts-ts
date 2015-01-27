@@ -437,7 +437,7 @@ template<typename T> concept bool C2 = sizeof(T) == 1;
 template<C2 T> struct S { };
 
 template struct S<char[2]>;       // error: constraints not satisfied
-template<> struct S<char[2]> { }; // error: constraints not satisifed
+template<> struct S<char[2]> { }; // error: constraints not satisfied
 \end{codeblock}
 In \#1, the error is caused by the substitution of \tcode{int} into 
 the associated constraints of the template parameter \tcode{X}.

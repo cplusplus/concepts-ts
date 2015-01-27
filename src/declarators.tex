@@ -297,10 +297,12 @@ The types of \tcode{a}, \tcode{b}, and \tcode{c} are the same because the
 \grammarterm{constrained-type-specifier}{s} \tcode{E}, \tcode{E<>}, and 
 \tcode{E<0>} all associate the predicate constraint \tcode{E<T, 0>}, where 
 \tcode{T} is an invented template type parameter.
+% 
+\begin{codeblock}
+void f5(C head, C... tail);
+\end{codeblock}
+The types of \tcode{head} and \tcode{tail} have different types. Their
+respective associated constraints are \tcode{C<T>} and \tcode{C<U>...},
+where \tcode{T} is the template parameter invented for \tcode{head} and
+\tcode{U} is the template parameter invented for \tcode{U} (\ref{temp.parm}).
 \end{quote}
-
-% TODO: Add this as an example:
-% 
-%     void f(C head, C... tail)
-% 
-% head and tail have different types.
