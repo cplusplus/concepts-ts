@@ -40,6 +40,7 @@ The optional \grammarterm{requires-clause} following a
 constraints (\ref{temp.constr.decl}) on template arguments (\ref{temp.arg}).
 \end{quote}
 
+
 %%
 %% Template parameters
 %%
@@ -88,8 +89,8 @@ define the meaning of a constrained template parameter.
 \pnum
 A \grammarterm{constrained-parameter} declares a template parameter whose 
 kind (type, non-type, template) and type match that of the prototype parameter 
-of the concept designated by the \grammarterm{concept-name} of the
-\grammarterm{qualified-concept-name} in the \grammarterm{constrained-parameter}.
+of the concept designated by the \grammarterm{qualified-concept-name} 
+(\ref{dcl.spec.auto.constr}) in the \grammarterm{constrained-parameter}.
 % 
 The designated concept is selected by the rules for concept resolution 
 described in \ref{temp.constr.resolve}.
@@ -138,8 +139,8 @@ template<C5... Cs> f6();      // OK: \tcode{Cs} is a template parameter pack of 
 A \grammarterm{constrained-parameter} associates a predicate
 constraint (\ref{temp.constr.pred}) with its \grammarterm{template-declaration}. 
 % 
-The constraint is derived from the \grammarterm{constrained-type-name} 
-\tcode{CC} in the \grammarterm{constrained-parameter}, its designated concept 
+The constraint is derived from the \grammarterm{qualified-concept-name} 
+\tcode{Q} in the \grammarterm{constrained-parameter}, its designated concept 
 \tcode{C}, and the declared template parameter \tcode{P}.
 % 
 \begin{itemize}
@@ -150,10 +151,9 @@ the pack expansion \tcode{P...}. Otherwise, \tcode{A} is the
 \grammarterm{id-expression} \tcode{P}.
 
 \item Then, form a \grammarterm{template-id} \tcode{TT} based on the 
-\grammarterm{constrained-type-name} \tcode{CC} of the 
-\grammarterm{constrained-parameter}. If \tcode{CC} is 
+\grammarterm{qualified-concept-name} \tcode{Q}. If \tcode{Q} is 
 a \grammarterm{concept-name}, then \tcode{TT} is \tcode{C<A>}. Otherwise, 
-\tcode{CC} is a \grammarterm{partial-concept-id} of the form
+\tcode{Q} is a \grammarterm{partial-concept-id} of the form
 \tcode{C<A1, A2, ..., A$N$>}, and \tcode{TT} is \tcode{C<A, A1, A2, ..., A$N$}>.
 
 \item Then, form an \grammarterm{expression} \tcode{E} as follows. 
@@ -226,7 +226,7 @@ templates.
 
 \begin{bnf}
 \nontermdef{template-introduction}\br
-  nested-name-specifier\opt concept-name \terminal{\{} introduction-list \terminal{\}}
+   qualified-concept-name \terminal{\{} introduction-list \terminal{\}}
 
 \nontermdef{introduction-list}\br
   introduced-parameter\br
@@ -238,12 +238,13 @@ templates.
 
 A \grammarterm{template-introduction} declares a sequence of 
 \grammarterm{template-parameter}{s}, which are derived from a 
-\grammarterm{concept-name} and the sequence of \grammarterm{introduced-parameter}{s} 
-in its \grammarterm{introduction-list}.
+\grammarterm{qualified-concept-name} (\ref{dcl.spec.auto.constr}) and the 
+sequence of \grammarterm{introduced-parameter}{s} in its 
+\grammarterm{introduction-list}.
 
 \pnum
-The concept designated by the \grammarterm{concept-name} is selected by the
-concept resolution rules described in \ref{temp.constr.resolve}. Let
+The concept designated by the \grammarterm{qualified-concept-name} is selected 
+by the concept resolution rules described in \ref{temp.constr.resolve}. Let
 \tcode{C} be the designated concept.
 
 \pnum
@@ -293,10 +294,10 @@ C3{...Ts} struct S2; // OK: \tcode{Ts} is declared as \tcode{typename ... Ts}
 
 
 \pnum
-A concept referred to by a \grammarterm{concept-name} may have template 
-parameters with default template arguments. An \grammarterm{introduction-list} 
-may omit \grammarterm{identifier}{}s for a corresponding template
-parameter if it has a default argument. 
+A concept referred to by a \grammarterm{qualified-concept-name} may have 
+template parameters with default template arguments. An 
+\grammarterm{introduction-list} may omit \grammarterm{identifier}{}s for a 
+corresponding template parameter if it has a default argument.
 % 
 Only the \grammarterm{introduced-parameter}{}s are declared as template 
 parameters.
@@ -328,7 +329,7 @@ Array<double> s2;    // error: \tcode{Array} takes two template arguments
 \pnum
 A \grammarterm{template-introduction} associates a predicate constraint with 
 its \grammarterm{template-declaration}. This constraint is derived from
-the \grammarterm{concept-name} \tcode{C} in the 
+the \grammarterm{qualified-concept-name} \tcode{C} in the 
 \grammarterm{template-introduction} and the sequence of 
 \grammarterm{introduced-parameter}{s}.
 
@@ -342,10 +343,10 @@ template argument \tcode{A} as follows. If \tcode{P} includes an ellipsis,
 then \tcode{A} is the pack expansion \tcode{P...} (\ref{temp.variadic}). 
 Otherwise, \tcode{A} is the \grammarterm{id-expression} \tcode{P}.
 
-\item Then, form an expression \tcode{E} as follows. If \tcode{C} is
+\item Then, form an expression \tcode{E} as follows. If \tcode{C} designates
 a variable concept (\ref{dcl.spec.concept}), then \tcode{E} is the
 \grammarterm{id-expression}
-\tcode{C<A1, ..., A$N$>}. Otherwise, \tcode{C} is a function concept and
+\tcode{C<A1, ..., A$N$>}. Otherwise, \tcode{C} designates a function concept and
 \tcode{E} is the function call \tcode{C<A1, ..., A$N$>}.
 \end{itemize}
 % 
@@ -381,8 +382,8 @@ template<C1 T, typename U> void f(T, U); // OK: redeclaration of \tcode{f(T, aut
 \end{codeblock}
 % 
 \exitexample
-
 \end{quote}
+
 
 %%
 %% Names of template specializations
