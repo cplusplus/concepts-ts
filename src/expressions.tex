@@ -400,7 +400,7 @@ template<typename T>
     requires(T t, ...) { t; }; // error: terminates with an ellipsis
   }
 
-template<typenamem T>
+template<typename T>
   concept bool C2() { 
     requires(T t, void (*p)(T*, ...)) // OK: the parameter-declaration-clause of
     { p(t); };                        // the requires-expression does not terminate 
@@ -438,7 +438,7 @@ required (\ref{temp.res}).
 \begin{codeblock}
 template<typename T> concept bool C =
   requires {
-    new int[(int)-sizeof(T)]; // ill-formed, no diagnostic required
+    new int[-(int)sizeof(T)]; // ill-formed, no diagnostic required
   };
 \end{codeblock}
 \exitexample
