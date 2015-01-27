@@ -514,7 +514,7 @@ is the one selected according to the rules for concept resolution in
 \pnum
 \enternote
 The constraint introduced by a \grammarterm{constrained-type-name} is
-introduced by the invention of template parameter. 
+introduced by the invention of a template parameter. 
 % 
 The rules for inventing template parameters corresponding to placeholders
 in the \grammarterm{parameter-declaration-clause} of a
@@ -566,7 +566,8 @@ template<typename T>
   concept bool F1() { return true; } // OK: declares a function concept
 template<typename T> 
   concept bool F2();                 // error: function concept is not a definition
-template<typename T> constexpr bool F3();
+template<typename T> 
+  constexpr bool F3();
 template<typename T>
   concept bool F3() { return true; } // error: redeclaration of a function as a concept
 template<typename T> 
