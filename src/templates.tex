@@ -442,7 +442,7 @@ template<> struct S<char[2]> { }; // error: constraints not satisifed
 In \#1, the error is caused by the substitution of \tcode{int} into 
 the associated constraints of the template parameter \tcode{X}.
 % 
-In \#2, no constraints can be checked for \tcode{typename Y::template MT<char>} 
+In \#2, no constraints can be checked for \tcode{typename T::template MT<char>} 
 because \tcode{MT} is a member of an unknown specialization.
 \exitexample
 \end{quote}
