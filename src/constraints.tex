@@ -198,18 +198,30 @@ or as the associated constraint of a
 \grammarterm{template-introduction} (\ref{temp.intro}).
 \exitnote
 % 
-After substitution, \tcode{E} shall be a converted constant expression of 
-type \tcode{bool}.
+After substitution, \tcode{E} shall have type \tcode{bool}.
 % 
 The constraint is satisfied if and only if \tcode{E} evaluates to 
 \tcode{true}.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = sizeof(T) == 4 && !true;
+template<typename T> 
+  concept bool C = sizeof(T) == 4 && !true; // requires predicate constraints
+                                            // \tcode{sizeof(T)} == 4 and \tcode{!t}
+
+template<typename T>
+  struct S {
+    constexpr explicit operator bool() const { return true; }
+  };
+
+template<typename T>
+  requires S<T>{}
+    void f(T);
+
+f(0); // error: constraints cannot be satisfied because the
+      // expression \tcode{S<int>\{\}} does not have type \tcode{bool}
 \end{codeblock}
-Here, \tcode{sizeof(T) == 4} and \tcode{!true} are 
-predicate constraints required by the concept \tcode{C}.
+No conversions are applied to predicate constraints.
 \exitexample
 
 \pnum
