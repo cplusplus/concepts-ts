@@ -1299,6 +1299,24 @@ expression.
 %%
 \rSec2[temp.explicit]{Explicit instantiation}
 
+Add the following note after paragraph 7.
+
+\begin{quote}
+\setcounter{Paras}{7}
+\begin{addedblock}
+\pnum
+\enternote
+An explicit instantiation of a constrained template shall satisfy that
+template's associated constraints (\ref{temp.constr}). The satisfaction
+of constraints is determined during name lookup for explicit instantiations
+in which all template arguments are specified (\ref{temp.names}), or for
+explicit instantiations of function templates, during template argument 
+deduction (\ref{temp.deduct.decl}) when one or more trailing template 
+arguments are left unspecified.
+\exitnote
+\end{addedblock}
+\end{quote}
+
 Modify paragraph 8 to ensure that only members whose constraints are 
 satisfied are explicitly instantiated during class template 
 specialization. The note in the \Cpp Standard is omitted.
@@ -1315,6 +1333,29 @@ instantiation, \added{and provided that the associated constraints
 (\ref{temp.constr.decl}), if any, of that member are satisfied 
 (\ref{temp.constr}) by the template arguments of the explicit instantiation, } 
 except as described below.
+\end{quote}
+
+%%
+%% Explicit specialization
+%%
+\rSec2[temp.explicit]{Explicit specialization}
+
+Add the following note after paragraph 10.
+
+\begin{quote}
+\setcounter{Paras}{10}
+\begin{addedblock}
+\pnum
+\enternote
+An explicit specialization of a constrained template shall satisfy that
+template's associated constraints (\ref{temp.constr}). The satisfaction
+of constraints is determined during name lookup for explicit specializations
+in which all template arguments are specified (\ref{temp.names}), or for
+explicit specializations of function templates, during template argument 
+deduction (\ref{temp.deduct.decl}) when one or more trailing template 
+arguments are left unspecified.
+\exitnote
+\end{addedblock}
 \end{quote}
 
 
