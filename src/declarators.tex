@@ -301,8 +301,9 @@ The types of \tcode{a}, \tcode{b}, and \tcode{c} are the same because the
 \begin{codeblock}
 void f5(C head, C... tail);
 \end{codeblock}
-The types of \tcode{head} and \tcode{tail} have different types. Their
+The types of \tcode{head} and \tcode{tail} are different. Their
 respective associated constraints are \tcode{C<T>} and \tcode{C<U>...},
 where \tcode{T} is the template parameter invented for \tcode{head} and
 \tcode{U} is the template parameter invented for \tcode{U} (\ref{temp.param}).
+\exitexample
 \end{quote}
