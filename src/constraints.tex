@@ -803,7 +803,7 @@ in the conjuctive normal form of \tcode{Q}, where
 
 \item a disjunctive clause \tcode{P$i$} subsumes a conjunctive clause
 \tcode{Q$j$} if and only if each atomic constraint in \tcode{P$i$} subsumes 
-any atomic constraint \tcode{Q$j$}, where
+any atomic constraint in \tcode{Q$j$}, where
 
 \item an atomic constraint \tcode{A} subsumes another atomic constraint
 \tcode{B} if and only if the \tcode{A} and \tcode{B} are equivalent using the
@@ -988,7 +988,7 @@ template<typename... Ts> concept bool C3 = true;
 void f1(const C1*); // OK: \tcode{C1} selects \#1
 void f2(C1<char>);  // OK: \tcode{C1<char>} selects \#2
 
-template<C2<0> T> struct S1; // error: no matching concept for \tcode{C<0>},
+template<C2<0> T> struct S1; // error: no matching concept for \tcode{C2<0>},
                              // mismatched template arguments
 template<C2 T> struct S2;    // error: resolution of \tcode{C2} is ambiguous,
                              // both concepts are viable
