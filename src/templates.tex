@@ -163,7 +163,7 @@ concept and \tcode{E} is the function call \tcode{TT()}.
 
 \item Finally, If \tcode{P} declares a template parameter pack and 
 \tcode{C} is not a variadic concept, \tcode{E} is adjusted to be the
-\grammarterm{fold-expression} \tcode{E \&\& ...} (\ref{expr.prim.fold}).
+\grammarterm{fold-expression} \tcode{(E \&\& ...)} (\ref{expr.prim.fold}).
 \end{itemize}
 % 
 \tcode{E} is the expression of the associated predicate constraint.
@@ -175,7 +175,7 @@ template<typename... Ts> concept bool C2() { return true; }
 template<typename T, typename U> concept bool C3 = true;
 
 template<C1 T> struct s1;      // associates \tcode{C1<T>}
-template<C1... T> struct s2;   // associates \tcode{C1<T>...}
+template<C1... T> struct s2;   // associates \tcode{(C1<T> \&\& ...)}
 template<C2... T> struct s3;   // associates \tcode{C2<T...>()}
 template<C3<int> T> struct s4; // associates \tcode{C3<T, int>}
 \end{codeblock}
