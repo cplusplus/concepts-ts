@@ -843,17 +843,23 @@ This partial ordering is used to determine
 \pnum
 When two declarations \tcode{D1} and \tcode{D2} are
 partially ordered by their normalized constraints, \tcode{D1} is 
-\defn{more constrained} than \tcode{D2} if
+\defn{at least as constrained} as \tcode{D2} if
 % 
 \begin{itemize}
 \item \tcode{D1} and \tcode{D2} are both constrained
-declarations and \tcode{D1}'s associated constraints subsume but 
-are not subsumed by those of \tcode{D2}; or
+declarations and \tcode{D1}'s associated constraints subsume
+those of \tcode{D2}; or
 
-\item \tcode{D1} is constrained and \tcode{D2} is
+\item \tcode{D2} is
 unconstrained. 
 \end{itemize}
 % 
+\pnum
+A declaration \tcode{D1} is \defn{more constrained}
+than another declaration \tcode{D2} when \tcode{D1} is at least as
+constrained as \tcode{D2}, and \tcode{D2} is not at least as
+constrained as \tcode{D1}.
+
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C1 = requires(T t) { --t; };
@@ -870,12 +876,6 @@ g(true);    // selects \#3 because \tcode{C1<bool>} is not satisfied
 g(0);       // selects \#4
 \end{codeblock}
 \exitexample
-
-\pnum
-A declaration \tcode{D1} is \defn{at least as constrained}
-as another declaration \tcode{D2} when \tcode{D1} is more
-constrained than \tcode{D2}, and \tcode{D2} is not more
-constrained than \tcode{D1}.
 
 
 %%
