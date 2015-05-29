@@ -78,7 +78,7 @@ auto::* p1 = &S1::n; // \tcode{auto} deduced as \tcode{S1}
 
 template<typename T> concept bool C = sizeof(T) == sizeof(int);
 C::* p2 = &S1::n; // OK: \tcode{C} deduced as \tcode{S1}
-C::* p3 = &S1::c; // error: deduction fails because constraints are not satisfied
+C::* p3 = &S2::c; // error: deduction fails because constraints are not satisfied
 
 void f(typename auto::X::Y);
 f(S1);    // error: \tcode{auto} cannot be deduced from \tcode{S1}
