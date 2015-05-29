@@ -118,21 +118,13 @@ recommended name, in the same circumstances under which the feature is available
 (for example, taking into account relevant command-line options), to indicate
 the presence of support for that feature. Implementers should define that macro
 with the value specified in the most recent version of this Technical
-Specification that they have implemented. The recommended macro name is
-\tcode{__cpp_experimental_} followed by the string in the ``Macro name suffix''
-column in Table~\ref{tab:info.features}.
+Specification that they have implemented. The macro name for this Technical 
+Specification is \tcode{__cpp_experimental_concepts}, and its value is 
+\tcode{201501}.
 
 \pnum
 No header files should be required to test macros describing the presence
 of support for language features.
-
-\begin{floattable}{Feature-test macros for concepts}{tab:info.features}
-{ll}
-\topline
-\lhdr{Macro name suffix} & \rhdr{Value} \\
-\capsep
-\tcode{concepts}  & \tcode{201501}      \\
-\end{floattable}
 
 \rSec1[intro.ack]{Acknowledgments}
 
