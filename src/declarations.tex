@@ -460,7 +460,7 @@ A \grammarterm{constrained-type-specifier} designates a placeholder
 \begin{codeblock}
 template<typename T> concept bool C1 = false;
 template<int N> concept bool C2 = false;
-template<template<typename> class X> C3 = false;
+template<template<typename> class X> concept bool C3 = false;
 
 template<typename T, int N> class Array { };
 template<typename T, template<typename> class A> class Stack { };
