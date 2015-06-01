@@ -74,7 +74,7 @@ struct S1 { int n; };
 struct S2 { char c; };
 struct S3 { struct X { using Y = int; }; };
 
-auto::* p1 = &S1::n; // \tcode{auto} deduced as \tcode{S1}
+int auto::* p1 = &S1::n; // \tcode{auto} deduced as \tcode{S1}
 
 template<typename T> concept bool C = sizeof(T) == sizeof(int);
 C::* p2 = &S1::n; // OK: \tcode{C} deduced as \tcode{S1}
