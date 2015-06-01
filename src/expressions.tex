@@ -29,20 +29,32 @@ In this section, add the
 \begin{quote}
 \begin{bnf}
 \nontermdef{primary-expression}\br
+    literal\br
+    \terminal{this}\br
+    \terminal{(} expression \terminal{)}\br
+    id-expression\br
+    lambda-expression\br
     \added{fold-expression}\br
     \added{requires-expression}
 \end{bnf}
 \end{quote}
 
-In paragraph 8, add \tcode{auto} to \grammarterm{nested-name-specifier}:
+In paragraph 8, add \tcode{auto} and \grammarterm{constrained-type-name} 
+to \grammarterm{nested-name-specifier}:
 
 \begin{quote}
-\setcounter{Paras}{7}
-\pnum
+% \setcounter{Paras}{7}
+% \pnum
 \begin{bnf}
 \nontermdef{nested-name-specifier}\br
-    \terminal{auto} \terminal{::}\br
-    constrained-type-name \terminal{::}
+    \terminal{::}\br
+    type-name \terminal{::}\br
+    namespace-name \terminal{::}\br
+    decltype-specifier \terminal{::}\br
+    \added{\terminal{auto} \terminal{::}}\br
+    \added{constrained-type-name \terminal{::}}\br
+    nested-name-specifier identifier \terminal{::}\br
+    nested-name-specifier \terminal{template}\opt \terminal{::}
 \end{bnf}
 \end{quote}
 
