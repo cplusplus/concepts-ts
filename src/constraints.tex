@@ -207,7 +207,7 @@ The constraint is satisfied if and only if \tcode{E} evaluates to
 \begin{codeblock}
 template<typename T> 
   concept bool C = sizeof(T) == 4 && !true; // requires predicate constraints
-                                            // \tcode{sizeof(T) == 4} and \tcode{!t}
+                                            // \tcode{sizeof(T) == 4} and \tcode{!true}
 
 template<typename T>
   struct S {
