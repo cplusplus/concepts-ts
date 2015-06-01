@@ -988,8 +988,8 @@ template<C2<0> T> struct S1; // error: no matching concept for \tcode{C<0>},
 template<C2 T> struct S2;    // error: resolution of \tcode{C2} is ambiguous,
                              // both concepts are viable
 
-Q{...Ts} void q1(); // OK: selects \tcode{Q}
-Q{T} void q2();     // OK: selects \tcode{Q}
+C3{...Ts} void q1(); // OK: selects \tcode{C3}
+C3{T} void q2();     // OK: selects \tcode{C3}
 \end{codeblock}
 \exitexample
 
