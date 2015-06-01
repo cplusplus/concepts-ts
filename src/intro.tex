@@ -102,30 +102,35 @@ Conformance is defined in terms of the behavior of programs.
 %%
 %% Feature-testing recommendations
 %%
-\rSec1[intro.features]{Feature-testing recommendations (Informative)}
+\rSec1[intro.features]{Feature-testing recommendations}
 
 \pnum
-For the sake of improved portability between partial implementations of various
-C++ standards, WG21 (the ISO Technical Committee for the \Cpp Programming
-Language) recommends that implementers and programmers follow the guidelines in
-this section concerning feature-test macros. 
-\enternote 
-WG21's SD-6 makes similar recommendations for the \Cpp Standard.
-\exitnote
+An implementation that provides support for this Technical Specification shall 
+define the feature test macro \tcode{__cpp_concepts} with the 
+value \tcode{201501}.
 
-\pnum
-Implementers who provide a new language feature should define a macro with the
-recommended name, in the same circumstances under which the feature is available
-(for example, taking into account relevant command-line options), to indicate
-the presence of support for that feature. Implementers should define that macro
-with the value specified in the most recent version of this Technical
-Specification that they have implemented. The macro name for this Technical 
-Specification is \tcode{__cpp_experimental_concepts}, and its value is 
-\tcode{201501}.
+% \pnum
+% For the sake of improved portability between partial implementations of various
+% C++ standards, WG21 (the ISO Technical Committee for the \Cpp Programming
+% Language) recommends that implementers and programmers follow the guidelines in
+% this section concerning feature-test macros. 
+% \enternote 
+% WG21's SD-6 makes similar recommendations for the \Cpp Standard.
+% \exitnote
 
-\pnum
-No header files should be required to test macros describing the presence
-of support for language features.
+% \pnum
+% Implementers who provide a new language feature should define a macro with the
+% recommended name, in the same circumstances under which the feature is available
+% (for example, taking into account relevant command-line options), to indicate
+% the presence of support for that feature. Implementers should define that macro
+% with the value specified in the most recent version of this Technical
+% Specification that they have implemented. The macro name for this Technical 
+% Specification is \tcode{__cpp_experimental_concepts}, and its value is 
+% \tcode{201501}.
+
+% \pnum
+% No header files should be required to test macros describing the presence
+% of support for language features.
 
 \rSec1[intro.ack]{Acknowledgments}
 
