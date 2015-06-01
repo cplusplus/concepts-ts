@@ -82,22 +82,22 @@ a non-type or template (\ref{dcl.spec.auto.constr}).
 % 
 \enterexample
 \begin{codeblock}
+template<typename T> concept bool C = sizeof(T) == sizeof(int);
+template<int N> concept bool D = true;
+
 struct S1 { int n; };
 struct S2 { char c; };
 struct S3 { struct X { using Y = int; }; };
 
 int auto::* p1 = &S1::n; // \tcode{auto} deduced as \tcode{S1}
-
-template<typename T> concept bool C = sizeof(T) == sizeof(int);
-C::* p2 = &S1::n; // OK: \tcode{C} deduced as \tcode{S1}
-C::* p3 = &S2::c; // error: deduction fails because constraints are not satisfied
+int D::* p2 = &S1::n;    // error: \tcode{D} does not designate a placeholder type
+int C::* p3 = &S1::n;    // OK: \tcode{C} deduced as \tcode{S1}
+char C::* p4 = &S2::c;   // error: deduction fails because constraints are not satisfied
 
 void f(typename auto::X::Y);
-f(S1);    // error: \tcode{auto} cannot be deduced from \tcode{S1}
+f(S1())); // error: \tcode{auto} cannot be deduced from \tcode{S1()}
 f<S3>(0); // OK
 
-template<int N> concept bool D = true;
-D::* p4 = &S1::n; // error: \tcode{D} does not designate a placeholder type
 \end{codeblock}
 In the declaration of \tcode{f}, the placeholder appears in a non-deduced 
 context (\cxxref{temp.deduct.type}). It may be replaced later through the
