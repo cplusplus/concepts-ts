@@ -258,8 +258,8 @@ template<typename T, typename U> struct Pair;
 template<typename T, typename U> Pair<T, U> make_pair(T, U);
 template<int N> struct Size { void f(int) { }  };
 
-void (auto::*)(auto) p1 = &Size<0>::f;   // OK: \tcode{p} has type \tcode{void(Size<0>::*)(int)}
-Pair<auto, auto> p2 = make_pair(0, 'a'); // OK: \tcode{p} has type \tcode{Pair<int, char>}
+void (auto::* p1)(auto) = &Size<0>::f;   // OK: \tcode{p1} has type \tcode{void(Size<0>::*)(int)}
+Pair<auto, auto> p2 = make_pair(0, 'a'); // OK: \tcode{p2} has type \tcode{Pair<int, char>}
 N::Wrap<auto> a = N::make_wrap(0.0);     // OK: \tcode{a} has type \tcode{Wrap<double>}
 auto::Wrap<int> x = N::make_wrap(0);     // error: failed to deduce value for \tcode{auto}
 Size<sizeof(auto)> y = Size<0>{};        // error: failed to deduce value for \tcode{auto}
