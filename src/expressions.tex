@@ -194,7 +194,7 @@ template<typename T> concept bool C = true;
 auto gl = [](C& a, C* b) { a = *b; }; // OK: denotes a generic lambda
 
 struct Fun {
-  auto operator()(C& a, C* b) const { return a = *b; }
+  auto operator()(C& a, C* b) const { a = *b; }
 } fun;
 \end{codeblock}
 \tcode{C} is a 
