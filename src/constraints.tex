@@ -398,8 +398,7 @@ template parameters in \tcode{f} that correspond to the placeholders in
 % 
 \enterexample
 \begin{codeblock}
-template<typename T, typename U>
-  struct Pair;
+template<typename T, typename U> struct Pair;
 
 template<typename T>
   concept bool C1() { return true; }
@@ -407,8 +406,7 @@ template<typename T>
 template<typename T>
   concept bool C2() { return requires(T t) { {*t} -> Pair<C1&, auto>; }; }
 
-template<typename T>
-  void g(T);
+template<C2 T> void g(T);
 
 g((int*)nullptr); // error: constraints not satisfied.
 \end{codeblock}
