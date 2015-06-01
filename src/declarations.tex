@@ -58,14 +58,20 @@ are placeholders for values (type, non-type, template) to be deduced
 Add \grammarterm{constrained-type-specifier}{s} to the table of
 \grammarterm{simple-type-specifier}{s} in Table~\ref{tab:simple.type.specifiers}.
 
+\renewcommand{\thetable}{\arabic{table}}
 \setcounter{table}{9}
 \begin{simpletypetable}
 {\grammarterm{simple-type-specifier}{s} and the types they specify}
 {tab:simple.type.specifiers}
 {ll}
 \topline
-Specifier(s)                    &   Type                 \\ \capsep
-\added{\grammarterm{constrained-type-specifier}} &   \added{placeholder for value (type, non-type, template) to be deduced}\\
+Specifier(s)                                     &   Type                                                                 \\ \capsep
+\grammarterm{type-name}                          &   the type named                                                       \\
+\grammarterm{simple-template-id}                 &   the type as defined in~\ref{temp.names}                              \\
+\multicolumn{2}{|c|}{\vdots}                                                                                              \\
+auto                                             & placeholder for a type to be deduced                                   \\
+decltype(\grammarterm{expression})               & the type as defined below                                              \\
+\added{\grammarterm{constrained-type-specifier}} & \added{placeholder for value (type, non-type, template) to be deduced} \\
 \end{simpletypetable}
 
 
