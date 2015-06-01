@@ -106,8 +106,16 @@ Conformance is defined in terms of the behavior of programs.
 
 \pnum
 An implementation that provides support for this Technical Specification shall 
-define the feature test macro \tcode{__cpp_concepts} with the 
-value \tcode{201501}.
+define the feature test macro(s) in Table~\ref{tab:info.features}.
+
+\begin{floattable}{Feature-test macro(s)}{tab:info.features}
+{ll}
+\topline
+\lhdr{Macro name} & \rhdr{Value} \\
+\capsep
+\tcode{__cpp_concepts}  & \tcode{201501}      \\
+\end{floattable}
+
 
 % \pnum
 % For the sake of improved portability between partial implementations of various
