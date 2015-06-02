@@ -51,14 +51,20 @@ constrained template parameters.
 
 \begin{quote}
 \pnum
+\vspace{-\the\baselineskip}
 
 \begin{bnf}
 \nontermdef{template-parameter}\br
+  type-parameter\br
+  parameter-declaration\br
   \added{constrained-parameter}
+\end{bnf}
 
+\begin{bnf}
 \begin{addedblock}
 \nontermdef{constrained-parameter}\br
-  qualified-concept-name ...\opt identifier\opt default-template-argument\opt
+  qualified-concept-name ...\opt identifier\opt\br
+  qualified-concept-name identifier\opt default-template-argument\opt
 
 \nontermdef{default-template-argument}\br
   \terminal{=} type-id\br
