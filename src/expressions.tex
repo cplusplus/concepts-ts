@@ -439,12 +439,9 @@ may result in the formation of invalid types or expressions in its
 requirements. In such cases, the constraints corresponding to those
 requirements are not satisfied; it does not cause the program to be ill-formed.
 %
-\enternote
-But if the substitution of template arguments into
-a \grammarterm{requirement} would always result in
-a substitution failure, the program is ill-formed; no diagnostic
-required (\ref{temp.res}).
-\exitnote
+If the substitution of template arguments into a \grammarterm{requirement} 
+would always result in a substitution failure, the program is ill-formed; 
+no diagnostic required.
 %
 \enterexample
 \begin{codeblock}
