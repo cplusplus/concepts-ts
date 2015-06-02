@@ -67,11 +67,14 @@ Modify the matching condition in paragraph 1 to accept a
 \grammarterm{requires-clause}.
       
 \begin{quote}
-\pnum
+\pnum\vspace{-\the\baselineskip} % Adjust to hide the blank line.
+
 \begin{bnf}
 \terminal{D1} \terminal{(} parameter-declaration-clause \terminal{)} cv-qualifier-seq\opt\br
-  \hspace*{\bnfindentinc}ref-qualifier\opt exception-specification\opt attribute-specifier-seq\opt\br
-  \hspace*{\bnfindentinc}\added{requires-clause\opt}
+  \hspace*{\bnfindentinc}ref-qualifier\opt 
+                         exception-specification\opt 
+                         attribute-specifier-seq\opt 
+                         \added{requires-clause\opt}
 \end{bnf}
 \end{quote}
 
@@ -79,11 +82,14 @@ Modify the matching condition in paragraph 2 to accept a
 \grammarterm{requires-clause}.
 
 \begin{quote}
-\pnum
+\pnum\vspace{-\the\baselineskip} % Adjust to hide the blank line.
+
 \begin{bnf}
 \terminal{D1} \terminal{(} parameter-declaration-clause \terminal{)} cv-qualifier-seq\opt\br 
-  \hspace*{\bnfindentinc}ref-qualifier\opt exception-specification\opt attribute-specifier-seq\opt\br
-  \hspace*{\bnfindentinc}trailing-return-type \added{requires-clause\opt}
+  \hspace*{\bnfindentinc}ref-qualifier\opt 
+                         exception-specification\opt 
+                         attribute-specifier-seq\opt
+                         \added{requires-clause\opt}
 \end{bnf}
 \end{quote}
 
