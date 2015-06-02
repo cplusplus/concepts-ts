@@ -90,8 +90,8 @@ using the symbol $\land$ and disjunction is spelled using the
 symbol $\lor$. 
 % 
 The operands of these operations are called the left 
-and right operands. In the constraint \tcode{P $\land$ Q},
-\tcode{P} is the left operand and \tcode{Q} is the right operand.
+and right operands. In the constraint $A \land B$,
+$A$ is the left operand, and $B$ is the right operand.
 % 
 Grouping of constraints is shown using parentheses.
 \exitnote
@@ -133,11 +133,10 @@ Such a substitution would cause this program to be ill-formed since
 the immediate context (\ref{temp.deduct}.
 \exitexample
 
-
-% \pnum
-A conjunction \tcode{P} is equivalent to another conjunction \tcode{Q}
-if and only if the left operands of \tcode{P} and \tcode{Q} are equivalent
-and the right operands of \tcode{P} and \tcode{Q} are equivalent.
+\pnum
+A conjunction $C$ is equivalent to another conjunction $D$
+if and only if the left operands of $C$ and $D$ are equivalent
+and the right operands of $C$ and $D$ are equivalent.
 
 \pnum
 A \defn{disjunction} is a constraint taking two 
@@ -154,21 +153,22 @@ of those constraints resulting from substitution. If the expression
 \tcode{P || Q} results in a call to a user-declared \tcode{operator||},
 the program is ill-formed.
 
-% \pnum
-A disjunction \tcode{P} is equivalent to another disjunction \tcode{Q}
-if and only if the left operands of \tcode{P} and \tcode{Q} are equivalent
-and the right operands of \tcode{P} and \tcode{Q} are equivalent.
+\pnum
+A disjunction $C$ is equivalent to another disjunction $D$
+if and only if the left operands of $C$ and $D$ are equivalent
+and the right operands of $C$ and $D$ are equivalent.
 
 \pnum
 \enternote
 The prohibition against user-declared logical operators disallows
 \grammarterm{constraint-expression}{s} (\ref{temp.constr.decl}) whose 
 evaluation disagrees with the satisfaction of its derived constraint.
-That is, for any atomic predicate constraints \tcode{P} and \tcode{Q},
-the conjunction \tcode{P $\land$ Q} is satisfied if and only if
-the \grammarterm{constraint-expression} \tcode{P \&\& Q} evaluates to
-\tcode{true}. Likewise, the disjunction \tcode{P $\lor$ Q} is satisfied 
-if and only if the \grammarterm{constraint-expression} \tcode{P || Q}
+That is, for any atomic predicate constraints $A$ and $B$, whose
+respective expressions are \tcode{PA} and \tcode{PB},
+the conjunction $A \land B$ is satisfied if and only if
+the \grammarterm{constraint-expression} \tcode{PA \&\& PB} evaluates to
+\tcode{true}. Likewise, the disjunction $A \lor B$ is satisfied 
+if and only if the \grammarterm{constraint-expression} \tcode{PA || PB}
 evaluates to \tcode{true}.
 \exitnote
 
@@ -225,9 +225,9 @@ No conversions are applied to predicate constraints.
 \exitexample
 
 \pnum
-A predicate constraint \tcode{P} is equivalent to another predicate
-\tcode{Q} if and only if the expressions of \tcode{P} and \tcode{Q}
-are equivalent using the rules described in \ref{temp.over.link} to compare
+A predicate constraint $A$ is equivalent to another predicate
+$B$ if and only if the expressions of $A$ and $B$ are equivalent using the 
+rules described in \ref{temp.over.link} to compare
 expressions.
 
 
@@ -268,9 +268,9 @@ for \tcode{T}.
 \exitexample
 
 \pnum
-An expression constraint \tcode{P} is equivalent to another expression
-constraint \tcode{Q} if and only if the \tcode{expression}{}s of
-\tcode{P} and \tcode{Q} are equivalent using the rules described 
+An expression constraint $A$ is equivalent to another expression
+constraint $B$ if and only if the \grammarterm{expression}{}s of
+$A$ and $B$ are equivalent using the rules described 
 in \ref{temp.over.link} to compare expressions.
 
 
@@ -311,9 +311,8 @@ does not require that type to be complete
 (\cxxref{basic.types}).
 
 \pnum
-A type constraint \tcode{P} is equivalent to another type
-constraint \tcode{Q} if and only if the types in \tcode{P}
-and \tcode{Q} are equivalent according to the rules in
+A type constraint $A$ is equivalent to another type constraint $B$ if and 
+only if the types in $A$ and $B$ are equivalent according to the rules in
 \cxxref{temp.type}.
 
 
@@ -352,11 +351,11 @@ convertible to \tcode{bool}.
 \exitexample
 
 \pnum
-An implicit conversion constraint \tcode{P} is equivalent to another implicit 
-conversion constraint \tcode{Q} if and only if the \grammarterm{expression}{}s 
-of \tcode{P} and \tcode{Q} are equivalent using the rules in
+An implicit conversion constraint $A$ is equivalent to another implicit 
+conversion constraint $B$ if and only if the \grammarterm{expression}{}s 
+of $A$ and $B$ are equivalent using the rules in
 \ref{temp.over.link} to compare expressions, and the the types
-of \tcode{P} and \tcode{Q} are equivalent according to the rules in
+of $A$ and $B$ are equivalent according to the rules in
 \cxxref{temp.type}.
 
 
@@ -422,11 +421,11 @@ because no values can be deduced for the placeholders \tcode{C1} and
 \exitexample
 
 \pnum
-An argument deduction constraint \tcode{P} is equivalent to another 
-argument deduction constraint \tcode{Q} if and only if the 
-\grammarterm{expression}{s} of \tcode{P} and \tcode{Q} are equivalent
+An argument deduction constraint $A$ is equivalent to another 
+argument deduction constraint $B$ if and only if the 
+\grammarterm{expression}{s} of $A$ and $B$ are equivalent
 using the rules in \ref{temp.over.link} to compare expressions, and the types
-of \tcode{P} and \tcode{Q} are equivalent (\cxxref{temp.type}).
+of $A$ and $B$ are equivalent (\cxxref{temp.type}).
 
 
 %%
@@ -446,10 +445,9 @@ that includes the \tcode{noexcept} specifier (\ref{expr.prim.req.compound}).
 \exitnote
 
 \pnum
-An exception constraint \tcode{P} is equivalent to another predicate
-\tcode{Q} if and only if the expressions of \tcode{P} and \tcode{Q}
-are equivalent using the rules described in \ref{temp.over.link} to compare
-expressions.
+An exception constraint $A$ is equivalent to another predicate
+$B$ if and only if the expressions of $A$ and $B$ are equivalent using the 
+rules described in \ref{temp.over.link} to compare expressions.
 
 
 %%
@@ -474,9 +472,9 @@ is the conjunction of constraints.
 \enternote 
 Parameterized constraints have no corresponding C++ syntax. For the purpose of 
 exposition, a parameterized constraint is written as, e.g.,
-\tcode{$\lambda$(T x, U y) P(x, y)}, where \tcode{x} and \tcode{y} are
-constraint variables, and \tcode{P(x, y)} is that constraint's operand
-written in terms of \tcode{x} and \tcode{y}.
+$\lambda(\mathtt{T~x}, \mathtt{U~y})~P(\mathtt{x}, \mathtt{y})$, where 
+\tcode{x} and \tcode{y} are constraint variables, and $P(\mathtt{x}, \mathtt{y})$ 
+is that constraint's operand written in terms of \tcode{x} and \tcode{y}.
 \exitnote
 % 
 \enterexample
@@ -488,7 +486,8 @@ template<typename T>
   };
 \end{codeblock}
 The concept \tcode{Eq} defines the parameterized constraint
-\tcode{$\lambda$(T a, T b) P(a, b)} where \tcode{P(a, b)} is the conjunction
+$\lambda(\mathtt{T~a}, \mathtt{T~b})~P(\mathtt{a}, \mathtt{b})$ where 
+$P(\mathtt{a}, \mathtt{b})$ is the conjunction
 of two expression constraints: \tcode{a == b} and \tcode{a != b} must be
 valid expressions (\ref{temp.constr.expr}).
 \exitexample
@@ -502,12 +501,12 @@ into a constraint variable fails, no more substitutions are performed, and
 the constraint is not satisfied.
 
 \pnum
-Two parameterized constraints \tcode{P} and \tcode{Q} are equivalent 
+Two parameterized constraints $A$ and $B$ are equivalent 
 if and only if their operands are equivalent.
 % 
 Two expressions involving constraint variables are equivalent if they
 are equivalent according to the rules for expressions described in 
-\ref{temp.over.link}, except that any \grammarterm{identifier}{s} referring to 
+\ref{temp.over.link}, except that any \grammarterm{identifier}{}s referring to 
 constraint variables are equivalent if and only if the types of their 
 corresponding declarations are equivalent (\cxxref{temp.type}).
 
@@ -639,15 +638,15 @@ as a conjunction or disjunction of its operands.
 The \defn{normal form} of a constraint is defined as follows:
 % 
 \begin{itemize}
-\item The normal form of the disjunction \tcode{P} $\lor$ \tcode{Q} is the 
-disjunction of the normal form of \tcode{P} and the normal form \tcode{Q}.
+\item The normal form of the disjunction $P \lor Q$ is the 
+disjunction of the normal form of $P$ and the normal form $Q$.
 
-\item The normal form of the conjunction \tcode{P} $\land$ \tcode{Q} is the 
-conjunction of the normal form of \tcode{P} and the normal form \tcode{Q}.
+\item The normal form of the conjunction $P \land Q$ is the 
+conjunction of the normal form of $P$ and the normal form $Q$.
 
-\item The normal form of a predicate constraint \tcode{P} is formed by
-first creating a new expression \tcode{E} from the expression of \tcode{P} by 
-replacing all subexpressions in \tcode{P} that refer to concepts with their 
+\item The normal form of a predicate constraint $P$ is formed by
+first creating a new expression \tcode{E} from the expression of $P$ by 
+replacing all subexpressions in $P$ that refer to concepts with their 
 corresponding definitions. In particular,
 % 
 \begin{itemize}
@@ -669,14 +668,14 @@ If any such substitution fails, the program is ill-formed.
 % 
 Second, transform the expression \tcode{E} into a constraint as follows:
 \begin{itemize}
-\item An expression \tcode{(P)} is transformed into the normalized predicate 
-constraint \tcode{P}.
+\item An expression \tcode{(E)} is transformed into the normalized predicate 
+constraint for \tcode{E}.
 
-\item An expression \tcode{P || Q} is transformed into the normalized 
-disjunction of the predicate constraints \tcode{P} and \tcode{Q}.
+\item An expression \tcode{E1 || E2} is transformed into the normalized 
+disjunction of the predicate constraints for \tcode{E1} and \tcode{E2}.
 
-\item An expression \tcode{P \&\& Q} is transformed into the normalized
-conjunction of the predicate constraints \tcode{P} and \tcode{Q}.
+\item An expression \tcode{E1 \&\& E2} is transformed into the normalized
+conjunction of the predicate constraints for \tcode{E1} and \tcode{E2}.
 
 \item A \grammarterm{requires-expression}, (\ref{expr.prim.req}) having the
 form
@@ -732,7 +731,7 @@ The normalized associated constraints of \#1 are
 those of \#2 are the type constraint for \tcode{T::type},
 %
 those of \#3 are are parameterized constraint
-\tcode{$\lambda$(T x)} the expression constraint \tcode{++x}.
+$\lambda(\mathtt{T~x})$ the expression constraint \tcode{++x}.
 % 
 In \#4, the \grammarterm{constraint-expression} \tcode{(bool)3 + 4}
 is not a valid predicate constraint because it does not have type \tcode{bool}.
@@ -745,9 +744,9 @@ is not a valid predicate constraint because it does not have type \tcode{bool}.
 \rSec2[temp.constr.order]{Partial ordering by constraints}
 
 \pnum
-A constraint \tcode{P} is said to \defn{subsume} another constraint \tcode{Q} 
-if, informally, it can be determined that \tcode{P} implies \tcode{Q}, up to 
-the equivalence of types and expressions in \tcode{P} and \tcode{Q}.
+A constraint $P$ is said to \defn{subsume} another constraint $Q$ 
+if, informally, it can be determined that $P$ implies $Q$, up to 
+the equivalence of types and expressions in $P$ and $Q$.
 % 
 \enterexample
 Subsumption does not determine if the predicate constraint 
@@ -755,13 +754,10 @@ Subsumption does not determine if the predicate constraint
 integral template argument \tcode{N}.
 \exitexample
 
-% TODO: If I add a quantified constraint (which I will), then this
-% rewriting needs to lift its conjunctions out of it.
-
 \pnum
-In order to determine if a constraint \tcode{P} subsumes a constraint
-\tcode{Q}, transform \tcode{P} into disjunctive normal form, 
-and transform \tcode{Q} into conjunctive normal form\footnote{
+In order to determine if a constraint $P$ subsumes a constraint
+$Q$, transform $P$ into disjunctive normal form, 
+and transform $Q$ into conjunctive normal form\footnote{
 A constraint is in disjunctive normal form when it is a disjunction of
 clauses where each clause is a conjunction of atomic constraints. 
 % 
@@ -769,50 +765,49 @@ Similarly, a constraint is in conjunctive normal form when it is a conjunction
 of clauses where each each clause is disjunction of atomic constraints.
 % 
 \enterexample
-Let \tcode{A}, \tcode{B}, and \tcode{C} be atomic constraints.
+Let $A$, $B$, and $C$ be atomic constraints.
 % 
-The constraint \tcode{A} $\land$ (\tcode{B} $\lor$ \tcode{C}) is in 
+The constraint $A \land$ ($B \lor C$) is in 
 conjunctive normal form.
 % 
-Its conjunctive clauses are \tcode{A} and (\tcode{B} $\lor$ \tcode{C}).
+Its conjunctive clauses are $A$ and ($B \lor C$).
 % 
 The disjunctive normal form of the constraint
-\tcode{A} $\land$ (\tcode{B} $\lor$ \tcode{C}) 
+$A \land$ ($B \lor C$) 
 is
-(\tcode{A} $\land$ \tcode{B}) $\lor$ (\tcode{A} $\land$ \tcode{C}).
+($A \land B$) $\lor$ ($A \land C$).
 % 
-Its disjunctive clauses are (\tcode{A} $\land$ \tcode{B}) and 
-(\tcode{A} $\land$ \tcode{C}).
+Its disjunctive clauses are ($A \land B$) and 
+($A \land C$).
 \exitexample
 }.
 % 
 Parameterized constraints do not appear in conjunctive or disjunctive normal
 forms. For the purpose of this transformation, the constraint
-\tcode{$\lambda$(T x) P(x)} is equivalent to the constraint \tcode{P(x)}.
+$\lambda(\mathtt{T~x})~P(\mathtt{x})$ is equivalent to the constraint 
+$P(\mathtt{x})$.
 % 
-Then, \tcode{P} subsumes \tcode{Q} if and only if
+Then, $P$ subsumes $Q$ if and only if
 \begin{itemize}
-\item for every disjunctive clause \tcode{P$i$} in the disjunctive normal 
-form of \tcode{P}, \tcode{P$i$} subsumes every conjunctive clause \tcode{Q$j$} 
+\item for every disjunctive clause $P_i$ in the disjunctive normal 
+form of $P$, $P_i$ subsumes every conjunctive clause $Q_j$ 
 in the conjuctive normal form of \tcode{Q}, where
 
-\item a disjunctive clause \tcode{P$i$} subsumes a conjunctive clause
-\tcode{Q$j$} if and only if each atomic constraint in \tcode{P$i$} subsumes 
-any atomic constraint \tcode{Q$j$}, where
+\item a disjunctive clause $P_i$ subsumes a conjunctive clause
+$Q_j$ if and only if each atomic constraint in $P_i$ subsumes 
+any atomic constraint $Q_j$, where
 
-\item an atomic constraint \tcode{A} subsumes another atomic constraint
-\tcode{B} if and only if the \tcode{A} and \tcode{B} are equivalent using the
+\item an atomic constraint $A$ subsumes another atomic constraint
+$B$ if and only if the $A$ and $B$ are equivalent using the
 rules described in \ref{temp.constr.constr} to compare constraints.
 \end{itemize}
 % 
 \enterexample
-Let \tcode{A} and \tcode{B} be atomic constraints (\ref{temp.constr.pred}).
+Let $A$ and $B$ be atomic constraints (\ref{temp.constr.pred}).
 % 
-The constraint \tcode{A $\land$ B} subsumes \tcode{A}, 
-but \tcode{A} does not subsume \tcode{A $\land$ B}. 
+The constraint $A \land B$ subsumes $A$, but $A$ does not subsume $A \land B$.
 % 
-The constraint \tcode{A} subsumes \tcode{A $\lor$ B}, but
-\tcode{A $\lor$ B} does not subsume \tcode{A}. 
+The constraint $A$ subsumes $A \lor B$, but $A \lor B$ does not subsume $A$.
 % 
 Also note that every constraint subsumes itself.
 \exitexample
