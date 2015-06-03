@@ -96,9 +96,8 @@ int C::* p3 = &S1::n;    // OK: \tcode{C} deduced as \tcode{S1}
 char C::* p4 = &S2::c;   // error: deduction fails because constraints are not satisfied
 
 void f(typename auto::X::Y);
-f(S1())); // error: \tcode{auto} cannot be deduced from \tcode{S1()}
+f(S1()); // error: \tcode{auto} cannot be deduced from \tcode{S1()}
 f<S3>(0); // OK
-
 \end{codeblock}
 In the declaration of \tcode{f}, the placeholder appears in a non-deduced 
 context (\cxxref{temp.deduct.type}). It may be replaced later through the
