@@ -12,14 +12,24 @@
 \rSec1[dcl.spec]{Specifiers}
 
 Extend the \grammarterm{decl-specifier} production
-to include the \tcode{concept} specifier.
+in paragraph 1 to include the \tcode{concept} specifier.
 
 \begin{quote}
+\pnum
+The specifiers that can be used in a declaration are
+
 \begin{bnf}
 \nontermdef{decl-specifier}\br
+    storage-class-specifier\br
+    type-specifier\br
+    function-specifier\br
+    \terminal{friend}\br
+    \terminal{typedef}\br
+    \terminal{constexpr}\br
     \added{\terminal{concept}}
 \end{bnf}
 \end{quote}
+
 
 %%
 %% Type specifiers
