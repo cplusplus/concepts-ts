@@ -976,7 +976,7 @@ template<typename... Ts> concept bool C3 = true;
 void f1(const C1*); // OK: \tcode{C1} selects \#1
 void f2(C1<char>);  // OK: \tcode{C1<char>} selects \#2
 
-template<C2<0> T> struct S1; // error: no matching concept for \tcode{C<0>},
+template<C2<0> T> struct S1; // error: no matching concept for \tcode{C2<0>},
                              // mismatched template arguments
 template<C2 T> struct S2;    // error: resolution of \tcode{C2} is ambiguous,
                              // both concepts are viable
