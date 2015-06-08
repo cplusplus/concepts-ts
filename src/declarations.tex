@@ -50,6 +50,23 @@ to the grammar for \grammarterm{simple-type-specifier}{}s.
 \begin{quote}
 \begin{bnf}
 \nontermdef{simple-type-specifier}\br
+    nested-name-specifier\opt type-name\br
+    nested-name-specifier \terminal{template} simple-template-id\br
+    \terminal{char}\br
+    \terminal{char16_t}\br
+    \terminal{char32_t}\br
+    \terminal{wchar_t}\br
+    \terminal{bool}\br
+    \terminal{short}\br
+    \terminal{int}\br
+    \terminal{long}\br
+    \terminal{signed}\br
+    \terminal{unsigned}\br
+    \terminal{float}\br
+    \terminal{double}\br
+    \terminal{void}\br
+    \terminal{auto}\br
+    decltype-specifier\br
     \added{constrained-type-specifier}
 \end{bnf}
 \end{quote}
