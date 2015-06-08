@@ -51,7 +51,7 @@ associated constraints (\ref{temp.constr.decl}) shall be \defn{satisfied}.
 % 
 \enternote
 The satisfaction of constraints on class templates, alias templates, 
-and variable templates is required when referring a template specialization 
+and variable templates is required when referencing a template specialization 
 (\ref{temp.names}). The satisfaction of constraints on functions and
 function templates is required during overload resolution (\ref{over.match.viable}).
 \exitnote
@@ -184,7 +184,7 @@ expression \tcode{E} (\cxxref{expr.const}).
 % 
 \enternote
 Predicate constraints allow the definition of template requirements
-in terms of constant expressions. This allows the specification 
+in terms of constant expressions. This allows the specification of
 constraints on non-type template arguments and template template 
 arguments.
 \exitnote
@@ -373,7 +373,7 @@ placeholders (\ref{dcl.spec.auto}).
 \enternote
 An argument deduction constraint is introduced by a
 \grammarterm{compound-requirement} (\ref{expr.prim.req.compound}) having a
-\grammarterm{trailing-return-type} that contains one ore more placeholders.
+\grammarterm{trailing-return-type} that contains one or more placeholders.
 % 
 In such a constraint, \tcode{E} is the \grammarterm{expression} of the 
 \grammarterm{compound-requirement}, and \tcode{T} is the type specified
@@ -445,7 +445,7 @@ that includes the \tcode{noexcept} specifier (\ref{expr.prim.req.compound}).
 \exitnote
 
 \pnum
-An exception constraint $A$ is equivalent to another predicate
+An exception constraint $A$ is equivalent to another exception constraint
 $B$ if and only if the expressions of $A$ and $B$ are equivalent using the 
 rules described in \ref{temp.over.link} to compare expressions.
 
