@@ -342,13 +342,22 @@ template<typename T> concept bool C =
   requires (T a, T b) {
     { a == b } -> bool;
   };
+
+template <typename T> concept bool D =
+  requires (T a) {
+    { a } -> int;
+  };
 \end{codeblock}
 The \grammarterm{compound-requirement} in the
 \grammarterm{requires-expression} of \tcode{C} introduces two atomic 
 constraints: an expression constraint for \tcode{a == b}, and the implicit 
 conversion constraint that the expression \tcode{a == b} is implicitly 
 convertible to \tcode{bool}.
+% 
+The implicit conversion constraint in \tcode{D} is satisfied whenever
+the \tcode{std::is_convertible<T, int>::value} is \tcode{true} (\cxxref{meta.rel}).
 \exitexample
+
 
 \pnum
 An implicit conversion constraint $A$ is equivalent to another implicit 
