@@ -28,6 +28,7 @@ allow a template declaration introduced by a concept.
 Add the following paragraphs after paragraph 6.
 
 \begin{quote}
+\begin{addedblock}
 \setcounter{Paras}{6}
 \pnum
 A \grammarterm{template-declaration} is written in terms of its template 
@@ -38,6 +39,7 @@ introduced by a \grammarterm{template-introduction} (\ref{temp.intro}).
 The optional \grammarterm{requires-clause} following a
 \grammarterm{template-parameter-list} allows the specification of
 constraints (\ref{temp.constr.decl}) on template arguments (\ref{temp.arg}).
+\end{addedblock}
 \end{quote}
 
 
@@ -77,6 +79,7 @@ constrained template parameters.
 Insert a new paragraph after paragraph 1.
 
 \begin{quote}
+\begin{addedblock}
 \pnum
 There is an ambiguity in the syntax of a template parameter between the
 declaration of a \grammarterm{constrained-parameter} and a
@@ -85,12 +88,14 @@ declaration of a \grammarterm{constrained-parameter} and a
 If the \grammarterm{type-specifier-seq} of a \grammarterm{parameter-declaration} 
 is a \grammarterm{constrained-type-specifier} (\ref{dcl.spec.auto.constr}), 
 then the \grammarterm{template-parameter} is a \grammarterm{constrained-parameter}.
+\end{addedblock}
 \end{quote}
 
 Insert the following paragraphs after paragraph 8. These paragraphs
 define the meaning of a constrained template parameter.
 
 \begin{quote}
+\begin{addedblock}
 \setcounter{Paras}{8}
 \pnum
 A \grammarterm{constrained-parameter} declares a template parameter whose 
@@ -186,7 +191,7 @@ template<C2... T> struct s3;   // associates \tcode{C2<T...>()}
 template<C3<int> T> struct s4; // associates \tcode{C3<T, int>}
 \end{codeblock}
 \exitexample
-
+\end{addedblock}
 \end{quote}
 
 Insert the following paragraph after paragraph 9 to require that the
@@ -194,6 +199,7 @@ kind of a \grammarterm{default-argument} matches the kind of its
 \grammarterm{constrained-parameter}.
 
 \begin{quote}
+\begin{addedblock}
 \setcounter{Paras}{11}
 \pnum
 The default \grammarterm{template-argument} of
@@ -214,6 +220,7 @@ template<C3 X = S0> struct S3;  // OK
 template<C1 T = 0> struct S4;   // error: default argument is not a type
 \end{codeblock}
 \exitexample
+\end{addedblock}
 \end{quote}
 
 
@@ -399,6 +406,7 @@ Add this paragraph at the end of the section to require the satisfaction of
 associated constraints on the formation of the \grammarterm{simple-template-id}.
 
 \begin{quote}
+\begin{addedblock}
 \setcounter{Paras}{7}
 \pnum
 When the \grammarterm{template-name} of a \grammarterm{simple-template-id} names
@@ -450,6 +458,7 @@ the associated constraints of the template parameter \tcode{X}.
 In \#2, no constraints can be checked for \tcode{typename T::template MT<char>} 
 because \tcode{MT} is a member of an unknown specialization.
 \exitexample
+\end{addedblock}
 \end{quote}
 
 %%

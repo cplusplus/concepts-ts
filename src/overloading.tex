@@ -166,6 +166,7 @@ selected function.
 Add the following example at the end of paragraph 5.
 
 \begin{quote}
+\begin{addedblock}
 \enterexample
 \begin{codeblock}
 void f();                // \#1
@@ -177,4 +178,5 @@ void (*pf)() = &f;         // selects \#2
 void (*pg)() = &g;         // error: no matching function
 \end{codeblock}
 \exitexample
+\end{addedblock}
 \end{quote}

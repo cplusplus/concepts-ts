@@ -208,6 +208,7 @@ Also, disallow the use of \tcode{decltype(auto)} with function parameters
 and deduction constraints.
 
 \begin{quote}
+\begin{addedblock}
 \pnum
 If a placeholder appears in the \grammarterm{trailing-return-type}
 of a \grammarterm{compound-requirement} in a \grammarterm{requires-expression} 
@@ -228,6 +229,7 @@ template<typename T> concept bool C() {
 The \tcode{decltype(auto)} \grammarterm{type-specifier} shall not appear
 in the declared type of a \grammarterm{parameter-declaration} or the
 \grammarterm{trailing-return-type} of a \grammarterm{compound-requirement}.
+\end{addedblock}
 \end{quote}
 
 
@@ -283,6 +285,7 @@ auto h();                  // OK: \tcode{h}'s return type will be deduced when i
 Add the following declarations to the example in the previous paragraph.
 
 \begin{quote}
+\begin{addedblock}
 \begin{codeblock}
 struct N {
   template<typename T> struct Wrap;
@@ -302,6 +305,7 @@ template<typename T> concept bool C = true;
 C z = 0;        // error: constrained-type-specifier in declaration of \tcode{z}
 auto cf() -> C; // error: constrained-type-specifier declared in return type of \tcode{cf}
 \end{codeblock}
+\end{addedblock}
 \end{quote}
 
 

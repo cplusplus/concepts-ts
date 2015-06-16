@@ -27,6 +27,7 @@ allow the specification of constraints on function declarations.
 Add the following paragraphs at the end of this section.
 
 \begin{quote}
+\begin{addedblock}
 \pnum
 The optional \grammarterm{requires-clause} (\ref{temp.constr.decl}) in a 
 \grammarterm{declarator} shall be present only when the declarator declares a 
@@ -47,6 +48,7 @@ void g(int (*)() requires true);      // error: constraint on a parameter-declar
 auto* p = new void(*)(char) requires true; // error: not a function declaration
 \end{codeblock}
 \exitexample
+\end{addedblock}
 \end{quote}
 
 
@@ -141,6 +143,7 @@ of the \grammarterm{parameter-declaration-clause}.
 Add the following paragraphs after paragraph 15.
 
 \begin{quote}
+\begin{addedblock}
 \pnum
 An \defn{abbreviated function template} is a function declaration whose
 parameter-type-list includes one or more placeholders (\ref{dcl.spec.auto}).
@@ -311,4 +314,5 @@ The types of \tcode{head} and \tcode{tail} are different. Their
 respective associated constraints are \tcode{C<T>} and \tcode{(C<U> \&\& ...)},
 where \tcode{T} is the template parameter invented for \tcode{head} and
 \tcode{U} is the template parameter invented for \tcode{tail} (\ref{temp.param}).
+\end{addedblock}
 \end{quote}

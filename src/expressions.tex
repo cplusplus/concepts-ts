@@ -62,6 +62,7 @@ to \grammarterm{nested-name-specifier}:
 Add a new paragraph after paragraph 11:
 
 \begin{quote}
+\begin{addedblock}
 \setcounter{Paras}{11}
 \pnum
 In a \grammarterm{nested-name-specifier} of the form \tcode{auto::} or
@@ -103,12 +104,14 @@ In the declaration of \tcode{f}, the placeholder appears in a non-deduced
 context (\cxxref{temp.deduct.type}). It may be replaced later through the
 explicit specification of template arguments.
 \exitexample
+\end{addedblock}
 \end{quote}
 
 Add a new paragraph after paragraph 13:
 
 % TODO: The wording "non-overloaded function declaration" is not right.
 \begin{quote}
+\begin{addedblock}
 \setcounter{Paras}{13}
 \pnum
 A program that refers explicitly or implicitly to a function with associated 
@@ -127,6 +130,7 @@ In each case the associated constraints of \tcode{f} are not satisfied. In the
 declaration of \tcode{p2}, those constraints are required to be satisfied even 
 though \tcode{f} is an unevaluated operand (Clause~\ref{expr}).
 \exitexample
+\end{addedblock}
 \end{quote}
 
 
@@ -139,11 +143,13 @@ Insert the following paragraph after paragraph 4 to define the
 term ``generic lambda''. 
 
 \begin{quote}
+\begin{addedblock}
 \setcounter{Paras}{4}
 \pnum
 A \defn{generic lambda} is a \grammarterm{lambda-expression} where one
 or more placeholders (\ref{dcl.spec.auto}) appear in the parameter-type-list
 of the \grammarterm{lambda-declarator}.
+\end{addedblock}
 \end{quote}
 
 Modify paragraph 5 so that the meaning of a generic lambda is defined 
