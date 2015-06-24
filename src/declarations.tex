@@ -414,13 +414,8 @@ where \tcode{U} is an invented type template parameter;
 variable or return type with a new invented type template parameter
 according to the rules for inventing template parameters
 for placeholders in \ref{dcl.fct}. 
-\enternote
-Equivalent \grammarterm{constrained-type-specifier}{s} in the variable or
-return type correspond to the same invented template parameter.
-\exitnote
 \end{itemize}
 \end{addedblock}
-% 
 % 
 Deduce a value for \removed{\tcode{U}} \added{each invented type template  
 parameter in \tcode{P}} using the rules of template argument deduction from 
@@ -514,8 +509,10 @@ auto cf(int) -> Pair<C, C> { return expr; }
 The return type of \tcode{cf} is is deduced form the parameter \tcode{p2} in the
 call \tcode{f2(expr)} of the following invented function:
 \begin{codeblock}
-template<C T1, C T2> void f2(Pair<T1, T2>);
+template<C T> void f2(Pair<T, T>);
 \end{codeblock}
+Both \grammarterm{constrained-type-specifier}{}s in the return type of 
+\tcode{cf} correspond to the same invented template parameter.
 \exitexample
 \end{addedblock}
 \end{quote}
