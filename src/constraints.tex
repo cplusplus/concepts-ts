@@ -53,7 +53,12 @@ associated constraints (\ref{temp.constr.decl}) shall be \defn{satisfied}.
 The satisfaction of constraints on class templates, alias templates, 
 and variable templates is required when referring to a template specialization 
 (\ref{temp.names}). The satisfaction of constraints on functions and
-function templates is required during overload resolution (\ref{over.match.viable}).
+function templates is required during overload resolution 
+(\ref{over.match.viable}). The satisfaction of constraints introduced by
+\grammarterm{constrained-type-specifier}{}s (\ref{dcl.spec.auto.constr})
+in the type of a variable or declared return type of a function is 
+required when values are deduced for their corresponding placeholders 
+(\ref{dcl.spec.auto}).
 \exitnote
 % 
 Determining if a constraint is satisfied entails the substitution 
@@ -641,9 +646,10 @@ The associated constraints of the first declaration are
 \exitexample
 
 \pnum
-Determining if a declaration's associated constraints are satisfied
-and partially ordering declarations by their associated constraints
-requires the \defn{normalization} of the associated constraints. 
+Determining 
+the satisfaction of constraints (\ref{temp.constr.constr}) and 
+the partial ordering of constraints (\ref{temp.constr.order}) 
+requires that they are first \defn{normalized}.
 % 
 Normalization transforms a constraint into a
 sequence of conjunctions and disjunctions of \defn{atomic constraints}.
