@@ -238,8 +238,10 @@ parameter \tcode{T}.
 % 
 In \tcode{f2}, the use of \tcode{C} in the return type would associate the
 constraint \tcode{(C<T> \&\& ...)}, which is distinct from the constraint
-\tcode{C<T>} associated through the \grammarterm{constrained-type-specifier} 
-in the \grammarterm{parameter-declaration-clause}.
+\tcode{C<T>} associated by the invented \grammarterm{constrained-parameter}
+(\ref{temp.param}) for the \grammarterm{constrained-type-specifier}
+in the \grammarterm{parameter-declaration-clause} according to the
+rules in \ref{dcl.fct}.
 \exitexample
 \end{addedblock}
 \end{quote}
