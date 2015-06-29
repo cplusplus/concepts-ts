@@ -228,8 +228,8 @@ template<typename T> concept bool C = true;
 
 template<typename... T> struct Tuple;
 
-C const& f1(C);         // has one template parameter and no deduced return type
-Tuple<C...> void f2(C); // has one template parameter and a deduced return type
+C const& f1(C);      // has one template parameter and no deduced return type
+Tuple<C...> f2(C);   // has one template parameter and a deduced return type
 \end{codeblock}
 In the declaration \tcode{f1}, the associated constraints of the invented
 template parameters corresponding to the \grammarterm{constrained-type-specifier}{}s
