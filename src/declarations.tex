@@ -495,7 +495,7 @@ template<typename T> concept bool C = true;
 
 const C* cv = expr;
 \end{codeblock}
-The type of \tcode{cv} is is deduced form the parameter \tcode{p1} in the
+The type of \tcode{cv} is deduced from the parameter \tcode{p1} in the
 call \tcode{f1(expr)} of the following invented function:
 \begin{codeblock}
 template<C T> void f1(const T* p1);
@@ -506,7 +506,7 @@ template<C T> void f1(const T* p1);
 \begin{codeblock}
 auto cf(int) -> Pair<C, C> { return expr; }
 \end{codeblock}
-The return type of \tcode{cf} is is deduced form the parameter \tcode{p2} in the
+The return type of \tcode{cf} is deduced from the parameter \tcode{p2} in the
 call \tcode{f2(expr)} of the following invented function:
 \begin{codeblock}
 template<C T> void f2(Pair<T, T>);
