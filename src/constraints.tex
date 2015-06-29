@@ -672,18 +672,17 @@ replacing all subexpressions in $P$ that refer to concepts with their
 corresponding definitions. In particular,
 % 
 \begin{itemize}
-
 \item replace all function calls of the form 
-\tcode{C<A$1$, A$2$, ..., A$N$>()}, where \tcode{C<A$1$, A$2$, ..., A$N$>} 
-names the specialization of a function concept \tcode{D} (\ref{dcl.spec.concept}),
-with the result of substituting \tcode{A$1$, A$2$, ..., A$N$} into the 
-expression returned by \tcode{D}, and
+\tcode{C<A$1$, A$2$, ..., A$N$>()}, where \tcode{C} refers to the function
+concept \tcode{D} (\ref{dcl.spec.concept}) selected by the rules for concept 
+resolution (\ref{temp.constr.resolve}), with the result of substituting
+\tcode{A$1$, A$2$, ..., A$N$} into the expression returned by \tcode{D}, and
 
 \item replace all \grammarterm{id-expression}{s} of the form 
-\tcode{C<A$1$, A$2$, ..., A$N$>}, where \tcode{C<A$1$, A$2$, ..., A$N$>} 
-names the specialization of a variable concept \tcode{D} (\ref{dcl.spec.concept}),
-with the result of substituting \tcode{A$1$, A$2$, ..., A$N$} 
-into the initializer of \tcode{D}.
+\tcode{C<A$1$, A$2$, ..., A$N$>}, where \tcode{C} is the variable
+concept \tcode{D} (\ref{dcl.spec.concept}) selected by the rules for concept 
+resolution (\ref{temp.constr.resolve}), with the result of substituting 
+\tcode{A$1$, A$2$, ..., A$N$} into the initializer of \tcode{D}.
 \end{itemize}
 % 
 If any such substitution fails, the program is ill-formed.
@@ -889,29 +888,34 @@ g(0);       // selects \#4
 
 
 %%
-%% Resolution of constrained-type-specifiers
+%% Resolution of qualified references to concepts
 %%
-\rSec2[temp.constr.resolve]{Resolution of \grammarterm{qualified-concept-name}{s}}
+\rSec2[temp.constr.resolve]{Resolution of qualified references to concepts}
 
 \pnum
 \defn{Concept resolution} is the process of selecting a concept 
-from a set of concept definitions referred to by a 
-\grammarterm{qualified-concept-name}.
+from a set of concept definitions referred to by a
+\grammarterm{qualified-concept-name},
 % 
-Concept resolution is performed when a \grammarterm{qualified-concept-name} 
-appears
+or from a set of declarations including one or more concept definitions
+referred to by a \grammarterm{simple-template-id} or a \grammarterm{qualified-id}
+whose \grammarterm{unqualified-id} is a \grammarterm{simple-template-id}.
+% 
+Concept resolution is performed when such a name appears
 \begin{itemize}
 \item as a \grammarterm{constrained-type-specifier} (\ref{dcl.spec.auto.constr}), 
-\item in a \grammarterm{constrained-parameter} (\ref{temp.param}), or 
-\item in a \grammarterm{template-introduction} (\ref{temp.intro}).
+\item in a \grammarterm{constrained-parameter} (\ref{temp.param}),
+\item in a \grammarterm{template-introduction} (\ref{temp.intro}), or
+\item within a \grammarterm{constraint-expression} during constraint 
+      normalization (\ref{temp.constr.decl}).
 \end{itemize}
+Within such a name, let \tcode{C} be the \grammarterm{concept-name} or
+\grammarterm{template-name} that refers to the set of concept definitions.
 
 \pnum
-Concept resolution selects a concept from a set referred to by an
-optional \grammarterm{nested-name-specifier} and the \grammarterm{concept-name} 
-of a \grammarterm{qualified-concept-name} by matching the template parameters 
-of each concept in that set to a sequence of template arguments and 
-\defn{wildcard}{s}.
+The selection of a concept from this set is done by matching the 
+template parameters of each concept in that set to a sequence of template 
+arguments and \defn{wildcard}{s}.
 % 
 This sequence is called the \defn{concept argument list}, and its elements
 are called \defn{concept argument}{s}.
@@ -921,7 +925,7 @@ parameter of any kind (type, non-type, template) as described below.
 
 \pnum
 The method for determining the concept argument list depends on the
-context in which \grammarterm{concept-name} \tcode{C} appears.
+context in which \tcode{C} appears.
 % 
 \begin{itemize}
 \item If \tcode{C} is part of a \grammarterm{constrained-type-specifier} or 
@@ -942,23 +946,21 @@ of wildcards of the same length as the \grammarterm{introduction-list} of
 the \grammarterm{template-introduction}.
 
 \item If \tcode{C} appears as a \grammarterm{template-name} of a
-\grammarterm{template-id}, the concept argument list is the sequence of
-\grammarterm{template-argument}{s} of the \grammarterm{template-id}.
+\grammarterm{simple-template-id}, the concept argument list is the sequence of
+\grammarterm{template-argument}{s} of that \grammarterm{simple-template-id}.
 \end{itemize}
 
-
 \pnum
-The selection of a concept from the set referred to by the 
-\grammarterm{concept-name} \tcode{C} is done by matching the
-concept argument list against the template parameter lists of each
-concept in that set.
+The selection of a concept from the set referred to by \tcode{C} is done 
+by matching the concept argument list against the template parameter lists of 
+each concept in that set.
 % 
 For a concept \tcode{CC} in that set to be a viable selection, each 
 argument in the concept argument list is matched against the corresponding 
 template parameters of \tcode{CC}.
 % 
-Default template arguments (if present) are instantiated for each template 
-parameter that does not correspond to a concept argument. Instantiated
+Default template arguments of \tcode{CC} (if any) are instantiated for each 
+template parameter that does not correspond to a concept argument. Instantiated
 default arguments are appended to the concept argument list.
 % 
 If the last declared template parameter of \tcode{CC} is not a parameter pack
