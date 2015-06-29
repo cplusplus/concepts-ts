@@ -53,7 +53,12 @@ associated constraints (\ref{temp.constr.decl}) shall be \defn{satisfied}.
 The satisfaction of constraints on class templates, alias templates, 
 and variable templates is required when referring to a template specialization 
 (\ref{temp.names}). The satisfaction of constraints on functions and
-function templates is required during overload resolution (\ref{over.match.viable}).
+function templates is required during overload resolution 
+(\ref{over.match.viable}). The satisfaction of constraints introduced by
+\grammarterm{constrained-type-specifier}{}s (\ref{dcl.spec.auto.constr})
+in the type of a variable or declared return type of a function is 
+required when values are deduced for their corresponding placeholders 
+(\ref{dcl.spec.auto}).
 \exitnote
 % 
 Determining if a constraint is satisfied entails the substitution 
@@ -556,10 +561,10 @@ A \grammarterm{constraint-expression} introduces a predicate constraint
 (\cxxref{expr.log.or}).
 
 \pnum
-Constraints can also be associated through the use of 
+Constraints can also be associated with a declaration through the use of 
 \grammarterm{template-introduction}{}s, 
 \grammarterm{constrained-parameter}{}s in a 
-\grammarterm{template-parameter-list}, or 
+\grammarterm{template-parameter-list},
 \grammarterm{constrained-type-specifier}{}s in the parameter-type-list
 of a function template.
 % 
@@ -593,8 +598,15 @@ The ordering of operands in that conjunction is:
 The formation of the associated constraints for a template declaration
 defines the order in which constraints are compared for equivalence
 (to determine when one template redeclares another), and the order in
-which template arguments are substituted when checking for satisfaction
+which constraints are instantiated when checking for satisfaction
 (\ref{temp.constr.constr}).
+% 
+The constraints associated by \grammarterm{constrained-type-specifier}{}s 
+appearing in a variable type or in the declared return type of a function are 
+not included in the associated constraints of a template declaration.
+\enternote
+These constraints are checked during the instantiation of the declaration.
+\exitnote
 % 
 A program containing two declarations whose associated constraints are 
 functionally equivalent but not equivalent (\ref{temp.constr.constr}) is 
@@ -634,9 +646,10 @@ The associated constraints of the first declaration are
 \exitexample
 
 \pnum
-Determining if a declaration's associated constraints are satisfied
-and partially ordering declarations by their associated constraints
-requires the \defn{normalization} of the associated constraints. 
+Determining 
+the satisfaction of constraints (\ref{temp.constr.constr}) and 
+the partial ordering of constraints (\ref{temp.constr.order}) 
+requires that they are first \defn{normalized}.
 % 
 Normalization transforms a constraint into a
 sequence of conjunctions and disjunctions of \defn{atomic constraints}.
