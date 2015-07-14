@@ -603,7 +603,7 @@ AND expression (\cxxref{expr.log.and}) whose operands are in the following order
 \end{itemize}
 % 
 The formation of the associated constraints for a template declaration
-estblishes the order in which the normalized constraints (defined below) 
+establishes the order in which the normalized constraints (defined below) 
 will be compared for equivalence (to determine when one template redeclares 
 another), and the order in which constraints are instantiated when checking 
 for satisfaction (\ref{temp.constr.constr}).
@@ -873,7 +873,7 @@ partially ordered by their normalized constraints (\ref{temp.constr.decl}),
 % 
 \begin{itemize}
 \item \tcode{D1} and \tcode{D2} are both constrained declarations and 
-\tcode{D1}'s associated constraints subsume those of \tcode{D2}; or
+\tcode{D1}'s normalized constraints subsume those of \tcode{D2}; or
 
 \item \tcode{D2} is unconstrained.
 \end{itemize}
