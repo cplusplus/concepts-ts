@@ -620,6 +620,7 @@ void g(const C&);
 \end{codeblock}
 \exitexample
 
+
 %%
 %% Nested requirements
 %%
@@ -651,5 +652,12 @@ template<typename T> concept bool D =
 The \grammarterm{nested-requirement} appends the predicate constraint 
 \tcode{sizeof(decltype (+t)) == 1} (\ref{temp.constr.pred}).
 \exitexample
+%
+\enternote
+The \grammarterm{constraint-expression} of the predicate constraint 
+introduced by a \grammarterm{nested-requirement} is normalized 
+(\ref{temp.constr.decl}) for the purposes of determining constraint
+satisfaction (\ref{temp.constr}) and partial ordering (\ref{temp.constr.order}).
+\exitnote
 
 \end{quote}

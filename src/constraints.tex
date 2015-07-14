@@ -548,60 +548,77 @@ an expression:
     logical-or-expression
 \end{bnf}
 
-A \grammarterm{constraint-expression} introduces a predicate constraint
-(\ref{temp.constr.pred}) for its \grammarterm{logical-or-expression}
-(\cxxref{expr.log.or}).
+% A \grammarterm{constraint-expression} introduces a predicate constraint
+% (\ref{temp.constr.pred}) for its \grammarterm{logical-or-expression}
+% (\cxxref{expr.log.or}).
 
 \pnum
 Constraints can also be associated with a declaration through the use of 
 \grammarterm{template-introduction}{}s, 
 \grammarterm{constrained-parameter}{}s in a 
-\grammarterm{template-parameter-list},
+\grammarterm{template-parameter-list}, and
 \grammarterm{constrained-type-specifier}{}s in the parameter-type-list
 of a function template.
 % 
-A template's \defn{associated constraints} are the conjunction of 
-constraints introduced in its \grammarterm{template-declaration}. 
+Each of these forms introduces additional \grammarterm{constraint-exprssion}{s} 
+that are used to constrain the declaration.
 % 
-The ordering of operands in that conjunction is:
+A template's \defn{associated constraints} are defined as a 
+single \grammarterm{constraint-expression} derived from the
+introduced \grammarterm{constraint-expression}{s} using the
+following rules.
+
+\begin{itemize}
+\item If there are no introduced \grammarterm{constraint-expression}{s},
+the declaration is unconstrained.
+
+\item If there is a single introduced \grammarterm{constraint-expression},
+that is the associated constraint.
+
+\item Otherwise, the associated constraints are formed as a logical 
+AND expression (\cxxref{expr.log.and}) whose operands are in the following order:
 % 
 \begin{itemize}
-\item a \grammarterm{template-introduction} (\ref{temp.intro}), and
+\item the \grammarterm{constraint-expression} introduced by
+      a \grammarterm{template-introduction} (\ref{temp.intro}), and
 
-\item all \grammarterm{constrained-parameter}{s} 
-      (\ref{temp.param}) in the declaration's 
-      \grammarterm{template-parameter-list}, in 
+\item the \grammarterm{constraint-expression} introduced by each
+      \grammarterm{constrained-parameter}{s} (\ref{temp.param}) in the 
+      declaration's \grammarterm{template-parameter-list}, in
       order of appearance, and
 
-\item the predicate constraint (\ref{temp.constr.pred}) 
-      of a \grammarterm{requires-clause} following a 
+\item the \grammarterm{constraint-expression} introduced
+      by a \grammarterm{requires-clause} following a 
       \grammarterm{template-parameter-list} (Clause~\ref{temp}), and
 
-\item all \grammarterm{constrained-type-specifier}{s} 
-      (\ref{dcl.spec.auto.constr}) in the type of a 
-      \grammarterm{parameter-declaration} in a function declaration
-      (\ref{dcl.fct}), in order of appearance, and
+\item the \grammarterm{constraint-expression} introduced by each 
+      \grammarterm{constrained-type-specifier}{s} (\ref{dcl.spec.auto.constr}) 
+      in the type of a \grammarterm{parameter-declaration} in a 
+      function declaration (\ref{dcl.fct}), in order of appearance, and
 
-\item the predicate constraint of a trailing 
+\item the \grammarterm{constraint-expression} of a trailing 
       \grammarterm{requires-clause} (Clause~\ref{dcl.decl}) 
       of a function declaration (\ref{dcl.fct}).
 \end{itemize}
+\end{itemize}
 % 
 The formation of the associated constraints for a template declaration
-defines the order in which constraints are compared for equivalence
-(to determine when one template redeclares another), and the order in
-which constraints are instantiated when checking for satisfaction
-(\ref{temp.constr.constr}).
+estblishes the order in which the normalized constraints (defined below) 
+will be compared for equivalence (to determine when one template redeclares 
+another), and the order in which constraints are instantiated when checking 
+for satisfaction (\ref{temp.constr.constr}).
 % 
-The constraints associated by \grammarterm{constrained-type-specifier}{}s 
-appearing in a variable type or in the declared return type of a function are 
-not included in the associated constraints of a template declaration.
+The \grammarterm{constraint-expression}{}s introduced by 
+\grammarterm{constrained-type-specifier}{}s in a variable type or in the 
+declared return type of a function are not included in the associated 
+constraints of a template declaration. 
+% 
 \enternote
 These constraints are checked during the instantiation of the declaration.
 \exitnote
 % 
 A program containing two declarations whose associated constraints are 
-functionally equivalent but not equivalent (\ref{temp.constr.constr}) is 
+functionally equivalent but not equivalent (\ref{temp.over.link}) is 
 ill-formed, no diagnostic required.
 % 
 \enterexample
@@ -623,8 +640,8 @@ template<typename T> concept bool C2 = sizeof(T) > 0;
 template<C1 T> void f2(T) requires C2<T>;                // \#1
 template<typename T> requires C1<T> && C2<T> void f2(T); // \#2, redeclaration of \#1
 \end{codeblock}
-The associated constraints of \#1 are \tcode{C1<T> $\land$ C2<T>}, and
-those of \#2 are also \tcode{C1<T> $\land$ C2<T>}.
+The associated constraints of \#1 are \tcode{C1<T> \&\& C2<T>}, and
+those of \#2 are also \tcode{C1<T> \&\& C2<T>}.
 % 
 \begin{codeblock}
 template<C1 T> requires C2<T> void f3();
@@ -633,34 +650,32 @@ template<C2 T> requires C1<T> void f3(); // error: constraints are functionally
 \end{codeblock}
 % 
 The associated constraints of the first declaration are
-\tcode{C1<T> $\land$ C2<T>}, and those of the second are
-\tcode{C2<T> $\land$ C1<T>}.
+\tcode{C1<T> \&\& C2<T>}, and those of the second are
+\tcode{C2<T> \&\& C1<T>}.
 \exitexample
 
 \pnum
-Determining 
-the satisfaction of constraints (\ref{temp.constr.constr}) and 
-the partial ordering of constraints (\ref{temp.constr.order}) 
+Determining the satisfaction of a declration's associated constraints,
+and the the partial ordering of declarations by those constraints,
 requires that they are first \defn{normalized}.
 % 
-Normalization transforms a constraint into a
-sequence of conjunctions and disjunctions of \defn{atomic constraints}.
+Normalization transforms a \grammarterm{expression} into a sequence of 
+conjunctions and disjunctions (\ref{temp.constr.op})
+of \defn{atomic constraints}.
 % 
-An atomic constraint (as defined below) is one that cannot be expressed
-as a conjunction or disjunction of its operands.
+The atomic constraints are those that have no constraints as operands:
+predicate constraints (\ref{temp.constr.pred}),
+expression constraints (\ref{temp.constr.expr}), 
+type constraints (\ref{temp.constr.type}),
+implicit conversion constraints (\ref{temp.constr.conv}), 
+argument deduction constraints (\ref{temp.constr.deduct}), and 
+exception constraints (\ref{temp.constr.expr}).
 % 
-The \defn{normal form} of a constraint is defined as follows:
+The \defn{normal form} of an \grammarterm{expression} \tcode{X} is 
+defined as follows.
 % 
-\begin{itemize}
-\item The normal form of the disjunction $P \lor Q$ is the 
-disjunction of the normal form of $P$ and the normal form $Q$.
-
-\item The normal form of the conjunction $P \land Q$ is the 
-conjunction of the normal form of $P$ and the normal form $Q$.
-
-\item The normal form of a predicate constraint $P$ is formed by
-first creating a new expression \tcode{E} from the expression of $P$ by 
-replacing all subexpressions in $P$ that refer to concepts with their 
+First, create a new expression \tcode{E} by replacing all 
+subexpressions in \tcode{X} that refer to concepts with their
 corresponding definitions. In particular,
 % 
 \begin{itemize}
@@ -681,30 +696,32 @@ If any such substitution fails, the program is ill-formed.
 % 
 Second, transform the expression \tcode{E} into a constraint as follows:
 \begin{itemize}
-\item An expression \tcode{(E)} is transformed into the normalized predicate 
-constraint for \tcode{E}.
+\item the normal form of an expression \tcode{(E)} is the normal form
+of \tcode{E};
 
-\item An expression \tcode{E1 || E2} is transformed into the normalized 
-disjunction of the predicate constraints for \tcode{E1} and \tcode{E2}.
+\item the normal form of an expression \tcode{E1 || E2} is the  
+disjunction (\ref{temp.constr.op}) of the normal forms of \tcode{E1} 
+and \tcode{E2};
 
-\item An expression \tcode{E1 \&\& E2} is transformed into the normalized
-conjunction of the predicate constraints for \tcode{E1} and \tcode{E2}.
+\item the normal form of an expression \tcode{E1 \&\& E2} is the  
+conjunction of the normal forms of \tcode{E1} 
+and \tcode{E2};
 
-\item A \grammarterm{requires-expression}, (\ref{expr.prim.req}) having the
-form
+\item the normal form of a \grammarterm{requires-expression}, 
+(\ref{expr.prim.req}) having the form
  
 \begin{ncsimplebnf}
 \terminal{requires} \terminal{(} parameter-declaration-clause \terminal{)} requirement-body
 \end{ncsimplebnf}
 % 
 where the \grammarterm{parameter-declaration-clause} is not equivalent to
-an empty parameter list, 
-is transformed into a parameterized constraint (\ref{temp.constr.param})
+an empty parameter list, is the parameterized constraint (\ref{temp.constr.param})
 with the same parameters as those in the \grammarterm{parameter-declaration-clause} 
 and whose operand is the normal form of conjunction of constraints introduced
-by \grammarterm{requirement}{s} in the \grammarterm{requirement-body}.
+by \grammarterm{requirement}{s} in the \grammarterm{requirement-body};
 
-\item A \grammarterm{requires-expression} having one of the following forms
+\item the normal form of a \grammarterm{requires-expression} having one of the 
+following forms
 
 \begin{ncsimplebnf}
 \terminal{requires} \terminal{( void )} requirement-body\br
@@ -712,18 +729,15 @@ by \grammarterm{requirement}{s} in the \grammarterm{requirement-body}.
 \terminal{requires} requirement-body\br
 \end{ncsimplebnf}
 % 
-is transformed into the normal form of conjunction of constraints introduced
-by \grammarterm{requirement}{s} in the \grammarterm{requirement-body}.
+is the conjunction of constraints introduced by \grammarterm{requirement}{s} 
+in the \grammarterm{requirement-body};
 
-\item Otherwise, the expression \tcode{E} is an atomic predicate constraint.
-\end{itemize}
+\item within a \grammarterm{requires-expression}, any predicate constraint
+$P$ introduced by a \grammarterm{nested-requirement} (\ref{expr.prim.req.nested}) 
+is replaced by the normal form of the expression of $P$;
 
-\item Expression constraints (\ref{temp.constr.expr}), 
-type constraints (\ref{temp.constr.type}), 
-implicit conversion constraints (\ref{temp.constr.conv}), 
-argument deduction constraints (\ref{temp.constr.deduct}), and 
-exception constraints (\ref{temp.constr.expr})
-are all atomic constraints and in normal form.
+\item otherwise, the normal form of \tcode{E} is the predicate constraint
+whose expression is \tcode{E}.
 \end{itemize}
 % 
 \enterexample
@@ -898,8 +912,7 @@ Concept resolution is performed when such a name appears
 \item as a \grammarterm{constrained-type-specifier} (\ref{dcl.spec.auto.constr}), 
 \item in a \grammarterm{constrained-parameter} (\ref{temp.param}),
 \item in a \grammarterm{template-introduction} (\ref{temp.intro}), or
-\item within a \grammarterm{constraint-expression} during constraint 
-      normalization (\ref{temp.constr.decl}).
+\item within a \grammarterm{constraint-expression} (\ref{temp.constr.decl}).
 \end{itemize}
 Within such a name, let \tcode{C} be the \grammarterm{concept-name} or
 \grammarterm{template-name} that refers to the set of concept definitions.
