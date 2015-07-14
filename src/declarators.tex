@@ -182,9 +182,9 @@ template parameter pack.
 % 
 All placeholders designated by \grammarterm{constrained-type-specifier}{}s 
 whose corresponding \grammarterm{constrained-parameter}{s} would introduce 
-equivalent predicate constraints (\ref{temp.param}), using the rules for 
-comparing constraints in \ref{temp.constr.constr}, have the same invented 
-template parameter.
+equivalent \grammarterm{constraint-expression}{s} (\ref{temp.param}), 
+using the rules for comparing expressions in \ref{temp.over.link}, have 
+the same invented template parameter.
 % 
 \enterexample
 \begin{codeblock}
@@ -224,16 +224,17 @@ void f4(E a, E<> b, E<0> c);
 \end{codeblock}
 The types of \tcode{a}, \tcode{b}, and \tcode{c} are the same because the 
 \grammarterm{constrained-type-specifier}{s} \tcode{E}, \tcode{E<>}, and 
-\tcode{E<0>} all associate the predicate constraint \tcode{E<T, 0>}, where 
-\tcode{T} is an invented template type parameter.
+\tcode{E<0>} all associate the \grammarterm{constraint-expression} 
+\tcode{E<T, 0>}, where \tcode{T} is an invented template type parameter.
 % 
 \begin{codeblock}
 void f5(C head, C... tail);
 \end{codeblock}
 The types of \tcode{head} and \tcode{tail} are different. Their
-respective associated constraints are \tcode{C<T>} and \tcode{(C<U> \&\& ...)},
-where \tcode{T} is the template parameter invented for \tcode{head} and
-\tcode{U} is the template parameter invented for \tcode{tail} (\ref{temp.param}).
+respective introduced \grammarterm{constraint-expressions}{s} are \tcode{C<T>} 
+and \tcode{(C<U> \&\& ...)}, where \tcode{T} is the template parameter invented 
+for \tcode{head} and \tcode{U} is the template parameter invented for 
+\tcode{tail} (\ref{temp.param}).
 \end{addedblock}
 \end{quote}
 

@@ -147,10 +147,10 @@ template<C5... Cs> f6();      // OK: \tcode{Cs} is a template parameter pack of 
 \exitexample
 
 \pnum
-A \grammarterm{constrained-parameter} associates a predicate
-constraint (\ref{temp.constr.pred}) with its \grammarterm{template-declaration}. 
+A \grammarterm{constrained-parameter} introduces a 
+\grammarterm{constraint-expression} (\ref{temp.constr.decl}).
 % 
-The constraint is derived from the \grammarterm{qualified-concept-name} 
+The expression is derived from the \grammarterm{qualified-concept-name} 
 \tcode{Q} in the \grammarterm{constrained-parameter}, its designated concept 
 \tcode{C}, and the declared template parameter \tcode{P}.
 % 
@@ -177,7 +177,7 @@ concept and \tcode{E} is the function call \tcode{TT()}.
 \grammarterm{fold-expression} \tcode{(E \&\& ...)} (\ref{expr.prim.fold}).
 \end{itemize}
 % 
-\tcode{E} is the expression of the associated predicate constraint.
+\tcode{E} is the introduced \grammarterm{constraint-expression}.
 % 
 \enterexample
 \begin{codeblock}
@@ -339,10 +339,10 @@ Array<double> s2;    // error: \tcode{Array} takes two template arguments
 \exitexample
 
 \pnum
-A \grammarterm{template-introduction} associates a predicate constraint with 
-its \grammarterm{template-declaration}. This constraint is derived from
-the \grammarterm{qualified-concept-name} \tcode{C} in the 
-\grammarterm{template-introduction} and the sequence of 
+A \grammarterm{template-introduction} introduces a 
+\grammarterm{constraint-expression} (\ref{temp.constr.decl}). This 
+expression is derived from the \grammarterm{qualified-concept-name} 
+\tcode{C} in the \grammarterm{template-introduction} and the sequence of
 \grammarterm{introduced-parameter}{s}.
 
 \begin{itemize}
@@ -362,7 +362,7 @@ a variable concept (\ref{dcl.spec.concept}), then \tcode{E} is the
 \tcode{E} is the function call \tcode{C<A1, ..., A$N$>()}.
 \end{itemize}
 % 
-\tcode{E} is the expression of the associated predicate constraint.
+\tcode{E} is the introduced \grammarterm{constraint-expression}.
 % 
 \enterexample
 \begin{codeblock}
@@ -415,7 +415,7 @@ a constrained non-function template or a constrained template
 of an unknown specialization (\ref{temp.res}), and all 
 \grammarterm{template-argument}{s} in the \grammarterm{simple-template-id} 
 are non-dependent \cxxref{temp.dep.temp}, the associated constraints of the 
-constrained template shall be satisfied. (\ref{temp.constr}).
+constrained template shall be satisfied. (\ref{temp.constr.decl}).
 % 
 \enterexample
 \begin{codeblock}
@@ -944,7 +944,7 @@ A partial specialization matches a given actual template argument list if
 the template arguments of the partial specialization can be deduced from the 
 actual template argument list (\ref{temp.deduct}) \added{, and the deduced 
 template arguments satisfy the constraints of the partial specialization, if 
-any (\ref{temp.constr})}.
+any (\ref{temp.constr.decl})}.
 \end{quote}
 
 Add the following example to the end of paragraph 2.
@@ -1048,30 +1048,20 @@ Two function templates are \defn{equivalent} if they:
 
 \item have the same name,
 
-\item have identical template parameter lists,
+\item have identical template parameter lists, and
 
-\item have return types and parameter lists that are equivalent using the 
-rules described above to compare expressions involving template parameters, and
-
-\item have associated constraints that are equivalent using the rules 
-described in \ref{temp.constr.decl} to compare constraints.
+\item have return types, parameter lists, and associated constraints that 
+are equivalent using the rules described above to compare expressions 
+involving template parameters.
 \end{itemize}
 \end{addedblock}
 % 
 Two function templates are \defn{functionally equivalent} if they 
-are equivalent except that \removed{one or more expressions that involve 
-template parameters in the return types and parameter lists are functionally 
-equivalent using the rules described above to compare expressions involving 
-template parameters.}
-\begin{addedblock}
-\begin{itemize}
-\item one or more expressions that involve template parameters in the return 
-      types and parameter lists are functionally equivalent using the rules 
-      described above to compare expressions involving template parameters, or
-\item the associated constraints are functionally equivalent using the rules 
-      described in \ref{temp.constr.decl} to compare constraints.
-\end{itemize}
-\end{addedblock}
+are equivalent except that one or more expressions that involve 
+template parameters in the return types\added{,} \removed{and} parameter 
+lists\added{, and associated constrains (\ref{temp.constr.decl})}
+are functionally equivalent using the rules described above to compare 
+expressions involving template parameters.
 % 
 If a program contains declarations of function templates that are 
 functionally equivalent but not equivalent, the program is ill-formed; 
@@ -1256,7 +1246,7 @@ constraints are instantiated.
 The associated constraints of a template specialization are not
 instantiated along with the specialization itself; they are
 instantiated only to determine if they are satisfied
-(\ref{temp.constr}).
+(\ref{temp.constr.decl}).
 % 
 \enternote
 The satisfaction of constraints is determined during name lookup or overload
@@ -1324,7 +1314,7 @@ Add the following note after paragraph 7.
 \pnum
 \enternote
 An explicit instantiation of a constrained template shall satisfy that
-template's associated constraints (\ref{temp.constr}). The satisfaction
+template's associated constraints (\ref{temp.constr.decl}). The satisfaction
 of constraints is determined during name lookup for explicit instantiations
 in which all template arguments are specified (\ref{temp.names}), or for
 explicit instantiations of function templates, during template argument 
@@ -1346,9 +1336,9 @@ also an explicit instantiation of the same kind (declaration or
 definition) of each of its members (not including members inherited from 
 base classes and members that are templates) that has not been previously 
 explicitly specialized in the translation unit containing the explicit 
-instantiation, \added{and provided that the associated constraints 
-(\ref{temp.constr.decl}), if any, of that member are satisfied 
-(\ref{temp.constr}) by the template arguments of the explicit instantiation, } 
+instantiation, \added{and provided that the associated constraints, if any, 
+of that member are satisfied by the template arguments of the explicit 
+instantiation (\ref{temp.constr.decl}),}
 except as described below.
 \end{quote}
 
@@ -1365,7 +1355,7 @@ Add the following note after paragraph 10.
 \pnum
 \enternote
 An explicit specialization of a constrained template shall satisfy that
-template's associated constraints (\ref{temp.constr}). The satisfaction
+template's associated constraints (\ref{temp.constr.decl}). The satisfaction
 of constraints is determined during name lookup for explicit specializations
 in which all template arguments are specified (\ref{temp.names}), or for
 explicit specializations of function templates, during template argument 
@@ -1429,7 +1419,7 @@ template.
 \pnum
 Remove from the set of function templates considered all those
 whose associated constraints (if any) are not satisfied by the deduced
-template arguments (\ref{temp.constr}).
+template arguments (\ref{temp.constr.decl}).
 \end{addedblock}
 \end{quote}
 

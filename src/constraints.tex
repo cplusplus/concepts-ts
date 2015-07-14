@@ -47,7 +47,7 @@ There are several different kinds of constraints:
 
 \pnum
 In order for a constrained template to be instantiated (\ref{temp.spec}), its 
-associated constraints (\ref{temp.constr.decl}) shall be \defn{satisfied}.
+associated constraints shall be \defn{satisfied} (\ref{temp.constr.decl}).
 % 
 \enternote
 The satisfaction of constraints on class templates, alias templates, 
@@ -55,7 +55,7 @@ and variable templates is required when referring to a template specialization
 (\ref{temp.names}). The satisfaction of constraints on functions and
 function templates is required during overload resolution 
 (\ref{over.match.viable}). The satisfaction of constraints introduced by
-\grammarterm{constrained-type-specifier}{}s (\ref{dcl.spec.auto.constr})
+\grammarterm{constrained-type-specifier}{s} (\ref{dcl.spec.auto.constr})
 in the type of a variable or declared return type of a function is 
 required when values are deduced for their corresponding placeholders 
 (\ref{dcl.spec.auto}).
@@ -68,8 +68,8 @@ The rules for determining the satisfaction of different kinds of
 constraints are defined in the following subsections.
 
 \pnum 
-In certain contexts, it is necessary to know when two constraints are equivalent
-(\ref{temp.constr.decl}). 
+Determining when one declaration is more specialized than another requires
+knowing when two constraints are equivalent (\ref{temp.constr.order}).
 % 
 The rules for determining the equivalence of different kinds of
 constraints are defined in the following subsections.
@@ -740,6 +740,9 @@ is replaced by the normal form of the expression of $P$;
 whose expression is \tcode{E}.
 \end{itemize}
 % 
+A declaration's \defn{normalized constraints} are those
+yielded by normalizing its associated constraints.
+% 
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C1() { return sizeof(T) == 1; }
@@ -763,6 +766,12 @@ $\lambda(\mathtt{T~x})$ the expression constraint \tcode{++x}.
 In \#4, the \grammarterm{constraint-expression} \tcode{(bool)3 + 4}
 is not a valid predicate constraint because it does not have type \tcode{bool}.
 \exitexample
+
+
+\pnum
+A declaration's associated constraints are satisfied by a set of template
+arguments if and only if its normalized associated constraints are satisfied
+by those arguments.
 
 
 %%
@@ -859,8 +868,8 @@ This partial ordering is used to determine
 
 \pnum
 When two declarations \tcode{D1} and \tcode{D2} are
-partially ordered by their normalized constraints, \tcode{D1} is 
-\defn{at least as constrained} as \tcode{D2} if
+partially ordered by their normalized constraints (\ref{temp.constr.decl}), 
+\tcode{D1} is \defn{at least as constrained} as \tcode{D2} if
 % 
 \begin{itemize}
 \item \tcode{D1} and \tcode{D2} are both constrained declarations and 

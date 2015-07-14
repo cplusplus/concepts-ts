@@ -115,7 +115,7 @@ Add a new paragraph after paragraph 13:
 \setcounter{Paras}{13}
 \pnum
 A program that refers explicitly or implicitly to a function with associated 
-constraints that are not satisfied (\ref{temp.constr}), other than to declare 
+constraints that are not satisfied (\ref{temp.constr.decl}), other than to declare 
 it, is ill-formed.
 % 
 \enterexample
@@ -346,8 +346,7 @@ A \grammarterm{requires-expression} has type \tcode{bool} and is an
 unevaluated expression (\ref{expr}).
 \enternote
 A \grammarterm{requires-expression} is transformed into a constraint 
-(\ref{temp.constr.decl}) in order to determine if it is 
-satisfied (\ref{temp.constr}).
+in order to determine if it is satisfied (\ref{temp.constr.decl}).
 \exitnote
 
 \pnum
@@ -655,7 +654,7 @@ The \grammarterm{nested-requirement} appends the predicate constraint
 %
 \enternote
 The \grammarterm{constraint-expression} of the predicate constraint 
-introduced by a \grammarterm{nested-requirement} is normalized 
+introduced by a \grammarterm{nested-requirement} is later normalized 
 (\ref{temp.constr.decl}) for the purposes of determining constraint
 satisfaction (\ref{temp.constr}) and partial ordering (\ref{temp.constr.order}).
 \exitnote

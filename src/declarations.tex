@@ -117,6 +117,7 @@ defined in subsection \ref{dcl.spec.auto.deduct}, and the meaning of
 
 Replace paragraph 1 with the text below.
 
+\begin{addedblock}
 \begin{quote}
 \pnum
 The \grammarterm{type-specifier}{}s \tcode{auto} and \tcode{decltype(auto)}
@@ -147,6 +148,7 @@ in this section.
 \exitnote
 % 
 \end{quote}
+\end{addedblock}
 
 
 Modify paragraph 2 to allow \grammarterm{constrained-type-specifier}{}s
@@ -213,15 +215,18 @@ refer to template parameters.
 \begin{quote}
 \begin{addedblock}
 \pnum
-A \grammarterm{constrained-type-specifier} within the declared return 
-type of an abbreviated function template does not designate a placeholder 
-if its invented template \grammarterm{constrained-parameter} would associate
-a predicate constraint (\ref{temp.param}) that is equivalent 
-(\ref{temp.constr.constr}) to that of an invented template 
-\grammarterm{constrained-parameter} \tcode{P} corresponding to a
-placeholder in the \grammarterm{parameter-declaration-clause}. 
+A \grammarterm{constrained-type-specifier} \tcode{C1} within the declared 
+return type of an abbreviated function template declaration does not 
+designate a placeholder if its introduced
+\grammarterm{constraint-expression} (\ref{dcl.spec.auto.constr}) 
+is determined to be equivalent, using the rules in \ref{temp.over.link}
+for comparing expressions, to the introduced 
+\grammarterm{constraint-expression} for a
+\grammarterm{constrained-type-specifier} \tcode{C2} in the 
+\grammarterm{parameter-declaration-clause} of that function declaration.
 % 
-That \grammarterm{constrained-type-specifier} is replaced by \tcode{P}.
+Instead, \tcode{C1} is replaced by the template parameter invented for
+\tcode{C2} (\ref{dcl.fct}).
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C = true;
@@ -231,17 +236,19 @@ template<typename... T> struct Tuple;
 C const& f1(C);      // has one template parameter and no deduced return type
 Tuple<C...> f2(C);   // has one template parameter and a deduced return type
 \end{codeblock}
-In the declaration \tcode{f1}, the associated constraints of the invented
-template parameters corresponding to the \grammarterm{constrained-type-specifier}{}s
-are equivalent; they would both associate \tcode{C<T>}, for an invented template 
-parameter \tcode{T}.
+In the declaration \tcode{f1}, the \grammarterm{constraint-expression} 
+introduced by the \grammarterm{constrained-type-specifier}{}s in the
+\grammarterm{parameter-declaration-clause} and return type are equivalent
+; they would both introduce the expression \tcode{C<T>}, for some invented 
+template parameter \tcode{T}.
 % 
-In \tcode{f2}, the use of \tcode{C} in the return type would associate the
-constraint \tcode{(C<T> \&\& ...)}, which is distinct from the constraint
-\tcode{C<T>} associated by the invented \grammarterm{constrained-parameter}
-(\ref{temp.param}) for the \grammarterm{constrained-type-specifier}
-in the \grammarterm{parameter-declaration-clause} according to the
-rules in \ref{dcl.fct}.
+In \tcode{f2}, the use of \tcode{C} in the return type would introduce the
+\grammarterm{constraint-expression} \tcode{(C<T> \&\& ...)}, which is 
+distinct from the \grammarterm{constraint-expression} \tcode{C<T>} introduced
+by the invented \grammarterm{constrained-parameter} (\ref{temp.param}) for 
+the \grammarterm{constrained-type-specifier} in the 
+\grammarterm{parameter-declaration-clause} according to the rules in 
+\ref{dcl.fct}.
 \exitexample
 \end{addedblock}
 \end{quote}
@@ -428,11 +435,11 @@ If the deduction fails, the declaration is ill-formed.
 % 
 If any placeholders in the declared type were introduced by a
 \grammarterm{constrained-type-specifier}, then let \tcode{C} be the
-conjunction of predicate constraints introduced by those placeholders.
-The ordering of operands in that conjunction is same as the order in which 
-the placeholders appear. If these constraints are not satisfied 
-(\ref{temp.constr.constr}) by the deduced values, the declaration is 
-ill-formed.
+\grammarterm{constraint-expression} introduced by those placeholders.
+The order of operands in that expression is same as the order in which 
+the placeholders appear in the declared type. If the normalized constraint 
+for that expression is not satisfied by the values deduced for the
+declared type (\ref{temp.constr.decl}), the declaration is ill-formed.
 % 
 Otherwise, the type deduced for the variable or return type is obtained by 
 substituting the deduced \removed{\tcode{U}} \added{values for each invented 
