@@ -434,12 +434,23 @@ template parameter type and the initializer is the corresponding argument.
 If the deduction fails, the declaration is ill-formed.
 % 
 If any placeholders in the declared type were introduced by a
-\grammarterm{constrained-type-specifier}, then let \tcode{C} be the
-\grammarterm{constraint-expression} introduced by those placeholders.
-The order of operands in that expression is same as the order in which 
-the placeholders appear in the declared type. If the normalized constraint 
-for that expression is not satisfied by the values deduced for the
-declared type (\ref{temp.constr.decl}), the declaration is ill-formed.
+\grammarterm{constrained-type-specifier}, then define \tcode{C} to be a
+\grammarterm{constraint-expression} as follows:
+\begin{itemize}
+\item if there is single \grammarterm{constrained-type-specifier},
+then \tcode{C} is the \grammarterm{constraint-expression} introduced
+by the invented template \grammarterm{constrained-parameter} (\ref{temp.param})
+corresponding to that \grammarterm{constrained-type-specifier};
+\item otherwise, \tcode{C} is the \grammarterm{logical-and-expression}
+(\cxxref{expr.log.and}) whose operands are the 
+\grammarterm{constraint-expression}{s} introduced by the invented
+template \grammarterm{constrained-parameter}{s} corresponding to
+each \grammarterm{constrained-type-specifier}, in order of appearance.
+\end{itemize}
+% 
+If the normalized constraint for \tcode{C} (\ref{temp.constr.decl}) is not 
+satisfied by the values deduced for the declared type, the declaration is 
+ill-formed.
 % 
 Otherwise, the type deduced for the variable or return type is obtained by 
 substituting the deduced \removed{\tcode{U}} \added{values for each invented 
