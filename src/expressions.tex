@@ -364,7 +364,7 @@ template<typename T>
   concept bool R() {
     return requires (T i) {
       typename T::type;
-      {*i} -> const T::type&;
+      {*i} -> const typename T::type&;
     };
   }
 \end{codeblock}
