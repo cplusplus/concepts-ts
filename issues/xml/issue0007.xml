@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="7" status="EWG">
+<title>Remove function concepts</title>
+<section><sref ref="[dcl.spec.concept]"/></section>
+<submitter>US</submitter>
+<date>18 May 2015</date>
+
+<discussion>
+<p>
+The syntactic distinction between a function concept  and a variable concept
+seems to serve no useful  purpose. A single concept syntax seems sufficient,
+and especially so once redundant elements are removed.
+
+Merge the two concept forms into one, streamlining the syntax by eliminating 
+at least the following redundant elements: explicit bool (see comment below), 
+explicit return, and the always empty parentheses constituting the function
+parameter list.
+</p>
+
+<p>
+Also see issues <iref ref="6"/> and <iref ref="8"/> as they relate.
+</p>
+
+<p>
+Suggest opening an EWG issue.
+</p>
+</discussion>
+
+</issue>

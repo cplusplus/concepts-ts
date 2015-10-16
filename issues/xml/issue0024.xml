@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="24" status="New">
+<title>Expression equivalence outside of declaration matching is novel</title>
+<section><sref ref="[temp.constr.order]"/></section>
+<submitter>Hubert Tong</submitter>
+<date>27 Jun 2015</date>
+
+<discussion>
+<p>
+Consider the following case:
+
+<pre>
+<code>
+template &lt;typename T&gt; constexpr bool P = true;
+constexpr bool Q = true;
+
+template &lt;typename T = int&gt; requires P&lt;T&gt;
+void foo(int = 0, T = 0);
+
+template &lt;typename U = int&gt; requires P&lt;U&gt; && Q
+void foo(U = 0, int = 0);
+
+void bar() { foo(); }
+</code>
+</pre>
+
+It seems that <code>&lt;T&gt;</code> in the first declaration of 
+<code>foo()</code> may be considered equivalent to P&lt;U&gt; in
+the second declaration of <code>foo()</code>; however, I would find it surprising if the call
+to <code>foo()</code> is unambiguous. Note that <code>T</code> and <code>U</code> 
+are not involved in the partial ordering in this case aside from the determination 
+of the more constrained template.
+</p>
+
+</discussion>
+
+</issue>

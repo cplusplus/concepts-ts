@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="22" status="New">
+<title>Initializers are never <i>constraint-expression</i>s</title>
+<section><sref ref="[dcl.spec.concept]"/></section>
+<submitter>Hubert Tong</submitter>
+<date>19 Jun 2015</date>
+
+<discussion>
+<p>
+Initializers [dcl.init] are not expressions. However bullet 6.3 in
+[dcl.spec.concept] has a requirement where an "initializer shall be a
+constraint-expression".
+</p>
+
+<p>
+Presumably the constraint is that the initializer shall have exactly one full-
+expression (that is,
+<pre>
+<code>
+template &lt;typename T&gt; concept bool C{};
+</code>
+</pre>
+is ill-formed), and that said full-expression is valid where a 
+<i>constraint-expression</i> is required.
+</p>
+
+<p>
+It also seems that C++14 subclause 8.5 [dcl.init] paragraph 2 should be removed
+or updated to exclude objects declared with the concept specifier in a manner
+similar to how it excludes objects declared with the constexpr specifier.
+</p>
+</discussion>
+
+</issue>

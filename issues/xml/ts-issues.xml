@@ -1,0 +1,199 @@
+<issueslist revision="1"
+            maintainer="Andrew Sutton &lt;asutton@uakron.ed&gt;"
+            date="2015-05-22"
+>
+
+
+<!-- The intro block enumerates the introductions
+     for each of the different documents generated
+     by a the make_lists program. -->
+<intros>
+
+<intro list="Active">
+  <p>Reference ISO/IEC TS 19217</p>
+
+  <p>This document contains the C++ core language issues for the Concepts
+  Technical specification which the Committee (INCITS PL22.16 + WG21) has not 
+  yet acted, that is, issues with status 
+  <a href="ts-active.html#Ready">Ready</a>,
+  <a href="ts-active.html#TentativelyReady">Tentatively Ready</a>,
+  <a href="ts-active.html#Review">Review</a>,
+  <a href="ts-active.html#Drafting">Drafing</a>,
+  <a href="ts-active.html#Open">Open</a>, and
+  <a href="ts-active.html#New">New</a>.
+  (See <a href="#Status">Issue Status</a> below).
+
+
+  <p>This document is part of a group of related documents that together 
+  describe the issues that have been raised regarding the C++ Standard. 
+  The other documents in the group are:</p>
+  <ul>
+      <li><a href="ts-toc.html">Table of Contents</a> for all concepts issues.</li>
+      <li><a href="ts-index.html">Index by Section</a> for all concepts issues.</li>
+      <li><a href="ts-status.html">Index by Status</a> for all concepts issues.</li>
+      <li><a href="ts-closed.html">Closed Issues List</a></li>
+      <li><a href="ts-defect.html">Defect Reports List</a></li>
+  </ul>
+
+  <p>Section references in this document refelct the section numbering
+  in document <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4549.pdf">
+  WG21 N4549</a>.</p>
+
+  <p>The purpose of these documents is to record the disposition of issues 
+  that have come before the Core Language Working Group of the ANSI 
+  (INCITS PL22.16) and ISO (WG21) C++ Standard Committee.</p>
+
+  <p>The issues in these lists are not necessarily formal ISO Defect
+  Reports (DR's). While some issues will eventually be elevated to
+  official Defect Report status, other issues will be disposed of in
+  other ways.</p>
+
+  <p>For the most current official version of this document see 
+  <a href="http://www.open-std.org/jtc1/sc22/wg21/">http://www.open-std.org/jtc1/sc22/wg21/</a>.
+  Requests for further information about this document should include
+  the document number above, reference ISO/IEC 19217, and be
+  submitted to Information Technology Industry Council (ITI), 1250 Eye
+  Street NW, Washington, DC 20005.</p>
+
+  <p>Information regarding C++ standardization can be found at 
+  <a href="http://isocpp.org/std">http://isocpp.org/std</a>.
+
+</intro>
+
+<intro list="Complete">
+  <p>Reference ISO/IEC TS 19217</p>
+  <p>Also see:</p>
+    <ul>
+      <li><a href="ts-toc.html">Table of Contents</a> for all concepts issues.</li>
+      <li><a href="ts-index.html">Index by Section</a> for all concepts issues.</li>
+      <li><a href="ts-status.html">Index by Status</a> for all concepts issues.</li>
+      <li><a href="ts-active.html">Concepts Active Issues List</a></li>
+      <li><a href="ts-closed.html">Concepts Closed Issues List</a></li>
+    </ul>
+  <p>This document contains only concepts issues which have been closed
+  by the Core Working Group (CWG) after being found to be acceptable
+  extensions to the standard.  That is, issues which have a status of <a href="ts-active.html#DR">DR</a>,
+  <a href="ts-active.html#TC1">TC1</a>, <a href="ts-active.html#WP">WP</a>, <a href="ts-active.html#C++11">C++11</a>, 
+  or <a href="ts-active.html#Resolved">Resolved</a>. See the
+  <a href="ts-closed.html">Concepts Closed Issues List</a> for issues closed as non-defects.  See the
+  <a href="ts-active.html">Concepts Active Issues List</a> for active issues and more information.  The
+  introductory material in that document also applies to this
+  document.</p>
+</intro>
+
+<intro list="Closed">
+  <p>Reference ISO/IEC TS 19217</p>
+  <p>Also see:</p>
+    <ul>
+      <li><a href="ts-toc.html">Table of Contents</a> for all concepts issues.</li>
+      <li><a href="ts-index.html">Index by Section</a> for all concepts issues.</li>
+      <li><a href="ts-status.html">Index by Status</a> for all concepts issues.</li>
+      <li><a href="ts-active.html">Concepts Active Issues List</a></li>
+      <li><a href="ts-complete.html">Concepts Complete Issues List</a></li>
+    </ul>
+
+  <p>This document contains only concepts issues which have been closed
+  by the Core Working Group as duplicates or not defects. That is,
+  issues which have a status of <a href="ts-active.html#Dup">Dup</a> or
+  <a href="ts-active.html#NAD">NAD</a>. See the <a href="ts-active.html">Concepts Active Issues List</a> active issues and more
+  information. See the <a href="ts-complete.html">Concepts Complete Issues List</a> for issues considered
+  accepted extensions.  The introductory material in that document also applies to
+  this document.</p>
+</intro>
+
+<intro list="TOC">
+  <p>Reference ISO/IEC TS 19217</p>
+
+  <p>This document is the Table of Contents for the <a href="ts-active.html">Concepts Active Issues List</a>,
+  <a href="ts-complete.html">Concepts Complete Issues List</a>, and <a href="ts-closed.html">Concepts Closed Issues List</a>.</p>
+
+  <p>Also see:</p>
+    <ul>
+      <li><a href="ts-index.html">Index by Section</a></li>
+      <li><a href="ts-status.html">Index by Status</a></li>
+    </ul>
+</intro>
+
+<intro list="Section">
+  <p>Reference ISO/IEC TS 19217</p>
+
+  <p>This document is the Index by Section for the <a href="ts-active.html">Concepts Active Issues List</a>,
+  <a href="ts-complete.html">Concepts Complete Issues List</a>, and <a href="ts-closed.html">Concepts Closed Issues List</a>.</p>
+
+  <p>Also see:</p>
+    <ul>
+      <li><a href="ts-toc.html">Table of Contents</a></li>
+      <li><a href="ts-status.html">Index by Status</a></li>
+    </ul>
+</intro>
+
+<intro list="Status">
+  <p>Reference ISO/IEC TS 19217</p>
+
+  <p>This document is the Index by Status for the <a href="ts-active.html">Concepts Active Issues List</a>,
+  <a href="ts-complete.html">Concepts Complete Issues List</a>, and <a href="ts-closed.html">Concepts Closed Issues List</a>.</p>
+
+  <p>Also see:</p>
+    <ul>
+      <li><a href="ts-toc.html">Table of Contents</a></li>
+      <li><a href="ts-index.html">Index by Section</a></li>
+    </ul>
+</intro>
+
+</intros>
+
+
+<revision_history>
+</revision_history>
+
+<statuses>
+  
+  <p>Issues progress through various statuses as the Core Language Working Group
+  and, ultimately, the full PL22.16 and WG21 committees deliberate and act. For
+  ease of reference, issues are grouped in these documents by their status.
+  Issues have one of the following statuses:</p>
+
+  <p><b>Open</b>: The issue is new or the working group has not yet formed an 
+  opinion on the issue. If a Suggested Resolution is given, it reflects the 
+  opinion of the issue's submitter, not necessarily that of the working group 
+  or the Committee as a whole.</p>
+
+  <p><b>Drafting</b>: Informal consensus has been reached in the working group 
+  and is described in rough terms in a Tentative Resolution, although precise 
+  wording for the change is not yet available.</p>
+
+  <p><b>Review</b>: Exact wording of a Proposed Resolution is now available for 
+  an issue on which the working group previously reached informal consensus.</p>
+
+  <p><b>Ready</b>: The working group has reached consensus that a change in the 
+  working draft is required, the Proposed Resolution is correct, and the issue 
+  is ready to forward to the full Committee for ratification.
+
+  <p><b>Tentatively Ready</b>: Like "ready" except that the resolution was 
+  produced and approved by a subset of the working group membership between 
+  meetings. Persons not participating in these between-meeting activities are 
+  encouraged to review such resolutions carefully and to alert the working 
+  group with any problems that may be found.</p>
+
+  <p><b>DR</b>: The full Committee has approved the item as a proposed defect 
+  report. The Proposed Resolution in an issue with this status reflects the 
+  best judgment of the Committee at this time regarding the action that will 
+  be taken to remedy the defect; however, the current wording of the Standard 
+  remains in effect until such time as a Technical Corrigendum or a revision 
+  of the Standard is issued by ISO.</p>
+
+  <p><b>Dup</b>: The issue is identical to or a subset of another issue, 
+  identified in a Rationale statement.
+
+  <p><b>NAD</b>: The working group has reached consensus that the issue is 
+  not a defect in the Standard. A Rationale statement describes the working 
+  group's reasoning.
+
+  <p><b>Extension</b>: The working group has reached consensus that the issue 
+  is not a defect in the Standard but is a request for an extension to the 
+  language. The working group expresses no opinion on the merits of an issue 
+  with this status; however, the issue will be maintained on the list for 
+  possible future consideration as an extension proposal.
+</statuses>
+
+</issueslist>

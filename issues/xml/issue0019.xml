@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="19" status="New">
+<title>Wording makes all constrained function definitions ill-formed</title>
+<section><sref ref="[dcl.spec.concept]"/></section>
+<submitter>Hubert Tong</submitter>
+<date>04 Jun 2015</date>
+
+<discussion>
+<p>
+In N4141 (C++14) subclause [dcl.fct.def.general] paragraph 2:
+The declarator in a function-definition shall have the form
+
+<blockquote>
+<i>
+  D1 ( parameter-declaration-clause ) cv-qualifier-seq<sub>opt</sub>
+  ref-qualifier<sub>opt</sub> 
+  exception-specification<sub>opt</sub> 
+  attribute-specifier-seq<sub>opt</sub> 
+  trailing-return-type<sub>opt</sub>
+</i>
+</blockquote>
+as described in 8.3.5. A function shall be defined only in namespace or class scope.
+</p>
+
+<p>
+The issue also occurs in N4141 subclause 12.1 [class.ctor] paragraph 1 and 
+subclause 12.4 [class.dtor] paragraph 1.
+</p>
+</discussion>
+
+</issue>

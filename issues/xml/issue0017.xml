@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="17" status="New">
+<title>Wording for subsumption</title>
+<section><sref ref="[dcl.spec.concept]"/></section>
+<submitter>Hubert Tong</submitter>
+<date>25 May 2015</date>
+
+<discussion>
+<p>
+The wording in N4377 subclause 14.10.3 [temp.constr.order] bullet 2.2 reads:
+<ul>
+<li>a disjunctive clause Pi subsumes a conjunctive clause Qj if and only if each atomic constraint in Pi subsumes any atomic constraint Qj, where</li>
+<li>...</li>
+</ul>
+Firstly, as a conjunctive clause of a constraint in CNF, Qj may be a disjunction
+as opposed to an atomic constraint. Adding "in" to give "any atomic constraint
+in Qj" might be an editorial fix, but it does not fix the issue below.
+</p>
+
+<p>
+Given "A and B" as P0, and "A" as Q0; then my reading of the "each subsumes any"
+wording is that P0 subsumes Q0 if and only if each atomic constraint in P0 (that
+is, A and B) subsumes A. That is: (A subsumes A) <i>and</i> (B subsumes A).
+</p>
+
+<p>
+I believe the intent is that Pi subsumes Qj if and only if there exists an
+atomic constraint, Pia, in Pi for which there exists an atomic constraint, Qjb,
+in Qj such that Pia subsumes Qjb. I am not seeing a way to reconcile the current
+wording of bullet 2.2 with what I believe the intent is.
+</p>
+</discussion>
+
+
+</issue>

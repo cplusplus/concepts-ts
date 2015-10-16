@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="???" status="New">
+<title>Your Title</title>
+<section><sref ref="[section.ref.here]"/></section>
+<submitter>Your name</submitter>
+<date>29 Feb 1900</date>
+
+<discussion>
+<p>
+</p>
+</discussion>
+
+<resolution>
+<p>
+</p>
+</resolution>
+
+</issue>

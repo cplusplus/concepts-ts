@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="8" status="EWG">
+<title>Implicit bool for concepts</title>
+<section><sref ref="[dcl.spec.concept]"/></section>
+<submitter>US</submitter>
+<date>18 May 2015</date>
+
+<discussion>
+<p>
+Since a concept's type always must be <code>bool</code>, there seems little reason to
+require the source code to say  so explicitly. Typing concept should be
+sufficient without also typing bool immediately afterward.
+
+Allow the compiler to supply bool (a) as the implicit return type for a
+function concept and (b) as the implicit type for a variable concept. (Note:
+this comment is implicitly accepted if issue <iref ref="7"/> is accepted.)
+</p>
+
+<p>
+Also see issues <iref ref="6"/> and <iref ref="7"/> as they relate.
+</p>
+
+<p>
+Suggest opening an EWG issue.
+</p>
+</discussion>
+
+</issue>

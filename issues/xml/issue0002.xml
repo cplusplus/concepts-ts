@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="2" status="EWG">
+<title>Allow concepts as class members</title>
+<section><sref ref="[dcl.spec.concept]"/></section>
+<submitter>FI</submitter>
+<date>18 May 2015</date>
+
+<discussion>
+<p>
+It seems unfortunate that concepts cannot be declared as members of class
+templates. This seemingly makes it impossible to define concepts for
+constraining multiple template parameter packs (if concepts as static member
+functions were possible, one could provide e.g. two packs so that the class
+template gets the first pack and the member function template gets the
+second. That can't be done with a namespace scope concept because multiple
+packs in function templates require deduction, and concepts  don't take
+arguments that could be deduced.). As an example, practical needs for such
+constraining arise in standard library implementations, when constraining
+the variadic converting constructors of  <code>std::tuple</code>.
+</p>
+
+<p>
+Suggest opening an EWG issue.
+</p>
+</discussion>
+
+</issue>

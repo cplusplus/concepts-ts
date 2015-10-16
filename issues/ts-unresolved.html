@@ -1,0 +1,549 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>C++ Concepts Unresolved Issues</title>
+<style type="text/css">
+  p {text-align:justify}
+  li {text-align:justify}
+  blockquote.note
+  {
+    background-color:#E0E0E0;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+  }
+  ins {background-color:#A0FFA0}
+  del {background-color:#FFA0A0}
+</style>
+</head>
+<body>
+<p>Revised 2015-10-16 at 13:10:27 UTC</p>
+<h2>Unresolved Issues</h2>
+<hr>
+<h3><a name="13"></a>13. Adjustment of parameter types in requires-expressions</h3>
+<p><b>Section:</b> 5.1.4 [expr.prim.req] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Casey Carter <b>Opened:</b> 2015-05-28 <b>Last modified:</b> 2015-10-15</p>
+<p><b>View all other</b> <a href="ts-index.html#expr.prim.req">issues</a> in [expr.prim.req].</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+It is unclear whether parameter types in a <i>requires-expression</i> are adjusted
+in the same way that parameter types for functions are adjusted.
+</p>
+
+<p>
+Andrew Sutton says that it should be the case.
+</p>
+
+
+<p><b>Wording available:</b></p>
+<p>
+Add the following sentence to 5.1.4/5:
+
+<blockquote>
+<ins>The types of parameters declared in a <i>requires-expression</i> are adjusted 
+according to the rules for forming funcion types in 8.3.5.</ins>
+</blockquote>
+</p>
+
+
+
+
+
+<hr>
+<h3><a name="14"></a>14. Concept checks on template template parameters are too restrictive</h3>
+<p><b>Section:</b> 14.4.3 [temp.arg.template] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Roland Bock <b>Opened:</b> 2015-10-02 <b>Last modified:</b> 2015-10-15</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+Consider a template that takes a <code>std::tuple</code> and copies its arguments 
+into another template (sink), see attached code.
+
+
+<pre>
+<code>
+template&lt;typename Tuple, template&lt;typename...&gt; class Sink&gt;
+using copy_tuple_args = ...
+</code>
+</pre>
+
+The <code>copy_tuple_args</code> template is generic, not caring about the nature 
+of the copied arguments or the sink. This works fine as long as the 
+sink is not constrained, e.g. if the sink is another tuple. But a 
+constrained sink like  this 
+
+<pre>
+<code>
+template&lt;Column... C&gt;
+struct column_list;
+</code>
+</pre>
+
+is not allowed according to the working paper since it is more
+constrained than the template parameter above. My <code>copy_tuple_arg</code>
+template will suddenly cease to work when I start to use concepts.
+</p>
+
+
+<p><b>Wording available:</b></p>
+<p>
+Modify [temp.arg.template]:
+
+<blockquote>
+  A <i>template-argument</i> <ins>(call it A)</ins> matches a template 
+  <i>template-parameter</i> (call it P) 
+  when each of the template parameters in the <i>template-parameter-list</i> of the 
+  <i>template-argument</i>'s corresponding class template or alias template 
+  <del>(call it A)</del> matches the corresponding template parameter in the 
+  <i>template-parameter-list</i> of P, and P is <ins>either unconstrained or</ins>
+  at least as constrained as A according to the rules in 14.10.3.
+</blockquote>
+</p>
+
+
+
+
+
+<hr>
+<h3><a name="15"></a>15. Partial specialization of non-concept variable template as a concept definition</h3>
+<p><b>Section:</b> 7.1.7 [dcl.spec.concept] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Hubert Tong <b>Opened:</b> 2015-10-02 <b>Last modified:</b> 2015-10-15</p>
+<p><b>View other</b> <a href="ts-index-open.html#dcl.spec.concept">active issues</a> in [dcl.spec.concept].</p>
+<p><b>View all other</b> <a href="ts-index.html#dcl.spec.concept">issues</a> in [dcl.spec.concept].</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+Partial specialization of a concept definition is prohibited by 
+7.1.7 [dcl.spec.concept]p7; however, there appears to be no 
+prohibition on a concept definition which is a partial specialization.
+
+e.g.,
+
+<pre>
+<code>
+template &lt;typename T, typename U&gt; bool C = true;
+template &lt;typename U&gt; concept bool C&lt;int, U&gt; = false;
+</code>
+</pre>
+</p>
+
+
+
+
+
+<hr>
+<h3><a name="16"></a>16. Concept and non-concept declarations of the same variable template</h3>
+<p><b>Section:</b> 7.1.7 [dcl.spec.concept] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Hubert Tong <b>Opened:</b> 2015-07-09 <b>Last modified:</b> 2015-10-15</p>
+<p><b>View other</b> <a href="ts-index-open.html#dcl.spec.concept">active issues</a> in [dcl.spec.concept].</p>
+<p><b>View all other</b> <a href="ts-index.html#dcl.spec.concept">issues</a> in [dcl.spec.concept].</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+It seems this is valid, and it is not clear if that is the intent.
+<pre>
+<code>
+namespace A {
+  template &lt;typename T&gt; extern const bool C;
+};
+template &lt;typename T&gt; concept bool A::C = true;
+</code>
+</pre>
+</p>
+
+<p>
+Note: The C++14 restriction (removed in DR 1712) that the constexpr specifier be
+present on every declaration of a variable template if any declaration has the
+constexpr specifier applies to the "physical" presence of the specifier.
+</p>
+
+<p>
+Note: The first declaration of A::C is not a "variable concept". There is no
+restriction that a variable concept (i.e., "[a] variable template definition
+having the concept specifier") is the only declaration of the entity that it
+defines.
+</p>
+
+<p>
+This seems to be a more general problem that being a "concept" is not a property
+of the entity, but of its definition.
+</p>
+
+<p>
+Andrew Sutton: This should not be a valid definition.
+</p>
+
+
+
+
+
+<hr>
+<h3><a name="17"></a>17. Wording for subsumption</h3>
+<p><b>Section:</b> 7.1.7 [dcl.spec.concept] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Hubert Tong <b>Opened:</b> 2015-05-25 <b>Last modified:</b> 2015-10-15</p>
+<p><b>View other</b> <a href="ts-index-open.html#dcl.spec.concept">active issues</a> in [dcl.spec.concept].</p>
+<p><b>View all other</b> <a href="ts-index.html#dcl.spec.concept">issues</a> in [dcl.spec.concept].</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+The wording in N4377 subclause 14.10.3 [temp.constr.order] bullet 2.2 reads:
+<ul>
+<li>a disjunctive clause Pi subsumes a conjunctive clause Qj if and only if each atomic constraint in Pi subsumes any atomic constraint Qj, where</li>
+<li>...</li>
+</ul>
+Firstly, as a conjunctive clause of a constraint in CNF, Qj may be a disjunction
+as opposed to an atomic constraint. Adding "in" to give "any atomic constraint
+in Qj" might be an editorial fix, but it does not fix the issue below.
+</p>
+
+<p>
+Given "A and B" as P0, and "A" as Q0; then my reading of the "each subsumes any"
+wording is that P0 subsumes Q0 if and only if each atomic constraint in P0 (that
+is, A and B) subsumes A. That is: (A subsumes A) <i>and</i> (B subsumes A).
+</p>
+
+<p>
+I believe the intent is that Pi subsumes Qj if and only if there exists an
+atomic constraint, Pia, in Pi for which there exists an atomic constraint, Qjb,
+in Qj such that Pia subsumes Qjb. I am not seeing a way to reconcile the current
+wording of bullet 2.2 with what I believe the intent is.
+</p>
+
+
+
+
+
+
+<hr>
+<h3><a name="18"></a>18. Predicate constraints that are not constant expressions</h3>
+<p><b>Section:</b> 7.1.7 [dcl.spec.concept] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Hubert Tong <b>Opened:</b> 2015-05-26 <b>Last modified:</b> 2015-10-15</p>
+<p><b>View other</b> <a href="ts-index-open.html#dcl.spec.concept">active issues</a> in [dcl.spec.concept].</p>
+<p><b>View all other</b> <a href="ts-index.html#dcl.spec.concept">issues</a> in [dcl.spec.concept].</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+The word "constant" only appears once in normative text in N4377. It is unclear
+to me whether a predicate constraint that is not a constant-expression is 
+ill- formed (which would require a diagnostic for a non-temploid function with a
+requires-clause whose expression is not constant), or merely not satisfied.
+</p>
+
+<p>
+It is useful to note that the "ill-formed" position leads to further issues
+where constant-expressions of the form <code>P || Q</code> may be written such that
+normalization of constraints will form <i>P or Q</i> where <i>Q</i> is a predicate constraint
+whose expression is not a constant-expression.
+</p>
+
+<p>
+Faisal Vali, Andrew Sutton, and Gabriel Dos Reis agree that
+predicate constraints containing non-constant expressions should
+be ill-formed.
+</p>
+
+<p>
+Andrew Sutton suggests: If Q is not dependent and not a constant expression, 
+then the program would be ill-formed. Otherwise if, as a result of substituting 
+during satisfaction, Q is not a constant expression the program is
+ill-formed.
+</p>
+
+<p>
+However, if Q is dependent but never evaluated (because P is
+satisfied), the program is well-formed. This would be the same if
+substitution into Q would result in substitution failures (e.g., if Q
+is <code>X&lt;T&gt;::value</code>).
+</p>
+
+
+
+
+
+<hr>
+<h3><a name="19"></a>19. Wording makes all constrained function definitions ill-formed</h3>
+<p><b>Section:</b> 7.1.7 [dcl.spec.concept] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Hubert Tong <b>Opened:</b> 2015-06-04 <b>Last modified:</b> 2015-10-15</p>
+<p><b>View other</b> <a href="ts-index-open.html#dcl.spec.concept">active issues</a> in [dcl.spec.concept].</p>
+<p><b>View all other</b> <a href="ts-index.html#dcl.spec.concept">issues</a> in [dcl.spec.concept].</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+In N4141 (C++14) subclause [dcl.fct.def.general] paragraph 2:
+The declarator in a function-definition shall have the form
+
+<blockquote>
+<i>
+  D1 ( parameter-declaration-clause ) cv-qualifier-seq<sub>opt</sub>
+  ref-qualifier<sub>opt</sub> 
+  exception-specification<sub>opt</sub> 
+  attribute-specifier-seq<sub>opt</sub> 
+  trailing-return-type<sub>opt</sub>
+</i>
+</blockquote>
+as described in 8.3.5. A function shall be defined only in namespace or class scope.
+</p>
+
+<p>
+The issue also occurs in N4141 subclause 12.1 [class.ctor] paragraph 1 and 
+subclause 12.4 [class.dtor] paragraph 1.
+</p>
+
+
+
+
+
+<hr>
+<h3><a name="20"></a>20. Wording makes all constrained function definitions ill-formed</h3>
+<p><b>Section:</b> 7.1.7 [dcl.spec.concept] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Hubert Tong <b>Opened:</b> 2015-06-12 <b>Last modified:</b> 2015-10-15</p>
+<p><b>View other</b> <a href="ts-index-open.html#dcl.spec.concept">active issues</a> in [dcl.spec.concept].</p>
+<p><b>View all other</b> <a href="ts-index.html#dcl.spec.concept">issues</a> in [dcl.spec.concept].</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+An identifier is a concept-name if it refers to a set of concept definitions (7.1.7).
+Given the following, is C a concept-name?
+
+<pre>
+<code>
+template &lt;typename T&gt; concept bool C() { return true; }
+template &lt;typename T&gt; int C(T t) { return 42; }
+
+struct A { };
+
+bool operator &&(A, int (*)(int));
+bool operator &&(A, bool);
+
+bool f(A a) { return a && C&lt;int&gt;; }
+</code>
+</pre>
+
+It seems that it is not a concept-name since it refers to a set of declarations
+which does not contain only concept definitions. If that is the intent, it 
+should be made more clear.
+</p>
+
+
+
+
+
+<hr>
+<h3><a name="21"></a>21. Disambiguation rules for <i>requires-clause</i>s</h3>
+<p><b>Section:</b> 8.3.5 [dcl.fct] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Hubert Tong <b>Opened:</b> 2015-06-08 <b>Last modified:</b> 2015-10-15</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+There is no disambiguation rule in C++14 + PDTS 19217 which requires a 
+<i>type-specifier-seq</i> to consume as many <i>type-specifier</i>s as is 
+available and avoid backtracking.
+</p>
+
+<p>
+Given either
+<pre>
+<code>
+template &lt;typename T&gt; requires (bool)&T::operator short
+unsigned int foo();
+</code>
+</pre>
+or
+<pre>
+<code>
+template &lt;typename T&gt; requires (bool)sizeof new (T::f()) short
+unsigned int bar();
+</code>
+</pre>
+
+there is more than one successful parse and it is unclear whether the return 
+type is <code>unsigned int</code> or <code>int</code>.
+</p>
+
+<p>
+The after-the-function-declarator form of the <i>requires-clause</i> is also 
+ambiguous:
+
+<pre>
+<code>
+struct X {};
+template&lt;typename T&gt; void f() requires (bool)sizeof new X
+{
+  // might be the function body, might be a brace-or-equal-init for X
+};
+</code>
+</pre>
+
+A 'max munch' rule would probably do the wrong thing for the above case, 
+and likewise here:
+
+<pre>
+<code>
+template&lt;typename T&gt; requires (bool)sizeof new unsigned
+struct X { };
+</code>
+</pre>
+</p>
+
+<p>
+Proposed resolutions have been to:
+<ul>
+  <li>require parens</li>,
+  <li>specify rules to make this unambiguous</li>
+  <li>specify the operand of a <i>requires-clause</i> as a new grammar.</li>
+</ul>
+No concensus has been reached.
+</p>
+
+
+
+
+
+<hr>
+<h3><a name="22"></a>22. Initializers are never <i>constraint-expression</i>s</h3>
+<p><b>Section:</b> 7.1.7 [dcl.spec.concept] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Hubert Tong <b>Opened:</b> 2015-06-19 <b>Last modified:</b> 2015-10-15</p>
+<p><b>View other</b> <a href="ts-index-open.html#dcl.spec.concept">active issues</a> in [dcl.spec.concept].</p>
+<p><b>View all other</b> <a href="ts-index.html#dcl.spec.concept">issues</a> in [dcl.spec.concept].</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+Initializers [dcl.init] are not expressions. However bullet 6.3 in
+[dcl.spec.concept] has a requirement where an "initializer shall be a
+constraint-expression".
+</p>
+
+<p>
+Presumably the constraint is that the initializer shall have exactly one full-
+expression (that is,
+<pre>
+<code>
+template &lt;typename T&gt; concept bool C{};
+</code>
+</pre>
+is ill-formed), and that said full-expression is valid where a 
+<i>constraint-expression</i> is required.
+</p>
+
+<p>
+It also seems that C++14 subclause 8.5 [dcl.init] paragraph 2 should be removed
+or updated to exclude objects declared with the concept specifier in a manner
+similar to how it excludes objects declared with the constexpr specifier.
+</p>
+
+
+
+
+
+<hr>
+<h3><a name="23"></a>23. Associated constraints is a term defined for templates only</h3>
+<p><b>Section:</b> 14.10.2 [temp.constr.decl] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Hubert Tong <b>Opened:</b> 2015-06-27 <b>Last modified:</b> 2015-10-15</p>
+<p><b>View all other</b> <a href="ts-index.html#temp.constr.decl">issues</a> in [temp.constr.decl].</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+The definition of "associated constraints" is in 14.10.2 [temp.constr.decl]
+paragraph 2 of N4377. Said definition only applies to templates, thus the
+"associated constraints" being referred to by N4377 subclause 1.3.1
+[defns.signature] appears to be undefined.
+</p>
+
+
+
+
+
+<hr>
+<h3><a name="24"></a>24. Expression equivalence outside of declaration matching is novel</h3>
+<p><b>Section:</b> 14.10.3 [temp.constr.order] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Hubert Tong <b>Opened:</b> 2015-06-27 <b>Last modified:</b> 2015-10-15</p>
+<p><b>View other</b> <a href="ts-index-open.html#temp.constr.order">active issues</a> in [temp.constr.order].</p>
+<p><b>View all other</b> <a href="ts-index.html#temp.constr.order">issues</a> in [temp.constr.order].</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+Consider the following case:
+
+<pre>
+<code>
+template &lt;typename T&gt; constexpr bool P = true;
+constexpr bool Q = true;
+
+template &lt;typename T = int&gt; requires P&lt;T&gt;
+void foo(int = 0, T = 0);
+
+template &lt;typename U = int&gt; requires P&lt;U&gt; && Q
+void foo(U = 0, int = 0);
+
+void bar() { foo(); }
+</code>
+</pre>
+
+It seems that <code>&lt;T&gt;</code> in the first declaration of 
+<code>foo()</code> may be considered equivalent to P&lt;U&gt; in
+the second declaration of <code>foo()</code>; however, I would find it surprising if the call
+to <code>foo()</code> is unambiguous. Note that <code>T</code> and <code>U</code> 
+are not involved in the partial ordering in this case aside from the determination 
+of the more constrained template.
+</p>
+
+
+
+
+
+
+<hr>
+<h3><a name="25"></a>25. Block scope template declarations</h3>
+<p><b>Section:</b> 14.10.3 [temp.constr.order] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Hubert Tong <b>Opened:</b> 2015-06-03 <b>Last modified:</b> 2015-10-15</p>
+<p><b>View other</b> <a href="ts-index-open.html#temp.constr.order">active issues</a> in [temp.constr.order].</p>
+<p><b>View all other</b> <a href="ts-index.html#temp.constr.order">issues</a> in [temp.constr.order].</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+The following constraint in Clause 14 [temp] is insufficient to prevent 
+the declaration of an abbreviated function template at block scope:
+
+<blockquote>
+A <i>template-declaration</i> can appear only as a namespace scope or class scope 
+declaration.
+</blockquote>
+</p>
+
+
+
+
+
+<hr>
+<h3><a name="26"></a>26. Function concepts not allowed to be declared in more than one TU</h3>
+<p><b>Section:</b> 14.10.3 [temp.constr.order] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Hubert Tong <b>Opened:</b> 2015-06-09 <b>Last modified:</b> 2015-10-15</p>
+<p><b>View other</b> <a href="ts-index-open.html#temp.constr.order">active issues</a> in [temp.constr.order].</p>
+<p><b>View all other</b> <a href="ts-index.html#temp.constr.order">issues</a> in [temp.constr.order].</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+According to subclause 7.1.7 [dcl.spec.concept] paragraph 1:
+<blockquote>
+When a function is declared to be a concept, it shall be the only declaration 
+of that function.
+</blockquote>
+</p>
+
+
+<p><b>Wording available:</b></p>
+Change that sentence to read:
+<blockquote>
+When a function template is declared to be a concept, it shall be the only 
+declaration of that function <ins>template in the translation unit</ins>.
+</blockquote>
+
+
+
+
+
+</body>
+</html>

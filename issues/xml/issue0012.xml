@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="12" status="EWG">
+<title>Add same-type constraints for expressions</title>
+<section><sref ref="[temp.constr.conv]"/></section>
+<submitter>US</submitter>
+<date>18 May 2015</date>
+
+<discussion>
+<p>
+This paragraph introduces implicit conversion constraints to specify (via the
+trailing-return-type notation <code>-></code>) that a constraint is satisfied iff an 
+expression <code>E</code> is convertible to a type <code>T</code>. It would be very useful to have 
+similar constraints that are satisfied iff <code>decltype(E)</code> is exactly the type
+<code>T</code>.
+
+Introduce new notation (e.g., <code>E => T</code>) to denote a constraint that is 
+satisfied iff the expression <code>E</code> has precisely the type <code>T</code>. Here is a 
+practical example of the utility of such a feature: 
+
+<pre>
+<code>
+    template &lt;typename T&gt;
+    concept bool CopyAssignable = requires (T a, T b) { 
+      { a = b } => T const&amp;;
+    };
+</code>
+</pre>
+</p>
+
+<p>
+This is a proposal for an extension and is better addressed in EWG.
+</p>
+</discussion>
+
+</issue>

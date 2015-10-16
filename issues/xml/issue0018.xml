@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="18" status="New">
+<title>Predicate constraints that are not constant expressions</title>
+<section><sref ref="[dcl.spec.concept]"/></section>
+<submitter>Hubert Tong</submitter>
+<date>26 May 2015</date>
+
+<discussion>
+<p>
+The word "constant" only appears once in normative text in N4377. It is unclear
+to me whether a predicate constraint that is not a constant-expression is 
+ill- formed (which would require a diagnostic for a non-temploid function with a
+requires-clause whose expression is not constant), or merely not satisfied.
+</p>
+
+<p>
+It is useful to note that the "ill-formed" position leads to further issues
+where constant-expressions of the form <code>P || Q</code> may be written such that
+normalization of constraints will form <i>P or Q</i> where <i>Q</i> is a predicate constraint
+whose expression is not a constant-expression.
+</p>
+
+<p>
+Faisal Vali, Andrew Sutton, and Gabriel Dos Reis agree that
+predicate constraints containing non-constant expressions should
+be ill-formed.
+</p>
+
+<p>
+Andrew Sutton suggests: If Q is not dependent and not a constant expression, 
+then the program would be ill-formed. Otherwise if, as a result of substituting 
+during satisfaction, Q is not a constant expression the program is
+ill-formed.
+</p>
+
+<p>
+However, if Q is dependent but never evaluated (because P is
+satisfied), the program is well-formed. This would be the same if
+substitution into Q would result in substitution failures (e.g., if Q
+is <code>X&lt;T&gt;::value</code>).
+</p>
+</discussion>
+
+</issue>

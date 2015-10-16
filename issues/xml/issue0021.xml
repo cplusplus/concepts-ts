@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="21" status="New">
+<title>Disambiguation rules for <i>requires-clause</i>s</title>
+<section><sref ref="[dcl.fct]"/></section>
+<submitter>Hubert Tong</submitter>
+<date>8 Jun 2015</date>
+
+<discussion>
+<p>
+There is no disambiguation rule in C++14 + PDTS 19217 which requires a 
+<i>type-specifier-seq</i> to consume as many <i>type-specifier</i>s as is 
+available and avoid backtracking.
+</p>
+
+<p>
+Given either
+<pre>
+<code>
+template &lt;typename T&gt; requires (bool)&T::operator short
+unsigned int foo();
+</code>
+</pre>
+or
+<pre>
+<code>
+template &lt;typename T&gt; requires (bool)sizeof new (T::f()) short
+unsigned int bar();
+</code>
+</pre>
+
+there is more than one successful parse and it is unclear whether the return 
+type is <code>unsigned int</code> or <code>int</code>.
+</p>
+
+<p>
+The after-the-function-declarator form of the <i>requires-clause</i> is also 
+ambiguous:
+
+<pre>
+<code>
+struct X {};
+template&lt;typename T&gt; void f() requires (bool)sizeof new X
+{
+  // might be the function body, might be a brace-or-equal-init for X
+};
+</code>
+</pre>
+
+A 'max munch' rule would probably do the wrong thing for the above case, 
+and likewise here:
+
+<pre>
+<code>
+template&lt;typename T&gt; requires (bool)sizeof new unsigned
+struct X { };
+</code>
+</pre>
+</p>
+
+<p>
+Proposed resolutions have been to:
+<ul>
+  <li>require parens</li>,
+  <li>specify rules to make this unambiguous</li>
+  <li>specify the operand of a <i>requires-clause</i> as a new grammar.</li>
+</ul>
+No concensus has been reached.
+</p>
+</discussion>
+
+</issue>
