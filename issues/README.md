@@ -1,8 +1,7 @@
-https://github.com/cplusplus/EWG is the repository for the C++ Standards Committee's
-Evolution Working Group issues lists files. 
+https://github.com/cplusplus/concepts-ts is the repository for the 
+C++ Technical Specification "Extensions for Concepts". The issues
+list can be found at https://github.com/cplusplus/concepts-ts/issues.
 
 For the most recent draft of the lists generated from these files,
-see http://cplusplus.github.com/EWG/ewg-active.html 
+see http://cplusplus.github.com/concepts-ts/ts-active.html 
 
-For the official versions of these lists,
-see http://www.open-std.org/jtc1/sc22/wg21/
