@@ -4,7 +4,7 @@
 ] >
 
 <issue num="20" status="New">
-<title>Wording makes all constrained function definitions ill-formed</title>
+<title>Concept-names and overload sets with non-concept functions</title>
 <section><sref ref="[dcl.spec.concept]"/></section>
 <submitter>Hubert Tong</submitter>
 <date>12 Jun 2015</date>
