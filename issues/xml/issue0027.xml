@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="27" status="New">
+<title>Redundant restriction on function specifiers for concepts</title>
+<section><sref ref="[dcl.spec.concept]"/></section>
+<submitter>Nathan Wilson</submitter>
+<date>17 Oct 2015</date>
+
+<discussion>
+<p>
+According to subclause 7.1.7 [dcl.spec.concept] paragraph 5:
+
+<blockquote>
+A function concept has the following restrictions: (5.1):
+<ul>
+  <li>No function-specifiers shall appear in its declaration (7.1.2).</li>
+  <li>...</li>
+</ul>
+</blockquote>
+
+Would that be redundant because of the restriction on function-specifiers being 
+covered by subsection [dcl.spec.concept]p2 and the result of 
+[dcl.spec.concept]p1, specifically, "The concept specifier shall be applied 
+only to the definition of a function or variable template, declared in 
+namespace scope"?
+</p>
+</discussion>
+
+<resolution>
+Strike the first bullet in [dcl.spec.concept]p5.
+<blockquote>
+<ul>
+  <li><del>No function-specifiers shall appear in its declaration (7.1.2).</del></li>
+  <li>...</li>
+</ul>
+</blockquote>
+</resolution>
+
+</issue>

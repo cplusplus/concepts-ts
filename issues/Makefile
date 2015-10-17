@@ -1,5 +1,5 @@
 
-CXX = g++-4.9
+# CXX = g++-4.9
 CXXFLAGS = -std=c++11 -DNDEBUG -O2
 
 
