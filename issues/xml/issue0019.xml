@@ -5,7 +5,7 @@
 
 <issue num="19" status="New">
 <title>Wording makes all constrained function definitions ill-formed</title>
-<section><sref ref="[dcl.spec.concept]"/></section>
+<section><sref ref="[dcl.fct.def.general]"/></section>
 <submitter>Hubert Tong</submitter>
 <date>04 Jun 2015</date>
 

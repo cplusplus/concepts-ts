@@ -5,7 +5,7 @@
 
 <issue num="17" status="New">
 <title>Wording for subsumption</title>
-<section><sref ref="[dcl.spec.concept]"/></section>
+<section><sref ref="[temp.constr.order]"/></section>
 <submitter>Hubert Tong</submitter>
 <date>25 May 2015</date>
 
