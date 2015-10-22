@@ -27,7 +27,7 @@ Proposed change: Eliminate the requirement, thereby permitting
 other uses for this new kind of expression of type <code>bool</code>. (For example, 
 requires­-expressions might replace many or all of the Boolean type traits.)
 Additionally, in any context where a bool value is permitted, allow a 
-concept’s name plus suitable arguments to denote the truth value of the claim
+concept's name plus suitable arguments to denote the truth value of the claim
 that "this combination of arguments satisfy this concept." (This syntax is 
 currently valid in only certain contexts such as requires­expressions.)
 </p>

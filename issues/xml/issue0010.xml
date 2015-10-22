@@ -12,7 +12,7 @@
 <discussion>
 <p>
 There are too many redundant ways to express the same set of requirements.
-While each presents a reasonable use‐case in isolation, the combined effect is
+While each presents a reasonable use-case in isolation, the combined effect is
 overwhelming.
 
 Proposed solution: Review the overlapping syntaxes, and eliminate those
