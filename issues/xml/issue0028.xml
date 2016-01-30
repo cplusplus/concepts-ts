@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="28" status="New">
+<title>Ordering of constraints involving fold expressions</title>
+<section><sref ref="[temp.constr.order]"/></section>
+<submitter>Robert Haberlach</submitter>
+<date>23 Jan 2016</date>
+
+<discussion>
+Partial ordering by constraints doesn't regard fold expressions.
+
+<code>
+template &lt;class T&gt; concept bool A = std::is_move_constructible&lt;T&gt;::value;
+template &lt;class T&gt; concept bool B = std::is_copy_constructible&lt;T&gt;::value;
+template &lt;class T&gt; concept bool C = A&lt;T&gt; &amp;&amp; B&lt;T&gt;;
+
+template &lt;class... _tx&gt;
+  requires (A&lt;_tx&gt; && ...)
+void g(_tx... tx) {
+  std::cout &lt;&lt; "a\n";
+}
+
+template &lt;class... _tx&gt;
+  requires (C&lt;_tx&gt; && ...)
+void g(_tx... tx) {
+  std::cout &lt;&lt; "c\n";
+</code>
+</discussion>
+
+<resolution>
+Augment 14.10.3 [temp.constr.order]p(2.3) thusly:
+
+an atomic constraint A subsumes another atomic constraint B if and only
+if either <del>the</del> A and B are equivalent using the rules
+described in 14.10.1 to compare constraints<ins>, or A is of the form
+<tt>P && ...</tt> and B is of the form <tt>Q && ...</tt> or <tt>Q ||
+...</tt>, where P subsumes Q.</ins>.
+</resolution>
+
+</issue>
