@@ -1,12 +1,12 @@
-// This program reads all the issues in the issues directory passed as 
-// the first command line argument.  If all documents are successfully 
+// This program reads all the issues in the issues directory passed as
+// the first command line argument.  If all documents are successfully
 // parsed, it will generate the Concepts Issues List documents
 // for an ISO SC22 WG21 mailing.
 
 // Based on code originally donated by Howard Hinnant
 // Since modified by Alisdair Meredith
 
-// Note that this program requires a reasonably conformant C++0x compiler, 
+// Note that this program requires a reasonably conformant C++0x compiler,
 // supporting at least:
 //    auto
 //    lambda expressions
@@ -61,7 +61,7 @@ using namespace std;
 
 // This should be part of <string> in 0x lib
 // Should also be more efficient than using ostringstream!
-string itos(int i) 
+string itos(int i)
 {
    ostringstream t;
    t << i;
@@ -72,7 +72,7 @@ string itos(int i)
 // Generic utilities that are useful and do not rely on context or types from our domain (issue-list processing)
 // =============================================================================================================
 
-auto parse_month(string const& m) -> greg::month 
+auto parse_month(string const& m) -> greg::month
 {
    // This could be turned into an efficient map lookup with a suitable indexed container
    return (m == "Jan") ? greg::jan
@@ -107,8 +107,8 @@ auto parse_date(istream& temp) -> greg::date {
 }
 
 
-void 
-print_date(ostream& out, greg::date const& mod_date ) 
+void
+print_date(ostream& out, greg::date const& mod_date )
 {
    out << mod_date.year() << '-';
    if (mod_date.month() < 10) { out << '0'; }
@@ -285,7 +285,7 @@ struct section_num {
 };
 
 
-istream& 
+istream&
 operator>>(istream& is, section_num& sn)
 {
    sn.prefix.clear();
@@ -336,15 +336,15 @@ operator>>(istream& is, section_num& sn)
    return is;
 }
 
-ostream& 
+ostream&
 operator<<(ostream& os, section_num const& sn)
 {
-   if (!sn.prefix.empty()) 
+   if (!sn.prefix.empty())
       os << sn.prefix << ' ';
 
-   bool use_period{false};
+   int use_period = 0;
    for (auto sub : sn.num ) {
-      if(use_period++) {
+      if (use_period++) {
          os << '.';
       }
 
@@ -359,21 +359,21 @@ operator<<(ostream& os, section_num const& sn)
 }
 
 
-auto 
+auto
 operator<(section_num const& x, section_num const& y) noexcept -> bool {
    return (x.prefix < y.prefix) ?  true
         : (y.prefix < x.prefix) ? false
         : x.num < y.num;
 }
 
-auto 
+auto
 operator==(section_num const& x, section_num const& y) noexcept -> bool {
    return (x.prefix != y.prefix)
         ? false
         : x.num == y.num;
 }
 
-auto 
+auto
 operator!=(section_num const& x, section_num const& y) noexcept -> bool {
    return !(x == y);
 }
@@ -381,7 +381,7 @@ operator!=(section_num const& x, section_num const& y) noexcept -> bool {
 typedef string section_tag;
 
 
-struct issue 
+struct issue
 {
    int num;
    string                stat;
@@ -436,61 +436,61 @@ struct sort_by_num {
 
 
 struct sort_by_status {
-   auto operator()(const issue& x, const issue& y) const noexcept -> bool {
-      static constexpr
-      auto get_priority = []( string const& stat ) -> unsigned {
-         static char const * const status_priority[] {
-            "Voting",
-            "Tentatively Voting",
-            "Immediate",
-            "Ready",
-            "Tentatively Ready",
-            "Tentatively NAD Editorial",
-            "Tentatively NAD Future",
-            "Tentatively NAD",
-            "Review",
-            "New",
-            "Open",
-            "Deferred",
-            "Tentatively Resolved",
-            "Pending DR",
-            "Pending WP",
-            "Pending Resolved",
-            "Pending NAD Future",
-            "Pending NAD Editorial",
-            "Pending NAD",
-            "NAD Future",
-            "DR",
-            "WP",
-            "CD1",
-            "C++11",
-            "C++14",
-            "TC1",
-            "Resolved",
-            "TRDec",
-            "NAD Editorial",
-            "NAD",
-            "Dup",
-            "NAD Concepts",
-            "CWG",
-            "EWG",
-            "Extension",
-         };
-         // Don't know why gcc 4.6 rejects this - cannot deduce iterators for 'find_if' algorithm
-         //static auto first = begin(status_priority);
-         //static auto last  = end(status_priority);
-         //return find_if( first, last), [&](char const * str){ return str == stat; } ) - first;
 
-         // Yet gcc 4.6 does work with this that should have identical semantics, other than an lvalue/rvalue switch
-         static auto const first = begin(status_priority);
-         static auto const last  = end(status_priority);
-         auto const i = find_if( first, last, [&](char const * str){ return str == stat; } );
-         if(last == i) {
-            cout << "unknown status: " << stat << endl;
-         }
-         return i - first;
-      };
+  unsigned get_priority(string const& stat) const {
+     static char const * const status_priority[] {
+        "Voting",
+        "Tentatively Voting",
+        "Immediate",
+        "Ready",
+        "Tentatively Ready",
+        "Tentatively NAD Editorial",
+        "Tentatively NAD Future",
+        "Tentatively NAD",
+        "Review",
+        "New",
+        "Open",
+        "Deferred",
+        "Tentatively Resolved",
+        "Pending DR",
+        "Pending WP",
+        "Pending Resolved",
+        "Pending NAD Future",
+        "Pending NAD Editorial",
+        "Pending NAD",
+        "NAD Future",
+        "DR",
+        "WP",
+        "CD1",
+        "C++11",
+        "C++14",
+        "TC1",
+        "Resolved",
+        "TRDec",
+        "NAD Editorial",
+        "NAD",
+        "Dup",
+        "NAD Concepts",
+        "CWG",
+        "EWG",
+        "Extension",
+     };
+     // Don't know why gcc 4.6 rejects this - cannot deduce iterators for 'find_if' algorithm
+     //static auto first = begin(status_priority);
+     //static auto last  = end(status_priority);
+     //return find_if( first, last), [&](char const * str){ return str == stat; } ) - first;
 
+     // Yet gcc 4.6 does work with this that should have identical semantics, other than an lvalue/rvalue switch
+     static auto const first = begin(status_priority);
+     static auto const last  = end(status_priority);
+     auto const i = find_if( first, last, [&](char const * str){ return str == stat; } );
+     if(last == i) {
+        cout << "unknown status: " << stat << endl;
+     }
+     return i - first;
+  };
+
+   bool operator()(const issue& x, const issue& y) const noexcept {
       return get_priority(x.stat) < get_priority(y.stat);
    }
 };
@@ -855,7 +855,7 @@ void format(vector<issue>& issues, issue& is) {
 
 
 // Contains the XML text for all issues.
-struct IssuesData 
+struct IssuesData
 {
    explicit IssuesData(string const& path);
 
@@ -884,7 +884,7 @@ IssuesData::IssuesData(string const& path)
 }
 
 
-string 
+string
 IssuesData::get_doc_number(string doc) const
 {
     if (doc == "active") {
@@ -941,7 +941,7 @@ IssuesData::get_intro(string doc) const {
 
 
 string
-IssuesData::get_maintainer() const 
+IssuesData::get_maintainer() const
 {
    auto i = m_data.find("maintainer=\"");
    if (i == string::npos) {
@@ -1347,8 +1347,8 @@ assert(!i->tags.empty());
 
 
 template <class Pred>
-void 
-print_issues(ostream& out, vector<issue> const& issues, Pred pred) 
+void
+print_issues(ostream& out, vector<issue> const& issues, Pred pred)
 {
    multiset<issue, sort_by_first_tag> const  all_issues{ issues.begin(), issues.end()} ;
    multiset<issue, sort_by_status>    const  issues_by_status{ issues.begin(), issues.end() };
@@ -1409,8 +1409,8 @@ print_issues(ostream& out, vector<issue> const& issues, Pred pred)
    }
 }
 
-void 
-print_paper_heading(ostream& out, string const&paper, IssuesData const& issues) 
+void
+print_paper_heading(ostream& out, string const&paper, IssuesData const& issues)
 {
    out <<
 R"(<table>
@@ -1671,7 +1671,7 @@ auto parse_issue_from_file(string const& filename) -> issue {
 
 // Construct a vector of issues from the set of XML
 // files with the name issue*.xml in the given path.
-vector<issue> 
+vector<issue>
 read_issues(string const& path)
 {
    cout << "Reading issues from: " << path << endl;
@@ -1692,26 +1692,26 @@ read_issues(string const& path)
 }
 
 
-void 
-prepare_issues(vector<issue>& issues) 
+void
+prepare_issues(vector<issue>& issues)
 {
-   // Initially sort the issues by issue number, so each issue can 
+   // Initially sort the issues by issue number, so each issue can
    // be correctly 'format'ted
    sort(issues.begin(), issues.end(), sort_by_num{});
 
-   // Then we format the issues, which should be the last time we 
-   // need to touch the issues themselves We may turn this into a 
-   // two-stage process, analysing duplicates and then applying the 
-   // links. This will allow us to better express constness when 
-   // the issues are used purely for reference. Currently, the 
-   // 'format' function takes a reference-to-non-const-vector-of-issues 
-   // purely to mark up information related to duplicates, so processing 
+   // Then we format the issues, which should be the last time we
+   // need to touch the issues themselves We may turn this into a
+   // two-stage process, analysing duplicates and then applying the
+   // links. This will allow us to better express constness when
+   // the issues are used purely for reference. Currently, the
+   // 'format' function takes a reference-to-non-const-vector-of-issues
+   // purely to mark up information related to duplicates, so processing
    // duplicates in a separate pass may clarify the code.
    for (auto& i : issues )
       format(issues, i);
 
-   // Issues will be routinely re-sorted in later code, but contents 
-   // should be fixed after formatting. This suggests we may want to be 
+   // Issues will be routinely re-sorted in later code, but contents
+   // should be fixed after formatting. This suggests we may want to be
    // storing some kind of issue handle in the functions that keep
    // re-sorting issues, and so minimize the churn on the larger objects.
 }
@@ -1983,7 +1983,7 @@ int main(int argc, char* argv[]) {
 
       if (path.back() != '/')
          path += '/';
-      
+
 
       // Build the section database.
       section_db  = read_section_db(path + "meta-data/");
