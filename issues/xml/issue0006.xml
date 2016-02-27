@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
-<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
   <!ENTITY nbsp "&#160;">
 ] >
 
@@ -11,15 +11,15 @@
 
 <discussion>
 <p>
-Using <code>concept</code> as a <i>decl-specifer</i>, rather than forming a first class 
-entity like a type or template, makes the feature appear more complex than 
+Using <code>concept</code> as a <i>decl-specifer</i>, rather than forming a first class
+entity like a type or template, makes the feature appear more complex than
 it needs to be. Concepts would be simpler (for user and [we believe]
-the specification) if there was only one kind, rather than both function 
-and variable syntax; the <code>bool</code> keyword would become redundant and the 
-set of restrictions on concepts based on them being functions or variables 
+the specification) if there was only one kind, rather than both function
+and variable syntax; the <code>bool</code> keyword would become redundant and the
+set of restrictions on concepts based on them being functions or variables
 would disappear.
 
-We will provide a paper in time for the Lenexa pre meeting mailing 
+We will provide a paper in time for the Lenexa pre meeting mailing
 proposing a grammar that would give all concepts the form:
 
 <pre>
@@ -35,7 +35,8 @@ Also see issues <iref ref="7"/> and <iref ref="8"/> as they relate.
 </p>
 
 <p>
-Suggest opening an EWG issue.
+EWG is generally in favor of resolving this and related issues, but there
+is no consensus on how to procdeed.
 </p>
 </discussion>
 

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
-<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="23" status="New">
+<issue num="23" status="CWG">
 <title>Associated constraints is a term defined for templates only</title>
 <section><sref ref="[temp.constr.decl]"/></section>
 <submitter>Hubert Tong</submitter>

@@ -3,7 +3,7 @@
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="28" status="New">
+<issue num="28" status="EWG">
 <title>Ordering of constraints involving fold expressions</title>
 <section><sref ref="[temp.constr.order]"/></section>
 <submitter>Robert Haberlach</submitter>
@@ -28,6 +28,13 @@ template &lt;class... _tx&gt;
 void g(_tx... tx) {
   std::cout &lt;&lt; "c\n";
 </code>
+
+<p>
+Andrew Sutton: this is logically valid and seems like a reasonable extension.
+As a general rule, there may be many ways in which we can extend the constraint
+language to support these kinds of resolutions. Of course, this means that
+each such change potentially breaks changes.
+</p>
 </discussion>
 
 <resolution>

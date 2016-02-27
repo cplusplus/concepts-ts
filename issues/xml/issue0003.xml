@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
-<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
   <!ENTITY nbsp "&#160;">
 ] >
 
@@ -11,30 +11,34 @@
 
 <discussion>
 <p>
-The following requirement seems overly restrictive, as it can be fairly 
+The following requirement seems overly restrictive, as it can be fairly
 easily (but tediously) be worked around: "A <i>requires-expression</i> shall
-appear only within a concept definition (7.1.7), or within the 
+appear only within a concept definition (7.1.7), or within the
 <i>requires-clause</i> of a template declaration (Clause 14) or function declaration
 (8.3.5)."
 
-(The tedious workaround for each concept C is to define an overload set 
-consisting of two function templates, one unconstrained and returning false, 
+(The tedious workaround for each concept C is to define an overload set
+consisting of two function templates, one unconstrained and returning false,
 the other constrained by C and returning true.)
 </p>
 
 <p>
-Proposed change: Eliminate the requirement, thereby permitting 
-other uses for this new kind of expression of type <code>bool</code>. (For example, 
+Proposed change: Eliminate the requirement, thereby permitting
+other uses for this new kind of expression of type <code>bool</code>. (For example,
 requires­-expressions might replace many or all of the Boolean type traits.)
-Additionally, in any context where a bool value is permitted, allow a 
+Additionally, in any context where a bool value is permitted, allow a
 concept's name plus suitable arguments to denote the truth value of the claim
-that "this combination of arguments satisfy this concept." (This syntax is 
+that "this combination of arguments satisfy this concept." (This syntax is
 currently valid in only certain contexts such as requires­expressions.)
 </p>
 
 <p>
-Suggest opening an EWG issue.
+There is a paper addressing this issue:
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0266r0.pdf"></a>.
 </p>
 </discussion>
+
+<resolution>
+</resolution>
 
 </issue>

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
-<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="11" status="EWG">
+<issue num="11" status="CWG">
 <title>Concerns about subsumption and equivalence rules</title>
 <section><sref ref="[temp.constr.decl]"/></section>
 <submitter>US</submitter>
@@ -11,25 +11,26 @@
 
 <discussion>
 <p>
-We have a broad concern that it is hard to understand the feature purely 
-from the specification, especially the subsumption rules, and equivalence 
+We have a broad concern that it is hard to understand the feature purely
+from the specification, especially the subsumption rules, and equivalence
 rules to know when two signatures declare the same function or
 are ambiguous equally constrained overloads, yet there is a lack of readily
 available implementations to test our understanding against. While the feature
-set of the TS looks good, we think one more iteration on the specification 
+set of the TS looks good, we think one more iteration on the specification
 would be useful.
 
 Proposed solution: Recast the rules for subsumption as a mini grammar
-(distinct from the C++ grammar) as the English text appears to be trying to 
-describe a grammar, but less formally, which leads to a potential lack of 
-precision, and more confusion for the reader. We are not highlighting specific 
-lack of precision at this time, as we have not emerged from confusion in 
+(distinct from the C++ grammar) as the English text appears to be trying to
+describe a grammar, but less formally, which leads to a potential lack of
+precision, and more confusion for the reader. We are not highlighting specific
+lack of precision at this time, as we have not emerged from confusion in
 time to file appropriate comments.
 </p>
 
 <p>
-These concerns are better addressed in EWG.
+EWG believes this is strictly a wording issue. Returned to CWG.
 </p>
+
 </discussion>
 
 </issue>

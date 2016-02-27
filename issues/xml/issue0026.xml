@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
-<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="26" status="New">
+<issue num="26" status="CWG">
 <title>Function concepts not allowed to be declared in more than one TU</title>
 <section><sref ref="[temp.constr.order]"/></section>
 <submitter>Hubert Tong</submitter>
@@ -13,7 +13,7 @@
 <p>
 According to subclause 7.1.7 [dcl.spec.concept] paragraph 1:
 <blockquote>
-When a function is declared to be a concept, it shall be the only declaration 
+When a function is declared to be a concept, it shall be the only declaration
 of that function.
 </blockquote>
 </p>
@@ -22,7 +22,7 @@ of that function.
 <resolution>
 Change that sentence to read:
 <blockquote>
-When a function template is declared to be a concept, it shall be the only 
+When a function template is declared to be a concept, it shall be the only
 declaration of that function <ins>template in the translation unit</ins>.
 </blockquote>
 </resolution>

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
-<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="27" status="New">
+<issue num="27" status="CWG">
 <title>Redundant restriction on function specifiers for concepts</title>
 <section><sref ref="[dcl.spec.concept]"/></section>
 <submitter>Nathan Wilson</submitter>
@@ -21,10 +21,10 @@ A function concept has the following restrictions: (5.1):
 </ul>
 </blockquote>
 
-Would that be redundant because of the restriction on function-specifiers being 
-covered by subsection [dcl.spec.concept]p2 and the result of 
-[dcl.spec.concept]p1, specifically, "The concept specifier shall be applied 
-only to the definition of a function or variable template, declared in 
+Would that be redundant because of the restriction on function-specifiers being
+covered by subsection [dcl.spec.concept]p2 and the result of
+[dcl.spec.concept]p1, specifically, "The concept specifier shall be applied
+only to the definition of a function or variable template, declared in
 namespace scope"?
 </p>
 </discussion>

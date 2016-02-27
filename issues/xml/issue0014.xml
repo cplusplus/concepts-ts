@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
-<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="14" status="New">
+<issue num="14" status="EWG">
 <title>Concept checks on template template parameters are too restrictive</title>
 <section><sref ref="[temp.arg.template]"/></section>
 <submitter>Roland Bock</submitter>
@@ -11,7 +11,7 @@
 
 <discussion>
 <p>
-Consider a template that takes a <code>std::tuple</code> and copies its arguments 
+Consider a template that takes a <code>std::tuple</code> and copies its arguments
 into another template (sink), see attached code.
 
 
@@ -22,10 +22,10 @@ using copy_tuple_args = ...
 </code>
 </pre>
 
-The <code>copy_tuple_args</code> template is generic, not caring about the nature 
-of the copied arguments or the sink. This works fine as long as the 
-sink is not constrained, e.g. if the sink is another tuple. But a 
-constrained sink like  this 
+The <code>copy_tuple_args</code> template is generic, not caring about the nature
+of the copied arguments or the sink. This works fine as long as the
+sink is not constrained, e.g. if the sink is another tuple. But a
+constrained sink like  this
 
 <pre>
 <code>
@@ -45,11 +45,11 @@ template will suddenly cease to work when I start to use concepts.
 Modify [temp.arg.template]:
 
 <blockquote>
-  A <i>template-argument</i> <ins>(call it A)</ins> matches a template 
-  <i>template-parameter</i> (call it P) 
-  when each of the template parameters in the <i>template-parameter-list</i> of the 
-  <i>template-argument</i>'s corresponding class template or alias template 
-  <del>(call it A)</del> matches the corresponding template parameter in the 
+  A <i>template-argument</i> <ins>(call it A)</ins> matches a template
+  <i>template-parameter</i> (call it P)
+  when each of the template parameters in the <i>template-parameter-list</i> of the
+  <i>template-argument</i>'s corresponding class template or alias template
+  <del>(call it A)</del> matches the corresponding template parameter in the
   <i>template-parameter-list</i> of P, and P is <ins>either unconstrained or</ins>
   at least as constrained as A according to the rules in 14.10.3.
 </blockquote>

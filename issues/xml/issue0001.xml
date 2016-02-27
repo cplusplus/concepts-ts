@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
-<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
   <!ENTITY nbsp "&#160;">
 ] >
 
@@ -11,7 +11,7 @@
 
 <discussion>
 <p>
-More a suggestion than a comment: would a convertible-to-type example 
+More a suggestion than a comment: would a convertible-to-type example
 like the following be appropriate?
 
 <pre>

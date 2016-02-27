@@ -1018,8 +1018,8 @@ auto IssuesData::get_revisions(vector<issue> const& issues, string const& diff_r
 //   r += "R09: 2014-10-09 pre-Urbana mailing";
 //   r += "R10: 2014-10-29 post-Urbana mailing";
 //
-   r += "R12: 2015-05-22 post-Lenexa mailing";
-//   r += "Madrid meeting resolutions";   // We should date and *timestamp* this reference, as we expect to generate several documents per day
+  //  r += "R1: 2015-05-22 post-Lenexa mailing";
+   r += "R2: 2015-05-22 pre-Jacksonville mailing";
    r += diff_report;
    r += "</li>\n";
 

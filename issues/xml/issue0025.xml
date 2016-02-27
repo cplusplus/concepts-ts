@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
-<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="25" status="New">
+<issue num="25" status="CWG">
 <title>Block scope template declarations</title>
 <section><sref ref="[temp.constr.order]"/></section>
 <submitter>Hubert Tong</submitter>
@@ -11,11 +11,11 @@
 
 <discussion>
 <p>
-The following constraint in Clause 14 [temp] is insufficient to prevent 
+The following constraint in Clause 14 [temp] is insufficient to prevent
 the declaration of an abbreviated function template at block scope:
 
 <blockquote>
-A <i>template-declaration</i> can appear only as a namespace scope or class scope 
+A <i>template-declaration</i> can appear only as a namespace scope or class scope
 declaration.
 </blockquote>
 </p>

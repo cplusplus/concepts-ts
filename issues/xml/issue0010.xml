@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
-<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="10" status="EWG">
+<issue num="10" status="NAD">
 <title>Redundant expressions of constraints</title>
 <section><sref ref="[temp.constr.decl]"/></section>
 <submitter>US</submitter>
@@ -16,7 +16,7 @@ While each presents a reasonable use-case in isolation, the combined effect is
 overwhelming.
 
 Proposed solution: Review the overlapping syntaxes, and eliminate those
-that add least value, or are least frequently used. This may mean shipping 
+that add least value, or are least frequently used. This may mean shipping
 the TS in close to its current form to obtain such feedback though.
 </p>
 
@@ -24,5 +24,10 @@ the TS in close to its current form to obtain such feedback though.
 Suggest opening an EWG issue.
 </p>
 </discussion>
+
+<rationale>
+The issue is too broadly stated. There is nothing specific for EWG to address
+as an issue.
+</rationale>
 
 </issue>

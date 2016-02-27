@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
-<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="15" status="New">
+<issue num="15" status="CWG">
 <title>Partial specialization of non-concept variable template as a concept definition</title>
 <section><sref ref="[dcl.spec.concept]"/></section>
 <submitter>Hubert Tong</submitter>
@@ -11,8 +11,8 @@
 
 <discussion>
 <p>
-Partial specialization of a concept definition is prohibited by 
-<sref ref="[dcl.spec.concept]"/>p7; however, there appears to be no 
+Partial specialization of a concept definition is prohibited by
+<sref ref="[dcl.spec.concept]"/>p7; however, there appears to be no
 prohibition on a concept definition which is a partial specialization.
 
 e.g.,

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
-<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="5" status="EWG">
+<issue num="5" status="NAD">
 <title>Extending exception constraints</title>
 <section><sref ref="[expr.prim.req.compound]"/></section>
 <submitter>US</submitter>
@@ -11,7 +11,7 @@
 
 <discussion>
 <p>
-If we retain exception constraints, the optional `noexcept` specifier 
+If we retain exception constraints, the optional `noexcept` specifier
 should support the full range of the noexcept grammar.
 
 Amend <i>compound-requirement</i>:
@@ -30,5 +30,9 @@ Also see <iref ref="4"/> as it relates.
 Suggest opening an EWG issue.
 </p>
 </discussion>
+
+<rationale>
+EWG was against adding full exception specifications to compound requirements.
+</rationale>
 
 </issue>

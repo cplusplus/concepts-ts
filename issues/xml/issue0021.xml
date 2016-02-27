@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
-<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="21" status="New">
+<issue num="21" status="CWG">
 <title>Disambiguation rules for <i>requires-clause</i>s</title>
 <section><sref ref="[dcl.fct]"/></section>
 <submitter>Hubert Tong</submitter>
@@ -11,8 +11,8 @@
 
 <discussion>
 <p>
-There is no disambiguation rule in C++14 + PDTS 19217 which requires a 
-<i>type-specifier-seq</i> to consume as many <i>type-specifier</i>s as is 
+There is no disambiguation rule in C++14 PDTS 19217 which requires a
+<i>type-specifier-seq</i> to consume as many <i>type-specifier</i>s as is
 available and avoid backtracking.
 </p>
 
@@ -32,12 +32,12 @@ unsigned int bar();
 </code>
 </pre>
 
-there is more than one successful parse and it is unclear whether the return 
+there is more than one successful parse and it is unclear whether the return
 type is <code>unsigned int</code> or <code>int</code>.
 </p>
 
 <p>
-The after-the-function-declarator form of the <i>requires-clause</i> is also 
+The after-the-function-declarator form of the <i>requires-clause</i> is also
 ambiguous:
 
 <pre>
@@ -50,7 +50,7 @@ template&lt;typename T&gt; void f() requires (bool)sizeof new X
 </code>
 </pre>
 
-A 'max munch' rule would probably do the wrong thing for the above case, 
+A 'max munch' rule would probably do the wrong thing for the above case,
 and likewise here:
 
 <pre>
