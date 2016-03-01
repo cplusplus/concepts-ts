@@ -231,8 +231,8 @@ auto filename_for_status(string stat) -> string {
         : (stat == "NAD Editorial") ? TS_CLOSED
         : (stat == "NAD Concepts")  ? TS_CLOSED
         : (stat == "Extension")     ? TS_CLOSED
-        : (stat == "CWG")           ? TS_CLOSED
-        : (stat == "EWG")           ? TS_CLOSED
+        : (stat == "CWG")           ? TS_ACTIVE
+        : (stat == "EWG")           ? TS_ACTIVE
         : (stat == "Voting")        ? TS_ACTIVE
         : (stat == "Immediate")     ? TS_ACTIVE
         : (stat == "Ready")         ? TS_ACTIVE
