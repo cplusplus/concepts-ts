@@ -3,7 +3,7 @@
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="11" status="CWG">
+<issue num="11" status="Open">
 <title>Concerns about subsumption and equivalence rules</title>
 <section><sref ref="[temp.constr.decl]"/></section>
 <submitter>US</submitter>

@@ -3,7 +3,7 @@
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="19" status="CWG">
+<issue num="19" status="Open">
 <title>Wording makes all constrained function definitions ill-formed</title>
 <section><sref ref="[dcl.fct.def.general]"/></section>
 <submitter>Hubert Tong</submitter>

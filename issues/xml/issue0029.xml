@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="29" status="Open">
+<title>Allow concepts to be evaluated in any context</title>
+<section><sref ref="[temp.constr.decl]"/></section>
+<submitter>Andrew Sutton</submitter>
+<date>27 Feb 2016</date>
+
+<discussion>
+<p>
+Currently, concepts are only guaranteed to be evaluable within the context
+of a requires-expression. Among other things, this guarantees that the following
+will not work:
+
+<code>
+static_assert(C&lt;X&gt;(), ""); // for some concrete X
+</code>
+</p>
+
+<p>
+Evaluating a concept in any context effectively requires that it be evaluated
+as if in a SFINAE context. The original design of concepts did not require
+this because it was not clear how easy this would be for all implementers.
+Based on EWG discussions in Kona, this appears to no longer be the case.
+</p>
+
+<p>
+This issue is submitted as a result of a straw poll taken during discussion
+of issue <iref="3"/>.
+</p>
+</discussion>
+
+<resolution>
+</resolution>
+
+</issue>

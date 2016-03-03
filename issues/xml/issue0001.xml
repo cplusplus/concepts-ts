@@ -3,7 +3,7 @@
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="1" status="CWG">
+<issue num="1" status="Open">
 <title>Relationship of implicit conversion constraints to <tt>is_convertible</tt></title>
 <section><sref ref="[temp.constr.conv]"/></section>
 <submitter>CA</submitter>
@@ -18,7 +18,7 @@ like the following be appropriate?
 <code>
 template &lt;typename T&gt; concept bool D =
 requires (T a) {
-  { a } -&gt; int; // std::is_convertible&lt;T,int&gt;::value ?
+  { a } -&gt; int; // equivalent to std::is_convertible&lt;T,int&gt;::value ?
 };
 </code>
 </pre>

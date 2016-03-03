@@ -3,7 +3,7 @@
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="16" status="CWG">
+<issue num="16" status="Open">
 <title>Concept and non-concept declarations of the same variable template</title>
 <section><sref ref="[dcl.spec.concept]"/></section>
 <submitter>Hubert Tong</submitter>

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="31" status="Open">
+<title>Constrained-type-specifiers introduce non-type placeholders</title>
+<section><sref ref="[decl.spec.auto.constr]"/></section>
+<submitter>Jason Merrill</submitter>
+<date>3 Mar 2016</date>
+
+<discussion>
+<p>
+A <i>constrained-type-specifier</i> also denotes non-type constraints. The
+production name should reflect that.
+</p>
+</discussion>
+
+</issue>

@@ -3,7 +3,7 @@
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="27" status="CWG">
+<issue num="27" status="Open">
 <title>Redundant restriction on function specifiers for concepts</title>
 <section><sref ref="[dcl.spec.concept]"/></section>
 <submitter>Nathan Wilson</submitter>

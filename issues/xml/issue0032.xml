@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="33" status="Open">
+<title>Constrained constructors not allowed</title>
+<section><sref ref="[class.ctor]"/></section>
+<submitter>Casey Carter</submitter>
+<date>03 Mar 2016</date>
+
+<discussion>
+<p>
+The current TS doesn't support constrained constructors, since the matching
+form for constructor declarations in 12.1/1 doesn't have an optional requires
+clause.
+</p>
+</discussion>
+
+</issue>

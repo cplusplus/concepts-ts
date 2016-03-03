@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="30" status="Open">
+<title>Normalization wording guarantees worst case performance for subsumption</title>
+<section><sref ref="[temp.constr.decl]"/></section>
+<submitter>Andrew Sutton</submitter>
+<date>27 Feb 2016</date>
+
+<discussion>
+<p>
+The current wording for normalization guarantees exponential performance
+during subsumption.
+</p>
+
+<p>
+Addressing this issue first requires that we address issue <iref ref="29"/>.
+If concepts can be safely evaluated in any context, then we do not need to
+lift the entire constraint into the current instantiation.
+</p>
+
+<p>
+The current phrasing also prohibits certain compiler optimizations by requiring
+a full expansion to atomic constraints. In particular, this does not admit
+early termination of the algorithm or memoization of comparisons.
+</p>
+
+<p>
+Prior to the Skillman concepts meeting, there was a much more abstract wording
+for the subsumption algorithm. One resolution would be to revert the current
+wording to the older version.
+</p>
+</discussion>
+
+<resolution>
+</resolution>
+
+</issue>

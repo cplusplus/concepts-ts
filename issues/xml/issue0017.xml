@@ -3,7 +3,7 @@
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="17" status="CWG">
+<issue num="17" status="Open">
 <title>Wording for subsumption</title>
 <section><sref ref="[temp.constr.order]"/></section>
 <submitter>Hubert Tong</submitter>
