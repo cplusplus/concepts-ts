@@ -3,7 +3,7 @@
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="28" status="EWG">
+<issue num="28" status="Open">
 <title>Ordering of constraints involving fold expressions</title>
 <section><sref ref="[temp.constr.order]"/></section>
 <submitter>Robert Haberlach</submitter>
@@ -34,6 +34,11 @@ Andrew Sutton: this is logically valid and seems like a reasonable extension.
 As a general rule, there may be many ways in which we can extend the constraint
 language to support these kinds of resolutions. Of course, this means that
 each such change potentially breaks changes.
+</p>
+
+<p>
+This needs to apply to expansions of disjunctions also. This is done
+by inverting the subsumption (i.e., when Q subsumes P).
 </p>
 </discussion>
 
