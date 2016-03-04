@@ -3,7 +3,7 @@
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="3" status="EWG">
+<issue num="3" status="Ready">
 <title>Allow requires-expressions in more contexts</title>
 <section><sref ref="[expr.prim.req]"/></section>
 <submitter>US</submitter>
@@ -27,18 +27,21 @@ Proposed change: Eliminate the requirement, thereby permitting
 other uses for this new kind of expression of type <code>bool</code>. (For example,
 requires­-expressions might replace many or all of the Boolean type traits.)
 Additionally, in any context where a bool value is permitted, allow a
-concept's name plus suitable arguments to denote the truth value of the claim
+concept’s name plus suitable arguments to denote the truth value of the claim
 that "this combination of arguments satisfy this concept." (This syntax is
 currently valid in only certain contexts such as requires­expressions.)
 </p>
 
 <p>
-There is a paper addressing this issue:
+There is a paper addressing the <i>requires-expression</i> portion of this
+discussion.
 <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0266r0.pdf"></a>.
 </p>
-</discussion>
 
-<resolution>
-</resolution>
+<p>
+Issue <iref ref="29"/> was created to specifically address the inability to
+evaluate concepts outside of SFINAE contexts.
+</p>
+</discussion>
 
 </issue>
