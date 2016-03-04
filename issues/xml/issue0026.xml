@@ -3,7 +3,7 @@
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="26" status="Open">
+<issue num="26" status="Ready">
 <title>Function concepts not allowed to be declared in more than one TU</title>
 <section><sref ref="[temp.constr.order]"/></section>
 <submitter>Hubert Tong</submitter>
@@ -22,7 +22,7 @@ of that function.
 <resolution>
 Change that sentence to read:
 <blockquote>
-When a function template is declared to be a concept, it shall be the only
+When a function <ins>template</ins> is declared to be a concept, it shall be the only
 declaration of that function <ins>template in the translation unit</ins>.
 </blockquote>
 </resolution>
