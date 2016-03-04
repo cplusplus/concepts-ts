@@ -13,6 +13,7 @@
 Partial ordering by constraints doesn't regard fold expressions.
 
 <code>
+<pre>
 template &lt;class T&gt; concept bool A = std::is_move_constructible&lt;T&gt;::value;
 template &lt;class T&gt; concept bool B = std::is_copy_constructible&lt;T&gt;::value;
 template &lt;class T&gt; concept bool C = A&lt;T&gt; &amp;&amp; B&lt;T&gt;;
@@ -27,6 +28,7 @@ template &lt;class... _tx&gt;
   requires (C&lt;_tx&gt; && ...)
 void g(_tx... tx) {
   std::cout &lt;&lt; "c\n";
+</pre>
 </code>
 
 <p>
