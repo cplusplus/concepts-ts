@@ -17,4 +17,24 @@ clause.
 </p>
 </discussion>
 
+<resolution>
+<p>
+Add new section [class.ctor] to the TS with text:
+</p>
+
+<blockquote>
+<p>
+<ins>Modify the matching condition in paragraph 1 to accept a <i>requires-clause</i>.</ins>
+</p>
+
+<blockquote>
+<p>
+<ins><i>ptr-declarator</i> <code>(</code> <i>parameter-declaration-clause</i> <code>)</code>
+  <i>exception-specification<sub>opt</sub></i> <i>attribute-specifier-seq<sub>opt</sub></i>
+  <i>requires-clause<sub>opt</sub></i></ins>
+</p>
+</blockquote>
+</blockquote>
+</resolution>
+
 </issue>
