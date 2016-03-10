@@ -28,6 +28,7 @@ template &lt;class... _tx&gt;
   requires (C&lt;_tx&gt; && ...)
 void g(_tx... tx) {
   std::cout &lt;&lt; "c\n";
+}
 </pre>
 </code>
 
