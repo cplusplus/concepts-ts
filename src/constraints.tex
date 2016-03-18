@@ -152,7 +152,7 @@ The satisfaction of a disjunction's operands are evaluated left-to-right;
 if the left operand is satisfied, template arguments are not 
 substituted into the right operand, and the constraint is satisfied.
 %
-If the left and right operands of a conjunction are predicate constraints
+If the left and right operands of a disjunction are predicate constraints
 (\ref{temp.constr.pred}), let \tcode{P} and \tcode{Q} be the expressions
 of those constraints resulting from substitution. If the expression
 \tcode{P || Q} results in a call to a user-declared \tcode{operator||},
@@ -289,8 +289,8 @@ A \defn{type constraint} is a constraint that specifies a requirement
 on the formation of a type \tcode{T} through the substitution of template 
 arguments.
 % 
-A type constraint is satisfied if and only \tcode{T} is not ill-formed, meaning 
-that the substitution yielding \tcode{T} did not fail.
+A type constraint is satisfied if and only if \tcode{T} is not ill-formed,
+meaning that the substitution yielding \tcode{T} did not fail.
 % 
 \enternote
 A type constraint is introduced by the \grammarterm{typename-specifier} in a
@@ -669,7 +669,7 @@ expression constraints (\ref{temp.constr.expr}),
 type constraints (\ref{temp.constr.type}),
 implicit conversion constraints (\ref{temp.constr.conv}), 
 argument deduction constraints (\ref{temp.constr.deduct}), and 
-exception constraints (\ref{temp.constr.expr}).
+exception constraints (\ref{temp.constr.noexcept}).
 % 
 The \defn{normal form} of an \grammarterm{expression} \tcode{X} is 
 defined as follows.
@@ -798,7 +798,7 @@ A constraint is in disjunctive normal form when it is a disjunction of
 clauses where each clause is a conjunction of atomic constraints. 
 % 
 Similarly, a constraint is in conjunctive normal form when it is a conjunction 
-of clauses where each each clause is disjunction of atomic constraints.
+of clauses where each clause is a disjunction of atomic constraints.
 % 
 \enterexample
 Let $A$, $B$, and $C$ be atomic constraints.

@@ -139,10 +139,10 @@ template<char... Cs> concept bool C5 = true;
 
 template<C1 T> void f1();     // OK: \tcode{T} is a type template-parameter
 template<C2 X> void f2();     // OK: \tcode{X} is a template with one type-parameter
-template<C3 N> void f3();     // OK: \tcode{N} has type int
+template<C3 N> void f3();     // OK: \tcode{N} has type \tcode{int}
 template<C4... Ts> void f4(); // OK: \tcode{Ts} is a template parameter pack of types
 template<C4 T> void f5();     // OK: \tcode{T} is a type template-parameter
-template<C5... Cs> f6();      // OK: \tcode{Cs} is a template parameter pack of \tcode{char}{}s
+template<C5... Cs> void f6(); // OK: \tcode{Cs} is a template parameter pack of \tcode{char}s
 \end{codeblock}
 \exitexample
 
