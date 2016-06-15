@@ -22,9 +22,8 @@ This will not update the online publication, it only stages it. To make the
 online version match these changes, update `gh-pages`.
 
 1. Zip all the top-level `html` files into a single source: `zip issues.zip *.html`.
-2. Checkout `gh-pages`.
+2. Checkout `gh-pages` and `cd` to the top-level directory in the repository.
 3. Unzip your archive to overwrite the existing content.
 4. Commit and push.
 
-Don't forget to checkout `master`, otherwise, you might start modifying
-content in the wrong branch.
+Note that the file `index.html` will automatically redirect to `ts-index.html`.
