@@ -1,24 +1,16 @@
 <?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
-<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="33" status="New">
-<title>Term "template specialization" versus "specialization"</title>
-<section><sref ref="temp.inst"/></section>
-<submitter>Hubert Tong</submitter>
-<date>04 May 2016</date>
+<issue num="???" status="New">
+<title>Your Title</title>
+<section><sref ref="[section.ref.here]"/></section>
+<submitter>Your name</submitter>
+<date>03 Mar 2016</date>
 
 <discussion>
 <p>
-The term "template specialization" is most commonly used as a term meaning
-"specialization of a template", i.e., "class template specialization, function
-template specialization, variable template specialization or alias template
-specialization" (e.g., in [temp.names]). Using "specialization"
-instead of "template specialization" here would cause no normative change, but
-make the logic easier to follow. Namely, the instantiation behaviour of
-associated constraints on functions is already covered by 14.6 [temp.decls], and
-constraints can otherwise only be associated with templates.
 </p>
 </discussion>
 

@@ -19,8 +19,26 @@
 </style>
 </head>
 <body>
-<p>Revised 2016-06-15 at 16:06:08 UTC</p>
+<p>Revised 2016-06-15 at 17:06:21 UTC</p>
 <h2>Unresolved Issues</h2>
+<hr>
+<h3><a name="0"></a>0. Your Title</h3>
+<p><b>Section:</b> X [section.ref.here] <b>Status:</b> <a href="ts-active.html#New">New</a>
+ <b>Submitter:</b> Your name <b>Opened:</b> 2016-03-03 <b>Last modified:</b> 2016-06-15</p>
+<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<p><b>Discussion:</b></p>
+<p>
+</p>
+
+
+<p><b>Wording available:</b></p>
+<p>
+</p>
+
+
+
+
+
 <hr>
 <h3><a name="1"></a>1. Relationship of implicit conversion constraints to <tt>is_convertible</tt></h3>
 <p><b>Section:</b> 14.10.1.1 [temp.constr.conv] <b>Status:</b> <a href="ts-active.html#Open">Open</a>
@@ -701,26 +719,36 @@ production name should reflect that.
 
 
 <hr>
-<h3><a name="33"></a>33. Term "template specialization" versus "specialization"</h3>
-<p><b>Section:</b> X temp.inst <b>Status:</b> <a href="ts-active.html#New">New</a>
- <b>Submitter:</b> Hubert Tong <b>Opened:</b> 2016-05-04 <b>Last modified:</b> 2016-06-15</p>
-<p><b>View all issues with</b> <a href="ts-status.html#New">New</a> status.</p>
+<h3><a name="33"></a>33. Constrained constructors not allowed</h3>
+<p><b>Section:</b> 12.1 [class.ctor] <b>Status:</b> <a href="ts-active.html#Open">Open</a>
+ <b>Submitter:</b> Casey Carter <b>Opened:</b> 2016-03-03 <b>Last modified:</b> 2016-06-15</p>
+<p><b>View all issues with</b> <a href="ts-status.html#Open">Open</a> status.</p>
 <p><b>Discussion:</b></p>
 <p>
-The term "template specialization" is most commonly used as a term meaning
-"specialization of a template", i.e., "class template specialization, function
-template specialization, variable template specialization or alias template
-specialization" (e.g., in [temp.names]). Using "specialization"
-instead of "template specialization" here would cause no normative change, but
-make the logic easier to follow. Namely, the instantiation behaviour of
-associated constraints on functions is already covered by 14.6 [temp.decls], and
-constraints can otherwise only be associated with templates.
+The current TS doesn't support constrained constructors, since the matching
+form for constructor declarations in 12.1/1 doesn't have an optional requires
+clause.
 </p>
 
 
 <p><b>Wording available:</b></p>
 <p>
+Add new section [class.ctor] to the TS with text:
 </p>
+
+<blockquote>
+<p>
+<ins>Modify the matching condition in paragraph 1 to accept a <i>requires-clause</i>.</ins>
+</p>
+
+<blockquote>
+<p>
+<ins><i>ptr-declarator</i> <code>(</code> <i>parameter-declaration-clause</i> <code>)</code>
+  <i>exception-specification<sub>opt</sub></i> <i>attribute-specifier-seq<sub>opt</sub></i>
+  <i>requires-clause<sub>opt</sub></i></ins>
+</p>
+</blockquote>
+</blockquote>
 
 
 

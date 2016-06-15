@@ -1019,7 +1019,7 @@ auto IssuesData::get_revisions(vector<issue> const& issues, string const& diff_r
 //   r += "R10: 2014-10-29 post-Urbana mailing";
 //
   //  r += "R1: 2015-05-22 post-Lenexa mailing";
-   r += "R2: 2015-05-22 pre-Jacksonville mailing";
+   r += "R3: 2015-03-04 post-Jacksonville mailing";
    r += diff_report;
    r += "</li>\n";
 
