@@ -3,7 +3,7 @@
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="33" status="Open">
+<issue num="32" status="Dup">
 <title>Constrained constructors not allowed</title>
 <section><sref ref="[class.ctor]"/></section>
 <submitter>Casey Carter</submitter>
@@ -18,6 +18,9 @@ clause.
 </discussion>
 
 <resolution>
+This issue would be fixed by a resolution for <iref ref="19"/>.
+
+<!--
 <p>
 Add new section [class.ctor] to the TS with text:
 </p>
@@ -35,6 +38,7 @@ Add new section [class.ctor] to the TS with text:
 </p>
 </blockquote>
 </blockquote>
+-->
 </resolution>
 
 </issue>
