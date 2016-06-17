@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="36" status="New">
+<title>Handwaving around instantiation of constraining elements</title>
+<section><sref ref="temp.constr.constr"/></section>
+<submitter>Hubert Tong</submitter>
+<date>06 May 2016</date>
+
+<discussion>
+<p>
+
+The TS often refers to substitution or instantiation of associated constraints;
+however, associated constraints are a derived property of what might be called
+"constraining elements", i.e., constrained-type-specifiers, constrained-
+parameters, template-introductions and constraint-expressions.
+
+It appears that the wording in N4553 subclause 14.10.1 [temp.constr.constr]
+is attempting to achieve "partial substitution" is trumped in many cases by
+substitution into constraining elements.
+
+For example, the associated constraints would evaluate false (or in a more
+realistic case, a check that <code>T::type</code> is a type) prior to 
+considering <code>C&lt;placeholder, typename T::type&gt;()</code>, but it is unclear 
+whether instantiating <code>A&lt;int&gt;</code> causes an error from the use of 
+<code>T::type</code>:
+
+<pre>
+<code>
+template &lt;typename T, typename U&gt;
+concept bool C() { return true; }
+
+template &lt;typename T&gt;
+struct A {
+  template &lt;typename U&gt; requires false
+  void foo(C&lt;typename T::type&gt;) { }
+};
+
+int main(void) { A&lt;int&gt; a; }
+</code>
+</pre>
+
+</p> 
+</discussion>
+
+<resolution>
+<p>
+</p>
+</resolution>
+
+</issue>

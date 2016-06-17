@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="35" status="New">
+<title>Undefined behavior of <i>partial-concept-id</i>s in <i>template-introductions</i></title>
+<section><sref ref="temp.friend"/></section>
+<submitter>Hubert Tong</submitter>
+<date>06 May 2016</date>
+
+<discussion>
+<p>
+Given:
+
+<pre>
+<code>
+template &lt;typename T&gt;
+    requires true || T::happy
+void foo(T &amp;&amp;) { }
+
+template &lt;typename T&gt;
+struct A {
+  friend void bar(A &amp;&amp;)
+      requires true || T::happy {
+  }
+};
+
+int main(void) {
+  foo(0);
+  bar(A&lt;int&gt;());
+}
+</code>
+</pre>
+
+there appears to be wording (normative and otherwise), which would render the
+program ill-formed. I assume that is not the intent.
+</p>
+
+<p>
+The wording involved is as follows: N4553 subclause 14.6.4 [temp.friend]
+paragraph 11: In the instantiation of such a class template (14.8), the template
+arguments are substituted into the constraints but not evaluated. [ ... ] If
+substitution fails, the program is ill-formed.
+</p>
+
+<p>
+N4553 subclause 14.9.2 [temp.deduct] paragraph 5: If the function template has
+associated constraints (14.10.2), the template arguments are substituted into
+the associated constraints without evaluating the resulting expression. If this
+substitution results in an invalid type or expression, type deduction fails.
+</p> 
+</discussion>
+
+<resolution>
+<p>
+</p>
+</resolution>
+
+</issue>

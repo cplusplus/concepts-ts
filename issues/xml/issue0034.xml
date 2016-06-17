@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="34" status="New">
+<title>Undefined behavior of <i>partial-concept-id</i>s in <i>template-introductions</i></title>
+<section><sref ref="temp.intro"/></section>
+<submitter>Hubert Tong</submitter>
+<date>04 May 2016</date>
+
+<discussion>
+<p>
+There appear to be no semantics applied to the use of a partial-concept-id as
+the qualified-concept-name in a template-introduction. In particular, N4552
+subclause 14.2 [temp.intro] refers to subclause 14.10.4 [temp.constr.resolve],
+which in turn does not specify what the concept argument list is in such a case.
+</p> 
+
+<p>
+Andrew Sutton: "disallowing this seems reasonable".
+</p>
+</discussion>
+
+<resolution>
+<p>
+</p>
+</resolution>
+
+</issue>
