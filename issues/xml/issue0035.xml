@@ -4,51 +4,44 @@
 ] >
 
 <issue num="35" status="New">
-<title>Undefined behavior of <i>partial-concept-id</i>s in <i>template-introductions</i></title>
-<section><sref ref="temp.friend"/></section>
+<title>Handwaving around instantiation of constraining elements</title>
+<section><sref ref="[temp.constr.constr]"/></section>
 <submitter>Hubert Tong</submitter>
 <date>06 May 2016</date>
 
 <discussion>
 <p>
-Given:
+
+The TS often refers to substitution or instantiation of associated constraints;
+however, associated constraints are a derived property of what might be called
+"constraining elements", i.e., constrained-type-specifiers, constrained-
+parameters, template-introductions and constraint-expressions.
+
+It appears that the wording in N4553 subclause 14.10.1 [temp.constr.constr]
+is attempting to achieve "partial substitution" is trumped in many cases by
+substitution into constraining elements.
+
+For example, the associated constraints would evaluate false (or in a more
+realistic case, a check that <code>T::type</code> is a type) prior to 
+considering <code>C&lt;placeholder, typename T::type&gt;()</code>, but it is unclear 
+whether instantiating <code>A&lt;int&gt;</code> causes an error from the use of 
+<code>T::type</code>:
 
 <pre>
 <code>
-template &lt;typename T&gt;
-    requires true || T::happy
-void foo(T &amp;&amp;) { }
+template &lt;typename T, typename U&gt;
+concept bool C() { return true; }
 
 template &lt;typename T&gt;
 struct A {
-  friend void bar(A &amp;&amp;)
-      requires true || T::happy {
-  }
+  template &lt;typename U&gt; requires false
+  void foo(C&lt;typename T::type&gt;) { }
 };
 
-int main(void) {
-  foo(0);
-  bar(A&lt;int&gt;());
-}
+int main(void) { A&lt;int&gt; a; }
 </code>
 </pre>
 
-there appears to be wording (normative and otherwise), which would render the
-program ill-formed. I assume that is not the intent.
-</p>
-
-<p>
-The wording involved is as follows: N4553 subclause 14.6.4 [temp.friend]
-paragraph 11: In the instantiation of such a class template (14.8), the template
-arguments are substituted into the constraints but not evaluated. [ ... ] If
-substitution fails, the program is ill-formed.
-</p>
-
-<p>
-N4553 subclause 14.9.2 [temp.deduct] paragraph 5: If the function template has
-associated constraints (14.10.2), the template arguments are substituted into
-the associated constraints without evaluating the resulting expression. If this
-substitution results in an invalid type or expression, type deduction fails.
 </p> 
 </discussion>
 
