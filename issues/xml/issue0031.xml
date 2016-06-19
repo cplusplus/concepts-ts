@@ -5,7 +5,7 @@
 
 <issue num="31" status="Open">
 <title>Constrained-type-specifiers introduce non-type placeholders</title>
-<section><sref ref="[decl.spec.auto.constr]"/></section>
+<section><sref ref="[dcl.spec.auto.constr]"/></section>
 <submitter>Jason Merrill</submitter>
 <date>3 Mar 2016</date>
 
