@@ -3,7 +3,7 @@
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="33" status="Open">
+<issue num="32" status="Dup">
 <title>Constrained constructors not allowed</title>
 <section><sref ref="[class.ctor]"/></section>
 <submitter>Casey Carter</submitter>
@@ -15,9 +15,12 @@ The current TS doesn't support constrained constructors, since the matching
 form for constructor declarations in 12.1/1 doesn't have an optional requires
 clause.
 </p>
+
+<p>This issue subsumed by issue <iref duplicate="19"/>.</p>
 </discussion>
 
 <resolution>
+<!--
 <p>
 Add new section [class.ctor] to the TS with text:
 </p>
@@ -35,6 +38,7 @@ Add new section [class.ctor] to the TS with text:
 </p>
 </blockquote>
 </blockquote>
+-->
 </resolution>
 
 </issue>
