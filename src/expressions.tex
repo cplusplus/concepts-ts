@@ -342,20 +342,17 @@ A \grammarterm{requires-expression} defines a constraint (\ref{temp.constr})
 based on its parameters (if any) and its nested \grammarterm{requirement}{s}.
 
 \pnum
-A \grammarterm{requires-expression} has type \tcode{bool} and is an 
-unevaluated expression (\ref{expr}).
+A \grammarterm{requires-expression} is a prvalue of type \tcode{bool} whose
+value is \tcode{true} when its corresponding constraint is satisfied
+(\ref{temp.constr.decl}) and whose value is \tcode{false} otherwise.
 \enternote
 A \grammarterm{requires-expression} is transformed into a constraint 
-in order to determine if it is satisfied (\ref{temp.constr.decl}).
+in order to determine if it is satisfied.
 \exitnote
+Expressions appearing within a \grammarterm{requirement-body}
+are unevaluated operands (Clause~\ref{expr}).
 
 \pnum
-A \grammarterm{requires-expression} shall appear
-only within a concept definition (\ref{dcl.spec.concept}),
-or within the \grammarterm{requires-clause} of a
-\grammarterm{template-declaration} 
-(Clause~\ref{temp}) or function declaration (\ref{dcl.fct}).
-% 
 \enterexample
 A common use of \grammarterm{requires-expression}{}s is to define
 requirements in concepts such as the one below:
@@ -443,7 +440,11 @@ The substitution of template arguments into a \grammarterm{requires-expression}
 may result in the formation of invalid types or expressions in its
 requirements. In such cases, the constraints corresponding to those
 requirements are not satisfied; it does not cause the program to be ill-formed.
-%
+\enternote
+If a \grammarterm{requires-expression} contains invalid types or expressions in
+its requirements, and it does not appear within the declaration of a templated
+entity, then the program is ill-formed.
+\exitnote
 If the substitution of template arguments into a \grammarterm{requirement} 
 would always result in a substitution failure, the program is ill-formed; 
 no diagnostic required.
