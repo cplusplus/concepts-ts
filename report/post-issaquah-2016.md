@@ -30,10 +30,13 @@ CWG Motion 2 from Oulu:
   translation unit.
 
 CWG Motion 11 from Issaquah: [P0266R2](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0266r1.pdf),
-"Lifting Restrictions on `requires`-Expressions.
+"Lifting Restrictions on `requires`-Expressions".
 
 
 ## Minor editorial fixes
+
+A log of editorial fixes made since N4553 is below:
+
 
 ```
 commit 18b9ae90cfb5ff09f7d06c79f551a6ff9e8ba871
