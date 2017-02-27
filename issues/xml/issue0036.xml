@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [ 
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="36" status="New">
+<title>Constraints on complete specializations</title>
+<section><sref ref="[temp]"/></section>
+<submitter>Walter Brown</submitter>
+<date>31 Aug 2016</date>
+
+<discussion>
+<p>
+
+Concepts allows constraints on non-template functions but not on explicit
+specializations of class templates. For example:
+
+<pre>
+template&lt;&gt;
+  requires numeric_has_infinity_v&lt;double&gt;
+struct
+  infinity_unqual&lt;double&gt;
+{
+  static constexpr double value = __builtin_inf();
+};
+</code>
+</pre>
+
+</p> 
+</discussion>
+
+<resolution>
+<p>
+</p>
+</resolution>
+
+</issue>
