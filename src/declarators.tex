@@ -4,27 +4,77 @@
 %%
 \rSec0[dcl.decl]{Declarators}
 
-Factor the grammar of \grammarterm{declarator}{}s to
+In paragraph 4, Modify the grammar of \grammarterm{declarator}{}s to
 allow the specification of constraints on function declarations.
 
 \begin{quote}
 \setcounter{Paras}{3}
-
+\pnum
+Declarators have the syntax
 
 \begin{bnf}
 \nontermdef{declarator}\br
     ptr-declarator\br
-    noptr-declarator parameters-and-qualifiers trailing-return-type \added{requires-clause\opt}
+    noptr-declarator parameters-and-qualifiers trailing-return-type
+\end{bnf}
 
+\begin{bnf}
+\nontermdef{ptr-declarator}\br
+    noptr-declarator\br
+    ptr-operator ptr-declarator
+\end{bnf}
 
+\begin{bnf}
+\nontermdef{noptr-declarator}\br
+    declarator-id attribute-specifier-seq\opt\br
+    noptr-declarator parameters-and-qualifiers\br
+    noptr-declarator \terminal{[} constant-expression\opt{} \terminal{]} attribute-specifier-seq\opt\br
+    \terminal{(} ptr-declarator \terminal{)}
+\end{bnf}
+
+\begin{bnf}
 \nontermdef{parameters-and-qualifiers}\br
   \terminal{(} parameter-declaration-clause \terminal{)} cv-qualifier-seq\opt\br
     \hspace*{\bnfindentinc}ref-qualifier\opt exception-specification\opt attribute-specifier-seq\opt \added{requires-clause}\opt
 \end{bnf}
+
+\begin{bnf}
+\nontermdef{trailing-return-type}\br
+    \terminal{->} type-id
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{ptr-operator}\br
+    \terminal{*} attribute-specifier-seq\opt cv-qualifier-seq\opt\br
+    \terminal{\&} attribute-specifier-seq\opt\br
+    \terminal{\&\&} attribute-specifier-seq\opt\br
+    nested-name-specifier \terminal{*} attribute-specifier-seq\opt cv-qualifier-seq\opt
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{cv-qualifier-seq}\br
+    cv-qualifier cv-qualifier-seq\opt
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{cv-qualifier}\br
+    \terminal{const}\br
+    \terminal{volatile}
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{ref-qualifier}\br
+    \terminal{\&}\br
+    \terminal{\&\&}
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{declarator-id}\br
+    \terminal{...}\opt id-expression
+\end{bnf}
 \end{quote}
 
-
-Add the following paragraphs at the end of this section.
+Add the following paragraph at the end of this section.
 
 \begin{quote}
 \begin{addedblock}
@@ -73,10 +123,7 @@ Modify the matching condition in paragraph 1 to accept a
 
 \begin{bnf}
 \terminal{D1} \terminal{(} parameter-declaration-clause \terminal{)} cv-qualifier-seq\opt\br
-  \hspace*{\bnfindentinc}ref-qualifier\opt 
-                         exception-specification\opt 
-                         attribute-specifier-seq\opt 
-                         \added{requires-clause\opt}
+  \hspace*{\bnfindentinc}ref-qualifier\opt exception-specification\opt attribute-specifier-seq\opt \added{requires-clause\opt}
 \end{bnf}
 \end{quote}
 
@@ -88,16 +135,14 @@ Modify the matching condition in paragraph 2 to accept a
 
 \begin{bnf}
 \terminal{D1} \terminal{(} parameter-declaration-clause \terminal{)} cv-qualifier-seq\opt\br 
-  \hspace*{\bnfindentinc}ref-qualifier\opt 
-                         exception-specification\opt 
-                         attribute-specifier-seq\opt
-                         \added{requires-clause\opt}
+  \hspace*{\bnfindentinc}ref-qualifier\opt exception-specification\opt attribute-specifier-seq\opt\br
+  \hspace*{\bnfindentinc}trailing-return-type \added{requires-clause\opt}
 \end{bnf}
 \end{quote}
 
 
-Modify the second sentence of paragraph 5. The remainder of this
-paragraph has been omitted.
+Modify the first part of paragraph 5. The unchanged remainder of the paragraph
+is omitted.
 
 \begin{quote}
 \setcounter{Paras}{4}
@@ -110,24 +155,25 @@ the return type\added{,} \removed{and} the parameter-type-list\added{, and
 associated constraints, if any (\ref{temp.constr.decl})}.
 \end{quote}
 
-Modify paragraph 6 to exclude constraints from the type of a function.
+Modify paragraph 8 to exclude constraints from the type of a function.
 Note that the change occurs in the sentence following the example
 in the \Cpp Standard.
 
 \begin{quote}
+\setcounter{Paras}{7}
 \pnum
 The return type, the parameter-type-list, the \grammarterm{ref-qualifier}, 
-and the \grammarterm{cv-qualifier-seq}, but not the default arguments
-(\cxxref{dcl.fct.default})\added{, associated constraints (\ref{temp.constr.decl}),} or
-the exception specification (\cxxref{except.spec}), are part of the function 
-type.
+the \grammarterm{cv-qualifier-seq}, and the exception specification, but not 
+the default arguments (\cxxref{dcl.fct.default})
+\added{or associated constraints (\ref{temp.constr.decl})}
+are part of the function type.
 \end{quote}
 
-Modify paragraph 15. Note that the footnote reference has been
+Modify paragraph 17. Note that the footnote reference has been
 omitted.
 
 \begin{quote}
-\setcounter{Paras}{14}
+\setcounter{Paras}{16}
 \pnum
 There is a syntactic ambiguity when an ellipsis occurs at the end of a 
 \grammarterm{parameter-declaration-clause} without a preceding comma. In this 
@@ -140,7 +186,7 @@ otherwise, it is parsed as part
 of the \grammarterm{parameter-declaration-clause}.
 \end{quote}
 
-Add the following paragraphs after paragraph 15.
+Add the following paragraphs after paragraph 17.
 
 \begin{quote}
 \begin{addedblock}
