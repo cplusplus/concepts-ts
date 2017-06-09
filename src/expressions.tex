@@ -34,7 +34,6 @@ In this section, add the
     \terminal{(} expression \terminal{)}\br
     id-expression\br
     lambda-expression\br
-    \added{fold-expression}\br
     \added{requires-expression}
 \end{bnf}
 \end{quote}
@@ -137,6 +136,7 @@ though \tcode{f} is an unevaluated operand (Clause~\ref{expr}).
 %%
 %% Lambda expressions
 %%
+\setcounter{subsection}{4}
 \rSec2[expr.prim.lambda]{Lambda expressions}
 
 Insert the following paragraph after paragraph 4 to define the
@@ -225,87 +225,12 @@ called with the same arguments.
 \end{quote}
 
 %%
-%% Fold expressions
-%%
-\rSec2[expr.prim.fold]{Fold expressions}
-
-Add this section after 5.1.2.
-
-\begin{quote}
-
-\pnum
-A fold expression performs a fold of a template parameter
-pack~(\ref{temp.variadic}) over a binary operator.
-
-\begin{bnf}
-\nontermdef{fold-expression}\br
-    \terminal{(} cast-expression fold-operator \terminal{...} \terminal{)}\br
-    \terminal{(} \terminal{...} fold-operator cast-expression \terminal{)}\br
-    \terminal{(} cast-expression fold-operator \terminal{...} fold-operator cast-expression \terminal{)}
-\end{bnf}
-
-\begin{bnf}
-\nontermdef{fold-operator} \textnormal{one of}\br
-    \terminal{+ }\quad\terminal{- }\quad\terminal{* }\quad\terminal{/ }\quad\terminal{\% }\quad\terminal{\^{} }\quad\terminal{\& }\quad\terminal{| }\quad\terminal{\shl\ }\quad\terminal{\shr }\br
-    \terminal{+=}\quad\terminal{-=}\quad\terminal{*=}\quad\terminal{/=}\quad\terminal{\%=}\quad\terminal{\^{}=}\quad\terminal{\&=}\quad\terminal{|=}\quad\terminal{\shl=}\quad\terminal{\shr=}\quad\terminal{=}\br
-    \terminal{==}\quad\terminal{!=}\quad\terminal{< }\quad\terminal{> }\quad\terminal{<=}\quad\terminal{>=}\quad\terminal{\&\&}\quad\terminal{||}\quad\terminal{,  }\quad\terminal{.* }\quad\terminal{->*}
-\end{bnf}
-
-\pnum
-An expression of the form
-\tcode{(...} \placeholder{op} \tcode{e)}
-where \placeholder{op} is a \grammarterm{fold-operator}
-is called a \defn{unary left fold}.
-An expression of the form
-\tcode{(e} \placeholder{op} \tcode{...)}
-where \placeholder{op} is a \grammarterm{fold-operator}
-is called a \defn{unary right fold}.
-Unary left folds and unary right folds
-are collectively called \defnx{unary folds}{unary fold}.
-In a unary fold,
-the \grammarterm{cast-expression}
-shall contain an unexpanded parameter pack~(\ref{temp.variadic}).
-
-\pnum
-An expression of the form
-\tcode{(e1} \placeholder{op1} \tcode{...} \placeholder{op2} \tcode{e2)}
-where \placeholder{op1} and \placeholder{op2} are \grammarterm{fold-operator}{s}
-is called a \defn{binary fold}.
-In a binary fold,
-\placeholder{op1} and \placeholder{op2}
-shall be the same \grammarterm{fold-operator},
-and either \tcode{e1}
-shall contain an unexpanded parameter pack
-or \tcode{e2}
-shall contain an unexpanded parameter pack,
-but not both.
-If \tcode{e2} contains an unexpanded parameter pack,
-the expression is called a \defn{binary left fold}.
-If \tcode{e1} contains an unexpanded parameter pack,
-the expression is called a \defn{binary right fold}.
-\enterexample
-\begin{codeblock}
-template<typename ...Args>
-bool f(Args ...args) {
-  return (true && ... && args); // OK
-}
-
-template<typename ...Args>
-bool f(Args ...args) {
-  return (args + ... + args); // error: both operands contain unexpanded parameter packs
-}
-\end{codeblock}
-\exitexample
-
-\end{quote}
-
-
-%%
 %% Requires expressions
 %%
+\setcounter{subsection}{6}
 \rSec2[expr.prim.req]{Requires expressions}
 
-Add this section to 5.1.
+Add this section to 8.1.
 
 \begin{quote}
 
