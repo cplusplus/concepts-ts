@@ -7,20 +7,15 @@ Modify paragraph 8 to include a reference to \grammarterm{requires-expression}{}
 
 \begin{quote}
 \pnum
-In some contexts, unevaluated operands appear
+In some contexts, \defn{unevaluated operands} appear
 (\added{\ref{expr.prim.req}, }\cxxref{expr.typeid}, \cxxref{expr.sizeof}, 
-\cxxref{expr.unary.noexcept}).
+\cxxref{expr.unary.noexcept}, \cxxref{dcl.type.simple}).
 \end{quote}
 
 %%
 %% Primary Expressions
 %%
 \rSec1[expr.prim]{Primary expressions}
-
-%%
-%% General (primary expressions)
-%%
-\rSec2[expr.prim.general]{General}
 
 In this section, add the
 \grammarterm{requires-expression} to the rule for 
@@ -34,17 +29,48 @@ In this section, add the
     \terminal{(} expression \terminal{)}\br
     id-expression\br
     lambda-expression\br
+    fold-expression\br
     \added{requires-expression}
 \end{bnf}
 \end{quote}
 
-In paragraph 8, add \tcode{auto} and \grammarterm{constrained-type-name} 
-to \grammarterm{nested-name-specifier}:
+\setcounter{subsection}{3}
+\rSec2[expr.prim.id]{Names}
+
+Add a new paragraph to the end of this section.
+
+% TODO: The wording "non-overloaded function declaration" is not right.
+\begin{quote}
+\begin{addedblock}
+\setcounter{Paras}{2}
+\pnum
+A program that refers explicitly or implicitly to a function with associated 
+constraints that are not satisfied (\ref{temp.constr.decl}), other than to 
+declare it, is ill-formed.
+% 
+\enterexample
+\begin{codeblock}
+void f(int) requires false;
+
+f(0);                      // error: cannot call \tcode{f}
+void (*p1)(int) = f;       // error: cannot take the address of \tcode{f}
+decltype(f)* p2 = nullptr; // error: the type \tcode{decltype(f)} is invalid
+\end{codeblock}
+In each case the associated constraints of \tcode{f} are not satisfied. In the 
+declaration of \tcode{p2}, those constraints are required to be satisfied even 
+though \tcode{f} is an unevaluated operand (Clause~\ref{expr}).
+\exitexample
+\end{addedblock}
+\end{quote}
+
+
+\setcounter{subsubsection}{1}
+\rSec3[expr.prim.id.qual]{Qualified names}
+
+Add \tcode{auto} and \grammarterm{constrained-type-name} to the
+\grammarterm{nested-name-specifier} grammar.
 
 \begin{quote}
-\setcounter{Paras}{7}
-\pnum\vspace{-\the\baselineskip} % Adjust to hide the blank line.
-
 \begin{bnf}
 \nontermdef{nested-name-specifier}\br
     \terminal{::}\br
@@ -58,11 +84,11 @@ to \grammarterm{nested-name-specifier}:
 \end{bnf}
 \end{quote}
 
-Add a new paragraph after paragraph 11:
+Add a new paragraph at the end of this section.
 
 \begin{quote}
 \begin{addedblock}
-\setcounter{Paras}{11}
+\setcounter{Paras}{5}
 \pnum
 In a \grammarterm{nested-name-specifier} of the form \tcode{auto::} or
 \tcode{C::}, where \tcode{C} is a \grammarterm{constrained-type-name},
@@ -102,32 +128,6 @@ f<S3>(0); // OK
 In the declaration of \tcode{f}, the placeholder appears in a non-deduced 
 context (\cxxref{temp.deduct.type}). It may be replaced later through the
 explicit specification of template arguments.
-\exitexample
-\end{addedblock}
-\end{quote}
-
-Add a new paragraph after paragraph 13:
-
-% TODO: The wording "non-overloaded function declaration" is not right.
-\begin{quote}
-\begin{addedblock}
-\setcounter{Paras}{13}
-\pnum
-A program that refers explicitly or implicitly to a function with associated 
-constraints that are not satisfied (\ref{temp.constr.decl}), other than to declare 
-it, is ill-formed.
-% 
-\enterexample
-\begin{codeblock}
-void f(int) requires false;
-
-f(0);                      // error: cannot call \tcode{f}
-void (*p1)(int) = f;       // error: cannot take the address of \tcode{f}
-decltype(f)* p2 = nullptr; // error: the type \tcode{decltype(f)} is invalid
-\end{codeblock}
-In each case the associated constraints of \tcode{f} are not satisfied. In the 
-declaration of \tcode{p2}, those constraints are required to be satisfied even 
-though \tcode{f} is an unevaluated operand (Clause~\ref{expr}).
 \exitexample
 \end{addedblock}
 \end{quote}
