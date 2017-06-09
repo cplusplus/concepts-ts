@@ -11,8 +11,8 @@
 %%
 \rSec1[dcl.spec]{Specifiers}
 
-Extend the \grammarterm{decl-specifier} production
-in paragraph 1 to include the \tcode{concept} specifier.
+Add the \tcode{concept} specifier to the \grammarterm{decl-specifier} grammar
+in paragraph 1.
 
 \begin{quote}
 \pnum
@@ -21,11 +21,12 @@ The specifiers that can be used in a declaration are
 \begin{bnf}
 \nontermdef{decl-specifier}\br
     storage-class-specifier\br
-    type-specifier\br
+    defining-type-specifier\br
     function-specifier\br
     \terminal{friend}\br
     \terminal{typedef}\br
     \terminal{constexpr}\br
+    \terminal{inline}\br
     \added{\terminal{concept}}
 \end{bnf}
 \end{quote}
@@ -34,7 +35,7 @@ The specifiers that can be used in a declaration are
 %%
 %% Type specifiers
 %%
-\setcounter{subsection}{5}
+\setcounter{subsection}{6}
 \rSec2[dcl.type]{Type specifiers}
 
 
@@ -52,6 +53,7 @@ to the grammar for \grammarterm{simple-type-specifier}{}s.
 \nontermdef{simple-type-specifier}\br
     nested-name-specifier\opt type-name\br
     nested-name-specifier \terminal{template} simple-template-id\br
+    nested-name-specifier\opt template-name\br
     \terminal{char}\br
     \terminal{char16_t}\br
     \terminal{char32_t}\br
@@ -74,10 +76,12 @@ to the grammar for \grammarterm{simple-type-specifier}{}s.
 Modify paragraph 2 to begin:
 
 \begin{quote}
+\setcounter{Paras}{1}
 \pnum
-\removed{The \tcode{auto} specifier is a placeholder for a type to be deduced 
-(\ref{dcl.spec.auto}).}
-\added{The \tcode{auto} specifier and \grammarterm{constrained-type-specifier}{s} 
+\removed{The \grammarterm{simple-type-specifier} \tcode{auto} specifier is a 
+placeholder for a type to be deduced (\ref{dcl.spec.auto}).}
+\added{The \grammarterm{simple-type-specifier} \tcode{auto} and
+\grammarterm{constrained-type-specifier}{s}
 are placeholders for values (type, non-type, template) to be deduced 
 (\ref{dcl.spec.auto}).}
 \end{quote}
@@ -86,19 +90,20 @@ Add \grammarterm{constrained-type-specifier}{s} to the table of
 \grammarterm{simple-type-specifier}{s} in Table~\ref{tab:simple.type.specifiers}.
 
 \renewcommand{\thetable}{\arabic{table}}
-\setcounter{table}{9}
+\setcounter{table}{10}
 \begin{simpletypetable}
 {\grammarterm{simple-type-specifier}{s} and the types they specify}
 {tab:simple.type.specifiers}
 {ll}
 \topline
-Specifier(s)                                     &   Type                                                                 \\ \capsep
-\grammarterm{type-name}                          &   the type named                                                       \\
-\grammarterm{simple-template-id}                 &   the type as defined in~\ref{temp.names}                              \\
-\multicolumn{2}{|c|}{\vdots}                                                                                              \\
-auto                                             & placeholder for a type to be deduced                                   \\
-decltype(\grammarterm{expression})               & the type as defined below                                              \\
-\added{\grammarterm{constrained-type-specifier}} & \added{placeholder for value (type, non-type, template) to be deduced} \\
+Specifier(s)                                       &   Type                                                                 \\ \capsep
+\grammarterm{type-name}                            &   the type named                                                       \\
+\grammarterm{simple-template-id}                   &   the type as defined in~\ref{temp.names}                              \\
+\multicolumn{2}{|c|}{\vdots}                                                                                                \\
+\tcode{auto}                                       & placeholder for a type to be deduced                                   \\
+\tcode{decltype(auto)}                             & placeholder for a type to be deduced                                   \\
+\tcode{decltype(}\grammarterm{expression}\tcode{)} & the type as defined below                                              \\
+\added{\grammarterm{constrained-type-specifier}}   & \added{placeholder for value (type, non-type, template) to be deduced} \\
 \end{simpletypetable}
 
 
@@ -109,17 +114,26 @@ decltype(\grammarterm{expression})               & the type as defined below    
 \rSec3[dcl.spec.auto]{\tcode{auto} specifier}
 
 Extend this section to allow for \grammarterm{constrained-type-specifier}{s}
-as a new syntax for designating placeholders. The section is refactored so
-that placeholders are introduced in this section, deduction rules are
-defined in subsection \ref{dcl.spec.auto.deduct}, and the meaning of
+as a new syntax for designating placeholders. The meaning of
 \grammarterm{constrained-type-specifier}{s} is described in
 \ref{dcl.spec.auto.constr}.
 
 Replace paragraph 1 with the text below.
 
-\begin{addedblock}
 \begin{quote}
+\begin{removedblock}
 \pnum
+The \tcode{auto} and \tcode{decltype(auto)} \grammarterm{type-specifier}{s}
+are used to
+designate a placeholder type that will be replaced later by deduction
+from an initializer. The \tcode{auto}
+\grammarterm{type-specifier} is also used to
+introduce a function type having a \grammarterm{trailing-return-type} or to
+signify that a lambda is a generic lambda (\cxxref{expr.prim.lambda.closure}).
+The \tcode{auto} \grammarterm{type-specifier} is also used to introduce a
+structured binding declaration (\cxxref{dcl.struct.bind}).
+\end{removedblock}
+\begin{addedblock}
 The \grammarterm{type-specifier}{}s \tcode{auto} and \tcode{decltype(auto)}
 and \grammarterm{constrained-type-specifier}{}s designate a placeholder
 (type, non-type, or template) that will be replaced later, either through 
@@ -141,15 +155,18 @@ abbreviated function template (\ref{dcl.fct}), or that a
 (\ref{expr.prim.req.compound}) introduces an argument deduction constraint 
 (\ref{temp.constr.deduct}).
 %
+The \tcode{auto} \grammarterm{type-specifier} is also introduce a function type 
+having a \grammarterm{trailing-return-type} or to introduce a structured binding
+declaration \cxxref{dcl.struct.bind}.
+%
 \enternote
 A \grammarterm{nested-name-specifier} can also include placeholders (\ref{expr.prim}).
 Replacements for those placeholders are determined according to the rules
 in this section.
 \exitnote
 % 
-\end{quote}
 \end{addedblock}
-
+\end{quote}
 
 Modify paragraph 2 to allow \grammarterm{constrained-type-specifier}{}s
 with function declarators, except in the declared return type.
@@ -162,11 +179,13 @@ declarator in the \grammarterm{decl-specifier-seq}, \grammarterm{type-specifier-
 in any context where such a declarator is valid. 
 % 
 If the function declarator includes a \grammarterm{trailing-return-type} 
-(\ref{dcl.fct}), that specifies the declared return type of the function.
-% 
+(\ref{dcl.fct}), that \grammarterm{trailing-return-type} specifies the declared 
+return type of the function. Otherwise, the function declarator shall declare
+a function.
+%
 If the declared return type of the function contains a placeholder, the 
-return type of the function is deduced from return statements in the body of 
-the function, if any.
+return type of the function is deduced from non-discarded return statements,
+if any, in the body of the function (\ref{stmt.if}).
 %
 \added{
 In a function declarator of the form \tcode{auto D -> T} where
@@ -285,8 +304,8 @@ in the declared type of a \grammarterm{parameter-declaration} or the
 \end{quote}
 
 
-Modify paragraph 4 (paragraph 7, here) to allow multiple placeholders within a 
-variable declaration, but disallowing \grammarterm{constrained-type-specifier}{}s.
+Modify paragraph 4 in the \Cpp Standard (paragraph 7, here) to allow multiple 
+placeholders within a variable declaration.
 
 \begin{quote}
 \pnum
@@ -295,9 +314,7 @@ The type of a variable declared using
 \removed{\tcode{auto} or \tcode{decltype(auto)}} 
 is deduced from its initializer.
 % 
-This use is allowed when declaring variables in a block (\cxxref{stmt.block}),
-in namespace scope (\cxxref{basic.scope.namespace}), and in a 
-\grammarterm{for-init-statement} (\cxxref{stmt.for}).
+This use is allowed in an initializing declaration (\cxxref{11.6}) of a variable.
 %
 \removed{\tcode{auto} or \tcode{decltype(auto)} shall appear as one
 of the \grammarterm{decl-specifier}{}s in the \grammarterm{decl-specifier-seq} }
@@ -309,7 +326,7 @@ A placeholder can appear anywhere in the declared type of the variable, but
 }
 \removed{and the}\added{The} \grammarterm{decl-specifier-seq} \added{of such a
 variable} shall be followed by one or more \grammarterm{init-declarator}{}s,
-each of which shall have a non-empty initializer.
+each of which shall be followed by a non-empty initializer.
 %
 In an initializer of the form
 \begin{codeblock}
@@ -361,8 +378,8 @@ auto cf3() -> C;         // OK: \tcode{cf3}'s return type will be deduced when i
 \end{addedblock}
 \end{quote}
 
-Update paragraph 6 (paragraph 9, here) to disallow placeholders in
-other contexts.
+Update paragraph 6 in the \Cpp Standard (paragraph 8, here) to disallow 
+placeholders in other contexts.
 
 \begin{quote}
 \pnum
@@ -372,12 +389,129 @@ ill-formed.
 \end{quote}
 
 
-% 
-% Deducing replacements for variables and return types
-% 
-\rSec4[dcl.spec.auto.deduct]{Deducing replacements for variables and return types}
+Modify paragraph 7 in the \Cpp standard (paragraph 9, here) to read:
 
-Factor the deduction rules for \tcode{auto} into a new subsection.
+\begin{quote}
+\pnum
+If the \grammarterm{init-declarator-list} contains more than one 
+\grammarterm{init-declarator}, they shall all form declarations of variables.
+The type of each declared variable is determined is determined by placeholder 
+type deduction (\ref{dcl.spec.auto.deduct}), and if 
+the type that replaces \removed{the placeholder type} 
+\added{the declared variable type or return type}
+is not the same in each deduction, the program is ill-formed.
+\end{quote}
+
+Add add the following examples to that paragraph.
+
+\begin{quote}
+\enterexample
+\begin{addedblock}
+\begin{codeblock}
+Pair<auto, auto> p1 = make_pair(0, 0), 
+                 *p2 = &p1;              // OK: replacement type is \tcode{Pair<int, int>}
+Pair<auto, auto> p3 = make_pair(0, 'a'), 
+                 p4 = make_pair('a', 0); // error: different replacement types
+\end{codeblock}
+\end{addedblock}
+\exitexample
+\end{quote}
+
+Modify paragraph 8 in the \Cpp Standard (paragraph 10, here) to read:
+\begin{quote}
+\pnum
+If a function with a declared return type that contains 
+\removed{a placeholder type} 
+\added{placeholders}
+has multiple non-discarded \tcode{return} statements,
+the return type is deduced for each such \tcode{return} statement. 
+If the type deduced is not the same in each deduction,
+the program is ill-formed.
+\end{quote}
+
+Modify paragraph 9 in \Cpp Standard (paragraph 11, here) to read:
+
+\begin{quote}
+\pnum
+If a function with a declared return type that uses 
+\removed{a placeholder type}
+\added{placeholders} 
+has no non-discarded \tcode{return} statements, the return type is deduced as 
+though from a \tcode{return} statement with no operand at the closing brace of 
+the function body.
+\end{quote}
+
+Modify the first sentence of paragraph 10 in the \Cpp Standard (paragraph 12,
+here).
+
+\begin{quote}
+\pnum
+If the type of an entity with an undeduced placeholder \removed{type} 
+is needed to determine the type of an expression, the program is 
+ill-formed.
+\end{quote}
+
+Modify paragraph 12 in the \Cpp Standard (paragraph 14, here) to read:
+
+\begin{quote}
+\setcounter{Paras}{13}
+\pnum
+Redeclarations or specializations of a function or function template 
+with a declared return type that uses 
+\removed{a placeholder type}
+\added{placeholders} shall also use that placeholder, 
+not a deduced type.
+% 
+\added{If a placeholder is designated by a 
+\grammarterm{constrained-type-specifier}, redeclarations or specializations 
+shall use the same \grammarterm{constrained-type-specifier}.}
+\end{quote}
+
+Add the following examples to that paragraph.
+
+\begin{quote}
+\begin{addedblock}
+\begin{codeblock}
+template<typename T> concept bool C1 = true;
+template<typename T> concept bool C2 = true;
+
+template<typename T> auto cf(T) -> C1; // \#1
+template<typename T> C1 cf(T);         // \#2, redeclaration of \#1
+template<typename T> C2 cf(T);         // error: redeclared with different placeholder
+\end{codeblock}
+\end{addedblock}
+\end{quote}
+
+Modify paragraph 13 in the \Cpp Standard (paragraph 15, here) to disallow
+placeholders in the return types of virtual functions.
+
+\begin{quote}
+\pnum
+A function declared with a return type that uses 
+\removed{a placeholder type}
+\added{placeholders}
+shall not be virtual (\cxxref{class.virtual}).
+\end{quote}
+
+
+Modify paragraph 14 in the \Cpp Standard (paragraph 16, here) to read:
+
+\begin{quote}
+\pnum
+An explicit instantiation declaration (\ref{temp.explicit}) does not cause the 
+instantiation of an entity declared using 
+\removed{a placeholder type}
+\added{placeholders},
+but it also does not prevent that entity from being instantiated as needed to
+determine its type. 
+\end{quote}
+
+
+%%%
+%%% Placeholder type deduction
+%%%
+\rSec4[dcl.spec.auto.deduct]{Placeholder type deduction}
+
 
 \begin{quote}
 \pnum
@@ -537,121 +671,6 @@ Both \grammarterm{constrained-type-specifier}{}s in the return type of
 \end{addedblock}
 \end{quote}
 
-Copy paragraphs 8-15 from \ref{dcl.spec.auto} in the \Cpp Standard into
-this section. Modify paragraph 8 (here, 2) to read:
-
-\begin{quote}
-\pnum
-If the \grammarterm{init-declarator-list} contains more than one 
-\grammarterm{init-declarator}, they shall all form declarations of variables.
-The type of each declared variable is determined as described above, and if 
-the type that replaces \removed{the placeholder type} 
-\added{the declared variable type or return type}
-is not the same in each deduction, the program is ill-formed.
-\end{quote}
-
-Add add the following examples to that paragraph.
-
-\begin{quote}
-\enterexample
-\begin{addedblock}
-\begin{codeblock}
-Pair<auto, auto> p1 = make_pair(0, 0), 
-                 *p2 = &p1;              // OK: replacement type is \tcode{Pair<int, int>}
-Pair<auto, auto> p3 = make_pair(0, 'a'), 
-                 p4 = make_pair('a', 0); // error: different replacement types
-\end{codeblock}
-\end{addedblock}
-\exitexample
-\end{quote}
-
-Modify paragraph 9 (here, 3).
-\begin{quote}
-\pnum
-If a function with a declared return type that contains 
-\removed{a placeholder type} 
-\added{placeholders}
-has multiple return statements,
-the return type is deduced for each return statement. 
-If the type deduced is not the same in each deduction,
-the program is ill-formed.
-\end{quote}
-
-Modify the text of paragraph 10 (here, 4).
-
-\begin{quote}
-\pnum
-If a function with a declared return type that uses 
-\removed{a placeholder type}
-\added{placeholders} 
-has no return statements, the return type is deduced as though from 
-a return statement with no operand at the closing brace of the function
-body. 
-\end{quote}
-
-Modify the first sentence of paragraph 11 (here, 5).
-
-\begin{quote}
-\pnum
-If the type of an entity with an undeduced placeholder \removed{type} 
-is needed to determine the type of an expression, the program is 
-ill-formed.
-\end{quote}
-
-Modify the text of paragraph 13 (here, 7).
-
-\begin{quote}
-\setcounter{Paras}{6}
-\pnum
-Redeclarations or specializations of a function or function template 
-with a declared return type that uses 
-\removed{a placeholder type}
-\added{placeholders} shall also use that placeholder, 
-not a deduced type.
-% 
-\added{If a placeholder is designated by a 
-\grammarterm{constrained-type-specifier}, redeclarations or specializations 
-shall use the same \grammarterm{constrained-type-specifier}.}
-\end{quote}
-
-Add the following examples to that paragraph.
-
-\begin{quote}
-\begin{addedblock}
-\begin{codeblock}
-template<typename T> concept bool C1 = true;
-template<typename T> concept bool C2 = true;
-
-template<typename T> auto cf(T) -> C1; // \#1
-template<typename T> C1 cf(T);         // \#2, redeclaration of \#1
-template<typename T> C2 cf(T);         // error: redeclared with different placeholder
-\end{codeblock}
-\end{addedblock}
-\end{quote}
-
-Modify paragraph 14 (here, 8).
-
-\begin{quote}
-\pnum
-A function declared with a return type that uses 
-\removed{a placeholder type}
-\added{placeholders}
-shall not be virtual (10.3)
-\end{quote}
-
-
-Modify paragraph 15 (paragraph 8, here) to read:
-
-\begin{quote}
-\setcounter{Paras}{7}
-\pnum
-An explicit instantiation declaration (\ref{temp.explicit}) does not cause the 
-instantiation of an entity declared using 
-\removed{a placeholder type}
-\added{placeholders},
-but it also does not prevent that entity from being instantiated as needed to
-determine its type. 
-\end{quote}
 
 %%
 %% Constrained type specifiers
