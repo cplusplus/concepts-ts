@@ -42,7 +42,7 @@ overloaded: ...
 %%
 %% Declaration matching
 %%
-\rSec2[over.dcl]{Declaration matching}
+\rSec1[over.dcl]{Declaration matching}
 
 Modify paragraph 1 to extend the notion of declaration matching to
 also include a function's associated constraints. Note that the
@@ -59,7 +59,6 @@ they are in the same scope and have equivalent parameter declarations
 %%
 %% Overload resolution
 %%
-\setcounter{section}{2}
 \rSec1[over.match]{Overload resolution}
 
 
@@ -104,27 +103,135 @@ those constraints shall be satisfied (\ref{temp.constr.decl}).}
 %%
 \rSec2[over.match.best]{Best viable function}
 
-Modify the last item in the list in paragraph 1 and extend it with a final
-comparison based on the associated constraints of those functions. Note that 
-the preceding (unmodified) items in the \Cpp Standard are elided in this
-document.
+Modify paragraph 1 by adding a rule to the the criteria that determines when 
+one function is better than another. 
 
 \begin{quote}
+Given these definitions, a viable function
+\tcode{F1}
+is defined
+to be a
+\term{better}
+function than another viable function
+\tcode{F2}
+if
+for all arguments
+\textit{i},
+ICS\textit{i}(\tcode{F1}) is not a worse conversion
+sequence than ICS\textit{i}(\tcode{F2}), and then
 \begin{itemize}
-\item \ldots
+\item
+for some argument
+\textit{j},
+ICS\textit{j}(\tcode{F1}) is a better conversion
+sequence than ICS\textit{j}(\tcode{F2}), or, if not that,
 
-\item \tcode{F1} and \tcode{F2} are function template specializations, and 
-the function template for \tcode{F1} is more specialized than the template 
-for \tcode{F2} according to the partial ordering rules described in
-\ref{temp.func.order}\removed{.}\added{, or, if not that,}
+\item
+the context is an initialization by user-defined conversion
+(see~\cxxref{dcl.init},
+\cxxref{over.match.conv}, and~\cxxref{over.match.ref})
+and the standard conversion sequence from the return type of
+\tcode{F1}
+to the destination type (i.e., the type of the entity being initialized)
+is a better conversion sequence than the standard conversion sequence
+from the return type of
+\tcode{F2}
+to the destination type
+\enterexample
+\begin{codeblock}
+struct A {
+  A();
+  operator int();
+  operator double();
+} a;
+int i = a;          // \tcode{a.operator int()} followed by no conversion is better than
+                    // \tcode{a.operator double()} followed by a conversion to \tcode{int}
+float x = a;        // ambiguous: both possibilities require conversions,
+                    // and neither is better than the other
+\end{codeblock}
+\exitexample
+or, if not that,
+
+\item the context is an initialization by conversion function for direct
+reference binding (\cxxref{over.match.ref}) of a reference to function type, the
+return type of \tcode{F1} is the same kind of reference (i.e. lvalue or rvalue)
+as the reference being initialized, and the return type of \tcode{F2} is not
+\enterexample
+\begin{codeblock}
+template <class T> struct A {
+  operator T&();    // \#1
+  operator T&&();   // \#2
+};
+typedef int Fn();
+A<Fn> a;
+Fn& lf = a;         // calls \#1
+Fn&& rf = a;        // calls \#2
+\end{codeblock}
+\exitexample
+or, if not that,
+
+\item
+\tcode{F1}
+is not a function template specialization and
+\tcode{F2}
+is a
+function template
+specialization, or, if not that,
+
+\item
+\tcode{F1} and \tcode{F2} are function template specializations,
+and the function template
+for \tcode{F1} is more specialized than the template for \tcode{F2}
+according to the partial ordering rules described in~\ref{temp.func.order},
+or, if not that,
 
 \item
 \added{\tcode{F1} and \tcode{F2} are non-template functions with the same 
 parameter-type-lists, and  \tcode{F1} is more constrained than \tcode{F2} 
 according to the partial ordering of constraints described in 
-\ref{temp.constr.order}.}
+\ref{temp.constr.order}, or if not that,}
+
+\item
+\tcode{F1} is generated from a
+\grammarterm{deduction-guide}~(\cxxref{over.match.class.deduct})
+and \tcode{F2} is not, or, if not that,
+
+\item
+\tcode{F1} is the copy deduction candidate~(\cxxref{over.match.class.deduct})
+and \tcode{F2} is not, or, if not that,
+
+\item
+\tcode{F1} is generated from a non-template constructor
+and \tcode{F2} is generated from a constructor template.
+\enterexample
+\begin{codeblock}
+template <class T> struct A {
+  using value_type = T;
+  A(value_type);    // \#1
+  A(const A&);      // \#2
+  A(T, T, int);     // \#3
+  template<class U>
+    A(int, T, U);   // \#4
+  // \#5 is the copy deduction candidate, \tcode{A(A)}
+};
+
+A x(1, 2, 3);       // uses \#3, generated from a non-template constructor
+
+template <class T>
+A(T) -> A<T>;       // \#6, less specialized than \#5
+
+A a(42);            // uses \#6 to deduce \tcode{A<int>} and \#1 to initialize
+A b = a;            // uses \#5 to deduce \tcode{A<int>} and \#2 to initialize
+
+template <class T>
+A(A<T>) -> A<A<T>>; // \#7, as specialized as \#5
+
+A b2 = a;           // uses \#7 to deduce \tcode{A<A<int>>} and \#1 to initialize
+\end{codeblock}
+\exitexample
 \end{itemize}
 \end{quote}
+
 
 
 %%
@@ -132,9 +239,8 @@ according to the partial ordering of constraints described in
 %%
 \rSec1[over.over]{Address of overloaded function}
 
-Modify paragraph 4 (paragraph 5 in this document) to incorporate 
-constraints in the selection of an overloaded function when its address is 
-taken.
+Modify paragraph 4 to incorporate constraints in the selection of an 
+overloaded function when its address is taken.
 
 % TODO: Rewrite this as an itemized list of steps.
 \begin{quote}
