@@ -10,6 +10,8 @@ allow a template declaration introduced by a concept.
 
 \begin{quote}
 \pnum
+A \defn{template} defines a family of classes, functions, or variables, or an alias for a
+family of types.
 
 \begin{bnf}
 \nontermdef{template-declaration}\br
@@ -53,13 +55,27 @@ constrained template parameters.
 
 \begin{quote}
 \pnum
-\vspace{-\the\baselineskip}
+The syntax for \grammarterm{template-parameter}{s} is:
 
 \begin{bnf}
 \nontermdef{template-parameter}\br
   type-parameter\br
   parameter-declaration\br
   \added{constrained-parameter}
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{type-parameter}\br
+  type-parameter-key \terminal{...}\opt identifier\opt\br
+  type-parameter-key identifier\opt{} \terminal{=} type-id\br
+  \terminal{template <} template-parameter-list \terminal{>} type-parameter-key \terminal{...}\opt identifier\opt\br
+  \terminal{template <} template-parameter-list \terminal{>} type-parameter-key identifier\opt{} \terminal{=} id-expression
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{type-parameter-key}\br
+  \terminal{class}\br
+  \terminal{typename}
 \end{bnf}
 
 \begin{bnf}
@@ -91,8 +107,8 @@ then the \grammarterm{template-parameter} is a \grammarterm{constrained-paramete
 \end{addedblock}
 \end{quote}
 
-Insert the following paragraphs after paragraph 8. These paragraphs
-define the meaning of a constrained template parameter.
+Insert the following paragraphs after paragraph 8 in the \Cpp Standard. These 
+paragraphs define the meaning of a constrained template parameter.
 
 \begin{quote}
 \begin{addedblock}
@@ -194,9 +210,9 @@ template<C3<int> T> struct s4; // associates \tcode{C3<T, int>}
 \end{addedblock}
 \end{quote}
 
-Insert the following paragraph after paragraph 9 to require that the
-kind of a \grammarterm{default-argument} matches the kind of its
-\grammarterm{constrained-parameter}.
+Insert the following paragraph after paragraph 9 in the \Cpp Standard to 
+require that the kind of a \grammarterm{default-argument} matches the kind 
+of its \grammarterm{constrained-parameter}.
 
 \begin{quote}
 \begin{addedblock}
