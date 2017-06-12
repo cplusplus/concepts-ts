@@ -1019,7 +1019,8 @@ auto IssuesData::get_revisions(vector<issue> const& issues, string const& diff_r
 //   r += "R10: 2014-10-29 post-Urbana mailing";
 //
   //  r += "R1: 2015-05-22 post-Lenexa mailing";
-   r += "R3: 2015-03-04 post-Jacksonville mailing";
+//    r += "R3: 2015-03-04 post-Jacksonville mailing";
+//    r += "R3: 2015-03-04 pre-Toronto mailing";
    r += diff_report;
    r += "</li>\n";
 
@@ -1758,7 +1759,9 @@ auto read_issues_from_toc(string const& s) -> vector<pair<int, string> > {
       if (i == string::npos) {
          break;
       }
+      std::cout << "ROW: " << i << '\n';
       i = s.find("</a>", i);
+      std::cout << "ANCHOR: " << i << '\n';
       auto j = s.rfind('>', i);
       if (j == string::npos) {
          throw runtime_error{"unable to parse issue number: can't find beginning bracket"};
@@ -1769,6 +1772,7 @@ auto read_issues_from_toc(string const& s) -> vector<pair<int, string> > {
       if (instr.fail()) {
          throw runtime_error{"unable to parse issue number"};
       }
+      std::cout << "HERE: " << num << '\n';
       i = s.find("</a>", i+4);
       if (i == string::npos) {
          throw runtime_error{"partial issue found"};
