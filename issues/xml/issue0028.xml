@@ -51,8 +51,8 @@ Augment 14.10.3 [temp.constr.order]p(2.3) thusly:
 an atomic constraint A subsumes another atomic constraint B if and only
 if either <del>the</del> A and B are equivalent using the rules
 described in 14.10.1 to compare constraints<ins>, or A is of the form
-<tt>P && ...</tt> and B is of the form <tt>Q && ...</tt> or <tt>Q ||
-...</tt>, where P subsumes Q.</ins>.
+<code>(P && ...)</code> and B is of the form <code>(Q && ...)</code> 
+or <code>(Q || ...)</code>, where <code>P</code> subsumes <code>Q</code>.</ins>.
 </resolution>
 
 </issue>
