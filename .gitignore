@@ -230,6 +230,7 @@ issues/bin/*
 
 # Actual documents
 *.pdf
+report/*.html
 
 # Zip files
 *.zip
