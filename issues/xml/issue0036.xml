@@ -12,10 +12,11 @@
 <discussion>
 <p>
 
-Concepts allows constraints on non-template functions but not on explicit
+Concepts allow constraints on non-template functions but not on explicit
 specializations of class templates. For example:
 
 <pre>
+<code>
 template&lt;&gt;
   requires numeric_has_infinity_v&lt;double&gt;
 struct
