@@ -1759,9 +1759,7 @@ auto read_issues_from_toc(string const& s) -> vector<pair<int, string> > {
       if (i == string::npos) {
          break;
       }
-      std::cout << "ROW: " << i << '\n';
       i = s.find("</a>", i);
-      std::cout << "ANCHOR: " << i << '\n';
       auto j = s.rfind('>', i);
       if (j == string::npos) {
          throw runtime_error{"unable to parse issue number: can't find beginning bracket"};
@@ -1772,7 +1770,6 @@ auto read_issues_from_toc(string const& s) -> vector<pair<int, string> > {
       if (instr.fail()) {
          throw runtime_error{"unable to parse issue number"};
       }
-      std::cout << "HERE: " << num << '\n';
       i = s.find("</a>", i+4);
       if (i == string::npos) {
          throw runtime_error{"partial issue found"};
