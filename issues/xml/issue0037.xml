@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='iso-8859-1' standalone='no'?>
+<!DOCTYPE issue SYSTEM "lwg-issue.dtd" [
+  <!ENTITY nbsp "&#160;">
+] >
+
+<issue num="37" status="New">
+<title>Redundant <code>bool</code> requirement on predicate constraints</title>
+<section><sref ref="[temp.constr.pred]"/></section>
+<submitter>Hubert Tong</submitter>
+<date>8 Jun 2017</date>
+
+<discussion>
+<p>
+The <code>bool</code> type diagnosable rule on predicate constraints already encompasses the much more verbose user-declared logical operator rules if we consistently apply substitution into predicate constraints only when evaluation of its value for satisfaction is required.
+</p>
+</discussion>
+
+<resolution>
+<p>
+</p>
+</resolution>
+
+</issue>
