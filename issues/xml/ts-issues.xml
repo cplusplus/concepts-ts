@@ -182,6 +182,14 @@
   remains in effect until such time as a Technical Corrigendum or a revision
   of the Standard is issued by ISO.</p>
 
+  <p><b>Accepted</b>: Like a DR except that the issue concerns the wording of 
+  the current Working Paper rather than that of the current International 
+  Standard.</p>
+
+  <p><b>WP</b>: An Accepted issue whose resolution is reflected in the current 
+  Working Paper.
+
+
   <p><b>Dup</b>: The issue is identical to or a subset of another issue,
   identified in a Rationale statement.
 
