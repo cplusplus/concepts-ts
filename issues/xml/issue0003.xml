@@ -3,7 +3,7 @@
   <!ENTITY nbsp "&#160;">
 ] >
 
-<issue num="3" status="Open">
+<issue num="3" status="WP">
 <title>Allow requires-expressions in more contexts</title>
 <section><sref ref="[expr.prim.req]"/></section>
 <submitter>US</submitter>
