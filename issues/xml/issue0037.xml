@@ -11,7 +11,39 @@
 
 <discussion>
 <p>
-The <code>bool</code> type diagnosable rule on predicate constraints already encompasses the much more verbose user-declared logical operator rules if we consistently apply substitution into predicate constraints only when evaluation of its value for satisfaction is required.
+The <code>bool</code> type diagnosable rule on predicate constraints already 
+encompasses the much more verbose user-declared logical operator rules if we 
+consistently apply substitution into predicate constraints only when evaluation 
+of its value for satisfaction is required.
+</p>
+
+<p>
+The note in 14.10.1.1 [temp.constr.op] paragraph 6 ignores substitution 
+failure in its claims of agreement between expression evaluation and 
+satisfaction.
+
+In 14.10.1.2 [temp.constr.pred] paragraph 1:
+<quote>
+After substitution, <code>E</code> shall have type bool.
+</quote>
+
+In 14.10.1.1 [temp.constr.op] paragraph 2:
+<quote>
+If the left and right operands of a conjunction are predicate 
+constraints (14.10.1.2), let <code>P</code> and <code>Q</code> be the 
+expressions of those constraints resulting from substitution.
+If the expression <code>P && Q</code> results in a call to a user-declared 
+<code>operator&&</code>, the program is ill-formed.
+</quote>
+
+In 14.10.1.1 [temp.constr.op] paragraph 4:
+<quote>
+If the left and right operands of a disjunction are predicate constraints 
+(14.10.1.2), let <code>P</code> and <code>Q</code> be the expressions of those 
+constraints resulting from substitution. If the expression <code>P || Q</code> 
+results in a call to a user-declared <code>operator||</code>, the program is 
+ill-formed.
+</quote>
 </p>
 </discussion>
 
