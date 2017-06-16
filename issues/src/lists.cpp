@@ -207,7 +207,7 @@ auto remove_qualifier(string const& stat) -> string {
 
 static constexpr char const * TS_ACTIVE = "ts-active.html";
 static constexpr char const * TS_CLOSED = "ts-closed.html";
-static constexpr char const * TS_DEFECTS = "complete.html";
+static constexpr char const * TS_DEFECTS = "ts-complete.html";
 
 // functions to relate the status of an issue to its relevant published list document
 auto filename_for_status(string stat) -> string {
