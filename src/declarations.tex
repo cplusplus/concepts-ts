@@ -555,10 +555,11 @@ or with an operand of type \tcode{void},
 \tcode{T} shall be either
 \tcode{decltype(auto)} \removed{or}\added{,} \cv{}~\tcode{auto}% 
 \added{, or a \grammarterm{constrained-type-specifier}}.
-% 
-\added{Otherwise, if the initialization is copy-list-initialization, 
-\tcode{T} shall be either \tcode{decltype(auto)}, \tcode{auto}, or a
-\grammarterm{constrained-type-specifier}.}
+
+% FIXME: This is a normative change.
+% \added{Otherwise, if the initialization is copy-list-initialization, 
+% \tcode{T} shall be either \tcode{decltype(auto)}, \tcode{auto}, or a
+% \grammarterm{constrained-type-specifier}.}
 
 \pnum
 If the placeholder is the \tcode{auto} \grammarterm{type-specifier}
@@ -566,17 +567,33 @@ If the placeholder is the \tcode{auto} \grammarterm{type-specifier}
 $\mathtt{T}'$ replacing \tcode{T} is determined using the rules for template 
 argument deduction.
 % 
-Obtain \added{a type} \tcode{P} from
-\tcode{T} by replacing 
-\removed{the occurrences of \tcode{auto}}
-\added{each occurrence of a placeholder}
-with either a new invented type template parameter \tcode{U}$_I$
-\added{according to the rules in \ref{dcl.fct}}
-or, if the initialization is copy-list-initialization, with
-\tcode{std::initializer_list<U\added{$_I$}>}.
+\removed{Obtain \tcode{P} from
+\tcode{T} by replacing the occurrences of \tcode{auto} with either a new
+invented type template parameter \tcode{U} or,
+if the initialization is copy-list-initialization, with
+\tcode{std::initializer_list<U>}.}
 %
-Deduce a value for \added{each} \tcode{U}\added{$_I$} using the rules
-of template argument deduction from a function call~(\cxxref{temp.deduct.call}),
+\begin{addedblock}
+Otherwise, obtain a type \tcode{P} from \tcode{T} as follows:
+\begin{itemize}
+% FIXME: This doesn't do the right thing at all.
+\item if the initialization is a copy-list-initialization
+and a placeholder is a \grammarterm{decl-specifier} of the 
+\grammarterm{decl-specifier-seq} of the variable declaration, replace that 
+occurrence of the placeholder with \tcode{std::initializer_list<U>}
+where \tcode{U} is an invented type template parameter;
+
+\item otherwise, replace each occurrence of a placeholder in the
+variable or return type with a new invented type template parameter
+according to the rules for inventing template parameters
+for placeholders in \ref{dcl.fct}. 
+\end{itemize}
+\end{addedblock}
+%
+Deduce a value for \added{each} \removed{\tcode{U}}
+\added{invented type template parameter} using the rules
+of template argument deduction from a function 
+call~(\cxxref{temp.deduct.call}),
 where \tcode{P} is a
 function template parameter type and
 the corresponding argument is \tcode{e}.
@@ -604,8 +621,9 @@ each \grammarterm{constrained-type-specifier}, in order of appearance.
 is not satisfied by the deduced values, the declaration is ill-formed.}
 %
 Otherwise, $\mathtt{T}'$ is obtained by
-substituting the deduced \added{values} of each \tcode{U}\added{$_I$} into 
-\tcode{P}.
+substituting the deduced \removed{\tcode{U}}
+\added{values for the invented type template parameters}
+into \tcode{P}.
 
 \enterexample
 \begin{codeblock}
