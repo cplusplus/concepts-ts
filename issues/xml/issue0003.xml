@@ -33,15 +33,12 @@ currently valid in only certain contexts such as requires­expressions.)
 </p>
 
 <p>
-There is a paper addressing the <i>requires-expression</i> portion of this
-discussion.
-<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0266r0.pdf"></a>.
-</p>
-
-<p>
-Issue <iref ref="29"/> was created to specifically address the inability to
-evaluate concepts outside of SFINAE contexts.
+Suggest opening an EWG issue.
 </p>
 </discussion>
+
+<related>
+See issue 29.
+</related>
 
 </issue>
