@@ -281,8 +281,6 @@ respective introduced \grammarterm{constraint-expression}{s} are \tcode{C<T>}
 and \tcode{(C<U> \&\& ...)}, where \tcode{T} is the template parameter invented 
 for \tcode{head} and \tcode{U} is the template parameter invented for 
 \tcode{tail} (\ref{temp.param}).
-\end{addedblock}
-\end{quote}
 
 \pnum 
 The adjusted function parameters of an abbreviated function template are derived
@@ -365,5 +363,7 @@ template<int N> void f(Array<auto, N>*);
 template<int N, typename T> void f(Array<T, N>*); // OK: redeclaration of \tcode{f(Array<auto, N>*)}
 \end{codeblock}
 \exitexample
+\end{addedblock}
+\end{quote}
 
 
