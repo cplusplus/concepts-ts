@@ -763,7 +763,6 @@ template<template<typename> class X> concept bool C3 = false;
 
 template<typename T, int N> class Array { };
 template<typename T, template<typename> class A> class Stack { };
-template<typename T> class Alloc { };
 
 void f1(C1);              // \tcode{C1} designates a placeholder type
 void f2(Array<auto, C2>); // \tcode{C2} designates a placeholder for an integer value
