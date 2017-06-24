@@ -571,14 +571,14 @@ argument deduction.
 \removed{Obtain \tcode{P} from
 \tcode{T} by replacing the occurrences of \tcode{auto} with either a new
 invented type template parameter \tcode{U} or,
-if the initialization is copy-list-initialization, with
+if the initialization is \grammarterm{copy-list-initialization}, with
 \tcode{std::initializer_list<U>}.}
 %
 \begin{addedblock}
 Obtain a type \tcode{P} from \tcode{T} as follows:
 \begin{itemize}
 % FIXME: This doesn't do the right thing at all.
-\item if the initialization is a copy-list-initialization
+\item if the initialization is a \grammarterm{copy-list-initialization}
 and a placeholder is a \grammarterm{decl-specifier} of the 
 \grammarterm{decl-specifier-seq} of the variable declaration, replace that 
 occurrence of the placeholder with \tcode{std::initializer_list<U>}
