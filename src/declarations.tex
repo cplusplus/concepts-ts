@@ -714,7 +714,7 @@ auto cf(int) -> Pair<C, C> { return expr; }
 The return type of \tcode{cf} is deduced from the parameter \tcode{p2} in the
 call \tcode{f2(expr)} of the following invented function:
 \begin{codeblock}
-template<C T> void f2(Pair<T, T>);
+template<C T> void f2(Pair<T, T> p2);
 \end{codeblock}
 Both \grammarterm{constrained-type-specifier}{}s in the return type of 
 \tcode{cf} correspond to the same invented template parameter.
