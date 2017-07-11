@@ -981,28 +981,30 @@ the more constrained template as described by the rules in
 Add the following paragraph.
 
 \begin{quote}
+\begin{xaddedblock}
 \pnum A \defn{concept} defines constraints on its template arguments.
+
 \begin{bnf}
 \nontermdef{concept-definition}\br
-  \terminal{concept} concept-name \terminal{=} constraint-expression\br
-\end{bnf}
-\begin{bnf}
-\nontermdef{concept-name}\br
-  identifier
+  \terminal{concept} identifier \terminal{=} constraint-expression\br
 \end{bnf}
 
 \pnum A \grammarterm{concept-definition} declares its \grammarterm{identifier}
-to be a concept. The name of the concept is a as \grammarterm{concept-name}.
+to be a concept.
 \enterexample
 \begin{codeblock}
 template<typename T>
-concept bool C = requires(T x) {
+concept C = requires(T x) {
   { f(x) } -> T;
 };
 int f(int n) { return n; }
 template<typename T>
   requires C<T>
 T g(T x) { return f(x); }
+void fn() {
+  g(0); // OK: \tcode{C<int>} is satisfied
+  g((void*)0); // error: cannot call \tcode{g}, \tcode{C<void*>} is not satisfied
+}
 \end{codeblock}
 \exitexample
 
@@ -1011,16 +1013,25 @@ A \grammarterm{concept-definition} shall appear in the global scope or in a
 namespace scope \cxxref{basic.scope.namespace}.
 
 \pnum
-A concept is not instantiated \ref{temp.spec}. 
-A program that explicitly instantiates or specializes a concept is ill-formed.
+A concept is not instantiated (\ref{temp.spec}). 
+A program that explicitly instantiates (\ref{temp.explicit}), explicitly 
+specializes (\ref{temp.expl.spec}), or partially
+specializes a concept is ill-formed.
 
 \pnum
 When an \grammarterm{id-expression}
-refers to a specialization of the concept, the result of the expression is
+refers to a specialization of a concept, the result of the expression is
 the prvalue of type \tcode{bool}. The expression is \tcode{true} if concept's 
-\emph{constraint-expression} is satisfied \ref{temp.constr.constr} and 
+\emph{constraint-expression} is satisfied (\ref{temp.constr.constr}) and 
 \tcode{false} otherwise.
+\enternote
+A concept's constraints are also evaluated during the resolution of template
+nemes (\ref{temp.names}) and overload resolution (\ref{over}), and they are
+compared during the the partial ordering of constraints 
+(\ref{temp.constr.order}).
+\exitnote
 
+\end{xaddedblock}
 \end{quote}
 
 %%
