@@ -7,9 +7,15 @@
 \definecolor{remclr}{rgb}{1,0,0}
 \definecolor{noteclr}{rgb}{0,0,1}
 
+\definecolor{xaddclr}{rgb}{0,0,1}
+\definecolor{xremclr}{rgb}{1,.6,0}
+
 \renewcommand{\added}[1]{\textcolor{addclr}{\uline{#1}}}
 \newcommand{\removed}[1]{\textcolor{remclr}{\sout{#1}}}
 \renewcommand{\changed}[2]{\removed{#1}\added{#2}}
+
+\newcommand{\xadded}[1]{\textcolor{xaddclr}{\uline{#1}}}
+\newcommand{\xremoved}[1]{\textcolor{xremclr}{\sout{#1}}}
 
 \newcommand{\nbc}[1]{[#1]\ }
 \newcommand{\addednb}[2]{\added{\nbc{#1}#2}}
@@ -30,6 +36,21 @@
 \newenvironment{removedblock}
 {
 \color{remclr}
+}
+{
+\color{black}
+}
+
+\newenvironment{xaddedblock}
+{
+\color{xaddclr}
+}
+{
+\color{black}
+}
+\newenvironment{xremovedblock}
+{
+\color{xremclr}
 }
 {
 \color{black}
