@@ -1,7 +1,8 @@
 
-\rSec0[intro]{General}
-
-\rSec1[intro.scope]{Scope}
+%%
+%% Scope
+%%
+\rSec0[intro.scope]{Scope}
 
 \pnum
 This Technical Specification describes extensions to the \Cpp
@@ -20,16 +21,11 @@ Modifications made directly to existing text from the International
 Standard use \added{underlining} to represent added text and
 \removed{strikethrough} to represent deleted text.
 
-\pnum
-WG21 paper N4191 defines ``fold expressions'', which are used to define 
-constraint expressions resulting from the use of 
-\grammarterm{constrained-parameter}{s} that declare template parameter
-packs. This feature is not present in ISO/IEC 14882:2014, but it is planned 
-to be included in the next revision of that International Standard. The
-specification of that feature is included in this document.
 
-
-\rSec1[intro.refs]{Normative references}
+%%
+%% Normative references
+%%
+\rSec0[intro.refs]{Normative references}
 
 \pnum
 The following referenced document is indispensable for the
@@ -38,17 +34,26 @@ edition cited applies. For undated references, the latest edition
 of the referenced document (including any amendments) applies.
 
 \begin{itemize}
-\item ISO/IEC 14882:2014, \doccite{Programming Languages -- \Cpp}
+\item ISO/IEC 14882:2017, \doccite{Programming Languages -- \Cpp}
 \end{itemize}
 
-ISO/IEC 14882:2014 is hereafter called the \defn{\Cpp Standard}.
-%
+ISO/IEC 14882:2017 is hereafter called the \defn{\Cpp Standard}.
+
 The numbering of Clauses, sections, and paragraphs in this document
 reflects the numbering in the \Cpp Standard. References to Clauses
 and sections not appearing in this Technical Specification refer to
 the original, unmodified text in the \Cpp Standard.
 
-\rSec1[intro.defs]{Terms and definitions}
+\enternote
+The \Cpp Standard is not yet published. This Technical Specification is based
+on the wording in the current Working Draft.
+\exitnote
+
+
+%%
+%% Terms and definitions
+%%
+\rSec0[intro.defs]{Terms and definitions}
 
 Modify the definitions of ``signature'' to include associated
 constraints (\ref{temp.constr.decl}). This allows different translation units
@@ -88,13 +93,15 @@ parameter list\added{, and any associated constraints~(\ref{temp.constr.decl})}
 \end{quote}
 
 %%
-%% Implementation compliance
+%% General principles
 %%
+\rSec0[intro]{General principles}
+
 \rSec1[intro.compliance]{Implementation compliance}
 
 \pnum
 Conformance requirements for this specification are the same as those 
-defined in \ref{intro.compliance} in the \Cpp Standard.
+defined in \cxxref{intro.compliance} in the \Cpp Standard.
 \enternote 
 Conformance is defined in terms of the behavior of programs.
 \exitnote
