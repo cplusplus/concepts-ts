@@ -2,7 +2,7 @@
 %%
 %% Templates
 %%
-\setcounter{chapter}{13}
+\setcounter{chapter}{16}
 \rSec0[temp]{Templates}
 
 Modify the \grammarterm{template-declaration} grammar in paragraph 1 to 
@@ -10,6 +10,8 @@ allow a template declaration introduced by a concept.
 
 \begin{quote}
 \pnum
+A \defn{template} defines a family of classes, functions, or variables, or an alias for a
+family of types.
 
 \begin{bnf}
 \nontermdef{template-declaration}\br
@@ -53,13 +55,27 @@ constrained template parameters.
 
 \begin{quote}
 \pnum
-\vspace{-\the\baselineskip}
+The syntax for \grammarterm{template-parameter}{s} is:
 
 \begin{bnf}
 \nontermdef{template-parameter}\br
   type-parameter\br
   parameter-declaration\br
   \added{constrained-parameter}
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{type-parameter}\br
+  type-parameter-key \terminal{...}\opt identifier\opt\br
+  type-parameter-key identifier\opt{} \terminal{=} type-id\br
+  \terminal{template <} template-parameter-list \terminal{>} type-parameter-key \terminal{...}\opt identifier\opt\br
+  \terminal{template <} template-parameter-list \terminal{>} type-parameter-key identifier\opt{} \terminal{=} id-expression
+\end{bnf}
+
+\begin{bnf}
+\nontermdef{type-parameter-key}\br
+  \terminal{class}\br
+  \terminal{typename}
 \end{bnf}
 
 \begin{bnf}
@@ -91,8 +107,8 @@ then the \grammarterm{template-parameter} is a \grammarterm{constrained-paramete
 \end{addedblock}
 \end{quote}
 
-Insert the following paragraphs after paragraph 8. These paragraphs
-define the meaning of a constrained template parameter.
+Insert the following paragraphs after paragraph 8 in the \Cpp Standard. These 
+paragraphs define the meaning of a constrained template parameter.
 
 \begin{quote}
 \begin{addedblock}
@@ -194,9 +210,9 @@ template<C3<int> T> struct s4; // associates \tcode{C3<T, int>}
 \end{addedblock}
 \end{quote}
 
-Insert the following paragraph after paragraph 9 to require that the
-kind of a \grammarterm{default-argument} matches the kind of its
-\grammarterm{constrained-parameter}.
+Insert the following paragraph after paragraph 9 in the \Cpp Standard to 
+require that the kind of a \grammarterm{default-argument} matches the kind 
+of its \grammarterm{constrained-parameter}.
 
 \begin{quote}
 \begin{addedblock}
@@ -232,7 +248,7 @@ template<C1 T = 0> struct S4;   // error: default argument is not a type
 Add this section after \ref{temp.param}.
 
 \begin{quote}
-
+\begin{addedblock}
 \pnum
 A \grammarterm{template-introduction} provides a concise way of declaring
 templates.
@@ -394,6 +410,7 @@ template<C1 T, typename U> void f(T, U); // OK: redeclaration of \tcode{f(T, aut
 \end{codeblock}
 % 
 \exitexample
+\end{addedblock}
 \end{quote}
 
 
@@ -469,6 +486,7 @@ because \tcode{MT} is a member of an unknown specialization.
 %%
 %% Template template arguments
 %%
+\setcounter{subsection}{2}
 \rSec2[temp.arg.template]{Template template arguments}
 
 Modify paragraph 3 to include rules for matching constrained template 
@@ -539,17 +557,19 @@ instantiated separately from the template they are associated with.
 
 \begin{quote}
 \setcounter{Paras}{1}
-For purposes of name lookup and instantiation, default 
-arguments\added{, associated constraints (\ref{temp.constr.decl}),} and
-\grammarterm{exception-specification}{}s of function templates and default
-arguments\added{, associated constraints,} and 
-\grammarterm{exception-specification}{}s of member functions of class
-templates are considered definitions; each default 
-argument\added{, associated constraint,} or 
-\grammarterm{exception-specification} is a separate definition which is 
-unrelated to the function template definition or to any other default 
-arguments\added{, associated constraints,} or 
-\grammarterm{exception-specification}{}s.
+\pnum
+For purposes of name lookup and instantiation,
+default arguments\added{, associated constraints (\ref{temp.constr.decl}),} and 
+\grammarterm{noexcept-specifier}{s} of function templates and 
+default arguments\added{, associated constraints,} and 
+\grammarterm{noexcept-specifier}{s} of member functions of class templates 
+are considered definitions;
+each default argument\added{, associated constraint,} or 
+\grammarterm{noexcept-specifier} is a separate definition which is unrelated to
+the function template definition or to any other default arguments or
+\grammarterm{noexcept-specifier}{s}.
+For the purpose of instantiation, the substatements of a constexpr if
+statement~(\cxxref{stmt.if}) are considered definitions.
 \end{quote}
 
 
@@ -684,132 +704,14 @@ template<C1 T> template<typename U>
 
 
 %%
-%% Variadic templates
-%%
-\rSec2[temp.variadic]{Variadic templates}
-
-Add \grammarterm{fold-expression}{s} to the list of contexts in which
-pack expansion can occur. 
-
-\begin{quote}
-\begin{itemize}
-\item ...
-
-\item \added{In a \grammarterm{fold-expression} (\ref{expr.prim.fold});
-the pattern is the \grammarterm{cast-expression}
-that contains an unexpanded parameter pack.}
-\end{itemize}
-\end{quote}
-
-Modify paragraph 7 to exclude \grammarterm{fold-expression}{s} from
-producing a comma-separated list of elements.
-
-\begin{quote}
-The instantiation of a pack expansion
-\removed{that is not a \tcode{sizeof...} expression}
-\added{that is neither a \tcode{sizeof...} expression nor a \grammarterm{fold-expression}}
-produces a list
-$\mathtt{E}_1, \mathtt{E}_2, ..., \mathtt{E}_N$,
-where $N$ is the number of 
-elements in the pack expansion parameters. 
-% 
-Each \tcode{E$_i$} is generated by instantiating 
-the pattern and replacing each pack expansion 
-parameter with its $i$th element.
-\end{quote}
-
-
-Add the following paragraphs at the end of this section.
-
-\begin{quote}
-\begin{addedblock}
-\setcounter{Paras}{8}
-\pnum
-The instantiation of a \grammarterm{fold-expression} produces:
-
-\begin{itemize}
-\item
-\tcode{((}$\mathtt{E}_1$
-           \placeholder{op} $\mathtt{E}_2$\tcode{)}
-           \placeholder{op} $\cdots$\tcode{)}
-           \placeholder{op} $\mathtt{E}_N$
-for a unary left fold,
-\item
-         $\mathtt{E}_1$     \placeholder{op}
-\tcode{(}$\cdots$           \placeholder{op}
-\tcode{(}$\mathtt{E}_{N-1}$ \placeholder{op}
-         $\mathtt{E}_N$\tcode{))}
-for a unary right fold,
-\item
-\tcode{(((}$\mathtt{E}$
-            \placeholder{op} $\mathtt{E}_1$\tcode{)}
-            \placeholder{op} $\mathtt{E}_2$\tcode{)}
-            \placeholder{op} $\cdots$\tcode{)}
-            \placeholder{op} $\mathtt{E}_N$
-for a binary left fold, and
-\item
-         $\mathtt{E}_1$     \placeholder{op}
-\tcode{(}$\cdots$           \placeholder{op}
-\tcode{(}$\mathtt{E}_{N-1}$ \placeholder{op}
-\tcode{(}$\mathtt{E}_{N}$   \placeholder{op}
-         $\mathtt{E}$\tcode{)))}
-for a binary right fold.
-\end{itemize}
-
-In each case,
-\placeholder{op} is the \grammarterm{fold-operator},
-$N$ is the number of elements in the pack expansion parameters,
-and each $\mathtt{E}_i$ is generated by instantiating the pattern
-and replacing each pack expansion parameter with its $i$th element.
-For a binary fold-expression,
-$\mathtt{E}$ is generated
-by instantiating the \grammarterm{cast-expression}
-that did not contain an unexpanded parameter pack.
-\enterexample
-\begin{codeblock}
-template<typename ...Args>
-  bool all(Args ...args) { return (... && args); }
-
-bool b = all(true, true, true, false);
-\end{codeblock}
-Within the instantiation of \tcode{all},
-the returned expression expands to
-\tcode{((true \&\& true) \&\& true) \&\& false},
-which evalutes to \tcode{false}.
-\exitexample
-If $N$ is zero for a unary fold-expression,
-the value of the expression is shown in Table~\ref{tab:fold.empty};
-if the operator is not listed in Table~\ref{tab:fold.empty},
-the instantiation is ill-formed.
-
-\renewcommand{\thetable}{\Alph{table}}
-\setcounter{table}{1}
-\begin{floattable}{Value of folding empty sequences}{tab:fold.empty}
-{ll}
-\topline
-\lhdr{Operator} & \rhdr{Value when parameter pack is empty} \\
-\capsep
-\tcode{*}       & \tcode{1}      \\
-\tcode{+}       & \tcode{int()}  \\
-\tcode{\&}      & \tcode{-1}     \\
-\tcode{|}       & \tcode{int()}  \\
-\tcode{\&\&}    & \tcode{true}   \\
-\tcode{||}      & \tcode{false}  \\
-\tcode{,}       & \tcode{void()} \\
-\end{floattable}
-\end{addedblock}
-\end{quote}
-
-
-%%
 %% Friends
 %%
 \rSec2[temp.friend]{Friends}
 
-Modify paragraph 9 to restrict constrained friend declarations.
+Modify paragraph 8 to restrict constrained friend declarations.
 
 \begin{quote}
-\setcounter{Paras}{8}
+\setcounter{Paras}{7}
 \pnum
 When a friend declaration refers to a specialization of a function
 template, the function parameter declarations shall not include
@@ -885,7 +787,7 @@ that function is considered as a viable candidate for overload resolution
 %%
 \rSec2[temp.class.spec]{Class template partial specialization}
 
-After paragraph 3, insert the following, which explains constrained partial 
+After paragraph 3, insert the following, which allows constrained partial 
 specializations.
 
 \begin{quote}
@@ -906,29 +808,6 @@ template<C T, N I>        class A<int, T*, I>; // \#7
 \end{addedblock}
 \end{quote}
 
-Remove the 3rd item in the list of paragraph 8 to allow constrained class 
-template partial specializations like \#6, and because it is redundant with 
-the 4th item. Note that all other items in that list are elided.
-
-\begin{quote}
-\setcounter{Paras}{7}
-\pnum
-Within the argument list of a class template partial specialization, 
-the following restrictions apply:
-\begin{itemize}
-\item ...
-
-\item \removed{The argument list of the specialization shall
-not be identical to the implicit argument list of the
-primary template.}
-
-\item The specialization shall be more specialized than the primary
-template (\ref{temp.class.order}).
-
-\item ...
-\end{itemize}
-\end{quote}
- 
 %%
 %% Matching of class template partial specializations
 %%
@@ -942,7 +821,7 @@ to match a partial specialization.
 \pnum
 A partial specialization matches a given actual template argument list if 
 the template arguments of the partial specialization can be deduced from the 
-actual template argument list (\ref{temp.deduct}) \added{, and the deduced 
+actual template argument list (\ref{temp.deduct})\added{, and the deduced 
 template arguments satisfy the constraints of the partial specialization, if 
 any (\ref{temp.constr.decl})}.
 \end{quote}
@@ -1034,8 +913,7 @@ Modify paragraph 6 to account for constraints on function templates.
 \begin{quote}
 \setcounter{Paras}{5}
 \pnum
-
-\removed{ Two function templates are \defn{equivalent} if they are 
+\removed{Two function templates are \defn{equivalent} if they are 
 declared in the same scope, have the same name, have identical template 
 parameter lists, and have return types and parameter lists that are 
 equivalent using the rules described above to compare expressions 
@@ -1131,46 +1009,6 @@ template, the program is ill-formed; no diagnostic is required.
 \end{quote}
 
 %%
-%% Dependent names
-%%
-\setcounter{subsection}{1}
-\rSec2[temp.dep]{Dependent names}
-
-%%
-%% Type-dependent expressions
-%%
-\setcounter{subsubsection}{1}
-\rSec3[temp.dep.expr]{Type-dependent expressions}
-
-Add the following paragraph to this section.
-
-\begin{quote}
-\setcounter{Paras}{6}
-\pnum
-\added{A \grammarterm{fold-expression} is type-dependent.}
-\end{quote}
-
-%%
-%% Value-dependent expressions
-%%
-\rSec3[temp.dep.constexpr]{Value-dependent expressions}
-
-Modify paragraph 4 to include \grammarterm{fold-expression}{s} in
-the set of value-dependent expressions.
-
-\begin{quote}
-\setcounter{Paras}{3}
-\pnum
-Expressions of the following form are value-dependent:
-
-\begin{ncbnftab}
-\terminal{sizeof} \terminal{...} \terminal{(} identifier \terminal{)}\br
-\added{fold-expression}
-\end{ncbnftab}
-\end{quote}
-
-
-%%
 %% Dependent name resolution
 %% 
 \setcounter{subsection}{3}
@@ -1206,37 +1044,62 @@ the specialization.
 Change paragraph 1 to include associated constraints.
 
 \begin{quote}
+\pnum
 Unless a class template specialization has been explicitly
-instantiated \ref{temp.explicit} or explicitly specialized \ref{temp.expl.spec}, 
+instantiated~(\ref{temp.explicit}) or explicitly
+specialized~(\ref{temp.expl.spec}),
 the class template specialization is implicitly instantiated when the
-specialization is referenced in a context that requires a
-completely-defined object type or when the completeness of the
-class type affects the semantics of the program. 
-% 
-\enternote
-Within a template declaration, a local class or enumeration and the members
-of a local class are never considered to be entities that can be
-separately instantiated (this includes their default arguments,
-exception-specifications, and non-static data member initializers, if any). 
-% 
-As a result, the dependent names are looked up, the semantic constraints 
-are checked, and any templates used are instantiated as part of the
-instantiation of the entity within which the local class or enumeration is 
-declared.
-\exitnote
-% 
-The implicit instantiation of a class template specialization causes the 
-implicit instantiation of the declarations, but not of the definitions, default
-arguments, \added{associated constraints (\ref{temp.constr.decl}),} or
-\grammarterm{exception-specification}{}s of the class member functions,
-member classes, scoped member enumerations, static data members and
-member templates; and it causes the implicit instantiation of the
-definitions of unscoped member enumerations and member anonymous
-unions.
+specialization is referenced in a context that requires a completely-defined
+object type or when the completeness of the class type affects the semantics
+of the program.
+\begin{note}
+In particular, if the semantics of an expression depend on the member or
+base class lists of a class template specialization, the class template
+specialization is implicitly generated. For instance, deleting a pointer
+to class type depends on whether or not the class declares a destructor,
+and a conversion between pointers to class type depends on the
+inheritance relationship between the two classes involved.
+\end{note}
+\enterexample
+\begin{codeblock}
+template<class T> class B { @. . .@ };
+template<class T> class D : public B<T> { @. . .@ };
+
+void f(void*);
+void f(B<int>*);
+
+void g(D<int>* p, D<char>* pp, D<double>* ppp) {
+  f(p);             // instantiation of \tcode{D<int>} required: call \tcode{f(B<int>*)}
+  B<char>* q = pp;  // instantiation of \tcode{D<char>} required: convert \tcode{D<char>*} to \tcode{B<char>*}
+  delete ppp;       // instantiation of \tcode{D<double>} required
+}
+\end{codeblock}
+\exitexample
+If a class template has been declared, but not defined,
+at the point of instantiation~(\ref{temp.point}),
+the instantiation yields an incomplete class type~(\ref{basic.types}).
+\enterexample
+\begin{codeblock}
+template<class T> class X;
+X<char> ch;         // error: incomplete type \tcode{X<char>}
+\end{codeblock}
+\exitexample
+\begin{note}
+Within a template declaration,
+a local class~(\ref{class.local}) or enumeration and the members of
+a local class are never considered to be entities that can be separately
+instantiated (this includes their default arguments, 
+\added{associated constraints (\ref{temp.constr.decl}),}
+\grammarterm{noexcept-specifier}{s}, and non-static data member
+initializers, if any). As a result, the dependent names are looked up, the
+semantic constraints are checked, and any templates used are instantiated as
+part of the instantiation of the entity within which the local class or
+enumeration is declared.
+\end{note}
 \end{quote}
 
 
-Add a new paragraph after paragraph 15 to describe how associated
+Add a new paragraph at the end of this section to describe how associated
 constraints are instantiated.
 
 \begin{quote}
@@ -1324,12 +1187,12 @@ arguments are left unspecified.
 \end{addedblock}
 \end{quote}
 
-Modify paragraph 8 to ensure that only members whose constraints are 
-satisfied are explicitly instantiated during class template 
-specialization. The note in the \Cpp Standard is omitted.
+Modify paragraph 8 in the \Cpp standard (paragraph 9, here) to ensure that 
+only members whose constraints are satisfied are explicitly instantiated 
+during class template specialization. The note in the \Cpp Standard is omitted.
 
 \begin{quote}
-\setcounter{Paras}{7}
+\setcounter{Paras}{8}
 \pnum
 An explicit instantiation that names a class template specialization is 
 also an explicit instantiation of the same kind (declaration or 
@@ -1406,16 +1269,17 @@ the point of substitution.
 \exitnote}
 \end{quote}
 
+
 \setcounter{subsubsection}{5}
 \rSec3[temp.deduct.decl]{Deducing template arguments from a function declaration}
 
-Add the following after paragraph 1 in order to require the
+Add a new paragraph after paragraph 1 in order to require the
 satisfaction of constraints when matching a specialization to a
 template.
 
 \begin{quote}
 \begin{addedblock}
-\setcounter{Paras}{2}
+\setcounter{Paras}{1}
 \pnum
 Remove from the set of function templates considered all those
 whose associated constraints (if any) are not satisfied by the deduced
@@ -1423,7 +1287,8 @@ template arguments (\ref{temp.constr.decl}).
 \end{addedblock}
 \end{quote}
 
-Update paragraph 2 (now paragraph 3) to accommodate the new wording.
+Update paragraph 2 in the \Cpp Standard (paragraph 3, here) to accommodate 
+the new wording.
 
 \begin{quote}
 \pnum
