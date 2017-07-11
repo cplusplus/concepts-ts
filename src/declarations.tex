@@ -15,6 +15,7 @@ Extend the \grammarterm{decl-specifier} production
 in paragraph 1 to include the \tcode{concept} specifier.
 
 \begin{quote}
+\begin{removedblock}
 \pnum
 The specifiers that can be used in a declaration are
 
@@ -26,8 +27,9 @@ The specifiers that can be used in a declaration are
     \terminal{friend}\br
     \terminal{typedef}\br
     \terminal{constexpr}\br
-    \added{\terminal{concept}}
+    \terminal{concept}
 \end{bnf}
+\end{removedblock}
 \end{quote}
 
 
@@ -769,6 +771,8 @@ in the \grammarterm{trailing-return-type} of a
 %%
 \rSec2[dcl.spec.concept]{\tcode{concept} specifier}
 
+\begin{quote}
+\begin{removedblock}
 Add this section to \ref{dcl.spec}.
 
 \begin{quote}
@@ -909,4 +913,6 @@ This prevents users from subverting the constraint system by providing a
 meaning for a concept that differs from its original definition.
 \exitnote
 
+\end{quote}
+\end{removedblock}
 \end{quote}
