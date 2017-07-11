@@ -777,8 +777,9 @@ A \grammarterm{constrained-type-specifier} designates a placeholder
   concept-name\br
   partial-concept-id
 
+\xremoved{
 \nontermdef{concept-name}\br
-  identifier
+  identifier}
 
 \nontermdef{partial-concept-id}\br
 		concept-name \terminal{<} template-argument-list\opt \terminal{>}
@@ -786,9 +787,9 @@ A \grammarterm{constrained-type-specifier} designates a placeholder
 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 = false;
-template<int N> concept bool C2 = false;
-template<template<typename> class X> concept bool C3 = false;
+template<typename T> concept C1 = false;
+template<int N> concept C2 = false;
+template<template<typename> class X> concept C3 = false;
 
 template<typename T, int N> class Array { };
 template<typename T, template<typename> class A> class Stack { };
@@ -800,6 +801,7 @@ void f3(Stack<auto, C3>); // \tcode{C3} designates a placeholder for a class tem
 \end{codeblock}
 \exitexample
 
+\begin{xremovedblock}
 \pnum
 An identifier is a \grammarterm{concept-name} if it refers to a set of 
 concept definitions (\ref{dcl.spec.concept}).
@@ -821,6 +823,7 @@ void f(C); // OK: the set of concepts referred to by C includes both \#1 and \#2
 void g(D); // OK: the concept-name \tcode{D} refers only to \#3
 \end{codeblock}
 \exitexample
+\end{xremovedblock}
 
 \pnum
 A \grammarterm{partial-concept-id} is a \grammarterm{concept-name} followed 

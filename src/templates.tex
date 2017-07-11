@@ -986,11 +986,15 @@ Add the following paragraph.
 
 \begin{bnf}
 \nontermdef{concept-definition}\br
-  \terminal{concept} identifier \terminal{=} constraint-expression\br
+  \terminal{concept} concept-name \terminal{=} constraint-expression\br
+\end{bnf}
+\begin{bnf}
+\nontermdef{concept-name}\br
+  identifier
 \end{bnf}
 
 \pnum A \grammarterm{concept-definition} declares its \grammarterm{identifier}
-to be a concept.
+to be a concept. The name of the concept is a \grammarterm{concept-name}.
 \enterexample
 \begin{codeblock}
 template<typename T>
