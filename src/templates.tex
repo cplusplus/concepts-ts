@@ -974,6 +974,56 @@ the more constrained template as described by the rules in
 \end{quote}
 
 %%
+%% Concept definitions
+%%
+\rSec2[temp.concept]{Concept definitions}
+
+Add the following paragraph.
+
+\begin{quote}
+\pnum A \defn{concept} defines constraints on its template arguments.
+\begin{bnf}
+\nontermdef{concept-definition}\br
+  \terminal{concept} concept-name \terminal{=} constraint-expression\br
+\end{bnf}
+\begin{bnf}
+\nontermdef{concept-name}\br
+  identifier
+\end{bnf}
+
+\pnum A \grammarterm{concept-definition} declares its \grammarterm{identifier}
+to be a concept. The name of the concept is a as \grammarterm{concept-name}.
+\enterexample
+\begin{codeblock}
+template<typename T>
+concept bool C = requires(T x) {
+  { f(x) } -> T;
+};
+int f(int n) { return n; }
+template<typename T>
+  requires C<T>
+T g(T x) { return f(x); }
+\end{codeblock}
+\exitexample
+
+\pnum
+A \grammarterm{concept-definition} shall appear in the global scope or in a
+namespace scope \cxxref{basic.scope.namespace}.
+
+\pnum
+A concept is not instantiated \ref{temp.spec}. 
+A program that explicitly instantiates or specializes a concept is ill-formed.
+
+\pnum
+When an \grammarterm{id-expression}
+refers to a specialization of the concept, the result of the expression is
+the prvalue of type \tcode{bool}. The expression is \tcode{true} if concept's 
+\emph{constraint-expression} is satisfied \ref{temp.constr.constr} and 
+\tcode{false} otherwise.
+
+\end{quote}
+
+%%
 %% Name resolution
 %%
 \rSec1[temp.res]{Name resolution}
