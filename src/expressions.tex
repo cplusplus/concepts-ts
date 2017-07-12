@@ -93,8 +93,7 @@ though \tcode{f} is an unevaluated operand (Clause~\ref{expr}).
 \setcounter{subsubsection}{1}
 \rSec3[expr.prim.id.qual]{Qualified names}
 
-Add \tcode{auto} and \grammarterm{constrained-type-name} to the
-\grammarterm{nested-name-specifier} grammar.
+Add \tcode{auto} to the \grammarterm{nested-name-specifier} grammar.
 
 \begin{quote}
 \begin{bnf}
@@ -104,7 +103,6 @@ Add \tcode{auto} and \grammarterm{constrained-type-name} to the
     namespace-name \terminal{::}\br
     decltype-specifier \terminal{::}\br
     \added{\terminal{auto} \terminal{::}}\br
-    \added{constrained-type-name \terminal{::}}\br
     nested-name-specifier identifier \terminal{::}\br
     nested-name-specifier \terminal{template}\opt \terminal{::}
 \end{bnf}
@@ -116,36 +114,21 @@ Add a new paragraph at the end of this section.
 \begin{addedblock}
 \setcounter{Paras}{5}
 \pnum
-In a \grammarterm{nested-name-specifier} of the form \tcode{auto::} or
-\tcode{C::}, where \tcode{C} is a \grammarterm{constrained-type-name},
+In a \grammarterm{nested-name-specifier} of the form \tcode{auto::},
 that \grammarterm{nested-name-specifier} designates a placeholder that 
 will be replaced later according to the rules for placeholder deduction in
 \ref{dcl.spec.auto}.
-%
-If a placeholder designated by a \grammarterm{constrained-type-specifier} 
-is not a placeholder type, the program is ill-formed.
-%
-\enternote
-A \grammarterm{constrained-type-specifier} can designate a placeholder for
-a non-type or template (\ref{dcl.spec.auto.constr}).
-\exitnote
 %
 The replacement type deduced for a placeholder shall be a class or
 enumeration type.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = sizeof(T) == sizeof(int);
-template<int N> concept bool D = true;
-
 struct S1 { int n; };
 struct S2 { char c; };
 struct S3 { struct X { using Y = int; }; };
 
 int auto::* p1 = &S1::n; // \tcode{auto} deduced as \tcode{S1}
-int D::* p2 = &S1::n;    // error: \tcode{D} does not designate a placeholder type
-int C::* p3 = &S1::n;    // OK: \tcode{C} deduced as \tcode{S1}
-char C::* p4 = &S2::c;   // error: deduction fails because constraints are not satisfied
 
 void f(typename auto::X::Y);
 f(S1()); // error: \tcode{auto} cannot be deduced from \tcode{S1()}
