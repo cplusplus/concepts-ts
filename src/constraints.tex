@@ -54,13 +54,11 @@ associated constraints shall be \defn{satisfied} (\ref{temp.constr.decl}).
 \enternote
 The satisfaction of constraints on class templates, alias templates, 
 and variable templates is required when referring to a template specialization 
-(\ref{temp.names}). The satisfaction of constraints on functions and
+(\ref{temp.names}). 
+% 
+The satisfaction of constraints on functions and
 function templates is required during overload resolution 
-(\ref{over.match.viable}). The satisfaction of constraints introduced by
-\grammarterm{constrained-type-specifier}{s} (\ref{dcl.spec.auto.constr})
-in the type of a variable or declared return type of a function is 
-required when values are deduced for their corresponding placeholders 
-(\ref{dcl.spec.auto}).
+(\ref{over.match.viable}). 
 \exitnote
 % 
 Determining if a constraint is satisfied entails the substitution 
@@ -199,10 +197,7 @@ arguments.
 \enternote
 A predicate constraint is introduced by the \grammarterm{constraint-expression}
 of a 
-\grammarterm{requires-clause} (\ref{temp.constr.decl}), 
-or as the associated constraint of a
-\grammarterm{constrained-parameter} (\ref{temp.param}) or
-\grammarterm{template-introduction} (\ref{temp.intro}).
+\grammarterm{requires-clause} (\ref{temp.constr.decl}).
 \exitnote
 % 
 After substitution, \tcode{E} shall have type \tcode{bool}.
@@ -556,11 +551,8 @@ an expression:
 
 \pnum
 Constraints can also be associated with a declaration through the use of 
-\grammarterm{template-introduction}{}s, 
 \grammarterm{constrained-parameter}{}s in a 
-\grammarterm{template-parameter-list}, and
-\grammarterm{constrained-type-specifier}{}s in the parameter-type-list
-of a function template.
+\grammarterm{template-parameter-list}.
 % 
 Each of these forms introduces additional \grammarterm{constraint-expression}{s} 
 that are used to constrain the declaration.
@@ -678,32 +670,13 @@ defined as follows.
 % 
 First, create a new expression \tcode{E} by replacing all 
 subexpressions in \tcode{X} that refer to concepts with their
-corresponding definitions. In particular,
-% 
-\begin{xaddedblock}
+corresponding definitions. That is,
 replace all \grammarterm{id-expression}{s} of the form 
 \tcode{C<A$1$, A$2$, ..., A$N$>}, where \tcode{C} is a concept with the 
 result of substituting the template arguments \tcode{A$1$, A$2$, ..., A$N$} 
 into the \grammarterm{constraint-expression} of \tcode{C}.
-\end{xaddedblock}
 % 
-\begin{xremovedblock}
-\begin{itemize}
-\item replace all function calls of the form 
-\tcode{C<A$1$, A$2$, ..., A$N$>()}, where \tcode{C} refers to the function
-concept \tcode{D} (\ref{dcl.spec.concept}) selected by the rules for concept 
-resolution (\ref{temp.constr.resolve}), with the result of substituting
-\tcode{A$1$, A$2$, ..., A$N$} into the expression returned by \tcode{D}, and
-
-\item replace all \grammarterm{id-expression}{s} of the form 
-\tcode{C<A$1$, A$2$, ..., A$N$>}, where \tcode{C} is the variable
-concept \tcode{D} (\ref{dcl.spec.concept}) selected by the rules for concept 
-resolution (\ref{temp.constr.resolve}), with the result of substituting 
-\tcode{A$1$, A$2$, ..., A$N$} into the initializer of \tcode{D}.
-\end{itemize}
-\end{xremovedblock}
-% 
-If \xremoved{any such} \xadded{that} substitution fails, the program is ill-formed.
+If that substitution fails, the program is ill-formed.
 % 
 Second, transform the expression \tcode{E} into a constraint as follows:
 \begin{itemize}
@@ -756,10 +729,10 @@ yielded by normalizing its associated constraints.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1() { return sizeof(T) == 1; }
-template<typename T> concept bool C2 = C1<T>() && 1 == 2;
-template<typename T> concept bool C3 = requires { typename T::type; };
-template<typename T> concept bool C4 = requires (T x) { ++x; }
+template<typename T> concept C = sizeof(T) == 1;
+template<typename T> concept C2 = C1<T>() && 1 == 2;
+template<typename T> concept C3 = requires { typename T::type; };
+template<typename T> concept C4 = requires (T x) { ++x; }
 
 template<C2 T> void f1(T);                            // \#1
 template<C3 T> void f2(T);                            // \#2
@@ -915,132 +888,3 @@ g(0);       // selects \#4
 \end{addedblock}
 \end{quote}
 
-
-%%
-%% Resolution of qualified references to concepts
-%%
-\rSec2[temp.constr.resolve]{Resolution of qualified references to concepts}
-
-Remove this section. Concept definitions can no longer overload.
-
-\begin{quote}
-\begin{xremovedblock}
-\pnum
-\defn{Concept resolution} is the process of selecting a concept 
-from a set of concept definitions referred to by a
-\grammarterm{qualified-concept-name},
-% 
-or from a set of declarations including one or more concept definitions
-referred to by a \grammarterm{simple-template-id} or a \grammarterm{qualified-id}
-whose \grammarterm{unqualified-id} is a \grammarterm{simple-template-id}.
-% 
-Concept resolution is performed when such a name appears
-\begin{itemize}
-\item as a \grammarterm{constrained-type-specifier} (\ref{dcl.spec.auto.constr}), 
-\item in a \grammarterm{constrained-parameter} (\ref{temp.param}),
-\item in a \grammarterm{template-introduction} (\ref{temp.intro}), or
-\item within a \grammarterm{constraint-expression} (\ref{temp.constr.decl}).
-\end{itemize}
-Within such a name, let \tcode{C} be the \grammarterm{concept-name} or
-\grammarterm{template-name} that refers to the set of concept definitions.
-
-\pnum
-The selection of a concept from this set is done by matching the 
-template parameters of each concept in that set to a sequence of template 
-arguments and \defn{wildcard}{s}.
-% 
-This sequence is called the \defn{concept argument list}, and its elements
-are called \defn{concept argument}{s}.
-% 
-For the purpose this matching, a wildcard can match a template 
-parameter of any kind (type, non-type, template) as described below.
-
-\pnum
-The method for determining the concept argument list depends on the
-context in which \tcode{C} appears.
-% 
-\begin{itemize}
-\item If \tcode{C} is part of a \grammarterm{constrained-type-specifier} or 
-\grammarterm{constrained-parameter},
-then
-  \begin{itemize}
-  \item if \tcode{C} is a \grammarterm{constrained-type-name}, the concept 
-  argument list is comprised of a single wildcard, or
-  \item if \tcode{C} is the \grammarterm{concept-name} of a 
-  \grammarterm{partial-concept-id}, the concept argument list is comprised of a
-  single wildcard followed by the \grammarterm{template-argument}{s} of that 
-  \grammarterm{partial-concept-id}.
-  \end{itemize}
-
-\item If \tcode{C} is the \grammarterm{concept-name} in a
-\grammarterm{template-introduction}. the concept argument list is a sequence 
-of wildcards of the same length as the \grammarterm{introduction-list} of
-the \grammarterm{template-introduction}.
-
-\item If \tcode{C} appears as a \grammarterm{template-name} of a
-\grammarterm{simple-template-id}, the concept argument list is the sequence of
-\grammarterm{template-argument}{s} of that \grammarterm{simple-template-id}.
-\end{itemize}
-
-\pnum
-The selection of a concept from the set referred to by \tcode{C} is done 
-by matching the concept argument list against the template parameter lists of 
-each concept in that set.
-% 
-For a concept \tcode{CC} in that set to be a viable selection, each 
-argument in the concept argument list is matched against the corresponding 
-template parameters of \tcode{CC}.
-% 
-Default template arguments of \tcode{CC} (if any) are instantiated for each 
-template parameter that does not correspond to a concept argument. Instantiated
-default arguments are appended to the concept argument list.
-% 
-If the last declared template parameter of \tcode{CC} is not a parameter pack
-and the number of template parameters of \tcode{CC} is greater than the
-number of concept arguments, \tcode{CC} is not a viable selection.
-% 
-Otherwise, concept arguments are matched to template parameters using the 
-following rules:
-% 
-\begin{itemize}
-\item a template argument matches a template parameter if and only if
-it matches in kind (type, non-type, template) and type according to the
-rules in \ref{temp.arg};
-
-\item a wildcard matches a template parameter of any kind;
-
-\item a template parameter pack (\cxxref{temp.variadic}), matches zero or more 
-concept arguments, provided that each of those arguments matches the pattern 
-of the template parameter pack using the rules above for matching matching 
-concept arguments and template parameters.
-\end{itemize}
-% 
-If any concept arguments do not match a corresponding template parameter,
-the concept \tcode{CC} is not a viable selection.
-% 
-The concept selected by concept resolution shall be the single viable selection
-in the set of concepts referred by \tcode{C}.
-% 
-\enterexample
-\begin{codeblock}
-template<typename T> concept bool C1() { return true; }             // \#1
-template<typename T, typename U> concept bool C1() { return true; } // \#2
-template<typename T> concept bool C2() { return true; }
-template<int T> concept bool C2() { return true; }
-template<typename... Ts> concept bool C3 = true;
-
-void f1(const C1*); // OK: \tcode{C1} selects \#1
-void f2(C1<char>);  // OK: \tcode{C1<char>} selects \#2
-
-template<C2<0> T> struct S1; // error: no matching concept for \tcode{C2<0>},
-                             // mismatched template arguments
-template<C2 T> struct S2;    // error: resolution of \tcode{C2} is ambiguous,
-                             // both concepts are viable
-
-C3{...Ts} void q1(); // OK: selects \tcode{C3}
-C3{T} void q2();     // OK: selects \tcode{C3}
-\end{codeblock}
-\exitexample
-
-\end{xremovedblock}
-\end{quote}

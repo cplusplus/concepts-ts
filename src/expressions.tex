@@ -37,13 +37,11 @@ In this section, add the
 \setcounter{subsection}{3}
 \rSec2[expr.prim.id]{Names}
 
-Add \xremoved{a new paragraph} \xadded{new paragraphs} to the end of this 
-section.
-
-\setcounter{Paras}{2}
+Add new paragraphs to the end of this section.
 
 \begin{quote}
-\begin{xaddedblock}
+\begin{addedblock}
+\setcounter{Paras}{2}
 \pnum
 A \grammarterm{id-expression} that denotes the specialization of a concept
 (\ref{temp.concept}) result in a prvalue of type \tcode{bool}. 
@@ -66,10 +64,9 @@ compared during the the partial ordering of constraints
 (\ref{temp.constr.order}).
 \exitnote
 
-\end{xaddedblock}
+\end{addedblock}
 \end{quote}
 
-% TODO: The wording "non-overloaded function declaration" is not right.
 \begin{quote}
 \begin{addedblock}
 \pnum

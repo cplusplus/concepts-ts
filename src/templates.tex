@@ -17,7 +17,6 @@ family of types.
 \nontermdef{template-declaration}\br
   \terminal{template} \terminal{<} template-parameter-list \terminal{>}
     \added{requires-clause\opt} declaration\br
-  \added{template-introduction declaration}
 
 \begin{addedblock}
 \nontermdef{requires-clause}\br
@@ -26,24 +25,6 @@ family of types.
 \end{bnf}
 
 \end{quote}
-  
-Add the following paragraphs after paragraph 6.
-
-\begin{quote}
-\begin{addedblock}
-\setcounter{Paras}{6}
-\pnum
-A \grammarterm{template-declaration} is written in terms of its template 
-parameters. These parameters are declared explicitly in a 
-\grammarterm{template-parameter-list} (\ref{temp.param}), or they are
-introduced by a \grammarterm{template-introduction} (\ref{temp.intro}).
-%
-The optional \grammarterm{requires-clause} following a
-\grammarterm{template-parameter-list} allows the specification of
-constraints (\ref{temp.constr.decl}) on template arguments (\ref{temp.arg}).
-\end{addedblock}
-\end{quote}
-
 
 %%
 %% Template parameters
