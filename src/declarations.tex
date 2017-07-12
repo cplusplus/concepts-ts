@@ -185,9 +185,9 @@ abbreviated function template (\ref{dcl.fct}), or that a
 (\ref{expr.prim.req.compound}) introduces an argument deduction constraint 
 (\ref{temp.constr.deduct}).
 %
-The \tcode{auto} \grammarterm{type-specifier} is also introduce a function type 
-having a \grammarterm{trailing-return-type} or to introduce a structured binding
-declaration \cxxref{dcl.struct.bind}.
+The \tcode{auto} \grammarterm{type-specifier} is also used to introduce a
+function type having a \grammarterm{trailing-return-type} or to introduce
+a structured binding declaration \cxxref{dcl.struct.bind}.
 %
 \enternote
 A \grammarterm{nested-name-specifier} can also include placeholders (\ref{expr.prim}).
@@ -213,8 +213,8 @@ If the function declarator includes a \grammarterm{trailing-return-type}
 return type of the function. Otherwise, the function declarator shall declare
 a function.
 %
-If the declared return type of the function contains a placeholder, the 
-return type of the function is deduced from non-discarded return statements,
+If the declared return type of the function contains a placeholder\removed{ type},
+the return type of the function is deduced from non-discarded return statements,
 if any, in the body of the function (\ref{stmt.if}).
 %
 \added{
@@ -344,7 +344,7 @@ The type of a variable declared using
 \removed{\tcode{auto} or \tcode{decltype(auto)}} 
 is deduced from its initializer.
 % 
-This use is allowed in an initializing declaration (\cxxref{11.6}) of a variable.
+This use is allowed in an initializing declaration (\cxxref{dcl.init}) of a variable.
 %
 \removed{\tcode{auto} or \tcode{decltype(auto)} shall appear as one
 of the \grammarterm{decl-specifier}{}s in the \grammarterm{decl-specifier-seq} }
@@ -425,7 +425,7 @@ Modify paragraph 7 in the \Cpp standard (paragraph 9, here) to read:
 \pnum
 If the \grammarterm{init-declarator-list} contains more than one 
 \grammarterm{init-declarator}, they shall all form declarations of variables.
-The type of each declared variable is determined is determined by placeholder 
+The type of each declared variable is determined by placeholder
 type deduction (\ref{dcl.spec.auto.deduct}), and if 
 the type that replaces \removed{the placeholder type} 
 \added{the declared variable type or return type}
@@ -550,7 +550,7 @@ determine its type.
 \removed{a deduced type} \added{deduced values (type, non-type, template)}.
 
 \pnum
-A type \tcode{T} containing a \removed{placeholder type}\added{placeholders},
+A type \tcode{T} containing \removed{a placeholder type}\added{placeholders},
 and a corresponding initializer \tcode{e},
 are determined as follows:
 
@@ -591,6 +591,7 @@ or with an operand of type \tcode{void},
 % \tcode{T} shall be either \tcode{decltype(auto)}, \tcode{auto}, or a
 % \grammarterm{constrained-type-specifier}.}
 
+\setcounter{Paras}{3}
 \pnum
 If the placeholder is the \tcode{auto} \grammarterm{type-specifier}
 \added{or a \grammarterm{constrained-type-specifier}}, the deduced type
@@ -600,14 +601,14 @@ argument deduction.
 \removed{Obtain \tcode{P} from
 \tcode{T} by replacing the occurrences of \tcode{auto} with either a new
 invented type template parameter \tcode{U} or,
-if the initialization is copy-list-initialization, with
+if the initialization is \grammarterm{copy-list-initialization}, with
 \tcode{std::initializer_list<U>}.}
 %
 \begin{addedblock}
-Otherwise, obtain a type \tcode{P} from \tcode{T} as follows:
+Obtain a type \tcode{P} from \tcode{T} as follows:
 \begin{itemize}
 % FIXME: This doesn't do the right thing at all.
-\item if the initialization is a copy-list-initialization
+\item if the initialization is a \grammarterm{copy-list-initialization}
 and a placeholder is a \grammarterm{decl-specifier} of the 
 \grammarterm{decl-specifier-seq} of the variable declaration, replace that 
 occurrence of the placeholder with \tcode{std::initializer_list<U>}
@@ -635,7 +636,7 @@ If the deduction fails, the declaration is ill-formed.
 \grammarterm{constraint-expression} as follows:}
 \begin{addedblock}
 \begin{itemize}
-\item if there is single \grammarterm{constrained-type-specifier},
+\item if there is a single \grammarterm{constrained-type-specifier},
 then \tcode{C} is the \grammarterm{constraint-expression} introduced
 by the invented template \grammarterm{constrained-parameter} (\ref{temp.param})
 corresponding to that \grammarterm{constrained-type-specifier};
@@ -743,7 +744,7 @@ auto cf(int) -> Pair<C, C> { return expr; }
 The return type of \tcode{cf} is deduced from the parameter \tcode{p2} in the
 call \tcode{f2(expr)} of the following invented function:
 \begin{codeblock}
-template<C T> void f2(Pair<T, T>);
+template<C T> void f2(Pair<T, T> p2);
 \end{codeblock}
 Both \grammarterm{constrained-type-specifier}{}s in the return type of 
 \tcode{cf} correspond to the same invented template parameter.
@@ -793,7 +794,6 @@ template<template<typename> class X> concept C3 = false;
 
 template<typename T, int N> class Array { };
 template<typename T, template<typename> class A> class Stack { };
-template<typename T> class Alloc { };
 
 void f1(C1);              // \tcode{C1} designates a placeholder type
 void f2(Array<auto, C2>); // \tcode{C2} designates a placeholder for an integer value
