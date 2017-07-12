@@ -473,8 +473,12 @@ that \tcode{g(x)} is non-throwing.
 \pnum
 A \grammarterm{nested-requirement} can be used
 to specify additional constraints in terms of local parameters.
-The \grammarterm{constraint-expression} of the predicate constraint 
-shall be satisfied.
+The \grammarterm{constraint-expression} of the \grammarterm{requires-clause} 
+shall be satisfied (\ref{temp.constr.decl}) by the substituted template
+arguments, if any.
+Substitution of template arguments into a \grammarterm{nested-requirement}
+does not result in substitution into the \grammarterm{constraint-expression}
+other than as specified in \ref{temp.constr.decl}.
 % 
 \enterexample
 \begin{codeblock}
@@ -487,13 +491,15 @@ template<typename T> concept D =
 \end{codeblock}
 \tcode{D<T>} is satisfied if \tcode{sizeof(decltype (+t)) == 1} (\ref{temp.constr.atomic}).
 \exitexample
-%
+
+\pnum
 \enternote
 Normalization of constraints appends a separate constraint for each
 \grammarterm{nested-requirement} within a \grammarterm{requires-expression}
 for the purpose of determining partial ordering (\ref{temp.constr.order}).
 \exitnote
-%
+
+\pnum
 A local parameter shall not appear as an evaluated operand 
 (\ref{expr}) of the \grammarterm{constraint-expression}.
 \enterexample
