@@ -205,12 +205,12 @@ concept and \tcode{E} is the function call \tcode{TT()}}.
 \enterexample
 \begin{codeblock}
 template<typename T> concept C1 = true;
-template<typename... Ts> concept C2() { return true; }
+template<typename... Ts> concept C2 = true;
 template<typename T, typename U> concept C3 = true;
 
 template<C1 T> struct s1;      // associates \tcode{C1<T>}
 template<C1... T> struct s2;   // associates \tcode{(C1<T> \&\& ...)}
-template<C2... T> struct s3;   // associates \tcode{C2<T...>()}
+template<C2... T> struct s3;   // associates \tcode{C2<T...>}
 template<C3<int> T> struct s4; // associates \tcode{C3<T, int>}
 \end{codeblock}
 \exitexample
@@ -352,7 +352,7 @@ even if its corresponding template parameter does.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T, int N = -1> concept P() { return true; }
+template<typename T, int N = -1> concept P = true;
 
 P{T, N} struct Array { };
 
@@ -394,13 +394,11 @@ a variable concept (\ref{dcl.spec.concept}), then \tcode{E} is the
 \enterexample
 \begin{codeblock}
 template<typename T, typename U> concept C1 = true;
-template<typename T, typename U> concept C2() { return true; }
 template<typename... Ts> concept C3 = true;
 
 C1{A, B} struct s1;    // associates \tcode{C1<A, B>}
-C2{A, B} struct s2;    // associates \tcode{C2<A, B>()}
-C3{...Ts} struct s3;   // associates \tcode{C3<Ts...>}
-C3{X, ...Y} struct s4; // associates \tcode{C3<X, Y...>}
+C2{...Ts} struct s3;   // associates \tcode{C2<Ts...>}
+C2{X, ...Y} struct s4; // associates \tcode{C2<X, Y...>}
 \end{codeblock}
 \exitexample
 
@@ -447,7 +445,7 @@ constrained template shall be satisfied. (\ref{temp.constr.decl}).
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 = false;
+template<typename T> concept C1 = false;
 
 template<C1 T> struct S1 { };
 template<C1 T> using Ptr = T*;
@@ -473,7 +471,7 @@ template<typename T>
     using Type = typename T::template MT<char>; // \#2
   };
 
-template<typename T> concept bool C2 = sizeof(T) == 1;
+template<typename T> concept C2 = sizeof(T) == 1;
 
 template<C2 T> struct S { };
 
