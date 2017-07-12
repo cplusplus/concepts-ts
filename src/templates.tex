@@ -339,7 +339,7 @@ parameters.
 % 
 \enterexample
 \begin{codeblock}
-template<typename A, typename B = bool> concept C() { return true; }
+template<typename A, typename B = bool> concept C = true;
 
 C{T} void f(T); // OK: \tcode{f(T)} is a function template with
                 // a single template type parameter \tcode{T}
@@ -536,8 +536,8 @@ examples given in the \Cpp Standard.
 \begin{addedblock}
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = requires (T t) { t.f(); };
-template<typename T> concept bool D = C<T> && requires (T t) { t.g(); };
+template<typename T> concept C = requires (T t) { t.f(); };
+template<typename T> concept D = C<T> && requires (T t) { t.g(); };
 
 template<template<C> class P>
   struct S { };
@@ -616,8 +616,8 @@ Add the following example at the end of paragraph 3.
 \begin{addedblock}
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = true;
-template<typename T> concept bool D = true;
+template<typename T> concept C = true;
+template<typename T> concept D = true;
 
 template<C T> struct S {
     void f();
@@ -693,8 +693,8 @@ Add the following example at the end of paragraph 1.
 \begin{addedblock}
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 = true;
-template<typename T> concept bool C2 = sizeof(T) <= 4;
+template<typename T> concept C1 = true;
+template<typename T> concept C2 = sizeof(T) <= 4;
 
 template<C1 T>
   struct S {
@@ -740,8 +740,8 @@ declaration that is not a definition, the constraints are used for declaration.
 \exitnote
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 = true;
-template<typename T> concept bool C2 = false;
+template<typename T> concept C1 = true;
+template<typename T> concept C2 = false;
 
 template<C1 T> void g0(T);
 template<C1 T> void g1(T);
@@ -773,7 +773,7 @@ Within a class template, a friend may define a non-template function
 whose constraints specify requirements on template arguments.
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool Eq = requires (T t) { t == t; };
+template<typename T> concept Eq = requires (T t) { t == t; };
 
 template<typename T>
   struct S {
@@ -807,8 +807,8 @@ A class template partial specialization may be constrained
 (Clause~\ref{temp}).
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = requires (T t) { t.f(); };
-template<int I> concept bool N = I > 0;
+template<typename T> concept C = requires (T t) { t.f(); };
+template<int I> concept N = I > 0;
 
 template<C T1, C T2, N I> class A<T1, T2, I>;  // \#6
 template<C T, N I>        class A<int, T*, I>; // \#7
@@ -889,8 +889,8 @@ Add the following example to the end of paragraph 1.
 \begin{addedblock}
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = requires (T t) { t.f(); };
-template<typename T> concept bool D = C<T> && requires (T t) { t.f(); };
+template<typename T> concept C = requires (T t) { t.f(); };
+template<typename T> concept D = C<T> && requires (T t) { t.f(); };
 
 
 template<typename T> class S { };
@@ -1207,8 +1207,8 @@ in \ref{temp.constr.order}.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = sizeof(T) > 2;
-template<typename T> concept bool D = C<T> && sizeof(T) > 4;
+template<typename T> concept C = sizeof(T) > 2;
+template<typename T> concept D = C<T> && sizeof(T) > 4;
 
 template<typename T> struct S {
   S() requires C<T> { } // \#1
@@ -1391,7 +1391,7 @@ Add the following example to paragraph 3.
 \begin{quote}
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = requires (T t) { -t; };
+template<typename T> concept C = requires (T t) { -t; };
 
 template<C T>        void f(T) { } // \#1
 template<typename T> void g(T) { } // \#2
