@@ -14,7 +14,7 @@ Add this section after \cxxref{temp.deduct.guide} in the \Cpp standard.
 \enternote
 This section defines the meaning of constraints on template arguments.
 % 
-The abstract syntax, satisfaction rules, and equivalence rules are defined
+The abstract syntax and satisfaction rules are defined
 in \ref{temp.constr.constr}. 
 % 
 Constraints are associated with declarations in \ref{temp.constr.decl}.
@@ -37,14 +37,8 @@ operands that specifies requirements on template arguments.
 There are several different kinds of constraints:
 \begin{itemize}
 \item conjunctions (\ref{temp.constr.op}),
-\item disjunctions (\ref{temp.constr.op}),
-\item predicate constraints (\ref{temp.constr.pred}),
-\item expression constraints (\ref{temp.constr.expr}),
-\item type constraints (\ref{temp.constr.type}),
-\item implicit conversion constraints (\ref{temp.constr.conv}),
-\item argument deduction constraints (\ref{temp.constr.deduct}),
-\item exception constraints (\ref{temp.constr.noexcept}), and
-\item parameterized constraints (\ref{temp.constr.param})
+\item disjunctions (\ref{temp.constr.op}), and
+\item atomic constraints (\ref{temp.constr.atomic})
 \end{itemize}
 
 \pnum
@@ -63,22 +57,8 @@ required when values are deduced for their corresponding placeholders
 (\ref{dcl.spec.auto}).
 \exitnote
 % 
-Determining if a constraint is satisfied entails the substitution 
-of template arguments into that constraint.
-% 
 The rules for determining the satisfaction of different kinds of 
 constraints are defined in the following subsections.
-
-\pnum 
-Determining when one declaration is more specialized than another requires
-knowing when two constraints are equivalent (\ref{temp.constr.order}).
-% 
-The rules for determining the equivalence of different kinds of
-constraints are defined in the following subsections.
-% 
-Two constraints that are not equivalent are \defn{functionally equivalent} if,
-for any given set of template arguments, either both constraints are satisfied
-or both constraints are unsatisfied.
 
 
 %%
@@ -112,12 +92,6 @@ The satisfaction of a conjunction's operands are evaluated left-to-right;
 if the left operand is not satisfied, template arguments are not 
 substituted into the right operand, and the constraint is not satisfied.
 % 
-If the left and right operands of a conjunction are predicate constraints
-(\ref{temp.constr.pred}), let \tcode{P} and \tcode{Q} be the expressions
-of those constraints resulting from substitution. If the expression
-\tcode{P \&\& Q} results in a call to a user-declared \tcode{operator\&\&},
-the program is ill-formed.
-% 
 \enterexample
 \begin{codeblock}
 template<typename T>
@@ -141,11 +115,6 @@ the immediate context (\ref{temp.deduct}.
 \exitexample
 
 \pnum
-A conjunction $C$ is equivalent to another conjunction $D$
-if and only if the left operands of $C$ and $D$ are equivalent
-and the right operands of $C$ and $D$ are equivalent.
-
-\pnum
 A \defn{disjunction} is a constraint taking two 
 operands. A disjunction of constraints is satisfied if and only 
 if either operand is satisfied or both operands are satisfied.
@@ -153,57 +122,35 @@ if either operand is satisfied or both operands are satisfied.
 The satisfaction of a disjunction's operands are evaluated left-to-right; 
 if the left operand is satisfied, template arguments are not 
 substituted into the right operand, and the constraint is satisfied.
-%
-If the left and right operands of a disjunction are predicate constraints
-(\ref{temp.constr.pred}), let \tcode{P} and \tcode{Q} be the expressions
-of those constraints resulting from substitution. If the expression
-\tcode{P || Q} results in a call to a user-declared \tcode{operator||},
-the program is ill-formed.
-
-\pnum
-A disjunction $C$ is equivalent to another disjunction $D$
-if and only if the left operands of $C$ and $D$ are equivalent
-and the right operands of $C$ and $D$ are equivalent.
-
-\pnum
-\enternote
-The prohibition against user-declared logical operators disallows
-\grammarterm{constraint-expression}{s} (\ref{temp.constr.decl}) whose 
-evaluation disagrees with the satisfaction of its derived constraint.
-That is, for any atomic predicate constraints $A$ and $B$, whose
-respective expressions are \tcode{PA} and \tcode{PB},
-the conjunction $A \land B$ is satisfied if and only if
-the \grammarterm{constraint-expression} \tcode{PA \&\& PB} evaluates to
-\tcode{true}. Likewise, the disjunction $A \lor B$ is satisfied 
-if and only if the \grammarterm{constraint-expression} \tcode{PA || PB}
-evaluates to \tcode{true}.
-\exitnote
 
 
 %%
-%% Predicate constraints
+%% Atomic constraints
 %%
-\rSec3[temp.constr.pred]{Predicate constraints}
+\rSec3[temp.constr.atomic]{Atomic constraints}
 
 \pnum
-A \defn{predicate constraint} is a constraint that evaluates a constant 
-expression \tcode{E} (\cxxref{expr.const}).
+An \defn{atomic constraint} is a constraint that evaluates a constant 
+expression \tcode{E} (\cxxref{expr.const}) that is neither a logical
+AND expression (\cxxref{expr.log.and}) nor a logical OR expression
+(\cxxref{expr.log.or}), under a mapping from the template parameters
+that appear within \tcode{E} to template arguments involving the
+template parameters of the constrained entity (the \defn{parameter
+mapping} of the atomic constraint).
+Two atomic constraints are equivalent if they are formed from the same
+\grammarterm{expression} and the parameter mappings are equivalent
+according to the rules for expressions described in \ref{temp.over.link},
+except that any \grammarterm{identifier}{s} referring to 
+local parameters of \grammarterm{requires-expression}{s}
+are equivalent if and only if the types of their corresponding
+declarations are equivalent (\cxxref{temp.type}).
 % 
 \enternote
-Predicate constraints allow the definition of template requirements
-in terms of constant expressions. This allows the specification of
-constraints on non-type template arguments and template template 
-arguments.
+Atomic constraints are formed by constraint normalization (\ref{temp.constr.decl}).
 \exitnote
 % 
-\enternote
-A predicate constraint is introduced by the \grammarterm{constraint-expression}
-of a 
-\grammarterm{requires-clause} (\ref{temp.constr.decl}), 
-or as the associated constraint of a
-\grammarterm{constrained-parameter} (\ref{temp.param}) or
-\grammarterm{template-introduction} (\ref{temp.intro}).
-\exitnote
+Determining if a constraint is satisfied entails the substitution 
+of the parameter mapping and template arguments into that constraint.
 % 
 After substitution, \tcode{E} shall have type \tcode{bool}.
 % 
@@ -228,307 +175,7 @@ template<typename T>
 f(0); // error: constraints cannot be satisfied because the
       // expression \tcode{S<int>\{\}} does not have type \tcode{bool}
 \end{codeblock}
-No conversions are applied to predicate constraints.
-\exitexample
-
-\pnum
-A predicate constraint $A$ is equivalent to another predicate
-$B$ if and only if the expressions of $A$ and $B$ are equivalent using the 
-rules described in \ref{temp.over.link} to compare
-expressions.
-
-
-%%
-%% Expression constraints
-%%
-\rSec3[temp.constr.expr]{Expression constraints}
-
-\pnum
-An \defn{expression constraint} is a constraint
-that specifies a requirement on the formation of an
-\grammarterm{expression} \tcode{E}
-through substitution of template arguments.
-% 
-An expression constraint is satisfied if substitution 
-yielding \tcode{E} did not fail. 
-% 
-Within an expression constraint, \tcode{E} is an unevaluated 
-operand (Clause \ref{expr}).
-% 
-\enternote
-An expression constraint is introduced by the \grammarterm{expression} in 
-either a \grammarterm{simple-requirement} (\ref{expr.prim.req.simple})
-or \grammarterm{compound-requirement} (\ref{expr.prim.req.compound})
-of a \grammarterm{requires-expression}.
-\exitnote
-% 
-\enterexample
-\begin{codeblock}
-template<typename T> concept bool C = requires (T t) { ++t; };
-\end{codeblock}
-The concept \tcode{C} introduces an expression constraint for 
-the expression \tcode{++t}.
-% 
-The type argument \tcode{int} satisfies this constraint because the 
-expression \tcode{++t} is valid after substituting \tcode{int} for 
-\tcode{T}.
-\exitexample
-
-\pnum
-An expression constraint $A$ is equivalent to another expression
-constraint $B$ if and only if the \grammarterm{expression}{}s of
-$A$ and $B$ are equivalent using the rules described 
-in \ref{temp.over.link} to compare expressions.
-
-
-%%
-%% Type constraints
-%%
-\rSec3[temp.constr.type]{Type constraints}
-
-\pnum
-A \defn{type constraint} is a constraint that specifies a requirement 
-on the formation of a type \tcode{T} through the substitution of template 
-arguments.
-% 
-A type constraint is satisfied if and only if \tcode{T} is not ill-formed,
-meaning that the substitution yielding \tcode{T} did not fail.
-% 
-\enternote
-A type constraint is introduced by the \grammarterm{typename-specifier} in a
-\grammarterm{type-requirement} of a \grammarterm{requires-expression}
-(\ref{expr.prim.req.type}).
-\exitnote
-% 
-\enterexample
-\begin{codeblock}
-template<typename T> concept bool C = requires () { typename T::type; };
-\end{codeblock}
-The concept \tcode{C} introduces a type constraint for the 
-type name \tcode{T::type}.
-% 
-The type \tcode{int} does not satisfy this constraint
-because substitution of that type into the constraint results in a
-substitution failure; \tcode{typename int::type} is ill-formed.
-\exitexample
-
-\pnum
-A type constraint that names a class template specialization 
-does not require that type to be complete 
-(\cxxref{basic.types}).
-
-\pnum
-A type constraint $A$ is equivalent to another type constraint $B$ if and 
-only if the types in $A$ and $B$ are equivalent according to the rules in
-\cxxref{temp.type}.
-
-
-%%
-%% Implicit conversion constraints
-%%
-\rSec3[temp.constr.conv]{Implicit conversion constraints}
-
-\pnum
-An \defn{implicit conversion constraint} is a constraint that 
-specifies a requirement on the implicit conversion of an \grammarterm{expression}
-\tcode{E} to a type \tcode{T}. 
-% 
-The constraint is satisfied if and only if \tcode{E} is implicitly convertible 
-to \tcode{T} (Clause~\cxxref{conv}).
-% 
-\enternote
-A conversion constraint is introduced by a \grammarterm{trailing-return-type} 
-in a \grammarterm{compound-requirement} when the 
-\grammarterm{trailing-return-type} contains no placeholders 
-(\ref{expr.prim.req.compound}).
-\exitnote
-% 
-\enterexample
-\begin{codeblock}
-template<typename T> concept bool C = 
-  requires (T a, T b) {
-    { a == b } -> bool;
-  };
-\end{codeblock}
-The \grammarterm{compound-requirement} in the
-\grammarterm{requires-expression} of \tcode{C} introduces two atomic 
-constraints: an expression constraint for \tcode{a == b}, and the implicit 
-conversion constraint that the expression \tcode{a == b} is implicitly 
-convertible to \tcode{bool}.
-\exitexample
-
-
-\pnum
-An implicit conversion constraint $A$ is equivalent to another implicit 
-conversion constraint $B$ if and only if the \grammarterm{expression}{}s 
-of $A$ and $B$ are equivalent using the rules in
-\ref{temp.over.link} to compare expressions, and the types
-of $A$ and $B$ are equivalent according to the rules in
-\cxxref{temp.type}.
-
-
-%%
-%% Argument deduction constraints
-%%
-\rSec3[temp.constr.deduct]{Argument deduction constraints}
-
-\pnum
-An \defn{argument deduction constraint} is a constraint that specifies 
-a requirement that the type of an \grammarterm{expression} \tcode{E}
-can be deduced from a type \tcode{T}, when \tcode{T} includes one or more 
-placeholders (\ref{dcl.spec.auto}).
-% 
-\enternote
-An argument deduction constraint is introduced by a
-\grammarterm{compound-requirement} (\ref{expr.prim.req.compound}) having a
-\grammarterm{trailing-return-type} that contains one or more placeholders.
-% 
-In such a constraint, \tcode{E} is the \grammarterm{expression} of the 
-\grammarterm{compound-requirement}, and \tcode{T} is the type specified
-by the \grammarterm{trailing-return-type}.
-\exitnote
-
-\pnum
-To determine if an argument deduction constraint is satisfied, invent
-an abbreviated function template \tcode{f} with one parameter whose
-type is \tcode{T} (\ref{dcl.fct}). 
-% 
-The constraint is satisfied if the resolution of the function call 
-\tcode{f(E)} succeeds (\ref{over.match}).
-% 
-\enternote
-Overload resolution succeeds when values are deduced for all invented
-template parameters in \tcode{f} that correspond to the placeholders in 
-\tcode{T}, and the constraints associated by any 
-\grammarterm{constrained-type-specifier}{s} are satisfied.
-\exitnote
-% 
-\enterexample
-\begin{codeblock}
-template<typename T, typename U> struct Pair;
-
-template<typename T>
-  concept bool C1() { return true; }
-
-template<typename T>
-  concept bool C2() { return requires(T t) { {*t} -> Pair<C1&, auto>; }; }
-
-template<C2 T> void g(T);
-
-g((int*)nullptr); // error: constraints not satisfied.
-\end{codeblock}
-The invented abbreviated function template \tcode{f} for the 
-\grammarterm{compound-requirement} in \tcode{C2} is:
-\begin{codeblock}
-void f(Pair<C1&, auto>);
-\end{codeblock}
-In the call \tcode{g((int*)nullptr)}, the constraints are not satisfied 
-because no values can be deduced for the placeholders \tcode{C1} and 
-\tcode{auto} from the expression \tcode{*t} when \tcode{t} has type
-``pointer-to-\tcode{int}''.
-\exitexample
-
-\pnum
-An argument deduction constraint $A$ is equivalent to another 
-argument deduction constraint $B$ if and only if the 
-\grammarterm{expression}{s} of $A$ and $B$ are equivalent
-using the rules in \ref{temp.over.link} to compare expressions, and the types
-of $A$ and $B$ are equivalent (\cxxref{temp.type}).
-
-
-%%
-%% Exception constraints
-%%
-\rSec3[temp.constr.noexcept]{Exception constraints}
-
-\pnum
-An \defn{exception constraint} is a constraint
-for an expression \tcode{E} that is satisfied if and only
-if the expression \tcode{noexcept(E)} is \tcode{true}
-(\cxxref{expr.unary.noexcept}).
-% 
-\enternote
-Exception constraints are introduced by a \grammarterm{compound-requirement} 
-that includes the \tcode{noexcept} specifier (\ref{expr.prim.req.compound}).
-\exitnote
-
-\pnum
-An exception constraint $A$ is equivalent to another exception constraint
-$B$ if and only if the expressions of $A$ and $B$ are equivalent using the 
-rules described in \ref{temp.over.link} to compare expressions.
-
-
-%%
-%% Parameterized constraints
-%%
-\rSec3[temp.constr.param]{Parameterized constraints}
-
-\pnum
-A \defn{parameterized constraint} is a constraint that declares a sequence
-of parameters (\ref{dcl.fct}), called \defn{constraint variables}, and has a 
-single operand. 
-% 
-\enternote
-Parameterized constraints are introduced by 
-\grammarterm{requires-expression}{s} (\ref{expr.prim.req}). The constraint
-variables of a parameterized constraint correspond to the 
-parameters declared in the \grammarterm{requirement-parameter-list} of a
-\grammarterm{requires-expression}, and the operand of the constraint
-is the conjunction of constraints.
-\exitnote
-% 
-\enternote 
-Parameterized constraints have no corresponding C++ syntax. For the purpose of 
-exposition, a parameterized constraint is written as, e.g.,
-$\lambda(\mathtt{T~x}, \mathtt{U~y})~P(\mathtt{x}, \mathtt{y})$, where 
-\tcode{x} and \tcode{y} are constraint variables, and $P(\mathtt{x}, \mathtt{y})$ 
-is that constraint's operand written in terms of \tcode{x} and \tcode{y}.
-\exitnote
-% 
-\enterexample
-\begin{codeblock}
-template<typename T>
-  concept bool Eq = requires (T a, T b) {
-    a == b;
-    a != b;
-  };
-\end{codeblock}
-The concept \tcode{Eq} defines the parameterized constraint
-$\lambda(\mathtt{T~a}, \mathtt{T~b})~P(\mathtt{a}, \mathtt{b})$ where 
-$P(\mathtt{a}, \mathtt{b})$ is the conjunction
-of two expression constraints: \tcode{a == b} and \tcode{a != b} must be
-valid expressions (\ref{temp.constr.expr}).
-\exitexample
-
-\pnum
-A parameterized constraint is satisfied if and only if substitution into 
-the types of its constraint variables does not result in an invalid type, and its
-operand is satisfied. Template arguments are substituted into the declared
-constraint variables in the order in which they are declared. If substitution 
-into a constraint variable fails, no more substitutions are performed, and
-the constraint is not satisfied.
-
-\pnum
-Two parameterized constraints $A$ and $B$ are equivalent 
-if and only if their operands are equivalent.
-% 
-Two expressions involving constraint variables are equivalent if they
-are equivalent according to the rules for expressions described in 
-\ref{temp.over.link}, except that any \grammarterm{identifier}{}s referring to 
-constraint variables are equivalent if and only if the types of their 
-corresponding declarations are equivalent (\cxxref{temp.type}).
-
-\pnum
-A constraint variable shall not appear as an evaluated operand 
-(\ref{expr}) of a predicate constraint (\ref{temp.constr.pred}).
-\enterexample
-\begin{codeblock}
-template<typename T> 
-  concept bool C = requires (T a) {
-    requires sizeof(a) == 4; // OK
-    requires a == 0;         // error: evaluation of a constraint variable
-  }
-\end{codeblock}
+No conversions are applied to atomic constraints.
 \exitexample
 
 
@@ -605,9 +252,7 @@ AND expression (\cxxref{expr.log.and}) whose operands are in the following order
 \end{itemize}
 % 
 The formation of the associated constraints for a template declaration
-establishes the order in which the normalized constraints (defined below) 
-will be compared for equivalence (to determine when one template redeclares 
-another), and the order in which constraints are instantiated when checking 
+establishes the order in which constraints are instantiated when checking 
 for satisfaction (\ref{temp.constr.constr}).
 % 
 The \grammarterm{constraint-expression}{}s introduced by 
@@ -619,40 +264,37 @@ constraints of a template declaration.
 These constraints are checked during the instantiation of the declaration.
 \exitnote
 % 
-A program containing two declarations whose associated constraints are 
-functionally equivalent but not equivalent (\ref{temp.over.link}) is 
-ill-formed, no diagnostic required.
-% 
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C = true;
 
 void f1(C);
-template<C T> void f1(T);
-C{T} void f1(T);
-template<typename T> requires C<T> void f1(T);
-template<typename T> void f1(T) requires C<T>;
+template<C T> void f2(T);
+C{T} void f3(T);
+template<typename T> requires C<T> void f4(T);
+template<typename T> void f5(T) requires C<T>;
 \end{codeblock}
-All declarations of \tcode{f1} declare the same function.
+The associated constraints of
+\tcode{f1}, \tcode{f2}, \tcode{f3}, \tcode{f4}, and \tcode{f5}
+are \tcode{C<T>}.
 % 
 \begin{codeblock}
 template<typename T> concept bool C1 = true;
 template<typename T> concept bool C2 = sizeof(T) > 0;
 
-template<C1 T> void f2(T) requires C2<T>;                // \#1
-template<typename T> requires C1<T> && C2<T> void f2(T); // \#2, redeclaration of \#1
+template<C1 T> void f6(T) requires C2<T>;
+template<typename T> requires C1<T> && C2<T> void f7(T);
 \end{codeblock}
-The associated constraints of \#1 are \tcode{C1<T> \&\& C2<T>}, and
-those of \#2 are also \tcode{C1<T> \&\& C2<T>}.
+The associated constraints of \tcode{f6} and \tcode{f7} are both
+\tcode{C1<T> \&\& C2<T>}.
 % 
 \begin{codeblock}
-template<C1 T> requires C2<T> void f3();
-template<C2 T> requires C1<T> void f3(); // error: constraints are functionally
-                                         // equivalent but not equivalent
+template<C1 T> requires C2<T> void f8();
+template<C2 T> requires C1<T> void f9();
 \end{codeblock}
 % 
-The associated constraints of the first declaration are
-\tcode{C1<T> \&\& C2<T>}, and those of the second are
+The associated constraints of \tcode{f8} are
+\tcode{C1<T> \&\& C2<T>}, and those \tcode{f9} are
 \tcode{C2<T> \&\& C1<T>}.
 \exitexample
 
@@ -663,83 +305,43 @@ requires that they are first \defn{normalized}.
 % 
 Normalization transforms a \grammarterm{expression} into a sequence of 
 conjunctions and disjunctions (\ref{temp.constr.op})
-of \defn{atomic constraints}.
-% 
-The atomic constraints are those that have no constraints as operands:
-predicate constraints (\ref{temp.constr.pred}),
-expression constraints (\ref{temp.constr.expr}), 
-type constraints (\ref{temp.constr.type}),
-implicit conversion constraints (\ref{temp.constr.conv}), 
-argument deduction constraints (\ref{temp.constr.deduct}), and 
-exception constraints (\ref{temp.constr.noexcept}).
+of atomic constraints (\ref{temp.constr.atomic}).
 % 
 The \defn{normal form} of an \grammarterm{expression} \tcode{X} is 
-defined as follows.
-% 
-First, create a new expression \tcode{E} by replacing all 
-subexpressions in \tcode{X} that refer to concepts with their
-corresponding definitions. In particular,
+defined as follows:
 % 
 \begin{itemize}
-\item replace all function calls of the form 
-\tcode{C<A$1$, A$2$, ..., A$N$>()}, where \tcode{C} refers to the function
-concept \tcode{D} (\ref{dcl.spec.concept}) selected by the rules for concept 
-resolution (\ref{temp.constr.resolve}), with the result of substituting
-\tcode{A$1$, A$2$, ..., A$N$} into the expression returned by \tcode{D}, and
+\item The normal form of an expression \tcode{(E)} is the normal form
+of \tcode{E}.
 
-\item replace all \grammarterm{id-expression}{s} of the form 
-\tcode{C<A$1$, A$2$, ..., A$N$>}, where \tcode{C} is the variable
-concept \tcode{D} (\ref{dcl.spec.concept}) selected by the rules for concept 
-resolution (\ref{temp.constr.resolve}), with the result of substituting 
-\tcode{A$1$, A$2$, ..., A$N$} into the initializer of \tcode{D}.
-\end{itemize}
-% 
-If any such substitution fails, the program is ill-formed.
-% 
-Second, transform the expression \tcode{E} into a constraint as follows:
-\begin{itemize}
-\item the normal form of an expression \tcode{(E)} is the normal form
-of \tcode{E};
-
-\item the normal form of an expression \tcode{E1 || E2} is the  
+\item The normal form of an expression \tcode{E1 || E2} is the  
 disjunction (\ref{temp.constr.op}) of the normal forms of \tcode{E1} 
-and \tcode{E2};
+and \tcode{E2}.
 
-\item the normal form of an expression \tcode{E1 \&\& E2} is the  
+\item The normal form of an expression \tcode{E1 \&\& E2} is the  
 conjunction of the normal forms of \tcode{E1} 
-and \tcode{E2};
+and \tcode{E2}.
 
-\item the normal form of a \grammarterm{requires-expression}, 
-(\ref{expr.prim.req}) having the form
- 
-\begin{ncsimplebnf}
-\terminal{requires} \terminal{(} parameter-declaration-clause \terminal{)} requirement-body
-\end{ncsimplebnf}
-% 
-where the \grammarterm{parameter-declaration-clause} is not equivalent to
-an empty parameter list, is the parameterized constraint (\ref{temp.constr.param})
-with the same parameters as those in the \grammarterm{parameter-declaration-clause} 
-and whose operand is the normal form of conjunction of constraints introduced
-by \grammarterm{requirement}{s} in the \grammarterm{requirement-body};
+\item The normal form of an \grammarterm{id-expression} of the form
+\tcode{C<A$1$, A$2$, ..., A$N$>}, where \tcode{C} names the concept
+\tcode{D} (\ref{dcl.spec.concept}),
+is the normal form of the initializer of \tcode{D},
+after substituting \tcode{A$1$, A$2$, ..., A$N$} for
+\tcode{D}{'s} respective template parameters in the
+parameter mappings in each atomic constraint.
+If any such substitution fails, the program is ill-formed.
 
-\item the normal form of a \grammarterm{requires-expression} having one of the 
-following forms
+\item The normal form of a \grammarterm{requires-expression} \tcode{E} is
+the conjunction of:
+\begin{itemize}
+\item the atomic constraint whose expression is \tcode{E}, and
+\item for each \grammarterm{nested-requirement} in \tcode{E}, the
+normal form of the \grammarterm{constraint-expression}.
+\end{itemize}
 
-\begin{ncsimplebnf}
-\terminal{requires} \terminal{( void )} requirement-body\br
-\terminal{requires} \terminal{()} requirement-body\br
-\terminal{requires} requirement-body\br
-\end{ncsimplebnf}
-% 
-is the conjunction of constraints introduced by \grammarterm{requirement}{s} 
-in the \grammarterm{requirement-body};
-
-\item within a \grammarterm{requires-expression}, any predicate constraint
-$P$ introduced by a \grammarterm{nested-requirement} (\ref{expr.prim.req.nested}) 
-is replaced by the normal form of the expression of $P$;
-
-\item otherwise, the normal form of \tcode{E} is the predicate constraint
-whose expression is \tcode{E}.
+\item otherwise, the normal form of \tcode{E} is the atomic constraint
+whose expression is \tcode{E} and whose parameter mapping is the
+identity mapping.
 \end{itemize}
 % 
 A declaration's \defn{normalized constraints} are those
@@ -752,18 +354,19 @@ template<typename T> concept bool C2 = C1<T>() && 1 == 2;
 template<typename T> concept bool C3 = requires { typename T::type; };
 template<typename T> concept bool C4 = requires (T x) { ++x; }
 
-template<C2 T> void f1(T);                            // \#1
-template<C3 T> void f2(T);                            // \#2
-template<C4 T> void f3(T);                            // \#3
+template<C2 U> void f1(U);                            // \#1
+template<C3 U> void f2(U);                            // \#2
+template<C4 U> void f3(U);                            // \#3
 template<typename T> requires (bool)3 + 4 void f4(T); // error: invalid constraints (\#4)
 \end{codeblock}
 The normalized associated constraints of \#1 are 
-\tcode{sizeof(T) == 1 $\land$ 1 == 2},
+$\tcode{sizeof(T) == 1}$ (with mapping \tcode{T}$\mapsto$\tcode{U}) $\land \tcode{1 == 2}$,
 % 
-those of \#2 are the type constraint for \tcode{T::type},
+those of \#2 are
+$\tcode{requires \{ typename T::type; \}}$ (with mapping \tcode{T}$\mapsto$\tcode{U}),
 %
-those of \#3 are the parameterized constraint
-$\lambda(\mathtt{T~x})$ the expression constraint \tcode{++x}.
+those of \#3 are
+$\tcode{requires (T x) \{ ++x; \}}$ (with mapping \tcode{T}$\mapsto$\tcode{U}).
 % 
 In \#4, the \grammarterm{constraint-expression} \tcode{(bool)3 + 4}
 is not a valid predicate constraint because it does not have type \tcode{bool}.
@@ -784,11 +387,12 @@ by those arguments.
 \pnum
 A constraint $P$ is said to \defn{subsume} another constraint $Q$ 
 if, informally, it can be determined that $P$ implies $Q$, up to 
-the equivalence of types and expressions in $P$ and $Q$.
+the equivalence of atomic constraints in $P$ and $Q$
+(\ref{temp.constr.atomic}).
 % 
 \enterexample
-Subsumption does not determine if the predicate constraint 
-\tcode{N >= 0} (\ref{temp.constr.pred}) subsumes \tcode{N > 0} for some 
+Subsumption does not determine if the atomic constraint 
+\tcode{N >= 0} (\ref{temp.constr.atomic}) subsumes \tcode{N > 0} for some 
 integral template argument \tcode{N}.
 \exitexample
 
@@ -820,11 +424,6 @@ Its disjunctive clauses are ($A \land B$) and
 \exitexample
 }.
 % 
-Parameterized constraints do not appear in conjunctive or disjunctive normal
-forms. For the purpose of this transformation, the constraint
-$\lambda(\mathtt{T~x})~P(\mathtt{x})$ is equivalent to the constraint 
-$P(\mathtt{x})$.
-% 
 Then, $P$ subsumes $Q$ if and only if
 \begin{itemize}
 \item for every disjunctive clause $P_i$ in the disjunctive normal 
@@ -837,11 +436,11 @@ any atomic constraint $Q_j$, where
 
 \item an atomic constraint $A$ subsumes another atomic constraint
 $B$ if and only if the $A$ and $B$ are equivalent using the
-rules described in \ref{temp.constr.constr} to compare constraints.
+rules described in \ref{temp.constr.atomic}.
 \end{itemize}
 % 
 \enterexample
-Let $A$ and $B$ be atomic constraints (\ref{temp.constr.pred}).
+Let $A$ and $B$ be atomic constraints (\ref{temp.constr.atomic}).
 % 
 The constraint $A \land B$ subsumes $A$, but $A$ does not subsume $A \land B$.
 % 
@@ -868,6 +467,9 @@ This partial ordering is used to determine
      (\ref{temp.func.order}).
 \end{itemize}
 
+%%% FIXME: We need to substitute the deductions from partial ordering
+%%% into the constraints before comparing them, otherwise they will be
+%%% referring to unrelated template parameters.
 \pnum
 When two declarations \tcode{D1} and \tcode{D2} are
 partially ordered by their normalized constraints (\ref{temp.constr.decl}), 
@@ -879,7 +481,7 @@ partially ordered by their normalized constraints (\ref{temp.constr.decl}),
 
 \item \tcode{D2} is unconstrained.
 \end{itemize}
-% 
+
 \pnum
 A declaration \tcode{D1} is \defn{more constrained}
 than another declaration \tcode{D2} when \tcode{D1} is at least as

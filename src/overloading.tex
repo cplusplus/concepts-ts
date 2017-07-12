@@ -5,14 +5,17 @@
 \setcounter{chapter}{15}
 \rSec0[over]{Overloading}
 
-Modify paragraph 1 to allow overloading based on constraints.
+Modify paragraph 1 to allow overloading based on constraints, by
+removing the repeated wording.
 
 \begin{quote}
 \pnum
 When two or more different declarations are specified for a single name 
-in the same scope, that name is said to be overloaded. By extension, two 
+in the same scope, that name is said to be overloaded
+\removed{. By extension, two 
 declarations in the same scope that declare the same name but with
-different types \added{or different associated constraints (\ref{temp.constr.decl})}
+different types}
+\added{, and the declarations}
 are called \defn{overloaded declarations}. Only function and function 
 template declarations can be overloaded; variable and type declarations 
 cannot be overloaded.
@@ -32,7 +35,7 @@ document.
 \pnum
 \enternote
 As specified in \ref{dcl.fct}, function declarations that have equivalent 
-parameter declarations \added{and associated constraints, if any 
+parameter declarations \added{and \grammarterm{requires-clause}{s}, if any 
 (\ref{temp.constr.decl})}, declare the same function and therefore cannot be 
 overloaded: ...
 \exitnote
@@ -51,7 +54,7 @@ example in the original text is omitted in this document.
 \begin{quote}
 Two function declarations of the same name refer to the same function if 
 they are in the same scope and have equivalent parameter declarations 
-(\ref{over.load}) \added{and equivalent associated constraints, if any 
+(\ref{over.load}) \added{and equivalent \grammarterm{requires-clause}{s}, if any 
 (\ref{temp.constr.decl})}.
 \end{quote}
 

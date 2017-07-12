@@ -67,29 +67,32 @@ appearing as multiple definitions of the same function.
 \indexdefn{signature}%
 \definition{signature}{defns.signature}
 <function> name, parameter type list~(\ref{dcl.fct}), \removed{and} enclosing 
-namespace (if any)\added{, and any associated constraints~(\ref{temp.constr.decl})}\\
+namespace (if any)%
+\added{, and \grammarterm{requires-clause} (\ref{temp.constr.decl}) (if any)}\\
 \enternote Signatures are used as a basis for
 name mangling and linking.\exitnote
 
 \indexdefn{signature}%
 \definition{signature}{defns.signature.templ}
 <function template> name, parameter type list~(\ref{dcl.fct}), enclosing namespace (if any),
-return type, \removed{and} template parameter list\added{, and any associated
-constraints~(\ref{temp.constr.decl})}
+return type,
+\removed{and template parameter list}
+\added{\grammarterm{template-head}, and \grammarterm{requires-clause}~(\ref{temp.constr.decl}) (if any)}
 
 \indexdefn{signature}%
 \definition{signature}{defns.signature.member}
 <class member function> name, parameter type list~(\ref{dcl.fct}), class of which the
 function is a member, \cv-qualifiers (if any),
-\removed{and} \grammarterm{ref-qualifier} (if any)\added{, and any associated
-constraints~(\ref{temp.constr.decl})}
+\removed{and} \grammarterm{ref-qualifier} (if any)%
+\added{, and \grammarterm{requires-clause}~(\ref{temp.constr.decl}) (if any)}\\
 
 \indexdefn{signature}%
 \definition{signature}{defns.signature.member.templ}
 <class member function template> name, parameter type list~(\ref{dcl.fct}), class of which the
 function is a member, \cv-qualifiers (if any),
-\grammarterm{ref-qualifier} (if any), return type, \removed{and} template 
-parameter list\added{, and any associated constraints~(\ref{temp.constr.decl})}
+\grammarterm{ref-qualifier} (if any), return type,
+\removed{and template parameter list}
+\added{\grammarterm{template-head}, and \grammarterm{requires-clause}~(\ref{temp.constr.decl}) (if any)}
 \end{quote}
 
 %%

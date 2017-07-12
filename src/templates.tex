@@ -15,9 +15,13 @@ family of types.
 
 \begin{bnf}
 \nontermdef{template-declaration}\br
-  \terminal{template} \terminal{<} template-parameter-list \terminal{>}
-    \added{requires-clause\opt} declaration\br
-  \added{template-introduction declaration}
+  \added{template-head} \removed{\terminal{template} \terminal{<} template-parameter-list \terminal{>}} declaration\br
+
+\begin{addedblock}
+\nontermdef{template-head}\br
+  \terminal{template} \terminal{<} template-parameter-list \terminal{>} requires-clause\opt\br
+  template-introduction
+\end{addedblock}
 
 \begin{addedblock}
 \nontermdef{requires-clause}\br
@@ -405,8 +409,7 @@ declared by the \grammarterm{template-introduction}.
 \begin{codeblock}
 template<typename T> concept bool C1 = true;
 
-C1{T} void f(T, auto);
-template<C1 T, typename U> void f(T, U); // OK: redeclaration of \tcode{f(T, auto)}
+C1{T} void f(T, auto); // same semantics as \tcode{template<C1 T, typename U> void f(T, U);}
 \end{codeblock}
 % 
 \exitexample
@@ -587,9 +590,10 @@ definitions of members of constrained templates.
 When a member function, a member class, a member enumeration, a static 
 data member or a member template of a class template is defined outside 
 of the class template definition, the member definition is defined as a 
-template definition in which the \grammarterm{template-parameter}{s}
-\added{and associated constraints} (\ref{temp.constr.decl}) are those of 
-the class template.
+template definition in which the
+\removed{\grammarterm{template-parameter}{s} are those}
+\added{\grammarterm{template-head} is equivalent to that}
+of the class template \added{(\ref{temp.over.link})}.
 % 
 The names of the template parameters used in the definition of the 
 member may be different from the template parameter names used in the 
@@ -613,13 +617,17 @@ template<typename T> concept bool D = true;
 template<C T> struct S {
     void f();
     void g();
+    void h();
     template<D U> struct Inner;
   }
 
-template<typename T> requires C<T> void S<T>::f() { } // OK: parameters and constraints match
+template<C A> void S<A>::f() { }        // OK: \grammarterm{template-head}{s} match
 template<typename T> void S<T>::g() { } // error: no matching declaration for \tcode{S<T>}
 
-template<C T> D{U} struct S<T>::Inner { }; // OK
+template<typename T> requires C<T>      // error (no diagnostic required): \grammarterm{template-head}{s} are
+void S<T>::h() { }                      // functionally equivalent but not equivalent
+
+template<C X> template<D Y> struct S<X>::Inner { }; // OK
 \end{codeblock}
 \exitexample
 \end{addedblock}
@@ -670,11 +678,13 @@ A member template can be defined within or outside its class definition
 or class template definition. 
 % 
 A member template of a class template that is defined outside of its 
-class template definition shall be specified with the 
-\grammarterm{template-parameter}{s} \added{and associated constraints}
-(\ref{temp.constr.decl}) of the class template followed by the 
-\grammarterm{template-parameter}{s}
-\added{and associated constraints} of the member template.
+class template definition shall be specified with
+\removed{the \grammarterm{template-parameter}{s}}
+\added{a \grammarterm{template-head} equivalent to that}
+of the class template followed by
+\removed{the \grammarterm{template-parameter}{s}}
+\added{a \grammarterm{template-head} equivalent to that}
+of the member template.
 \end{quote}
 
 
@@ -693,8 +703,8 @@ template<C1 T>
     template<C2 U> void g(U);
   };
 
-template<C1 T> template<typename U> 
-  void S<T>::f(U) requires C2<U> { } // OK
+template<C1 T> template<C2 U> 
+  void S<T>::f(U) { } // OK
 template<C1 T> template<typename U> 
   void S<T>::g(U) { }                // error: no matching function in \tcode{S<T>}
 \end{codeblock}
@@ -740,7 +750,7 @@ template<C2 T> void g2(T);
 
 template<typename T>
   struct S {
-    friend void f1() requires true;      // OK
+    friend void f1() requires C1<void>;  // OK
     friend void f2() requires C1<T>;     // OK
     friend void g0<T>(T) requires C1<T>; // error: constrained friend specialization
     friend void g1<T>(T);                // OK
@@ -748,8 +758,8 @@ template<typename T>
                                          // no diagnostic required
   };
 
-void f1() requires true;    // friend of all S<T>
-void f2() requires C1<int>; // friend of only S<int>
+void f1() requires C1<void>;   // friend of all \tcode{S<T>}
+void f2() requires C1<int>;    // friend of only \tcode{S<int>}
 \end{codeblock}
 The friend declaration of \tcode{g2} is ill-formed, no
 diagnostic required, because no valid specialization of \tcode{S}
@@ -908,40 +918,31 @@ The partial specialization \#2 is more specialized than
 %%
 \rSec3[temp.over.link]{Function template overloading}
 
-Modify paragraph 6 to account for constraints on function templates.
+Modify paragraph 6 to expand the scope of rules governing the existing term
+"equivalent".
 
 \begin{quote}
 \setcounter{Paras}{5}
 \pnum
-\removed{Two function templates are \defn{equivalent} if they are 
-declared in the same scope, have the same name, have identical template 
-parameter lists, and have return types and parameter lists that are 
+Two function templates are \defn{equivalent} if they are 
+declared in the same scope, have the same name,
+\removed{have identical template parameter lists}
+and have \added{\grammarterm{template-head}{s},}
+return types\added{,} and parameter lists that are 
 equivalent using the rules described above to compare expressions 
-involving template parameters.}
-% 
-\begin{addedblock}
-Two function templates are \defn{equivalent} if they:
-\begin{itemize}
-\item are declared in the same scope,
-
-\item have the same name,
-
-\item have identical template parameter lists, and
-
-\item have return types, parameter lists, and associated constraints that 
-are equivalent using the rules described above to compare expressions 
 involving template parameters.
-\end{itemize}
-\end{addedblock}
 % 
 Two function templates are \defn{functionally equivalent} if they 
 are equivalent except that one or more expressions that involve 
-template parameters in the return types\added{,} \removed{and} parameter 
-lists\added{, and associated constraints (\ref{temp.constr.decl})}
+template parameters in the \added{\grammarterm{template-head}{s},}
+return types\added{,} and parameter lists
 are functionally equivalent using the rules described above to compare 
 expressions involving template parameters.
 % 
-If a program contains declarations of function templates that are 
+If \removed{a program contains declarations of function templates that}
+\added{the validity or meaning of the program depends on whether two
+constructs are equivalent, and they}
+are 
 functionally equivalent but not equivalent, the program is ill-formed; 
 no diagnostic is required.
 \end{quote}
@@ -1113,10 +1114,7 @@ instantiated only to determine if they are satisfied
 % 
 \enternote
 The satisfaction of constraints is determined during name lookup or overload
-resolution (\ref{over.match}). Preserving the spelling
-of the substituted constraint also allows constrained member function
-to be partially ordered by those constraints according to the rules
-in \ref{temp.constr.order}.
+resolution (\ref{over.match}).
 \exitnote
 % 
 \enterexample
