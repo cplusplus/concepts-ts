@@ -383,7 +383,7 @@ template<typename T> concept C4 =
 The \grammarterm{compound-requirement} requires that \tcode{*x} be deduced
 as an argument for the invented function:
 \begin{codeblock}
-template<C3<U> T> void f(U const&);
+template<C3<U> X> void f(X const&);
 \end{codeblock}
 In this case, deduction always fails since \tcode{C3} is \tcode{false}.
 
