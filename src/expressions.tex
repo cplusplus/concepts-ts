@@ -288,7 +288,7 @@ template<typename T, typename T::type = 0> struct S;
 template<typename T> using Ref = T&;
 
 template<typename T> concept C =
-  requires () {
+  requires {
     typename T::inner; // required nested member name
     typename S<T>;     // required class template specialization
     typename Ref<T>;   // required alias template substitution, fails if \tcode{T} is void
