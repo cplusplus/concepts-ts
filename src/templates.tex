@@ -294,7 +294,7 @@ parameter using the following rules:
 \begin{itemize}
 \item Let \tcode{P} be the template parameter declaration in \tcode{C} 
       corresponding to \tcode{I}. If \tcode{P} does not declare a template 
-      parameter pack (\ref{temp.variadic}), \tcode{I} shall not include 
+      parameter pack (\cxxref{temp.variadic}), \tcode{I} shall not include 
       an ellipsis.
 
 \item If \tcode{P} declares a template parameter pack, adjust \tcode{P} 
@@ -310,9 +310,9 @@ parameter using the following rules:
 % 
 \enterexample
 \begin{codeblock}
-template<typename T, int N, typename... Xs> concept bool C1 = true;
-template<template<typename> class X> concept bool C2 = true;
-template<typename... Ts> concept bool C3 = true;
+template<typename T, int N, typename... Xs> concept C1 = true;
+template<template<typename> class X> concept C2 = true;
+template<typename... Ts> concept C3 = true;
 
 C1{A, B, ...C} // OK: \tcode{A} is declared as \tcode{typename A},
   struct S1;   // \tcode{B} is declared as \tcode{int B}, and
@@ -339,7 +339,7 @@ parameters.
 % 
 \enterexample
 \begin{codeblock}
-template<typename A, typename B = bool> concept bool C() { return true; }
+template<typename A, typename B = bool> concept C() { return true; }
 
 C{T} void f(T); // OK: \tcode{f(T)} is a function template with
                 // a single template type parameter \tcode{T}
@@ -352,7 +352,7 @@ even if its corresponding template parameter does.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T, int N = -1> concept bool P() { return true; }
+template<typename T, int N = -1> concept P() { return true; }
 
 P{T, N} struct Array { };
 
@@ -375,23 +375,27 @@ corresponding to the \grammarterm{introduced-parameter}{s}
 % 
 For each \grammarterm{introduced-parameter} \tcode{P}, form a corresponding 
 template argument \tcode{A} as follows. If \tcode{P} includes an ellipsis,
-then \tcode{A} is the pack expansion \tcode{P...} (\ref{temp.variadic}). 
+then \tcode{A} is the pack expansion \tcode{P...} (\cxxref{temp.variadic}). 
 Otherwise, \tcode{A} is the \grammarterm{id-expression} \tcode{P}.
 
-\item Then, form an expression \tcode{E} as follows. If \tcode{C} designates
+% FIXME: This doesn't guarantee that the E has the same namespace specifier
+% as the qualified form.
+\item \xremoved{Then, form an expression \tcode{E} as follows. If \tcode{C} designates
 a variable concept (\ref{dcl.spec.concept}), then \tcode{E} is the
 \grammarterm{id-expression}
 \tcode{C<A1, ..., A$N$>}. Otherwise, \tcode{C} designates a function concept and
-\tcode{E} is the function call \tcode{C<A1, ..., A$N$>()}.
+\tcode{E} is the function call \tcode{C<A1, ..., A$N$>()}.}
+\xadded{Then, form a \grammarterm{id-expression} \tcode{E} as
+\tcode{C<A1, ..., A$N$>}.}
 \end{itemize}
 % 
 \tcode{E} is the introduced \grammarterm{constraint-expression}.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T, typename U> concept bool C1 = true;
-template<typename T, typename U> concept bool C2() { return true; }
-template<typename... Ts> concept bool C3 = true;
+template<typename T, typename U> concept C1 = true;
+template<typename T, typename U> concept C2() { return true; }
+template<typename... Ts> concept C3 = true;
 
 C1{A, B} struct s1;    // associates \tcode{C1<A, B>}
 C2{A, B} struct s2;    // associates \tcode{C2<A, B>()}
@@ -410,7 +414,7 @@ declared by the \grammarterm{template-introduction}.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 = true;
+template<typename T> concept C1 = true;
 
 C1{T} void f(T, auto);
 template<C1 T, typename U> void f(T, U); // OK: redeclaration of \tcode{f(T, auto)}
