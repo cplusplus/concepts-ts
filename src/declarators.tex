@@ -79,7 +79,7 @@ Add the following paragraph at the end of this section.
 \begin{quote}
 \begin{addedblock}
 \pnum
-The optional \grammarterm{requires-clause} (\ref{temp}) in a 
+The optional \grammarterm{requires-clause} (Clause~\ref{temp}) in a 
 \grammarterm{declarator} shall be present only when the declarator declares a 
 function (\ref{dcl.fct}), and that \grammarterm{requires-clause} shall not 
 precede a \grammarterm{trailing-return-type}. 
@@ -150,9 +150,10 @@ is omitted.
 A single name can be used for several different functions in a single 
 scope; this is function overloading (Clause~\ref{over}). 
 %
-All declarations for a function shall agree exactly in \removed{both} 
-the return type\added{,} \removed{and} the parameter-type-list\added{, and 
-associated constraints, if any (\ref{temp.constr.decl})}.
+\removed{All declarations for a function shall agree exactly in both
+the return type and the parameter-type-list.}
+\added{All declarations for a function shall have equivalent return types, 
+parameter-type-lists, and \grammarterm{requires-clauses} (\ref{temp.over.link}).}
 \end{quote}
 
 Modify paragraph 8 to exclude constraints from the type of a function.
@@ -165,7 +166,7 @@ in the \Cpp Standard.
 The return type, the parameter-type-list, the \grammarterm{ref-qualifier}, 
 the \grammarterm{cv-qualifier-seq}, and the exception specification, but not 
 the default arguments (\cxxref{dcl.fct.default})
-\added{or associated constraints (\ref{temp.constr.decl})}
+\added{or \grammarterm{requires-clauses} (Clause~\ref{temp})}
 are part of the function type.
 \end{quote}
 
