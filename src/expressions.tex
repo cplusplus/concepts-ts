@@ -344,7 +344,7 @@ if substitution of template arguments fails.
 \exitnote
 \enterexample
 \begin{codeblock}
-template<typename T> struct S { };
+template<typename T, typename T::type = 0> struct S;
 template<typename T> using Ref = T&;
 
 template<typename T> concept C =
