@@ -86,6 +86,13 @@ The syntax for \grammarterm{template-parameter}{s} is:
   qualified-concept-name ... identifier\opt\br
   qualified-concept-name identifier\opt default-template-argument\opt
 
+\nontermdef{qualified-concept-name}\br
+	nested-name-specifier\opt concept-name\br
+	nested-name-specifier\opt partial-concept-id
+
+\nontermdef{partial-concept-id}\br
+		concept-name \terminal{<} template-argument-list\opt \terminal{>}
+
 \nontermdef{default-template-argument}\br
   \terminal{=} type-id\br
   \terminal{=} id-expression\br
@@ -103,9 +110,12 @@ There is an ambiguity in the syntax of a template parameter between the
 declaration of a \grammarterm{constrained-parameter} and a
 \grammarterm{parameter-declaration}.
 % 
-If the \grammarterm{type-specifier-seq} of a \grammarterm{parameter-declaration} 
-is a \grammarterm{constrained-type-specifier} (\ref{dcl.spec.auto.constr}), 
-then the \grammarterm{template-parameter} is a \grammarterm{constrained-parameter}.
+If the \grammarterm{type-specifier-seq} of a 
+\grammarterm{parameter-declaration}
+is a template specialization that refers to a 
+concept (\ref{temp.concept}), 
+then the \grammarterm{template-parameter} is a 
+\grammarterm{constrained-parameter}.
 \end{addedblock}
 \end{quote}
 
@@ -172,7 +182,7 @@ The expression is derived from the \grammarterm{qualified-concept-name}
 \begin{itemize}
 \item First, form a template argument \tcode{A} from \tcode{P}. If \tcode{P} 
 declares a template parameter pack (\cxxref{temp.variadic})
-and \tcode{C} is a variadic concept (\ref{dcl.spec.concept}), then \tcode{A} is 
+and \tcode{C} is a variadic concept (\ref{temp.concept}), then \tcode{A} is 
 the pack expansion \tcode{P...}. Otherwise, \tcode{A} is the 
 \grammarterm{id-expression} \tcode{P}.
 
