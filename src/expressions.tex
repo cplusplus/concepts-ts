@@ -37,12 +37,38 @@ In this section, add the
 \setcounter{subsection}{3}
 \rSec2[expr.prim.id]{Names}
 
-Add a new paragraph to the end of this section.
+Add \xremoved{a new paragraph} \xadded{new paragraphs} to the end of this 
+section.
+
+\setcounter{Paras}{2}
+
+\begin{quote}
+\begin{xaddedblock}
+\pnum
+A \grammarterm{id-expression} that denotes the specialization of a concept
+(\ref{temp.concept}) result in a prvalue of type \tcode{bool}. 
+%
+The expression is \tcode{true} if concept's concepts normalized 
+(\ref{temp.constr.decl}) \emph{constraint-expression} is satisfied according
+to the rules in \ref{temp.constr.constr} and \tcode{false} otherwise.
+\enterexample
+template<typename T> concept C = true;
+static_assert(C<int>); // OK
+\exitexample
+\pnum
+\enternote
+A concept's constraints are also evaluated during the resolution of template
+nemes (\ref{temp.names}) and overload resolution (\ref{over}), and they are
+compared during the the partial ordering of constraints 
+(\ref{temp.constr.order}).
+\exitnote
+
+\end{xaddedblock}
+\end{quote}
 
 % TODO: The wording "non-overloaded function declaration" is not right.
 \begin{quote}
 \begin{addedblock}
-\setcounter{Paras}{2}
 \pnum
 A program that refers explicitly or implicitly to a function with associated 
 constraints that are not satisfied (\ref{temp.constr.decl}), other than to 
