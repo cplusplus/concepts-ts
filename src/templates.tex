@@ -119,8 +119,8 @@ kind (type, non-type, template) and type match that of the prototype parameter
 of the concept designated by the \grammarterm{qualified-concept-name} 
 (\ref{dcl.spec.auto.constr}) in the \grammarterm{constrained-parameter}.
 % 
-The designated concept is selected by the rules for concept resolution 
-described in \ref{temp.constr.resolve}.
+\xremoved{The designated concept is selected by the rules for concept resolution 
+described in \ref{temp.constr.resolve}.}
 % 
 Let \tcode{X} be the prototype parameter of the designated concept.
 % 
@@ -279,7 +279,7 @@ sequence of \grammarterm{introduced-parameter}{s} in its
 \grammarterm{introduction-list}.
 
 \pnum
-The concept designated by the \grammarterm{qualified-concept-name} is selected 
+\xremoved{The concept designated by the \grammarterm{qualified-concept-name} is selected 
 by the concept resolution rules described in \ref{temp.constr.resolve}. Let
 \tcode{C} be the designated concept.
 % 
@@ -287,7 +287,13 @@ The template parameters declared by a \grammarterm{template-introduction}
 are derived from its \grammarterm{introduced-parameter}{s} and the
 template parameter declarations of \tcode{C} to which those
 \grammarterm{introduced-parameter}{s} are matched as wildcards according to 
-the rules in \ref{temp.constr.resolve}.
+the rules in \ref{temp.constr.resolve}.}
+% 
+\xadded{
+The template parameters declared by a \grammarterm{template-introduction}
+are derived from the \grammarterm{qualified-concept-name} and its template
+parameters using the following rules.
+}
 % 
 For each \grammarterm{introduced-parameter} \tcode{I}, declare a template
 parameter using the following rules:
@@ -521,7 +527,7 @@ equivalent (\ref{temp.over.link}), and for template
 \grammarterm{template-parameter}{}s matches, recursively. 
 % 
 When \tcode{P}'s \grammarterm{template-parameter-list} 
-contains a template parameter pack (\ref{temp.variadic}), the template 
+contains a template parameter pack (\cxxref{temp.variadic}), the template 
 parameter pack will match zero or more template parameters or template 
 parameter packs in the \grammarterm{template-parameter-list} of
 \tcode{A} with the same kind (type, non-type, template) and type as the template 

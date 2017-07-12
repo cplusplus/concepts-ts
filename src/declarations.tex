@@ -814,7 +814,7 @@ overloaded function concepts. There is at most one member of this set when a
 %
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool = true;               // \#1
+template<typename T> concept bool C = true;             // \#1
 template<typename T, typename U> concept bool C = true; // \#2
 template<typename T> concept bool D = true;             // \#3
 
@@ -828,7 +828,7 @@ void g(D); // OK: the concept-name \tcode{D} refers only to \#3
 \pnum
 A \grammarterm{partial-concept-id} is a \grammarterm{concept-name} followed 
 by a sequence of \grammarterm{template-argument}{}s.
-%
+
 \enterexample
 \begin{codeblock}
 template<typename T, int N = 0> concept bool Seq = true;
@@ -839,9 +839,9 @@ void f2(Seq<>);  // OK
 \exitexample
 
 \pnum
-The concept designated by a \grammarterm{constrained-type-specifier}
+\xremoved{The concept designated by a \grammarterm{constrained-type-specifier}
 is the one selected according to the rules for concept resolution in
-\ref{temp.constr.resolve}.
+\ref{temp.constr.resolve}.}
 
 \pnum
 \enternote

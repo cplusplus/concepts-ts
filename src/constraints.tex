@@ -912,12 +912,19 @@ g(0);       // selects \#4
 \end{codeblock}
 \exitexample
 
+\end{addedblock}
+\end{quote}
+
 
 %%
 %% Resolution of qualified references to concepts
 %%
 \rSec2[temp.constr.resolve]{Resolution of qualified references to concepts}
 
+Remove this section. Concept definitions can no longer overload.
+
+\begin{quote}
+\begin{xremovedblock}
 \pnum
 \defn{Concept resolution} is the process of selecting a concept 
 from a set of concept definitions referred to by a
@@ -1002,7 +1009,7 @@ rules in \ref{temp.arg};
 
 \item a wildcard matches a template parameter of any kind;
 
-\item a template parameter pack (\ref{temp.variadic}), matches zero or more 
+\item a template parameter pack (\cxxref{temp.variadic}), matches zero or more 
 concept arguments, provided that each of those arguments matches the pattern 
 of the template parameter pack using the rules above for matching matching 
 concept arguments and template parameters.
@@ -1035,5 +1042,5 @@ C3{T} void q2();     // OK: selects \tcode{C3}
 \end{codeblock}
 \exitexample
 
-\end{addedblock}
+\end{xremovedblock}
 \end{quote}
