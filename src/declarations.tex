@@ -318,8 +318,8 @@ deduction constraint (\ref{temp.constr.deduct}).
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C() {
-  return requires (T i) { 
+template<typename T> concept C =
+  requires (T i) { 
     {*i} -> const auto&; // OK: introduces an argument deduction constraint
   };
 }
@@ -814,9 +814,9 @@ overloaded function concepts. There is at most one member of this set when a
 %
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C() { return true; }             // \#1
-template<typename T, typename U> concept bool C() { return true; } // \#2
-template<typename T> concept bool D = true;                        // \#3
+template<typename T> concept bool = true;               // \#1
+template<typename T, typename U> concept bool C = true; // \#2
+template<typename T> concept bool D = true;             // \#3
 
 void f(C); // OK: the set of concepts referred to by C includes both \#1 and \#2;
            // concept resolution (\ref{temp.constr.resolve}) selects \#1.
