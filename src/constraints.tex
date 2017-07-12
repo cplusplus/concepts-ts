@@ -197,17 +197,10 @@ an expression:
     logical-or-expression
 \end{bnf}
 
-% A \grammarterm{constraint-expression} introduces a predicate constraint
-% (\ref{temp.constr.pred}) for its \grammarterm{logical-or-expression}
-% (\cxxref{expr.log.or}).
-
 \pnum
 Constraints can also be associated with a declaration through the use of 
-\grammarterm{template-introduction}{}s, 
 \grammarterm{constrained-parameter}{}s in a 
-\grammarterm{template-parameter-list}, and
-\grammarterm{constrained-type-specifier}{}s in the parameter-type-list
-of a function template.
+\grammarterm{template-parameter-list}.
 % 
 Each of these forms introduces additional \grammarterm{constraint-expression}{s} 
 that are used to constrain the declaration.
@@ -228,9 +221,6 @@ that is the associated constraint.
 AND expression (\cxxref{expr.log.and}) whose operands are in the following order:
 % 
 \begin{itemize}
-\item the \grammarterm{constraint-expression} introduced by
-      a \grammarterm{template-introduction} (\ref{temp.intro}), and
-
 \item the \grammarterm{constraint-expression} introduced by each
       \grammarterm{constrained-parameter} (\ref{temp.param}) in the 
       declaration's \grammarterm{template-parameter-list}, in
@@ -239,11 +229,6 @@ AND expression (\cxxref{expr.log.and}) whose operands are in the following order
 \item the \grammarterm{constraint-expression} introduced
       by a \grammarterm{requires-clause} following a 
       \grammarterm{template-parameter-list} (Clause~\ref{temp}), and
-
-\item the \grammarterm{constraint-expression} introduced by each 
-      \grammarterm{constrained-type-specifier} (\ref{dcl.spec.auto.constr}) 
-      in the type of a \grammarterm{parameter-declaration} in a 
-      function declaration (\ref{dcl.fct}), in order of appearance, and
 
 \item the \grammarterm{constraint-expression} of a trailing 
       \grammarterm{requires-clause} (Clause~\ref{dcl.decl}) 
@@ -255,11 +240,6 @@ The formation of the associated constraints for a template declaration
 establishes the order in which constraints are instantiated when checking 
 for satisfaction (\ref{temp.constr.constr}).
 % 
-The \grammarterm{constraint-expression}{}s introduced by 
-\grammarterm{constrained-type-specifier}{}s in a variable type or in the 
-declared return type of a function are not included in the associated 
-constraints of a template declaration. 
-% 
 \enternote
 These constraints are checked during the instantiation of the declaration.
 \exitnote
@@ -268,14 +248,11 @@ These constraints are checked during the instantiation of the declaration.
 \begin{codeblock}
 template<typename T> concept bool C = true;
 
-void f1(C);
-template<C T> void f2(T);
-C{T} void f3(T);
-template<typename T> requires C<T> void f4(T);
-template<typename T> void f5(T) requires C<T>;
+template<C T> void f1(T);
+template<typename T> requires C<T> void f2(T);
+template<typename T> void f3(T) requires C<T>;
 \end{codeblock}
-The associated constraints of
-\tcode{f1}, \tcode{f2}, \tcode{f3}, \tcode{f4}, and \tcode{f5}
+The associated constraints of \tcode{f1}, \tcode{f2}, and \tcode{f3}
 are \tcode{C<T>}.
 % 
 \begin{codeblock}

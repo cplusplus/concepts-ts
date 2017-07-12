@@ -5,8 +5,7 @@
 \setcounter{chapter}{16}
 \rSec0[temp]{Templates}
 
-Modify the \grammarterm{template-declaration} grammar in paragraph 1 to 
-allow a template declaration introduced by a concept.
+Modify the \grammarterm{template-declaration} grammar in paragraph 1.
 
 \begin{quote}
 \pnum
@@ -20,7 +19,6 @@ family of types.
 \begin{addedblock}
 \nontermdef{template-head}\br
   \terminal{template} \terminal{<} template-parameter-list \terminal{>} requires-clause\opt\br
-  template-introduction
 \end{addedblock}
 
 \begin{addedblock}
@@ -39,8 +37,8 @@ Add the following paragraphs after paragraph 6.
 \pnum
 A \grammarterm{template-declaration} is written in terms of its template 
 parameters. These parameters are declared explicitly in a 
-\grammarterm{template-parameter-list} (\ref{temp.param}), or they are
-introduced by a \grammarterm{template-introduction} (\ref{temp.intro}).
+\grammarterm{template-parameter-list} (\ref{temp.param}), or implicitly as
+part of an abbreviated function template (\ref{dcl.fct}).
 %
 The optional \grammarterm{requires-clause} following a
 \grammarterm{template-parameter-list} allows the specification of
@@ -232,170 +230,6 @@ template<C2 N = 0> struct S2;   // OK
 template<C3 X = S0> struct S3;  // OK
 template<C1 T = 0> struct S4;   // error: default argument is not a type
 \end{codeblock}
-\exitexample
-\end{addedblock}
-\end{quote}
-
-
-%%
-%% Introduction of template parameters
-%%
-\rSec1[temp.intro]{Introduction of template parameters}
-
-Add this section after \ref{temp.param}.
-
-\begin{quote}
-\begin{addedblock}
-\pnum
-A \grammarterm{template-introduction} provides a concise way of declaring
-templates.
-
-\begin{bnf}
-\nontermdef{template-introduction}\br
-   qualified-concept-name \terminal{\{} introduction-list \terminal{\}}
-
-\nontermdef{introduction-list}\br
-  introduced-parameter\br
-  introduction-list \terminal{,} introduced-parameter
-
-\nontermdef{introduced-parameter}\br
-    \terminal{...}\opt identifier
-\end{bnf}
-
-A \grammarterm{template-introduction} declares a template whose
-sequence of \grammarterm{template-parameter}{s} are derived from a
-\grammarterm{qualified-concept-name} (\ref{dcl.spec.auto.constr}) and the 
-sequence of \grammarterm{introduced-parameter}{s} in its 
-\grammarterm{introduction-list}.
-
-\pnum
-The template parameters declared by a \grammarterm{template-introduction}
-are derived from the \grammarterm{qualified-concept-name} and its template
-parameters using the following rules.
-% 
-For each \grammarterm{introduced-parameter} \tcode{I}, declare a template
-parameter using the following rules:
-\begin{itemize}
-\item Let \tcode{P} be the template parameter declaration in \tcode{C} 
-      corresponding to \tcode{I}. If \tcode{P} does not declare a template 
-      parameter pack (\cxxref{temp.variadic}), \tcode{I} shall not include 
-      an ellipsis.
-
-\item If \tcode{P} declares a template parameter pack, adjust \tcode{P} 
-      to be the pattern of that pack.
-
-\item Declare a template parameter according to the rules for declaring a
-      \grammarterm{constrained-parameter} in \ref{temp.param}, using
-      \tcode{P} as the prototype parameter and with no ellipsis.
-
-\item If \tcode{I} includes an ellipsis, then the declared template parameter 
-      is a template parameter pack.
-\end{itemize}
-% 
-\enterexample
-\begin{codeblock}
-template<typename T, int N, typename... Xs> concept C1 = true;
-template<template<typename> class X> concept C2 = true;
-template<typename... Ts> concept C3 = true;
-
-C1{A, B, ...C} // OK: \tcode{A} is declared as \tcode{typename A},
-  struct S1;   // \tcode{B} is declared as \tcode{int B}, and
-               // \tcode{C} is declared as \tcode{typename ... C}
-
-C2{T} void f();    // OK: \tcode{T} is declared as \tcode{template<typename> class T}
-C2{...Ts} void g(); // error: the template parameter corresponding to \tcode{Ts}
-                    // is not a template parameter pack
-
-C3{T} struct S2;     // OK: \tcode{T} is declared as \tcode{typename T}
-C3{...Ts} struct S2; // OK: \tcode{Ts} is declared as \tcode{typename ... Ts}
-\end{codeblock}
-\exitexample
-
-
-\pnum
-A concept referred to by a \grammarterm{qualified-concept-name} may have 
-template parameters with default template arguments. An 
-\grammarterm{introduction-list} may omit \grammarterm{identifier}{}s for a 
-corresponding template parameter if it has a default argument.
-% 
-Only the \grammarterm{introduced-parameter}{}s are declared as template 
-parameters.
-% 
-\enterexample
-\begin{codeblock}
-template<typename A, typename B = bool> concept C = true;
-
-C{T} void f(T); // OK: \tcode{f(T)} is a function template with
-                // a single template type parameter \tcode{T}
-\end{codeblock}
-\exitexample
-
-\pnum
-An introduced template parameter does not have a default template argument 
-even if its corresponding template parameter does.
-% 
-\enterexample
-\begin{codeblock}
-template<typename T, int N = -1> concept P = true;
-
-P{T, N} struct Array { };
-
-Array<double, 0> s1; // OK
-Array<double> s2;    // error: \tcode{Array} takes two template arguments
-\end{codeblock}
-\exitexample
-
-\pnum
-A \grammarterm{template-introduction} introduces a 
-\grammarterm{constraint-expression} (\ref{temp.constr.decl}). This 
-expression is derived from the \grammarterm{qualified-concept-name} 
-\tcode{C} in the \grammarterm{template-introduction} and the sequence of
-\grammarterm{introduced-parameter}{s}.
-
-\begin{itemize}
-\item First, form a sequence of template arguments \tcode{A1, A2, ..., A$N$} 
-corresponding to the \grammarterm{introduced-parameter}{s}
-\tcode{P1, P2, ..., P$N$}.
-% 
-For each \grammarterm{introduced-parameter} \tcode{P}, form a corresponding 
-template argument \tcode{A} as follows. If \tcode{P} includes an ellipsis,
-then \tcode{A} is the pack expansion \tcode{P...} (\cxxref{temp.variadic}). 
-Otherwise, \tcode{A} is the \grammarterm{id-expression} \tcode{P}.
-
-% FIXME: This doesn't guarantee that the E has the same namespace specifier
-% as the qualified form.
-\item Then, form an \grammarterm{id-expression} \tcode{E} as 
-\tcode{C<A1, ..., A$N$>}.
-\end{itemize}
-% 
-\tcode{E} is the introduced \grammarterm{constraint-expression}.
-% 
-\enterexample
-\begin{codeblock}
-template<typename T, typename U> concept C1 = true;
-template<typename... Ts> concept C3 = true;
-
-C1{A, B} struct s1;    // associates \tcode{C1<A, B>}
-C2{...Ts} struct s3;   // associates \tcode{C2<Ts...>}
-C2{X, ...Y} struct s4; // associates \tcode{C2<X, Y...>}
-\end{codeblock}
-\exitexample
-
-\pnum
-A template declared by a \grammarterm{template-introduction} can also be 
-an abbreviated function template (\ref{dcl.fct}). 
-% 
-The invented template parameters introduced by the placeholders in the 
-abbreviated function template are appended to the list of template parameters 
-declared by the \grammarterm{template-introduction}.
-% 
-\enterexample
-\begin{codeblock}
-template<typename T> concept C1 = true;
-
-C1{T} void f(T, auto); // same semantics as \tcode{template<C1 T, typename U> void f(T, U);}
-\end{codeblock}
-% 
 \exitexample
 \end{addedblock}
 \end{quote}
