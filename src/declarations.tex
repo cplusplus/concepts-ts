@@ -46,132 +46,36 @@ A \grammarterm{concept-definition} shall only appear as a part of
 \setcounter{subsection}{6}
 \rSec2[dcl.type]{Type specifiers}
 
-
-%%
-%% Simple type specifiers
-%%
-\setcounter{subsubsection}{1}
-\rSec3[dcl.type.simple]{Simple type specifiers}
-        
-Add \grammarterm{constrained-type-specifier}
-to the grammar for \grammarterm{simple-type-specifier}{}s.
-
-\begin{quote}
-\begin{bnf}
-\nontermdef{simple-type-specifier}\br
-    nested-name-specifier\opt type-name\br
-    nested-name-specifier \terminal{template} simple-template-id\br
-    nested-name-specifier\opt template-name\br
-    \terminal{char}\br
-    \terminal{char16_t}\br
-    \terminal{char32_t}\br
-    \terminal{wchar_t}\br
-    \terminal{bool}\br
-    \terminal{short}\br
-    \terminal{int}\br
-    \terminal{long}\br
-    \terminal{signed}\br
-    \terminal{unsigned}\br
-    \terminal{float}\br
-    \terminal{double}\br
-    \terminal{void}\br
-    \terminal{auto}\br
-    decltype-specifier\br
-    \added{constrained-type-specifier}
-\end{bnf}
-\end{quote}
-
-Modify paragraph 2 to begin:
-
-\begin{quote}
-\setcounter{Paras}{1}
-\pnum
-\removed{The \grammarterm{simple-type-specifier} \tcode{auto} specifier is a 
-placeholder for a type to be deduced (\ref{dcl.spec.auto}).}
-\added{The \grammarterm{simple-type-specifier} \tcode{auto} and
-\grammarterm{constrained-type-specifier}{s}
-are placeholders for values (type, non-type, template) to be deduced 
-(\ref{dcl.spec.auto}).}
-\end{quote}
-
-Add \grammarterm{constrained-type-specifier}{s} to the table of
-\grammarterm{simple-type-specifier}{s} in Table~\ref{tab:simple.type.specifiers}.
-
-\renewcommand{\thetable}{\arabic{table}}
-\setcounter{table}{10}
-\begin{simpletypetable}
-{\grammarterm{simple-type-specifier}{s} and the types they specify}
-{tab:simple.type.specifiers}
-{ll}
-\topline
-Specifier(s)                                       &   Type                                                                 \\ \capsep
-\grammarterm{type-name}                            &   the type named                                                       \\
-\grammarterm{simple-template-id}                   &   the type as defined in~\ref{temp.names}                              \\
-\multicolumn{2}{|c|}{\vdots}                                                                                                \\
-\tcode{auto}                                       & placeholder for a type to be deduced                                   \\
-\tcode{decltype(auto)}                             & placeholder for a type to be deduced                                   \\
-\tcode{decltype(}\grammarterm{expression}\tcode{)} & the type as defined below                                              \\
-\added{\grammarterm{constrained-type-specifier}}   & \added{placeholder for value (type, non-type, template) to be deduced} \\
-\end{simpletypetable}
-
-
 %%
 %% Auto specifier
 %%
 \setcounter{subsubsection}{3}
 \rSec3[dcl.spec.auto]{\tcode{auto} specifier}
 
-Extend this section to allow for \grammarterm{constrained-type-specifier}{s}
-as a new syntax for designating placeholders. The meaning of
-\grammarterm{constrained-type-specifier}{s} is described in
-\ref{dcl.spec.auto.constr}.
+Extend this section to allow \tcode{auto} to appear in multiple positions
+within a single \grammarterm{type-specifier}.
 
-Replace paragraph 1 with the text below.
+Modify paragraph 1.
 
 \begin{quote}
-\begin{removedblock}
 \pnum
 The \tcode{auto} and \tcode{decltype(auto)} \grammarterm{type-specifier}{s}
 are used to
 designate a placeholder type that will be replaced later by deduction
 from an initializer. The \tcode{auto}
 \grammarterm{type-specifier} is also used to
-introduce a function type having a \grammarterm{trailing-return-type} or to
-signify that a lambda is a generic lambda (\cxxref{expr.prim.lambda.closure}).
+introduce a function type having a \grammarterm{trailing-return-type} 
+\removed{or}\added{,} to
+signify that a lambda is a generic lambda (\cxxref{expr.prim.lambda.closure})
+\added{, or to signify that a function is an abbreviated function template
+(\ref{dcl.fct})}.
 The \tcode{auto} \grammarterm{type-specifier} is also used to introduce a
 structured binding declaration (\cxxref{dcl.struct.bind}).
-\end{removedblock}
-\begin{addedblock}
-The \grammarterm{type-specifier}{}s \tcode{auto} and \tcode{decltype(auto)}
-and \grammarterm{constrained-type-specifier}{}s designate a placeholder
-(type, non-type, or template) that will be replaced later, either through 
-deduction or an explicit specification.
-%
-The \tcode{auto} and \tcode{decltype(auto)} \grammarterm{type-specifier}{}s 
-designate placeholder types; a \grammarterm{constrained-type-specifier} can 
-also designate placeholders for values and templates. 
-% 
-\enternote
-The deduction of placeholders is done through the invention of template
-parameters as described in \ref{dcl.spec.auto.deduct} and \ref{dcl.fct}.
-\exitnote
-%
-Placeholders are also used to signify that a lambda is a generic lambda 
-(\ref{expr.prim.lambda}), that a function declaration is an
-abbreviated function template (\ref{dcl.fct}), or that a 
-\grammarterm{trailing-return-type} in a \grammarterm{compound-requirement}
-(\ref{expr.prim.req.compound}) introduces an argument deduction constraint 
-(\ref{temp.constr.deduct}).
-%
-The \tcode{auto} \grammarterm{type-specifier} is also introduce a function type 
-having a \grammarterm{trailing-return-type} or to introduce a structured binding
-declaration \cxxref{dcl.struct.bind}.
-%
-\enternote
+\added{\enternote
 A \grammarterm{nested-name-specifier} can also include placeholders (\ref{expr.prim}).
 Replacements for those placeholders are determined according to the rules
 in this section.
-\exitnote
+\exitnote}
 % 
 \end{addedblock}
 \end{quote}
