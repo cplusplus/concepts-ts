@@ -211,30 +211,6 @@ rules in (\ref{dcl.fct}).
 }
 \end{quote}
 
-Add the following example after those in paragraph 3 in the 
-\Cpp Standard.
-
-\begin{quote}
-\begin{addedblock}
-\enterexample
-\begin{codeblock}
-template<typename T> concept bool C = true;
-
-auto gl = [](C& a, C* b) { a = *b; }; // OK: denotes a generic lambda
-
-struct Fun {
-  auto operator()(C& a, C* b) const { a = *b; }
-} fun;
-\end{codeblock}
-\tcode{C} is a 
-\grammarterm{constrained-type-specifier},
-signifying that the lambda is generic. The generic lambda \tcode{gl}
-and the function object \tcode{fun} have equivalent behavior when 
-called with the same arguments.
-\exitexample
-\end{addedblock}
-\end{quote}
-
 %%
 %% Requires expressions
 %%
