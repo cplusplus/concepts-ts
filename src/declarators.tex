@@ -194,9 +194,8 @@ Add the following paragraphs after paragraph 17.
 An \defn{abbreviated function template} is a function declaration whose
 parameter-type-list includes one or more placeholders (\ref{dcl.spec.auto}).
 % 
-An abbreviated function template is equivalent to a function template
-(\ref{temp.fct}) whose \grammarterm{template-parameter-list}
-includes one invented \grammarterm{template-parameter} for each occurrence 
+An abbreviated function template declaration declares a function template
+(\ref{temp.fct}) with one invented template parameter for each occurrence 
 of a placeholder in the \grammarterm{parameter-declaration-clause},
 in order of appearance, according to the rules below.
 % 
@@ -292,8 +291,10 @@ If the replacement of a placeholder with the name of a template parameter
 results in an invalid parameter declaration, the program is ill-formed.
 % 
 \enternote
-Equivalent function template declarations declare the same function template
-(\ref{temp.over.link}).
+A function template declaration is not considered to be
+equivalent (\ref{temp.over.link}) to its adjusted form,
+so a function template cannot be declared with both forms
+in the same program.
 \exitnote
 % 
 \enterexample
@@ -307,10 +308,13 @@ void f2(Vec<auto*>...);
 void f3(Tuple<auto...>);
 void f4(auto (auto::*)(auto));
 
-template<typename T, typename U> void f1(const T&, U);             // redeclaration of \tcode{f1}
-template<typename... T> void f2(Vec<T*>...);                       // redeclaration of \tcode{f2}
-template<typename... Ts> void f3(Tuple<Ts...>);                    // redeclaration of \tcode{f3}
-template<typename T, typename U, typename V> void f4(T (U::*)(V)); // redeclaration of \tcode{f4}
+// Corresponding adjusted declarations.
+// Each of these is ill-formed, with no diagnostic required, because it
+// is functionally equivalent to the prior declaration but not equivalent.
+template<typename T, typename U> void f1(const T&, U);
+template<typename... T> void f2(Vec<T*>...);
+template<typename... Ts> void f3(Tuple<Ts...>);
+template<typename T, typename U, typename V> void f4(T (U::*)(V));
 
 template<typename T> concept bool C1 = true;
 template<typename T> concept bool C2 = true;
@@ -326,14 +330,15 @@ void g6(Tuple<C4...>);
 void g7(C4 p);
 void g8(Tuple<C4>);
 
-template<C1 T, C2 U> void g1(const T*, U&); // redeclaration of \tcode{g1}
-template<C1 T> void g2(Vec<T>&);            // redeclaration of \tcode{g2}
-template<C1... Ts> void g3(Ts&...);         // redeclaration of \tcode{g3}
-template<C3<int> T> void g4(Vec<T>);        // redeclaration of \tcode{g4}
-template<C4... Ts> void g5(Ts...);          // redeclaration of \tcode{g5}
-template<C4... Ts> void g6(Tuple<Ts...>);   // redeclaration of \tcode{g6}
-template<C4 T> void g7(T);                  // redeclaration of \tcode{g7}
-template<C4 T> void g8(Tuple<T>);           // redeclaration of \tcode{g8}
+// Corresponding adjusted declarations.
+template<C1 T, C2 U> void g1(const T*, U&);
+template<C1 T> void g2(Vec<T>&);
+template<C1... Ts> void g3(Ts&...);
+template<C3<int> T> void g4(Vec<T>);
+template<C4... Ts> void g5(Ts...);
+template<C4... Ts> void g6(Tuple<Ts...>);
+template<C4 T> void g7(T);
+template<C4 T> void g8(Tuple<T>);
 \end{codeblock}
 \exitexample
 % 
@@ -343,7 +348,7 @@ template<int N> concept bool Num = true;
 
 void h(Num*); // error: invalid type in parameter declaration
 \end{codeblock}
-The equivalent declaration would have this form:
+The adjusted declaration would have this form:
 \begin{codeblock}
 template<int N> void h(N*); // error: invalid type
 \end{codeblock}
@@ -360,7 +365,8 @@ invented \grammarterm{template-parameter}{}s are appended to the
 template<typename T, int N> class Array { };
 
 template<int N> void f(Array<auto, N>*);
-template<int N, typename T> void f(Array<T, N>*); // OK: redeclaration of \tcode{f(Array<auto, N>*)}
+// Adjusted form:
+template<int N, typename T> void f(Array<T, N>*);
 \end{codeblock}
 \exitexample
 \end{addedblock}

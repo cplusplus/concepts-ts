@@ -266,17 +266,8 @@ A requirement is one that can be checked by name lookup
 \end{bnf}
 
 \pnum
-A \grammarterm{requires-expression} defines a constraint (\ref{temp.constr})
-based on its parameters (if any) and its nested \grammarterm{requirement}{s}.
-
-\pnum
 A \grammarterm{requires-expression} is a prvalue of type \tcode{bool} whose
-value is \tcode{true} when its corresponding constraint is satisfied
-(\ref{temp.constr.decl}) and whose value is \tcode{false} otherwise.
-\enternote
-A \grammarterm{requires-expression} is transformed into a constraint 
-in order to determine if it is satisfied.
-\exitnote
+value is described below.
 Expressions appearing within a \grammarterm{requirement-body}
 are unevaluated operands (Clause~\ref{expr}).
 
@@ -357,17 +348,17 @@ a sequence of \grammarterm{requirement}{}s.
 These \grammarterm{requirement}{}s may refer to local 
 parameters, template parameters, and any other declarations visible from the 
 enclosing context. 
-%
-Each \grammarterm{requirement} appends a constraint (\ref{temp.constr}) to 
-the conjunction of constraints defined by the
-\grammarterm{requires-expression}. Constraints are appended in the order
-in which they are written.
 
 \pnum
 The substitution of template arguments into a \grammarterm{requires-expression} 
 may result in the formation of invalid types or expressions in its
-requirements. In such cases, the constraints corresponding to those
-requirements are not satisfied; it does not cause the program to be ill-formed.
+requirements or the violation of the semantic constraints of those requirements.
+In such cases, the \grammarterm{requires-expression} evaluates to \tcode{false};
+it does not cause the program to be ill-formed.
+The substitution proceeds in lexical order and stops when a condition that
+determines the result of the \grammarterm{requires-expression} is encountered.
+If no substitution is performed or substitution succeeds,
+the \grammarterm{requires-expression} evaluates to \tcode{true}.
 \enternote
 If a \grammarterm{requires-expression} contains invalid types or expressions in
 its requirements, and it does not appear within the declaration of a templated
@@ -398,11 +389,11 @@ template<typename T> concept bool C =
 \end{bnf}
 
 \pnum
-A \grammarterm{simple-requirement} introduces an expression 
-constraint (\ref{temp.constr.expr}) for its 
-\grammarterm{expression}.
+A simple requirement asserts the validity of an expression.
 \enternote
-An expression constraint asserts the validity of an expression.
+The enclosing \grammarterm{requires-expression} will evaluate to \tcode{false}
+if substitution of template arguments into the \grammarterm{expression} fails.
+The \grammarterm{expression} is an unevaluated operand (Clause \ref{expr}).
 \exitnote
 
 \enterexample
@@ -420,23 +411,21 @@ template<typename T> concept bool C =
 %%
 \rSec3[expr.prim.req.type]{Type requirements}
 
+%%% This is not the same as typename-specifier because 'template' is neither
+%%% required nor permitted in this context.
+%%% FIXME: We should say that 'template' is not required in this context when
+%%% we describe the rules for 'template'.
 \begin{bnf}
 \nontermdef{type-requirement}\br
     \terminal{typename} nested-name-specifier\opt type-name \terminal{;}
 \end{bnf}
 
 \pnum
-A \grammarterm{type-requirement} introduces a type 
-constraint (\ref{temp.constr.type}) for the type named by its
-optional \grammarterm{nested-name-specifier} and \grammarterm{type-name}.
-%
+A type requirement asserts the validity of a type.
 \enternote
-A type requirement asserts the validity of an associated
-type, either as a member type, a class template specialization,
-or an alias template. It is not used to specify requirements for
-arbitrary \grammarterm{type-specifier}{}s.
+The enclosing \grammarterm{requires-expression} will evaluate to \tcode{false}
+if substitution of template arguments into the \grammarterm{expression} fails.
 \exitnote
-%
 \enterexample
 \begin{codeblock}
 template<typename T> struct S { };
@@ -451,6 +440,11 @@ template<typename T> concept bool C =
 \end{codeblock}
 \exitexample
 
+\pnum
+A type constraint that names a class template specialization 
+does not require that type to be complete 
+(\cxxref{basic.types}).
+
 
 %%
 %% Compound requirements
@@ -464,33 +458,18 @@ template<typename T> concept bool C =
 \end{bnf}
 
 \pnum
-A \grammarterm{compound-requirement} introduces 
-a conjunction of one or more constraints for the
-\grammarterm{expression} \tcode{E}. The order in which
-those constraints are introduced is:
+A \grammarterm{compound-requirement} asserts properties
+of the \grammarterm{expression} \tcode{E}. After any template argument
+substitution into the \grammarterm{compound-requirement},
+the following properties are verified in this order:
 %
 \begin{itemize}
-\item the \grammarterm{compound-requirement} introduces an expression 
-constraint for \tcode{E} (\ref{temp.constr.expr});
+\item if the \tcode{noexcept} specifier is present,
+\tcode{E} shall not be a potentially-throwing expression~(\cxxref{except.spec});
 
-\item if the \tcode{noexcept} specifier is present, the 
-\grammarterm{compound-requirement} appends an exception constraint for 
-\tcode{E} (\ref{temp.constr.noexcept});
-
-\item if the \grammarterm{trailing-return-type} is present, the
-\grammarterm{compound-requirement} appends one or more constraints derived 
-from the type \tcode{T} named by the \grammarterm{trailing-return-type}:
-
-\begin{itemize}
-\item if \tcode{T} contains one or more placeholders (\ref{dcl.spec.auto}), 
-the requirement appends a deduction constraint (\ref{temp.constr.deduct}) 
-of \tcode{E} against the type \tcode{T}.
-
-\item otherwise, the requirement appends two constraints:
-a type constraint on the formation of \tcode{T} (\ref{temp.constr.type}) and
-an implicit conversion constraint from \tcode{E} to \tcode{T}
-(\ref{temp.constr.conv}).
-\end{itemize}
+\item if the \grammarterm{trailing-return-type} is present,
+\tcode{E} shall be implicitly convertible to the type named
+by the \grammarterm{trailing-return-type}.
 \end{itemize}
 %
 \enterexample
@@ -501,7 +480,7 @@ template<typename T> concept bool C1 =
   };
 \end{codeblock}
 The \grammarterm{compound-requirement} in \tcode{C1} 
-introduces an expression constraint for \tcode{x++}.
+requires that the expression \tcode{x++} is valid.
 It is equivalent to a \grammarterm{simple-requirement}
 with the same \grammarterm{expression}.
 
@@ -513,9 +492,9 @@ template<typename T> concept bool C2 =
 \end{codeblock}
 
 The \grammarterm{compound-requirement} in \tcode{C2} 
-introduces three constraints: an expression constraint for \tcode{*x}, 
-a type constraint for \tcode{typename T::inner}, and a conversion 
-constraint requiring \tcode{*x} to be implicitly convertible to
+requires that \tcode{*x} is a valid expression,
+that \tcode{typename T::inner} is a valid type, and
+that \tcode{*x} is implicitly convertible to
 \tcode{typename T::inner}.
 
 \begin{codeblock}
@@ -526,26 +505,8 @@ template<typename T> concept bool C3 =
 \end{codeblock}
 
 The \grammarterm{compound-requirement} in \tcode{C3} 
-introduces two constraints: an expression constraint for \tcode{g(x)} 
-and an exception constraint for \tcode{g(x)}.
-
-\begin{codeblock}
-template<typename T> concept bool C() { return true; }
-
-template<typename T> concept bool C5 =
-  requires(T x) {
-    {f(x)} -> const C&;
-  };
-\end{codeblock}
-
-The \grammarterm{compound-requirement} in \tcode{C5} 
-introduces two constraints: an expression constraint for \tcode{f(x)}, 
-and a deduction constraint requiring that overload resolution succeeds for the
-call \tcode{g(f(x))} where \tcode{g} is the following
-invented abbreviated function template.
-\begin{codeblock}
-void g(const C&);
-\end{codeblock}
+requires that \tcode{g(x)} is a valid expression and
+that \tcode{g(x)} is non-throwing.
 \exitexample
 
 
@@ -562,31 +523,117 @@ void g(const C&);
 \pnum
 A \grammarterm{nested-requirement} can be used
 to specify additional constraints in terms of local parameters.
-%
-A \grammarterm{nested-requirement} appends a predicate constraint 
-(\ref{temp.constr.pred}) for its \grammarterm{constraint-expression} 
-to the conjunction of constraints introduced by its enclosing
-\grammarterm{requires-expression}.
+The \grammarterm{constraint-expression} of the predicate constraint 
+shall be satisfied.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C() { return sizeof(T) == 1; }
+template<typename U> concept C = sizeof(U) == 1;
 
-template<typename T> concept bool D =
+template<typename T> concept D =
   requires (T t) {
-    requires C<decltype (+t)>();
+    requires C<decltype (+t)>;
   };
 \end{codeblock}
-The \grammarterm{nested-requirement} appends the predicate constraint 
-\tcode{sizeof(decltype (+t)) == 1} (\ref{temp.constr.pred}).
+\tcode{D<T>} is satisfied if \tcode{sizeof(decltype (+t)) == 1} (\ref{temp.constr.atomic}).
 \exitexample
 %
 \enternote
-The \grammarterm{constraint-expression} of the predicate constraint 
-introduced by a \grammarterm{nested-requirement} is later normalized 
-for the purposes of determining constraint satisfaction (\ref{temp.constr.decl}) 
-and partial ordering (\ref{temp.constr.order}).
+Normalization of constraints appends a separate constraint for each
+\grammarterm{nested-requirement} within a \grammarterm{requires-expression}
+for the purpose of determining partial ordering (\ref{temp.constr.order}).
 \exitnote
+%
+A local parameter shall not appear as an evaluated operand 
+(\ref{expr}) of the \grammarterm{constraint-expression}.
+\enterexample
+\begin{codeblock}
+template<typename T> 
+  concept bool C = requires (T a) {
+    requires sizeof(a) == 4; // OK
+    requires a == 0;         // error: evaluation of a constraint variable
+  }
+\end{codeblock}
+\exitexample
+
+
+
+
+
+
+\begin{comment}
+
+%%
+%% Argument deduction constraints
+%%
+\rSec3[temp.constr.deduct]{Argument deduction constraints}
+
+\pnum
+An \defn{argument deduction constraint} is a constraint that specifies 
+a requirement that the type of an \grammarterm{expression} \tcode{E}
+can be deduced from a type \tcode{T}, when \tcode{T} includes one or more 
+placeholders (\ref{dcl.spec.auto}).
+% 
+\enternote
+An argument deduction constraint is introduced by a
+\grammarterm{compound-requirement} (\ref{expr.prim.req.compound}) having a
+\grammarterm{trailing-return-type} that contains one or more placeholders.
+% 
+In such a constraint, \tcode{E} is the \grammarterm{expression} of the 
+\grammarterm{compound-requirement}, and \tcode{T} is the type specified
+by the \grammarterm{trailing-return-type}.
+\exitnote
+
+\pnum
+To determine if an argument deduction constraint is satisfied, invent
+an abbreviated function template \tcode{f} with one parameter whose
+type is \tcode{T} (\ref{dcl.fct}). 
+% 
+The constraint is satisfied if the resolution of the function call 
+\tcode{f(E)} succeeds (\ref{over.match}).
+% 
+\enternote
+Overload resolution succeeds when values are deduced for all invented
+template parameters in \tcode{f} that correspond to the placeholders in 
+\tcode{T}, and the constraints associated by any 
+\grammarterm{constrained-type-specifier}{s} are satisfied.
+\exitnote
+% 
+\enterexample
+\begin{codeblock}
+template<typename T, typename U> struct Pair;
+
+template<typename T>
+  concept bool C1() { return true; }
+
+template<typename T>
+  concept bool C2() { return requires(T t) { {*t} -> Pair<C1&, auto>; }; }
+
+template<C2 T> void g(T);
+
+g((int*)nullptr); // error: constraints not satisfied.
+\end{codeblock}
+The invented abbreviated function template \tcode{f} for the 
+\grammarterm{compound-requirement} in \tcode{C2} is:
+\begin{codeblock}
+void f(Pair<C1&, auto>);
+\end{codeblock}
+In the call \tcode{g((int*)nullptr)}, the constraints are not satisfied 
+because no values can be deduced for the placeholders \tcode{C1} and 
+\tcode{auto} from the expression \tcode{*t} when \tcode{t} has type
+``pointer-to-\tcode{int}''.
+\exitexample
+
+\pnum
+An argument deduction constraint $A$ is equivalent to another 
+argument deduction constraint $B$ if and only if the 
+\grammarterm{expression}{s} of $A$ and $B$ are equivalent
+using the rules in \ref{temp.over.link} to compare expressions, and the types
+of $A$ and $B$ are equivalent (\cxxref{temp.type}).
+
+
+
+\end{comment}
 
 \end{addedblock}
 \end{quote}
