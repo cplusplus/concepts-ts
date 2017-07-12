@@ -262,12 +262,10 @@ A common use of \grammarterm{requires-expression}{}s is to define
 requirements in concepts such as the one below:
 \begin{codeblock}
 template<typename T>
-  concept bool R() {
-    return requires (T i) {
-      typename T::type;
-      {*i} -> const typename T::type&;
-    };
-  }
+  concept R = requires (T i) {
+    typename T::type;
+    {*i} -> const typename T::type&;
+  };
 \end{codeblock}
 A \grammarterm{requires-expression} can also be used in a 
 \grammarterm{requires-clause} as a way of writing ad hoc 
@@ -286,7 +284,7 @@ Such requirements can also be written by defining them within
 a concept.
 \begin{codeblock}
 template<typename T>
-  concept bool C = requires (T x) { x + x; };
+  concept C = requires (T x) { x + x; };
 
 template<typename T> requires C<T> 
   T add(T a, T b) { return a + b; }
@@ -314,15 +312,15 @@ not terminate with an ellipsis.
 \enterexample
 \begin{codeblock}
 template<typename T>
-  concept bool C1() { 
-    requires(T t, ...) { t; }; // error: terminates with an ellipsis
-  }
+  concept = requires(T t, ...) { 
+    t; 
+  }; // error: terminates with an ellipsis
 
 template<typename T>
-  concept bool C2() { 
-    requires(T t, void (*p)(T*, ...)) // OK: the parameter-declaration-clause of
-    { p(t); };                        // the requires-expression does not terminate 
-  }                                   // with an ellipsis
+  concept C2 = 
+    requires(T t, void (*p)(T*, ...)) { // OK: the parameter-declaration-clause of
+    p(t);                               // the requires-expression does not terminate 
+  };                                    // with an ellipsis
 \end{codeblock}
 \exitexample
 
@@ -355,7 +353,7 @@ no diagnostic required.
 %
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C =
+template<typename T> concept C =
   requires {
     new int[-(int)sizeof(T)]; // ill-formed, no diagnostic required
   };
@@ -383,7 +381,7 @@ The \grammarterm{expression} is an unevaluated operand (Clause \ref{expr}).
 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C =
+template<typename T> concept C =
   requires (T a, T b) {
     a + b;  // an expression constraint for \tcode{a + b}
   };
@@ -416,7 +414,7 @@ if substitution of template arguments into the \grammarterm{expression} fails.
 template<typename T> struct S { };
 template<typename T> using Ref = T&;
 
-template<typename T> concept bool C =
+template<typename T> concept C =
   requires () {
     typename T::inner; // required nested member name
     typename S<T>;     // required class template specialization
@@ -517,7 +515,7 @@ template<C3<U> T> void f(U const&);
 In this case, deduction always fails since \tcode{C3} is \tcode{false}.
 
 \begin{codeblock}
-template<typename T> concept bool C5 =
+template<typename T> concept C5 =
   requires(T x) {
     {g(x)} noexcept;
   };
@@ -568,7 +566,7 @@ A local parameter shall not appear as an evaluated operand
 \enterexample
 \begin{codeblock}
 template<typename T> 
-  concept bool C = requires (T a) {
+  concept C = requires (T a) {
     requires sizeof(a) == 4; // OK
     requires a == 0;         // error: evaluation of a constraint variable
   }
@@ -623,10 +621,10 @@ template parameters in \tcode{f} that correspond to the placeholders in
 template<typename T, typename U> struct Pair;
 
 template<typename T>
-  concept bool C1() { return true; }
+  concept C1() { return true; }
 
 template<typename T>
-  concept bool C2() { return requires(T t) { {*t} -> Pair<C1&, auto>; }; }
+  concept C2() { return requires(T t) { {*t} -> Pair<C1&, auto>; }; }
 
 template<C2 T> void g(T);
 

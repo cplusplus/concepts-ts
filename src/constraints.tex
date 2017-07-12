@@ -156,8 +156,8 @@ The constraint is satisfied if and only if \tcode{E} evaluates to
 \enterexample
 \begin{codeblock}
 template<typename T> 
-  concept bool C = sizeof(T) == 4 && !true; // requires predicate constraints
-                                            // \tcode{sizeof(T) == 4} and \tcode{!true}
+  concept C = sizeof(T) == 4 && !true; // requires predicate constraints
+                                       // \tcode{sizeof(T) == 4} and \tcode{!true}
 
 template<typename T>
   struct S {
@@ -242,7 +242,7 @@ These constraints are checked during the instantiation of the declaration.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = true;
+template<typename T> concept C = true;
 
 template<C T> void f1(T);
 template<typename T> requires C<T> void f2(T);
@@ -252,8 +252,8 @@ The associated constraints of \tcode{f1}, \tcode{f2}, and \tcode{f3}
 are \tcode{C<T>}.
 % 
 \begin{codeblock}
-template<typename T> concept bool C1 = true;
-template<typename T> concept bool C2 = sizeof(T) > 0;
+template<typename T> concept C1 = true;
+template<typename T> concept C2 = sizeof(T) > 0;
 
 template<C1 T> void f6(T) requires C2<T>;
 template<typename T> requires C1<T> && C2<T> void f7(T);
@@ -330,10 +330,10 @@ yielded by normalizing its associated constraints.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1() { return sizeof(T) == 1; }
-template<typename T> concept bool C2 = C1<T>() && 1 == 2;
-template<typename T> concept bool C3 = requires { typename T::type; };
-template<typename T> concept bool C4 = requires (T x) { ++x; }
+template<typename T> concept C1 = sizeof(T) == 1;
+template<typename T> concept C2 = C1<T>() && 1 == 2;
+template<typename T> concept C3 = requires { typename T::type; };
+template<typename T> concept C4 = requires (T x) { ++x; }
 
 template<C2 U> void f1(U);                            // \#1
 template<C3 U> void f2(U);                            // \#2
@@ -471,8 +471,8 @@ constrained as \tcode{D1}.
 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 = requires(T t) { --t; };
-template<typename T> concept bool C2 = C1<T> && requires(T t) { *t; };
+template<typename T> concept C1 = requires(T t) { --t; };
+template<typename T> concept C2 = C1<T> && requires(T t) { *t; };
 
 template<C1 T> void f(T);       // \#1
 template<C2 T> void f(T);       // \#2
