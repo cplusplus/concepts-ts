@@ -482,7 +482,7 @@ template<typename T> concept C1 =
     {x++};
   };
 \end{codeblock}
-The \grammarterm{compound-requirement} in \tcode{C1} 
+The \grammarterm{compound-requirement} in \tcode{(C1)} 
 requires that the expression \tcode{x++} is valid.
 It is equivalent to a \grammarterm{simple-requirement}
 with the same \grammarterm{expression}.
@@ -620,11 +620,9 @@ template parameters in \tcode{f} that correspond to the placeholders in
 \begin{codeblock}
 template<typename T, typename U> struct Pair;
 
-template<typename T>
-  concept C1() { return true; }
+template<typename T> concept C1 = true;
 
-template<typename T>
-  concept C2() { return requires(T t) { {*t} -> Pair<C1&, auto>; }; }
+template<typename T> concept C2 = requires(T t) { {*t} -> Pair<C1&, auto>; }; }
 
 template<C2 T> void g(T);
 
