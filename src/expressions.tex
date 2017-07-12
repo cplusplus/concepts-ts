@@ -439,7 +439,11 @@ does not require that type to be complete
 \begin{bnf}
 \nontermdef{compound-requirement}\br
   \terminal{\{} expression \terminal{\}} \terminal{noexcept}\opt 
-    trailing-return-type\opt~\terminal{;}
+    return-type-requirement\opt~\terminal{;}
+
+\nontermdef{return-type-requirement}\br
+    trailing-return-type \terminal{;}\br
+    constrained-parameter cv\opt~abstract-declarator\opt
 \end{bnf}
 
 \pnum
@@ -452,14 +456,30 @@ the following properties are verified in this order:
 \item if the \tcode{noexcept} specifier is present,
 \tcode{E} shall not be a potentially-throwing expression~(\cxxref{except.spec});
 
-\item if the \grammarterm{trailing-return-type} is present,
-\tcode{E} shall be implicitly convertible to the type named
-by the \grammarterm{trailing-return-type}.
+\item if the \grammarterm{return-type-requirement} is present, additional
+requirements apply.
+
+\begin{itemize}
+\item If the \grammarterm{return-type-requirement} is a 
+\grammarterm{trailing-return-type}, \tcode{E} shall be implicitly 
+convertible to the type named by the
+\grammarterm{trailing-return-type}.
+
+\item If the \grammarterm{return-type-requirement} starts with a 
+\grammarterm{constrained-parameter} (\ref{temp.param}), the 
+\grammarterm{expression} is deduced against an invented function template
+\tcode{F} using the rules in \cxxref{temp.deduct.call}. \tcode{F} is a
+\tcode{void} function template with a single type template parameter
+\tcode{T} declared with the \grammarterm{constrained-parameter}. 
+It has a single \grammarterm{parameter} whose \grammarterm{type-specifier} is
+\grammarterm{cv}-\tcode{T} followed by the \grammarterm{abstract-declarator}. 
 \end{itemize}
+\end{itemize}
+
 %
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 =
+template<typename T> concept C1 =
   requires(T x) {
     {x++};
   };
@@ -470,7 +490,7 @@ It is equivalent to a \grammarterm{simple-requirement}
 with the same \grammarterm{expression}.
 
 \begin{codeblock}
-template<typename T> concept bool C2 =
+template<typename T> concept C2 =
   requires(T x) {
     {*x} -> typename T::inner;
   };
@@ -483,13 +503,27 @@ that \tcode{*x} is implicitly convertible to
 \tcode{typename T::inner}.
 
 \begin{codeblock}
-template<typename T> concept bool C3 =
+template<typename T, typenamem U> concept C3 = false;
+template<typename T> concept C4 =
+  requires(T x) {
+    {*x} -> C3<U> const&;
+  };
+\end{codeblock}
+The \grammarterm{compound-requirement} requires that \tcode{*x} be deduced
+as an argument for the invented function:
+\begin{codeblock}
+template<C3<U> T> void f(U const&);
+\end{codeblock}
+In this case, deduction always fails since \tcode{C3} is \tcode{false}.
+
+\begin{codeblock}
+template<typename T> concept bool C5 =
   requires(T x) {
     {g(x)} noexcept;
   };
 \end{codeblock}
 
-The \grammarterm{compound-requirement} in \tcode{C3} 
+The \grammarterm{compound-requirement} in \tcode{C5} 
 requires that \tcode{g(x)} is a valid expression and
 that \tcode{g(x)} is non-throwing.
 \exitexample
