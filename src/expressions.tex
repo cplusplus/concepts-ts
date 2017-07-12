@@ -124,15 +124,22 @@ enumeration type.
 % 
 \enterexample
 \begin{codeblock}
+template<typename T> concept C = sizeof(T) == sizeof(int);
+template<int N> concept D = true;
+
 struct S1 { int n; };
 struct S2 { char c; };
 struct S3 { struct X { using Y = int; }; };
 
 int auto::* p1 = &S1::n; // \tcode{auto} deduced as \tcode{S1}
 
-void f(typename auto::X::Y);
+auto f = [](typename auto::X::Y) {};
 f(S1()); // error: \tcode{auto} cannot be deduced from \tcode{S1()}
-f<S3>(0); // OK
+f.operator()<S3>(0); // OK
+
+enum E { e };
+auto g = [](decltype(auto::e)) {};
+g.operator()<E>(e);  // OK
 \end{codeblock}
 In the declaration of \tcode{f}, the placeholder appears in a non-deduced 
 context (\cxxref{temp.deduct.type}). It may be replaced later through the
