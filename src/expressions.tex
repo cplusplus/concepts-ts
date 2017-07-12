@@ -143,25 +143,6 @@ explicit specification of template arguments.
 
 
 %%
-%% Lambda expressions
-%%
-\setcounter{subsection}{4}
-\rSec2[expr.prim.lambda]{Lambda expressions}
-
-Insert the following paragraph after paragraph 4 to define the
-term ``generic lambda''. 
-
-\begin{quote}
-\begin{addedblock}
-\setcounter{Paras}{4}
-\pnum
-A \defn{generic lambda} is a \grammarterm{lambda-expression} where one
-or more placeholders (\ref{dcl.spec.auto}) appear in the parameter-type-list
-of the \grammarterm{lambda-declarator}.
-\end{addedblock}
-\end{quote}
-
-%%
 %% Requires expressions
 %%
 \setcounter{subsection}{6}
@@ -218,7 +199,7 @@ template<typename T>
   };
 \end{codeblock}
 A \grammarterm{requires-expression} can also be used in a 
-\grammarterm{requires-clause} as a way of writing ad hoc 
+\grammarterm{requires-clause} (\ref{temp}) as a way of writing ad hoc 
 constraints on template arguments such as the one below:
 \begin{codeblock}
 template<typename T>
@@ -262,15 +243,9 @@ not terminate with an ellipsis.
 \enterexample
 \begin{codeblock}
 template<typename T>
-  concept = requires(T t, ...) { 
+  concept C = requires(T t, ...) { // error: terminates with an ellipsis
     t; 
-  }; // error: terminates with an ellipsis
-
-template<typename T>
-  concept C2 = 
-    requires(T t, void (*p)(T*, ...)) { // OK: the parameter-declaration-clause of
-    p(t);                               // the requires-expression does not terminate 
-  };                                    // with an ellipsis
+  };
 \end{codeblock}
 \exitexample
 
