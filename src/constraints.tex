@@ -310,9 +310,17 @@ of atomic constraints (\ref{temp.constr.atomic}).
 The \defn{normal form} of an \grammarterm{expression} \tcode{X} is 
 defined as follows:
 % 
+First, replace all \grammarterm{id-expression}{s} of the form 
+\tcode{C<A$1$, A$2$, ..., A$N$>}, where \tcode{C} is a concept with the 
+result of substituting the template arguments \tcode{A$1$, A$2$, ..., A$N$} 
+into the \grammarterm{constraint-expression} of \tcode{C}.
+% 
+If that substitution fails, the program is ill-formed.
+% 
+Second, transform the expression \tcode{E} into a constraint as follows:
 \begin{itemize}
-\item The normal form of an expression \tcode{(E)} is the normal form
-of \tcode{E}.
+\item the normal form of an expression \tcode{(E)} is the normal form
+of \tcode{E};
 
 \item The normal form of an expression \tcode{E1 || E2} is the  
 disjunction (\ref{temp.constr.op}) of the normal forms of \tcode{E1} 
@@ -502,129 +510,6 @@ f(0);       // selects \#1
 f((int*)0); // selects \#2
 g(true);    // selects \#3 because \tcode{C1<bool>} is not satisfied
 g(0);       // selects \#4
-\end{codeblock}
-\exitexample
-
-
-%%
-%% Resolution of qualified references to concepts
-%%
-\rSec2[temp.constr.resolve]{Resolution of qualified references to concepts}
-
-\pnum
-\defn{Concept resolution} is the process of selecting a concept 
-from a set of concept definitions referred to by a
-\grammarterm{qualified-concept-name},
-% 
-or from a set of declarations including one or more concept definitions
-referred to by a \grammarterm{simple-template-id} or a \grammarterm{qualified-id}
-whose \grammarterm{unqualified-id} is a \grammarterm{simple-template-id}.
-% 
-Concept resolution is performed when such a name appears
-\begin{itemize}
-\item as a \grammarterm{constrained-type-specifier} (\ref{dcl.spec.auto.constr}), 
-\item in a \grammarterm{constrained-parameter} (\ref{temp.param}),
-\item in a \grammarterm{template-introduction} (\ref{temp.intro}), or
-\item within a \grammarterm{constraint-expression} (\ref{temp.constr.decl}).
-\end{itemize}
-Within such a name, let \tcode{C} be the \grammarterm{concept-name} or
-\grammarterm{template-name} that refers to the set of concept definitions.
-
-\pnum
-The selection of a concept from this set is done by matching the 
-template parameters of each concept in that set to a sequence of template 
-arguments and \defn{wildcard}{s}.
-% 
-This sequence is called the \defn{concept argument list}, and its elements
-are called \defn{concept argument}{s}.
-% 
-For the purpose this matching, a wildcard can match a template 
-parameter of any kind (type, non-type, template) as described below.
-
-\pnum
-The method for determining the concept argument list depends on the
-context in which \tcode{C} appears.
-% 
-\begin{itemize}
-\item If \tcode{C} is part of a \grammarterm{constrained-type-specifier} or 
-\grammarterm{constrained-parameter},
-then
-  \begin{itemize}
-  \item if \tcode{C} is a \grammarterm{constrained-type-name}, the concept 
-  argument list is comprised of a single wildcard, or
-  \item if \tcode{C} is the \grammarterm{concept-name} of a 
-  \grammarterm{partial-concept-id}, the concept argument list is comprised of a
-  single wildcard followed by the \grammarterm{template-argument}{s} of that 
-  \grammarterm{partial-concept-id}.
-  \end{itemize}
-
-\item If \tcode{C} is the \grammarterm{concept-name} in a
-\grammarterm{template-introduction}. the concept argument list is a sequence 
-of wildcards of the same length as the \grammarterm{introduction-list} of
-the \grammarterm{template-introduction}.
-
-\item If \tcode{C} appears as a \grammarterm{template-name} of a
-\grammarterm{simple-template-id}, the concept argument list is the sequence of
-\grammarterm{template-argument}{s} of that \grammarterm{simple-template-id}.
-\end{itemize}
-
-\pnum
-The selection of a concept from the set referred to by \tcode{C} is done 
-by matching the concept argument list against the template parameter lists of 
-each concept in that set.
-% 
-For a concept \tcode{CC} in that set to be a viable selection, each 
-argument in the concept argument list is matched against the corresponding 
-template parameters of \tcode{CC}.
-% 
-Default template arguments of \tcode{CC} (if any) are instantiated for each 
-template parameter that does not correspond to a concept argument. Instantiated
-default arguments are appended to the concept argument list.
-% 
-If the last declared template parameter of \tcode{CC} is not a parameter pack
-and the number of template parameters of \tcode{CC} is greater than the
-number of concept arguments, \tcode{CC} is not a viable selection.
-% 
-Otherwise, concept arguments are matched to template parameters using the 
-following rules:
-% 
-\begin{itemize}
-\item a template argument matches a template parameter if and only if
-it matches in kind (type, non-type, template) and type according to the
-rules in \ref{temp.arg};
-
-\item a wildcard matches a template parameter of any kind;
-
-\item a template parameter pack (\ref{temp.variadic}), matches zero or more 
-concept arguments, provided that each of those arguments matches the pattern 
-of the template parameter pack using the rules above for matching matching 
-concept arguments and template parameters.
-\end{itemize}
-% 
-If any concept arguments do not match a corresponding template parameter,
-the concept \tcode{CC} is not a viable selection.
-% 
-The concept selected by concept resolution shall be the single viable selection
-in the set of concepts referred by \tcode{C}.
-% 
-\enterexample
-\begin{codeblock}
-template<typename T> concept bool C1() { return true; }             // \#1
-template<typename T, typename U> concept bool C1() { return true; } // \#2
-template<typename T> concept bool C2() { return true; }
-template<int T> concept bool C2() { return true; }
-template<typename... Ts> concept bool C3 = true;
-
-void f1(const C1*); // OK: \tcode{C1} selects \#1
-void f2(C1<char>);  // OK: \tcode{C1<char>} selects \#2
-
-template<C2<0> T> struct S1; // error: no matching concept for \tcode{C2<0>},
-                             // mismatched template arguments
-template<C2 T> struct S2;    // error: resolution of \tcode{C2} is ambiguous,
-                             // both concepts are viable
-
-C3{...Ts} void q1(); // OK: selects \tcode{C3}
-C3{T} void q2();     // OK: selects \tcode{C3}
 \end{codeblock}
 \exitexample
 

@@ -5,31 +5,39 @@
 \setcounter{chapter}{9}
 \rSec0[dcl.dcl]{Declarations}
 
+Add \grammarterm{concept-definition} to the list of \grammarterm{declaration}s.
+
+\begin{quote}
+\begin{bnf}
+\nontermdef{declaration}\br
+  block-declaration\br
+  nodeclspec-function-declaration\br
+  function-definition\br
+  template-declaration\br
+  deduction-guide\br
+  explicit-instantiation\br
+  explicit-specialization\br
+  linkage-specification\br
+  namespace-definition\br
+  \added{concept-definition}\br
+  empty-declaration\br
+  attribute-declaration
+\end{bnf}
+\end{quote}
+
+Add the following paragraph at the end of this section.
+
+\setcounter{Paras}{12}
+\begin{quote}
+\pnum
+A \grammarterm{concept-definition} shall only appear as a part of 
+\grammarterm{template-declaration}.
+\end{quote}
 
 %%
 %% Specifiers
 %%
 \rSec1[dcl.spec]{Specifiers}
-
-Add the \tcode{concept} specifier to the \grammarterm{decl-specifier} grammar
-in paragraph 1.
-
-\begin{quote}
-\pnum
-The specifiers that can be used in a declaration are
-
-\begin{bnf}
-\nontermdef{decl-specifier}\br
-    storage-class-specifier\br
-    defining-type-specifier\br
-    function-specifier\br
-    \terminal{friend}\br
-    \terminal{typedef}\br
-    \terminal{constexpr}\br
-    \terminal{inline}\br
-    \added{\terminal{concept}}
-\end{bnf}
-\end{quote}
 
 
 %%
@@ -288,8 +296,8 @@ deduction constraint (\ref{temp.constr.deduct}).
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C() {
-  return requires (T i) { 
+template<typename T> concept C =
+  requires (T i) { 
     {*i} -> const auto&; // OK: introduces an argument deduction constraint
   };
 }
@@ -747,18 +755,15 @@ A \grammarterm{constrained-type-specifier} designates a placeholder
   concept-name\br
   partial-concept-id
 
-\nontermdef{concept-name}\br
-  identifier
-
 \nontermdef{partial-concept-id}\br
 		concept-name \terminal{<} template-argument-list\opt \terminal{>}
 \end{bnf}
 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 = false;
-template<int N> concept bool C2 = false;
-template<template<typename> class X> concept bool C3 = false;
+template<typename T> concept C1 = false;
+template<int N> concept C2 = false;
+template<template<typename> class X> concept C3 = false;
 
 template<typename T, int N> class Array { };
 template<typename T, template<typename> class A> class Stack { };
@@ -770,32 +775,11 @@ void f3(Stack<auto, C3>); // \tcode{C3} designates a placeholder for a class tem
 \end{codeblock}
 \exitexample
 
-\pnum
-An identifier is a \grammarterm{concept-name} if it refers to a set of 
-concept definitions (\ref{dcl.spec.concept}).
-%
-\enternote
-The set of concepts has multiple members only when referring to a set of 
-overloaded function concepts. There is at most one member of this set when a
-\grammarterm{concept-name} refers to a variable concept.
-\exitnote
-%
-\enterexample
-\begin{codeblock}
-template<typename T> concept bool C() { return true; }             // \#1
-template<typename T, typename U> concept bool C() { return true; } // \#2
-template<typename T> concept bool D = true;                        // \#3
-
-void f(C); // OK: the set of concepts referred to by C includes both \#1 and \#2;
-           // concept resolution (\ref{temp.constr.resolve}) selects \#1.
-void g(D); // OK: the concept-name \tcode{D} refers only to \#3
-\end{codeblock}
-\exitexample
 
 \pnum
 A \grammarterm{partial-concept-id} is a \grammarterm{concept-name} followed 
 by a sequence of \grammarterm{template-argument}{}s.
-%
+
 \enterexample
 \begin{codeblock}
 template<typename T, int N = 0> concept bool Seq = true;
@@ -804,11 +788,6 @@ void f1(Seq<3>); // OK
 void f2(Seq<>);  // OK
 \end{codeblock}
 \exitexample
-
-\pnum
-The concept designated by a \grammarterm{constrained-type-specifier}
-is the one selected according to the rules for concept resolution in
-\ref{temp.constr.resolve}.
 
 \pnum
 \enternote
@@ -835,150 +814,3 @@ in the \grammarterm{trailing-return-type} of a
 \end{addedblock}
 \end{quote}
 
-
-%%
-%% concept specifier
-%%
-\rSec2[dcl.spec.concept]{\tcode{concept} specifier}
-
-Add this section to \ref{dcl.spec}.
-
-\begin{quote}
-\begin{addedblock}
-\pnum
-The \tcode{concept} specifier shall be applied only to the 
-definition of a function template or variable template, declared
-in namespace scope (\cxxref{basic.scope.namespace}).
-%
-A function template definition having the \tcode{concept}
-specifier is called a \defn{function concept}. 
-% 
-A function concept shall have no \grammarterm{exception-specification} 
-and is treated as if it were specified with \tcode{noexcept(true)} 
-(\cxxref{except.spec}).
-%
-When a function template is declared to be a concept, it shall be the only
-declaration of that function template in the translation unit.
-%
-A variable template definition having the \tcode{concept} 
-specifier is called a \defn{variable concept}.
-%
-A \defn{concept definition} refers to either a function concept 
-and its definition or a variable concept and its initializer.
-%
-\enterexample
-\begin{codeblock}
-template<typename T> 
-  concept bool F1() { return true; } // OK: declares a function concept
-template<typename T> 
-  concept bool F2();                 // error: function concept is not a definition
-template<typename T> 
-  constexpr bool F3();
-template<typename T>
-  concept bool F3() { return true; } // error: redeclaration of a function as a concept
-template<typename T> 
-  concept bool V1 = true;            // OK: declares a variable concept
-template<typename T> 
-  concept bool V2;                   // error: variable concept with no initializer
-struct S {
-  template<typename T> 
-    static concept bool C = true;    // error: concept declared in class scope
-};
-\end{codeblock}
-\exitexample
-
-\pnum
-Every concept definition is implicitly defined to be a 
-\tcode{constexpr} declaration (\cxxref{dcl.constexpr}).
-% 
-A concept definition shall not be declared with the 
-\tcode{thread_local}, \tcode{inline}, \tcode{friend}, or 
-\tcode{constexpr} specifiers, nor shall a concept definition have associated 
-constraints (\ref{temp.constr.decl}).
-
-\pnum
-The definition of a function concept or the initializer of
-a variable concept shall not include a reference to the concept being
-declared.
-%
-\enterexample
-\begin{codeblock}
-template<typename T>
-  concept bool F() { return F<typename T::type>(); } // error
-template<typename T>
-  concept bool V = V<T*>;                            // error
-\end{codeblock}
-\exitexample
-
-\pnum
-The first declared template parameter of a concept definition is its
-\defn{prototype parameter}. 
-%
-A \defn{variadic concept} is a concept whose prototype parameter
-is a template parameter pack.
-
-\pnum
-A function concept has the following restrictions:
-\begin{itemize}
-\item No \grammarterm{function-specifier}{}s shall
-     appear in its declaration (\cxxref{dcl.fct.spec}).
-
-\item The declared return type shall have the type \tcode{bool}.
-
-\item The declaration's parameter list shall be equivalent to an empty 
-      parameter list.
-
-\item The declaration shall have a \grammarterm{function-body} equivalent
-to \tcode{\{ return E; \}} where \tcode{E} is a 
-\grammarterm{constraint-expression} (\ref{temp.constr.expr}).
-\end{itemize}
-%
-\enternote
-Return type deduction requires the instantiation of the function 
-definition, but concept definitions are not instantiated; they
-are normalized (\ref{temp.constr.decl}).
-\exitnote
-%
-\enterexample
-\begin{codeblock}
-template<typename T> 
-  concept int F1() { return 0; }      // error: return type is not bool
-template<typename T> 
-  concept auto F2() { return true; }  // error: return type is deduced
-template<typename T> 
-  concept bool F3(T) { return true; } // error: not an empty parameter list
-\end{codeblock}
-\exitexample
-
-\pnum
-A variable concept has the following restrictions:
-\begin{itemize}
-\item The declared type shall have the type \tcode{bool}.
-\item The declaration shall have an initializer.
-\item The initializer shall be a \grammarterm{constraint-expression}.
-\end{itemize}
-%
-\enterexample
-\begin{codeblock}
-template<typename T> 
-  concept bool V1 = 3 + 4; // error: initializer is not a constraint-expression
-concept bool V2 = 0;       // error: not a template
-
-template<typename T> concept bool C = true;
-
-template<C T> 
-  concept bool V3 = true;  // error: constrained template declared as a concept
-\end{codeblock}
-\exitexample
-
-\pnum
-A program shall not declare an explicit instantiation (\ref{temp.explicit}), 
-an explicit specialization (\ref{temp.expl.spec}), or a partial specialization
-of a concept definition.
-%
-\enternote
-This prevents users from subverting the constraint system by providing a 
-meaning for a concept that differs from its original definition.
-\exitnote
-\end{addedblock}
-\end{quote}

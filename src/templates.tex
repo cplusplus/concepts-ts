@@ -122,10 +122,7 @@ A \grammarterm{constrained-parameter} declares a template parameter whose
 kind (type, non-type, template) and type match that of the prototype parameter 
 of the concept designated by the \grammarterm{qualified-concept-name} 
 (\ref{dcl.spec.auto.constr}) in the \grammarterm{constrained-parameter}.
-% 
-The designated concept is selected by the rules for concept resolution 
-described in \ref{temp.constr.resolve}.
-% 
+%
 Let \tcode{X} be the prototype parameter of the designated concept.
 % 
 The declared template parameter is determined by the kind of \tcode{X} 
@@ -146,16 +143,16 @@ parameter is a template \grammarterm{template-parameter} having the same
 arguments.
 
 \item If the \grammarterm{qualified-concept-name} is followed by an ellipsis,
-then the declared parameter is a template parameter pack (\ref{temp.variadic}).
+then the declared parameter is a template parameter pack (\cxxref{temp.variadic}).
 \end{itemize}
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 = true;
-template<template<typename> class X> concept bool C2 = true;
-template<int N> concept bool C3 = true;
-template<typename... Ts> concept bool C4 = true;
-template<char... Cs> concept bool C5 = true;
+template<typename T> concept C1 = true;
+template<template<typename> class X> concept C2 = true;
+template<int N> concept C3 = true;
+template<typename... Ts> concept C4 = true;
+template<char... Cs> concept C5 = true;
 
 template<C1 T> void f1();     // OK: \tcode{T} is a type template-parameter
 template<C2 X> void f2();     // OK: \tcode{X} is a template with one type-parameter
@@ -176,38 +173,34 @@ The expression is derived from the \grammarterm{qualified-concept-name}
 % 
 \begin{itemize}
 \item First, form a template argument \tcode{A} from \tcode{P}. If \tcode{P} 
-declares a template parameter pack (\ref{temp.variadic})
+declares a template parameter pack (\cxxref{temp.variadic})
 and \tcode{C} is a variadic concept (\ref{dcl.spec.concept}), then \tcode{A} is 
 the pack expansion \tcode{P...}. Otherwise, \tcode{A} is the 
 \grammarterm{id-expression} \tcode{P}.
 
-\item Then, form a \grammarterm{template-id} \tcode{TT} based on the 
-\grammarterm{qualified-concept-name} \tcode{Q}. If \tcode{Q} is 
-a \grammarterm{concept-name}, then \tcode{TT} is \tcode{C<A>}. Otherwise, 
-\tcode{Q} is a \grammarterm{partial-concept-id} of the form
-\tcode{C<A1, A2, ..., A$N$>}, and \tcode{TT} is \tcode{C<A, A1, A2, ..., A$N$}>.
-
-\item Then, form an \grammarterm{expression} \tcode{E} as follows. 
-If \tcode{C} is a variable concept (\ref{dcl.spec.concept}), then \tcode{E} is the 
-\grammarterm{id-expression} \tcode{TT}. Otherwise, \tcode{C} is a function 
-concept and \tcode{E} is the function call \tcode{TT()}.
+% FIXME: This does not guarantee that the expression has the same 
+% namespace qualification as Q.
+\item Then, form an \grammarterm{id-expression} \tcode{E} as follows.
+If \tcode{Q} is a \grammarterm{concept-name}, then \tcode{E} is \tcode{C<A>}. 
+Otherwise, \tcode{Q} is a \grammarterm{partial-concept-id} of the form 
+\tcode{C<A1, A2, ..., A$N$>}, and \tcode{E} is \tcode{C<A, A1, A2, ..., A$N$>}.
 
 \item Finally, if \tcode{P} declares a template parameter pack and 
 \tcode{C} is not a variadic concept, \tcode{E} is adjusted to be the
-\grammarterm{fold-expression} \tcode{(E \&\& ...)} (\ref{expr.prim.fold}).
+\grammarterm{fold-expression} \tcode{(E \&\& ...)} (\cxxref{expr.prim.fold}).
 \end{itemize}
 % 
 \tcode{E} is the introduced \grammarterm{constraint-expression}.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 = true;
-template<typename... Ts> concept bool C2() { return true; }
-template<typename T, typename U> concept bool C3 = true;
+template<typename T> concept C1 = true;
+template<typename... Ts> concept C2 = true;
+template<typename T, typename U> concept C3 = true;
 
 template<C1 T> struct s1;      // associates \tcode{C1<T>}
 template<C1... T> struct s2;   // associates \tcode{(C1<T> \&\& ...)}
-template<C2... T> struct s3;   // associates \tcode{C2<T...>()}
+template<C2... T> struct s3;   // associates \tcode{C2<T...>}
 template<C3<int> T> struct s4; // associates \tcode{C3<T, int>}
 \end{codeblock}
 \exitexample
@@ -228,9 +221,9 @@ the kind (type, non-type, template) of the declared template parameter.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 = true;
-template<int N> concept bool C2 = true;
-template<template<typename> class X> concept bool C3 = true;
+template<typename T> concept C1 = true;
+template<int N> concept C2 = true;
+template<template<typename> class X> concept C3 = true;
 
 template<typename T> struct S0;
 
@@ -276,22 +269,16 @@ sequence of \grammarterm{introduced-parameter}{s} in its
 \grammarterm{introduction-list}.
 
 \pnum
-The concept designated by the \grammarterm{qualified-concept-name} is selected 
-by the concept resolution rules described in \ref{temp.constr.resolve}. Let
-\tcode{C} be the designated concept.
-% 
 The template parameters declared by a \grammarterm{template-introduction}
-are derived from its \grammarterm{introduced-parameter}{s} and the
-template parameter declarations of \tcode{C} to which those
-\grammarterm{introduced-parameter}{s} are matched as wildcards according to 
-the rules in \ref{temp.constr.resolve}.
+are derived from the \grammarterm{qualified-concept-name} and its template
+parameters using the following rules.
 % 
 For each \grammarterm{introduced-parameter} \tcode{I}, declare a template
 parameter using the following rules:
 \begin{itemize}
 \item Let \tcode{P} be the template parameter declaration in \tcode{C} 
       corresponding to \tcode{I}. If \tcode{P} does not declare a template 
-      parameter pack (\ref{temp.variadic}), \tcode{I} shall not include 
+      parameter pack (\cxxref{temp.variadic}), \tcode{I} shall not include 
       an ellipsis.
 
 \item If \tcode{P} declares a template parameter pack, adjust \tcode{P} 
@@ -307,9 +294,9 @@ parameter using the following rules:
 % 
 \enterexample
 \begin{codeblock}
-template<typename T, int N, typename... Xs> concept bool C1 = true;
-template<template<typename> class X> concept bool C2 = true;
-template<typename... Ts> concept bool C3 = true;
+template<typename T, int N, typename... Xs> concept C1 = true;
+template<template<typename> class X> concept C2 = true;
+template<typename... Ts> concept C3 = true;
 
 C1{A, B, ...C} // OK: \tcode{A} is declared as \tcode{typename A},
   struct S1;   // \tcode{B} is declared as \tcode{int B}, and
@@ -336,7 +323,7 @@ parameters.
 % 
 \enterexample
 \begin{codeblock}
-template<typename A, typename B = bool> concept bool C() { return true; }
+template<typename A, typename B = bool> concept C = true;
 
 C{T} void f(T); // OK: \tcode{f(T)} is a function template with
                 // a single template type parameter \tcode{T}
@@ -349,7 +336,7 @@ even if its corresponding template parameter does.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T, int N = -1> concept bool P() { return true; }
+template<typename T, int N = -1> concept P = true;
 
 P{T, N} struct Array { };
 
@@ -372,28 +359,25 @@ corresponding to the \grammarterm{introduced-parameter}{s}
 % 
 For each \grammarterm{introduced-parameter} \tcode{P}, form a corresponding 
 template argument \tcode{A} as follows. If \tcode{P} includes an ellipsis,
-then \tcode{A} is the pack expansion \tcode{P...} (\ref{temp.variadic}). 
+then \tcode{A} is the pack expansion \tcode{P...} (\cxxref{temp.variadic}). 
 Otherwise, \tcode{A} is the \grammarterm{id-expression} \tcode{P}.
 
-\item Then, form an expression \tcode{E} as follows. If \tcode{C} designates
-a variable concept (\ref{dcl.spec.concept}), then \tcode{E} is the
-\grammarterm{id-expression}
-\tcode{C<A1, ..., A$N$>}. Otherwise, \tcode{C} designates a function concept and
-\tcode{E} is the function call \tcode{C<A1, ..., A$N$>()}.
+% FIXME: This doesn't guarantee that the E has the same namespace specifier
+% as the qualified form.
+\item Then, form an \grammarterm{id-expression} \tcode{E} as 
+\tcode{C<A1, ..., A$N$>}.
 \end{itemize}
 % 
 \tcode{E} is the introduced \grammarterm{constraint-expression}.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T, typename U> concept bool C1 = true;
-template<typename T, typename U> concept bool C2() { return true; }
-template<typename... Ts> concept bool C3 = true;
+template<typename T, typename U> concept C1 = true;
+template<typename... Ts> concept C3 = true;
 
 C1{A, B} struct s1;    // associates \tcode{C1<A, B>}
-C2{A, B} struct s2;    // associates \tcode{C2<A, B>()}
-C3{...Ts} struct s3;   // associates \tcode{C3<Ts...>}
-C3{X, ...Y} struct s4; // associates \tcode{C3<X, Y...>}
+C2{...Ts} struct s3;   // associates \tcode{C2<Ts...>}
+C2{X, ...Y} struct s4; // associates \tcode{C2<X, Y...>}
 \end{codeblock}
 \exitexample
 
@@ -407,7 +391,7 @@ declared by the \grammarterm{template-introduction}.
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 = true;
+template<typename T> concept C1 = true;
 
 C1{T} void f(T, auto); // same semantics as \tcode{template<C1 T, typename U> void f(T, U);}
 \end{codeblock}
@@ -439,7 +423,7 @@ constrained template shall be satisfied. (\ref{temp.constr.decl}).
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 = false;
+template<typename T> concept C1 = false;
 
 template<C1 T> struct S1 { };
 template<C1 T> using Ptr = T*;
@@ -465,7 +449,7 @@ template<typename T>
     using Type = typename T::template MT<char>; // \#2
   };
 
-template<typename T> concept bool C2 = sizeof(T) == 1;
+template<typename T> concept C2 = sizeof(T) == 1;
 
 template<C2 T> struct S { };
 
@@ -515,7 +499,7 @@ equivalent (\ref{temp.over.link}), and for template
 \grammarterm{template-parameter}{}s matches, recursively. 
 % 
 When \tcode{P}'s \grammarterm{template-parameter-list} 
-contains a template parameter pack (\ref{temp.variadic}), the template 
+contains a template parameter pack (\cxxref{temp.variadic}), the template 
 parameter pack will match zero or more template parameters or template 
 parameter packs in the \grammarterm{template-parameter-list} of
 \tcode{A} with the same kind (type, non-type, template) and type as the template 
@@ -530,8 +514,8 @@ examples given in the \Cpp Standard.
 \begin{addedblock}
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = requires (T t) { t.f(); };
-template<typename T> concept bool D = C<T> && requires (T t) { t.g(); };
+template<typename T> concept C = requires (T t) { t.f(); };
+template<typename T> concept D = C<T> && requires (T t) { t.g(); };
 
 template<template<C> class P>
   struct S { };
@@ -611,8 +595,8 @@ Add the following example at the end of paragraph 3.
 \begin{addedblock}
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = true;
-template<typename T> concept bool D = true;
+template<typename T> concept C = true;
+template<typename T> concept D = true;
 
 template<C T> struct S {
     void f();
@@ -694,8 +678,8 @@ Add the following example at the end of paragraph 1.
 \begin{addedblock}
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 = true;
-template<typename T> concept bool C2 = sizeof(T) <= 4;
+template<typename T> concept C1 = true;
+template<typename T> concept C2 = sizeof(T) <= 4;
 
 template<C1 T>
   struct S {
@@ -741,8 +725,8 @@ declaration that is not a definition, the constraints are used for declaration.
 \exitnote
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C1 = true;
-template<typename T> concept bool C2 = false;
+template<typename T> concept C1 = true;
+template<typename T> concept C2 = false;
 
 template<C1 T> void g0(T);
 template<C1 T> void g1(T);
@@ -774,7 +758,7 @@ Within a class template, a friend may define a non-template function
 whose constraints specify requirements on template arguments.
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool Eq = requires (T t) { t == t; };
+template<typename T> concept Eq = requires (T t) { t == t; };
 
 template<typename T>
   struct S {
@@ -808,8 +792,8 @@ A class template partial specialization may be constrained
 (Clause~\ref{temp}).
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = requires (T t) { t.f(); };
-template<int I> concept bool N = I > 0;
+template<typename T> concept C = requires (T t) { t.f(); };
+template<int I> concept N = I > 0;
 
 template<C T1, C T2, N I> class A<T1, T2, I>;  // \#6
 template<C T, N I>        class A<int, T*, I>; // \#7
@@ -890,8 +874,8 @@ Add the following example to the end of paragraph 1.
 \begin{addedblock}
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = requires (T t) { t.f(); };
-template<typename T> concept bool D = C<T> && requires (T t) { t.f(); };
+template<typename T> concept C = requires (T t) { t.f(); };
+template<typename T> concept D = C<T> && requires (T t) { t.f(); };
 
 
 template<typename T> class S { };
@@ -972,6 +956,64 @@ partial ordering process.
 \added{If both deductions succeed, the partial ordering selects
 the more constrained template as described by the rules in
 \ref{temp.constr.order}.}
+\end{quote}
+
+%%
+%% Concept definitions
+%%
+\rSec2[temp.concept]{Concept definitions}
+
+Add the following paragraph.
+
+\begin{quote}
+\begin{addedblock}
+\pnum A \defn{concept} defines constraints on its template arguments.
+
+\begin{bnf}
+\nontermdef{concept-definition}\br
+  \terminal{concept} concept-name \terminal{=} constraint-expression\br
+\end{bnf}
+\begin{bnf}
+\nontermdef{concept-name}\br
+  identifier
+\end{bnf}
+
+\pnum A \grammarterm{concept-definition} declares its \grammarterm{identifier}
+to be a concept. The name of the concept is a \grammarterm{concept-name}.
+\enterexample
+\begin{codeblock}
+template<typename T>
+concept C = requires(T x) {
+  { x == x } -> bool;
+};
+template<typename T> 
+  requires C<T> // \tcode{C} constrains \tcode{f1(T)} in \grammarterm{constraint-expression}
+T f1(T x) { return f(x); }
+template<C T> // \tcode{C} constrains \tcode{f2(T)} as a \grammarterm{constrained-parameter}
+T f1(T x) { return f(x); }
+\end{codeblock}
+\exitexample
+
+\pnum
+A \grammarterm{concept-definition} shall appear in the global scope or in a
+namespace scope \cxxref{basic.scope.namespace}.
+
+\pnum
+A concept is not instantiated (\ref{temp.spec}). 
+A program that explicitly instantiates (\ref{temp.explicit}), explicitly 
+specializes (\ref{temp.expl.spec}), or partially
+specializes a concept is ill-formed. 
+\enternote
+\emph{id-expression}s that denote a concept specialization are evaluated as
+expressions (\ref{expr.prim.id}).
+\exitnote
+
+\pnum
+The first declared template parameter of a concept definition is its 
+\defn{prototype parameter}.
+A \defn{variadic concept} is a concept whose prototype parameter is a template 
+parameter pack.
+\end{addedblock}
 \end{quote}
 
 %%
@@ -1119,8 +1161,8 @@ resolution (\ref{over.match}).
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = sizeof(T) > 2;
-template<typename T> concept bool D = C<T> && sizeof(T) > 4;
+template<typename T> concept C = sizeof(T) > 2;
+template<typename T> concept D = C<T> && sizeof(T) > 4;
 
 template<typename T> struct S {
   S() requires C<T> { } // \#1
@@ -1303,7 +1345,7 @@ Add the following example to paragraph 3.
 \begin{quote}
 \enterexample
 \begin{codeblock}
-template<typename T> concept bool C = requires (T t) { -t; };
+template<typename T> concept C = requires (T t) { -t; };
 
 template<C T>        void f(T) { } // \#1
 template<typename T> void g(T) { } // \#2
