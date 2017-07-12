@@ -373,8 +373,8 @@ does not require that type to be complete
     return-type-requirement\opt~\terminal{;}
 
 \nontermdef{return-type-requirement}\br
-    trailing-return-type \terminal{;}\br
-    constrained-parameter cv\opt~abstract-declarator\opt
+    trailing-return-type\br
+    \terminal{->} constrained-parameter cv-qualifier-seq\opt~abstract-declarator\opt
 \end{bnf}
 
 \pnum
@@ -434,7 +434,7 @@ that \tcode{*x} is implicitly convertible to
 \tcode{typename T::inner}.
 
 \begin{codeblock}
-template<typename T, typenamem U> concept C3 = false;
+template<typename T, typename U> concept C3 = false;
 template<typename T> concept C4 =
   requires(T x) {
     {*x} -> C3<U> const&;
