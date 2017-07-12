@@ -84,6 +84,13 @@ The syntax for \grammarterm{template-parameter}{s} is:
   qualified-concept-name ... identifier\opt\br
   qualified-concept-name identifier\opt default-template-argument\opt
 
+\nontermdef{qualified-concept-name}\br
+	nested-name-specifier\opt concept-name\br
+	nested-name-specifier\opt partial-concept-id
+
+\nontermdef{partial-concept-id}\br
+		concept-name \terminal{<} template-argument-list\opt \terminal{>}
+
 \nontermdef{default-template-argument}\br
   \terminal{=} type-id\br
   \terminal{=} id-expression\br
@@ -92,7 +99,7 @@ The syntax for \grammarterm{template-parameter}{s} is:
 \end{bnf}
 \end{quote}
 
-Insert a new paragraph after paragraph 1.
+Insert new paragraphs after paragraph 1.
 
 \begin{quote}
 \begin{addedblock}
@@ -101,9 +108,11 @@ There is an ambiguity in the syntax of a template parameter between the
 declaration of a \grammarterm{constrained-parameter} and a
 \grammarterm{parameter-declaration}.
 % 
-If the \grammarterm{type-specifier-seq} of a \grammarterm{parameter-declaration} 
-is a \grammarterm{constrained-type-specifier} (\ref{dcl.spec.auto.constr}), 
-then the \grammarterm{template-parameter} is a \grammarterm{constrained-parameter}.
+If the \grammarterm{type-specifier-seq} of a 
+\grammarterm{parameter-declaration} 
+is a \grammarterm{constrained-type-specifier}, 
+then the \grammarterm{template-parameter} is a 
+\grammarterm{constrained-parameter}.
 \end{addedblock}
 \end{quote}
 
@@ -117,12 +126,10 @@ paragraphs define the meaning of a constrained template parameter.
 A \grammarterm{constrained-parameter} declares a template parameter whose 
 kind (type, non-type, template) and type match that of the prototype parameter 
 of the concept designated by the \grammarterm{qualified-concept-name} 
-(\ref{dcl.spec.auto.constr}) in the \grammarterm{constrained-parameter}.
+in the \grammarterm{constrained-parameter}.
 % 
-\xremoved{The designated concept is selected by the rules for concept resolution 
-described in \ref{temp.constr.resolve}.}
-% 
-Let \tcode{X} be the prototype parameter of the designated concept.
+Let \tcode{X} be the prototype parameter of the concept designated by the
+\grammarterm{concept-name} (\ref{temp.concept}).
 % 
 The declared template parameter is determined by the kind of \tcode{X} 
 (type, non-type, template) and the optional ellipsis in the
@@ -173,27 +180,16 @@ The expression is derived from the \grammarterm{qualified-concept-name}
 \begin{itemize}
 \item First, form a template argument \tcode{A} from \tcode{P}. If \tcode{P} 
 declares a template parameter pack (\cxxref{temp.variadic})
-and \tcode{C} is a variadic concept (\ref{dcl.spec.concept}), then \tcode{A} is 
+and \tcode{C} is a variadic concept (\ref{temp.concept}), then \tcode{A} is 
 the pack expansion \tcode{P...}. Otherwise, \tcode{A} is the 
 \grammarterm{id-expression} \tcode{P}.
 
 % FIXME: This does not guarantee that the expression has the same 
 % namespace qualification as Q.
-\item \xadded{Then, form an \grammarterm{id-expression} \tcode{E} as follows.
+\item Then, form an \grammarterm{id-expression} \tcode{E} as follows.
   If \tcode{Q} is a \grammarterm{concept-name}, then \tcode{E} is \tcode{C<A>}. 
   Otherwise, \tcode{Q} is a \grammarterm{partial-concept-id} of the form 
-  \tcode{C<A1, A2, ..., A$N$>}, and \tcode{E} is \tcode{C<A, A1, A2, ..., A$N$>}.}
-
-\item \xremoved{Then, form a \grammarterm{template-id} \tcode{TT} based on the 
-\grammarterm{qualified-concept-name} \tcode{Q}. If \tcode{Q} is 
-a \grammarterm{concept-name}, then \tcode{TT} is \tcode{C<A>}. Otherwise, 
-\tcode{Q} is a \grammarterm{partial-concept-id} of the form
-\tcode{C<A1, A2, ..., A$N$>}, and \tcode{TT} is \tcode{C<A, A1, A2, ..., A$N$>}}.
-
-\item \xremoved{Then, form an \grammarterm{expression} \tcode{E} as follows. 
-If \tcode{C} is a variable concept (\ref{dcl.spec.concept}), then \tcode{E} is the 
-\grammarterm{id-expression} \tcode{TT}. Otherwise, \tcode{C} is a function 
-concept and \tcode{E} is the function call \tcode{TT()}}.
+  \tcode{C<A1, A2, ..., A$N$>}, and \tcode{E} is \tcode{C<A, A1, A2, ..., A$N$>}.
 
 \item Finally, if \tcode{P} declares a template parameter pack and 
 \tcode{C} is not a variadic concept, \tcode{E} is adjusted to be the
@@ -246,187 +242,6 @@ template<C1 T = 0> struct S4;   // error: default argument is not a type
 \end{addedblock}
 \end{quote}
 
-
-%%
-%% Introduction of template parameters
-%%
-\rSec1[temp.intro]{Introduction of template parameters}
-
-Add this section after \ref{temp.param}.
-
-\begin{quote}
-\begin{addedblock}
-\pnum
-A \grammarterm{template-introduction} provides a concise way of declaring
-templates.
-
-\begin{bnf}
-\nontermdef{template-introduction}\br
-   qualified-concept-name \terminal{\{} introduction-list \terminal{\}}
-
-\nontermdef{introduction-list}\br
-  introduced-parameter\br
-  introduction-list \terminal{,} introduced-parameter
-
-\nontermdef{introduced-parameter}\br
-    \terminal{...}\opt identifier
-\end{bnf}
-
-A \grammarterm{template-introduction} declares a template whose
-sequence of \grammarterm{template-parameter}{s} are derived from a
-\grammarterm{qualified-concept-name} (\ref{dcl.spec.auto.constr}) and the 
-sequence of \grammarterm{introduced-parameter}{s} in its 
-\grammarterm{introduction-list}.
-
-\pnum
-\xremoved{The concept designated by the \grammarterm{qualified-concept-name} is selected 
-by the concept resolution rules described in \ref{temp.constr.resolve}. Let
-\tcode{C} be the designated concept.
-% 
-The template parameters declared by a \grammarterm{template-introduction}
-are derived from its \grammarterm{introduced-parameter}{s} and the
-template parameter declarations of \tcode{C} to which those
-\grammarterm{introduced-parameter}{s} are matched as wildcards according to 
-the rules in \ref{temp.constr.resolve}.}
-% 
-\xadded{
-The template parameters declared by a \grammarterm{template-introduction}
-are derived from the \grammarterm{qualified-concept-name} and its template
-parameters using the following rules.
-}
-% 
-For each \grammarterm{introduced-parameter} \tcode{I}, declare a template
-parameter using the following rules:
-\begin{itemize}
-\item Let \tcode{P} be the template parameter declaration in \tcode{C} 
-      corresponding to \tcode{I}. If \tcode{P} does not declare a template 
-      parameter pack (\cxxref{temp.variadic}), \tcode{I} shall not include 
-      an ellipsis.
-
-\item If \tcode{P} declares a template parameter pack, adjust \tcode{P} 
-      to be the pattern of that pack.
-
-\item Declare a template parameter according to the rules for declaring a
-      \grammarterm{constrained-parameter} in \ref{temp.param}, using
-      \tcode{P} as the prototype parameter and with no ellipsis.
-
-\item If \tcode{I} includes an ellipsis, then the declared template parameter 
-      is a template parameter pack.
-\end{itemize}
-% 
-\enterexample
-\begin{codeblock}
-template<typename T, int N, typename... Xs> concept C1 = true;
-template<template<typename> class X> concept C2 = true;
-template<typename... Ts> concept C3 = true;
-
-C1{A, B, ...C} // OK: \tcode{A} is declared as \tcode{typename A},
-  struct S1;   // \tcode{B} is declared as \tcode{int B}, and
-               // \tcode{C} is declared as \tcode{typename ... C}
-
-C2{T} void f();    // OK: \tcode{T} is declared as \tcode{template<typename> class T}
-C2{...Ts} void g(); // error: the template parameter corresponding to \tcode{Ts}
-                    // is not a template parameter pack
-
-C3{T} struct S2;     // OK: \tcode{T} is declared as \tcode{typename T}
-C3{...Ts} struct S2; // OK: \tcode{Ts} is declared as \tcode{typename ... Ts}
-\end{codeblock}
-\exitexample
-
-
-\pnum
-A concept referred to by a \grammarterm{qualified-concept-name} may have 
-template parameters with default template arguments. An 
-\grammarterm{introduction-list} may omit \grammarterm{identifier}{}s for a 
-corresponding template parameter if it has a default argument.
-% 
-Only the \grammarterm{introduced-parameter}{}s are declared as template 
-parameters.
-% 
-\enterexample
-\begin{codeblock}
-template<typename A, typename B = bool> concept C = true;
-
-C{T} void f(T); // OK: \tcode{f(T)} is a function template with
-                // a single template type parameter \tcode{T}
-\end{codeblock}
-\exitexample
-
-\pnum
-An introduced template parameter does not have a default template argument 
-even if its corresponding template parameter does.
-% 
-\enterexample
-\begin{codeblock}
-template<typename T, int N = -1> concept P = true;
-
-P{T, N} struct Array { };
-
-Array<double, 0> s1; // OK
-Array<double> s2;    // error: \tcode{Array} takes two template arguments
-\end{codeblock}
-\exitexample
-
-\pnum
-A \grammarterm{template-introduction} introduces a 
-\grammarterm{constraint-expression} (\ref{temp.constr.decl}). This 
-expression is derived from the \grammarterm{qualified-concept-name} 
-\tcode{C} in the \grammarterm{template-introduction} and the sequence of
-\grammarterm{introduced-parameter}{s}.
-
-\begin{itemize}
-\item First, form a sequence of template arguments \tcode{A1, A2, ..., A$N$} 
-corresponding to the \grammarterm{introduced-parameter}{s}
-\tcode{P1, P2, ..., P$N$}.
-% 
-For each \grammarterm{introduced-parameter} \tcode{P}, form a corresponding 
-template argument \tcode{A} as follows. If \tcode{P} includes an ellipsis,
-then \tcode{A} is the pack expansion \tcode{P...} (\cxxref{temp.variadic}). 
-Otherwise, \tcode{A} is the \grammarterm{id-expression} \tcode{P}.
-
-% FIXME: This doesn't guarantee that the E has the same namespace specifier
-% as the qualified form.
-\item \xremoved{Then, form an expression \tcode{E} as follows. If \tcode{C} designates
-a variable concept (\ref{dcl.spec.concept}), then \tcode{E} is the
-\grammarterm{id-expression}
-\tcode{C<A1, ..., A$N$>}. Otherwise, \tcode{C} designates a function concept and
-\tcode{E} is the function call \tcode{C<A1, ..., A$N$>()}.}
-\xadded{Then, form a \grammarterm{id-expression} \tcode{E} as
-\tcode{C<A1, ..., A$N$>}.}
-\end{itemize}
-% 
-\tcode{E} is the introduced \grammarterm{constraint-expression}.
-% 
-\enterexample
-\begin{codeblock}
-template<typename T, typename U> concept C1 = true;
-template<typename... Ts> concept C3 = true;
-
-C1{A, B} struct s1;    // associates \tcode{C1<A, B>}
-C2{...Ts} struct s3;   // associates \tcode{C2<Ts...>}
-C2{X, ...Y} struct s4; // associates \tcode{C2<X, Y...>}
-\end{codeblock}
-\exitexample
-
-\pnum
-A template declared by a \grammarterm{template-introduction} can also be 
-an abbreviated function template (\ref{dcl.fct}). 
-% 
-The invented template parameters introduced by the placeholders in the 
-abbreviated function template are appended to the list of template parameters 
-declared by the \grammarterm{template-introduction}.
-% 
-\enterexample
-\begin{codeblock}
-template<typename T> concept C1 = true;
-
-C1{T} void f(T, auto);
-template<C1 T, typename U> void f(T, U); // OK: redeclaration of \tcode{f(T, auto)}
-\end{codeblock}
-% 
-\exitexample
-\end{addedblock}
-\end{quote}
 
 
 %%
@@ -993,10 +808,11 @@ the more constrained template as described by the rules in
 %%
 \rSec2[temp.concept]{Concept definitions}
 
-Add the following paragraph.
+Add this section after \cxxref{temp.alias} in the \Cpp Standard.
 
 \begin{quote}
-\begin{xaddedblock}
+\begin{addedblock}
+
 \pnum A \defn{concept} defines constraints on its template arguments.
 
 \begin{bnf}
@@ -1010,22 +826,6 @@ Add the following paragraph.
 
 \pnum A \grammarterm{concept-definition} declares its \grammarterm{identifier}
 to be a concept. The name of the concept is a \grammarterm{concept-name}.
-\enterexample
-\begin{codeblock}
-template<typename T>
-concept C = requires(T x) {
-  { f(x) } -> T;
-};
-template<typename T> 
-  requires C<T>
-T g(T x) { return f(x); }
-int f(int n) { return n; }
-void fn() {
-  g(0); // OK: \tcode{C<int>} is satisfied
-  g((void*)0); // error: cannot call \tcode{g}, \tcode{C<void*>} is not satisfied
-}
-\end{codeblock}
-\exitexample
 
 \pnum
 A \grammarterm{concept-definition} shall appear in the global scope or in a
@@ -1037,8 +837,8 @@ A program that explicitly instantiates (\ref{temp.explicit}), explicitly
 specializes (\ref{temp.expl.spec}), or partially
 specializes a concept is ill-formed. 
 \enternote
-\emph{id-expression}s that denote a concept specialization are evaluated as
-expressions (\ref{expr.prim.id}).
+\emph{id-expression}{}s that denote a concept specialization are evaluated
+(\ref{expr.prim.id}).
 \exitnote
 
 \pnum
@@ -1046,7 +846,7 @@ The first declared template parameter of a concept definition is its
 \defn{prototype parameter}.
 A \defn{variadic concept} is a concept whose prototype parameter is a template 
 parameter pack.
-\end{xaddedblock}
+\end{addedblock}
 \end{quote}
 
 %%
