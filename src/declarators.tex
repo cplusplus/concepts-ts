@@ -79,7 +79,7 @@ Add the following paragraph at the end of this section.
 \begin{quote}
 \begin{addedblock}
 \pnum
-The optional \grammarterm{requires-clause} (\ref{temp.constr.decl}) in a 
+The optional \grammarterm{requires-clause} (\ref{temp}) in a 
 \grammarterm{declarator} shall be present only when the declarator declares a 
 function (\ref{dcl.fct}), and that \grammarterm{requires-clause} shall not 
 precede a \grammarterm{trailing-return-type}. 
@@ -169,34 +169,17 @@ the default arguments (\cxxref{dcl.fct.default})
 are part of the function type.
 \end{quote}
 
-Modify paragraph 17. Note that the footnote reference has been
-omitted.
-
-\begin{quote}
-\setcounter{Paras}{16}
-\pnum
-There is a syntactic ambiguity when an ellipsis occurs at the end of a 
-\grammarterm{parameter-declaration-clause} without a preceding comma. In this 
-case, the ellipsis is parsed as part of the \grammarterm{abstract-declarator} 
-if the type of the parameter either names a template parameter pack that has 
-not been expanded or contains 
-\removed{\tcode{auto}}
-\added{a placeholder (\ref{dcl.spec.auto})}; 
-otherwise, it is parsed as part
-of the \grammarterm{parameter-declaration-clause}.
-\end{quote}
-
 Add the following paragraphs after paragraph 17.
 
 \begin{quote}
 \begin{addedblock}
 \pnum
 An \defn{abbreviated function template} is a function declaration whose
-parameter-type-list includes one or more placeholders (\ref{dcl.spec.auto}).
+parameter-type-list includes one or more placeholder types (\ref{dcl.spec.auto}).
 % 
 An abbreviated function template declaration declares a function template
 (\ref{temp.fct}) with one invented template parameter for each occurrence 
-of a placeholder in the \grammarterm{parameter-declaration-clause},
+of a placeholder type in the \grammarterm{parameter-declaration-clause},
 in order of appearance, according to the rules below.
 % 
 \enternote
@@ -212,82 +195,20 @@ Each template parameter is invented as follows.
 \grammarterm{type-specifier}, then the invented template 
 parameter is a type \grammarterm{template-parameter}.
 
-\item Otherwise, the placeholder is designated by a 
-\grammarterm{constrained-type-specifier}, and the invented 
-parameter is a \grammarterm{constrained-parameter} (\ref{temp.param}) whose 
-\grammarterm{qualified-concept-name} is that of the 
-\grammarterm{constrained-type-specifier}.
-
 \item If the placeholder appears in the \grammarterm{decl-specifier-seq} of a 
 function parameter pack (\cxxref{temp.variadic}), or the 
 \grammarterm{type-specifier-seq} of a \grammarterm{type-id} that is a pack 
 expansion, the invented template parameter is a 
 template parameter pack.
 \end{itemize}
-% 
-All placeholders designated by \grammarterm{constrained-type-specifier}{}s 
-whose corresponding \grammarterm{constrained-parameter}{s} would introduce 
-equivalent \grammarterm{constraint-expression}{s} (\ref{temp.param}), 
-using the rules for comparing expressions in \ref{temp.over.link}, have 
-the same invented template parameter.
-% 
-\enterexample
-\begin{codeblock}
-namespace N {
-  template<typename T> concept bool C = true;
-}
-template<typename T> concept bool C = true;
-template<typename T, int> concept bool D = true;
-template<typename, int = 0> concept bool E = true;
-
-void abbr(C, D<0>);
-\end{codeblock}
-The \grammarterm{constrained-type-specifier}{}s \tcode{C} and \tcode{D<0>}
-correspond to distinct invented template parameters in the declaration
-of \tcode{abbr}.
-\begin{codeblock}
-void f0(C a, C b);
-\end{codeblock}
-The types of \tcode{a} and \tcode{b} are the same invented template
-type parameter.
-% 
-\begin{codeblock}
-void f1(C& a, C* b);
-\end{codeblock}
-The type of \tcode{a} is a reference to an invented template type parameter 
-\tcode{T}, and the type of \tcode{b} is a pointer to \tcode{T}.
-% 
-\begin{codeblock}
-void f2(N::C a, C b);
-void f3(D<0> a, D<1> b);
-\end{codeblock}
-In both functions, the parameters \tcode{a} and
-\tcode{b} have different invented template type parameters.
-% 
-\begin{codeblock}
-void f4(E a, E<> b, E<0> c);
-\end{codeblock}
-The types of \tcode{a}, \tcode{b}, and \tcode{c} are the same because the 
-\grammarterm{constrained-type-specifier}{s} \tcode{E}, \tcode{E<>}, and 
-\tcode{E<0>} all associate the \grammarterm{constraint-expression} 
-\tcode{E<T, 0>}, where \tcode{T} is an invented template type parameter.
-% 
-\begin{codeblock}
-void f5(C head, C... tail);
-\end{codeblock}
-The types of \tcode{head} and \tcode{tail} are different. Their
-respective introduced \grammarterm{constraint-expression}{s} are \tcode{C<T>} 
-and \tcode{(C<U> \&\& ...)}, where \tcode{T} is the template parameter invented 
-for \tcode{head} and \tcode{U} is the template parameter invented for 
-\tcode{tail} (\ref{temp.param}).
 
 \pnum 
 The adjusted function parameters of an abbreviated function template are derived
 from the \grammarterm{parameter-declaration-clause} by replacing each 
-occurrence of a placeholder with the name of the corresponding invented 
+occurrence of a placeholder type with the name of its corresponding invented 
 \grammarterm{template-parameter}.
 % 
-If the replacement of a placeholder with the name of a template parameter
+If the replacement of a placeholder type with the name of a template parameter
 results in an invalid parameter declaration, the program is ill-formed.
 % 
 \enternote
@@ -315,42 +236,6 @@ template<typename T, typename U> void f1(const T&, U);
 template<typename... T> void f2(Vec<T*>...);
 template<typename... Ts> void f3(Tuple<Ts...>);
 template<typename T, typename U, typename V> void f4(T (U::*)(V));
-
-template<typename T> concept bool C1 = true;
-template<typename T> concept bool C2 = true;
-template<typename T, typename U> concept bool C3 = true;
-template<typename... Ts> concept bool C4 = true;
-
-void g1(const C1*, C2&);
-void g2(Vec<C1>&);
-void g3(C1&...);
-void g4(Vec<C3<int>>);
-void g5(C4...);
-void g6(Tuple<C4...>);
-void g7(C4 p);
-void g8(Tuple<C4>);
-
-// Corresponding adjusted declarations.
-template<C1 T, C2 U> void g1(const T*, U&);
-template<C1 T> void g2(Vec<T>&);
-template<C1... Ts> void g3(Ts&...);
-template<C3<int> T> void g4(Vec<T>);
-template<C4... Ts> void g5(Ts...);
-template<C4... Ts> void g6(Tuple<Ts...>);
-template<C4 T> void g7(T);
-template<C4 T> void g8(Tuple<T>);
-\end{codeblock}
-\exitexample
-% 
-\enterexample
-\begin{codeblock}
-template<int N> concept bool Num = true;
-
-void h(Num*); // error: invalid type in parameter declaration
-\end{codeblock}
-The adjusted declaration would have this form:
-\begin{codeblock}
-template<int N> void h(N*); // error: invalid type
 \end{codeblock}
 \exitexample
 
