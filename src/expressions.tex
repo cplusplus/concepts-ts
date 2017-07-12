@@ -213,7 +213,7 @@ it does not cause the program to be ill-formed.
 The substitution and semantic constraint checking
 proceeds in lexical order and stops when a condition that
 determines the result of the \grammarterm{requires-expression} is encountered.
-If no substitution is performed or substitution succeeds,
+If substitution (if any) and semantic constraint checking succeed,
 the \grammarterm{requires-expression} evaluates to \tcode{true}.
 \enternote
 If a \grammarterm{requires-expression} contains invalid types or expressions in
