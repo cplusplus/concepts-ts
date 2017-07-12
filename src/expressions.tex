@@ -343,7 +343,8 @@ convertible to the type named by the
 \tcode{void} function template with a single type template parameter
 \tcode{T} declared with the \grammarterm{constrained-parameter}. 
 It has a single \grammarterm{parameter} whose \grammarterm{type-specifier} is
-\grammarterm{cv}-\tcode{T} followed by the \grammarterm{abstract-declarator}. 
+\grammarterm{cv-qualifier-seq}-\tcode{T} followed by the 
+\grammarterm{abstract-declarator}. 
 \end{itemize}
 \end{itemize}
 
@@ -377,13 +378,13 @@ that \tcode{*x} is implicitly convertible to
 template<typename T, typename U> concept C3 = false;
 template<typename T> concept C4 =
   requires(T x) {
-    {*x} -> C3<U> const&;
+    {*x} -> C3<int> const&;
   };
 \end{codeblock}
 The \grammarterm{compound-requirement} requires that \tcode{*x} be deduced
 as an argument for the invented function:
 \begin{codeblock}
-template<C3<U> X> void f(X const&);
+template<C3<int> X> void f(X const&);
 \end{codeblock}
 In this case, deduction always fails since \tcode{C3} is \tcode{false}.
 
@@ -440,8 +441,8 @@ for the purpose of determining partial ordering (\ref{temp.constr.order}).
 \exitnote
 
 \pnum
-A local parameter shall not appear as an evaluated operand 
-(\ref{expr}) of the \grammarterm{constraint-expression}.
+A local parameter shall only appear as an evaluated operand 
+(Clause~\ref{expr}) within the \grammarterm{constraint-expression}.
 \enterexample
 \begin{codeblock}
 template<typename T> 
