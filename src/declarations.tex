@@ -65,10 +65,8 @@ designate a placeholder type that will be replaced later by deduction
 from an initializer. The \tcode{auto}
 \grammarterm{type-specifier} is also used to
 introduce a function type having a \grammarterm{trailing-return-type} 
-\removed{or}\added{,} to
-signify that a lambda is a generic lambda (\cxxref{expr.prim.lambda.closure})
-\added{, or to signify that a function is an abbreviated function template
-(\ref{dcl.fct})}.
+or to signify that a lambda is a generic lambda 
+(\cxxref{expr.prim.lambda.closure}).
 The \tcode{auto} \grammarterm{type-specifier} is also used to introduce a
 structured binding declaration (\cxxref{dcl.struct.bind}).
 \added{\enternote
@@ -114,18 +112,6 @@ is a generic lambda
 auto glambda = [](int i, auto a) { return i; }; // OK: a generic lambda
 \end{codeblock}
 \exitexample
-%
-\begin{addedblock}
-Similarly, if a placeholder appears in a parameter type of a function 
-declaration, the function declaration declares an abbreviated function 
-template (\ref{dcl.fct}).
-%
-\enterexample
-\begin{codeblock}
-void f(const auto&, int); // OK: an abbreviated function template
-\end{codeblock}
-\exitexample
-\end{addedblock}
 \end{quote}
 
 
@@ -393,3 +379,6 @@ template<class T1, class T2, class T3, class T4, class T5, class T6>
 void g(Pair< T1(*)(T2, T3), T4 (T5::*)(T6)> x);
 \end{codeblock}
 \exitexample
+
+\end{addedblock}
+\end{quote}
