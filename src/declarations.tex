@@ -76,8 +76,6 @@ A \grammarterm{nested-name-specifier} can also include placeholders (\ref{expr.p
 Replacements for those placeholders are determined according to the rules
 in this section.
 \exitnote}
-% 
-\end{addedblock}
 \end{quote}
 
 Modify paragraph 2 to allow \grammarterm{constrained-type-specifier}{}s
@@ -85,7 +83,7 @@ with function declarators, except in the declared return type.
 
 \begin{quote}
 \pnum
-\removed{The placeholder type}\added{Placeholders} can appear with a function 
+\removed{The placeholder type}\added{Placeholder types} can appear with a function 
 declarator in the \grammarterm{decl-specifier-seq}, \grammarterm{type-specifier-seq},
 \grammarterm{conversion-function-id}, or \grammarterm{trailing-return-type}, 
 in any context where such a declarator is valid. 
@@ -97,22 +95,15 @@ a function.
 %
 If the declared return type of the function contains a placeholder, the 
 return type of the function is deduced from non-discarded return statements,
-if any, in the body of the function (\ref{stmt.if}).
-%
-\added{
-In a function declarator of the form \tcode{auto D -> T} where
-\tcode{T} contains placeholders, the initial \tcode{auto} does 
-not designate a placeholder.
-}
+if any, in the body of the function (\cxxref{stmt.if}).
 \end{quote}
-
 
 Modify paragraph 3 to allow the use of \tcode{auto} within the 
 parameter type of a lambda or function.
 
 \begin{quote}
 \pnum
-If \removed{the \tcode{auto} \grammarterm{type-specifier}} \added{a placeholder}
+If the \tcode{auto} \grammarterm{type-specifier} 
 appears \removed{as one of the \grammarterm{decl-specifier}{}s in the 
 \grammarterm{decl-specifier-seq} of a \grammarterm{parameter-declaration}} 
 \added{in a parameter type} of a \grammarterm{lambda-expression}, the lambda 
@@ -138,53 +129,9 @@ void f(const auto&, int); // OK: an abbreviated function template
 \end{addedblock}
 \end{quote}
 
-
-Add the following after paragraph 3 to describe when 
-\grammarterm{constrained-type-specifier}{}s in the return type 
-refer to template parameters.
-
-\begin{quote}
-\begin{addedblock}
-\pnum
-A \grammarterm{constrained-type-specifier} \tcode{C1} within the declared 
-return type of an abbreviated function template declaration does not 
-designate a placeholder if its introduced
-\grammarterm{constraint-expression} (\ref{dcl.spec.auto.constr}) 
-is determined to be equivalent, using the rules in \ref{temp.over.link}
-for comparing expressions, to the introduced 
-\grammarterm{constraint-expression} for a
-\grammarterm{constrained-type-specifier} \tcode{C2} in the 
-\grammarterm{parameter-declaration-clause} of that function declaration.
-% 
-Instead, \tcode{C1} is replaced by the template parameter invented for
-\tcode{C2} (\ref{dcl.fct}).
-\enterexample
-\begin{codeblock}
-template<typename T> concept bool C = true;
-
-template<typename... T> struct Tuple;
-
-C const& f1(C);      // has one template parameter and no deduced return type
-Tuple<C...> f2(C);   // has one template parameter and a deduced return type
-\end{codeblock}
-In the declaration \tcode{f1}, the \grammarterm{constraint-expression} 
-introduced by the \grammarterm{constrained-type-specifier}{}s in the
-\grammarterm{parameter-declaration-clause} and return type are equivalent
-; they would both introduce the expression \tcode{C<T>}, for some invented 
-template parameter \tcode{T}.
-% 
-In \tcode{f2}, the use of \tcode{C} in the return type would introduce the
-\grammarterm{constraint-expression} \tcode{(C<T> \&\& ...)}, which is 
-distinct from the \grammarterm{constraint-expression} \tcode{C<T>} introduced
-by the invented \grammarterm{constrained-parameter} (\ref{temp.param}) for 
-the \grammarterm{constrained-type-specifier} in the 
-\grammarterm{parameter-declaration-clause} according to the rules in 
-\ref{dcl.fct}.
-\exitexample
-\end{addedblock}
-\end{quote}
-
-
+%%%
+%%% FIXME: We've lost argument deduction constraints!
+%%% 
 Add the following after paragraph 4 to allow the use of \tcode{auto} in the
 \grammarterm{trailing-return-type} of a \grammarterm{compound-requirement}.
 Also, disallow the use of \tcode{decltype(auto)} with function parameters
@@ -222,17 +169,18 @@ placeholders within a variable declaration.
 \begin{quote}
 \pnum
 The type of a variable declared using 
-\added{a placeholder} 
+\added{a placeholder type} 
 \removed{\tcode{auto} or \tcode{decltype(auto)}} 
 is deduced from its initializer.
 % 
-This use is allowed in an initializing declaration (\cxxref{11.6}) of a variable.
+This use is allowed in an initializing declaration (\cxxref{dcl.init}) of 
+a variable.
 %
 \removed{\tcode{auto} or \tcode{decltype(auto)} shall appear as one
 of the \grammarterm{decl-specifier}{}s in the \grammarterm{decl-specifier-seq} }
 %
 \added{
-A placeholder can appear anywhere in the declared type of the variable, but 
+A placeholder type can appear anywhere in the declared type of the variable, but 
 \tcode{decltype(auto)} shall appear only as one of the
 \grammarterm{decl-specifier}{}s of the \grammarterm{decl-specifier-seq}.
 }
@@ -278,26 +226,8 @@ Pair<auto, auto> p2 = make_pair(0, 'a'); // OK: \tcode{p2} has type \tcode{Pair<
 N::Wrap<auto> a = N::make_wrap(0.0);     // OK: \tcode{a} has type \tcode{Wrap<double>}
 auto::Wrap<int> x = N::make_wrap(0);     // error: failed to deduce value for \tcode{auto}
 Size<sizeof(auto)> y = Size<0>{};        // error: failed to deduce value for \tcode{auto}
-
-template<typename T> concept bool C = true;
-template<typename T> concept bool D = false;
-C z1 = 0;                // OK: \tcode{z1} has type \tcode{int}
-D z2 = 0;                // error: constraints not satisfied
-C cf1() { return 0.0; }; // OK: \tcode{cf1} returns \tcode{double}
-D cf2() { return 0.0; }; // error: constraints not satisfied
-auto cf3() -> C;         // OK: \tcode{cf3}'s return type will be deduced when it is defined
 \end{codeblock}
 \end{addedblock}
-\end{quote}
-
-Update paragraph 6 in the \Cpp Standard (paragraph 8, here) to disallow 
-placeholders in other contexts.
-
-\begin{quote}
-\pnum
-A program that uses \removed{\tcode{auto} or \tcode{decltype(auto)}}
-\added{placeholders} in a context not explicitly allowed in this section is 
-ill-formed.
 \end{quote}
 
 
@@ -329,95 +259,6 @@ Pair<auto, auto> p3 = make_pair(0, 'a'),
 \exitexample
 \end{quote}
 
-Modify paragraph 8 in the \Cpp Standard (paragraph 10, here) to read:
-\begin{quote}
-\pnum
-If a function with a declared return type that contains 
-\removed{a placeholder type} 
-\added{placeholders}
-has multiple non-discarded \tcode{return} statements,
-the return type is deduced for each such \tcode{return} statement. 
-If the type deduced is not the same in each deduction,
-the program is ill-formed.
-\end{quote}
-
-Modify paragraph 9 in \Cpp Standard (paragraph 11, here) to read:
-
-\begin{quote}
-\pnum
-If a function with a declared return type that uses 
-\removed{a placeholder type}
-\added{placeholders} 
-has no non-discarded \tcode{return} statements, the return type is deduced as 
-though from a \tcode{return} statement with no operand at the closing brace of 
-the function body.
-\end{quote}
-
-Modify the first sentence of paragraph 10 in the \Cpp Standard (paragraph 12,
-here).
-
-\begin{quote}
-\pnum
-If the type of an entity with an undeduced placeholder \removed{type} 
-is needed to determine the type of an expression, the program is 
-ill-formed.
-\end{quote}
-
-Modify paragraph 12 in the \Cpp Standard (paragraph 14, here) to read:
-
-\begin{quote}
-\setcounter{Paras}{13}
-\pnum
-Redeclarations or specializations of a function or function template 
-with a declared return type that uses 
-\removed{a placeholder type}
-\added{placeholders} shall also use that placeholder, 
-not a deduced type.
-% 
-\added{If a placeholder is designated by a 
-\grammarterm{constrained-type-specifier}, redeclarations or specializations 
-shall use the same \grammarterm{constrained-type-specifier}.}
-\end{quote}
-
-Add the following examples to that paragraph.
-
-\begin{quote}
-\begin{addedblock}
-\begin{codeblock}
-template<typename T> concept bool C1 = true;
-template<typename T> concept bool C2 = true;
-
-template<typename T> auto cf(T) -> C1; // \#1
-template<typename T> C1 cf(T);         // \#2, redeclaration of \#1
-template<typename T> C2 cf(T);         // error: redeclared with different placeholder
-\end{codeblock}
-\end{addedblock}
-\end{quote}
-
-Modify paragraph 13 in the \Cpp Standard (paragraph 15, here) to disallow
-placeholders in the return types of virtual functions.
-
-\begin{quote}
-\pnum
-A function declared with a return type that uses 
-\removed{a placeholder type}
-\added{placeholders}
-shall not be virtual (\cxxref{class.virtual}).
-\end{quote}
-
-
-Modify paragraph 14 in the \Cpp Standard (paragraph 16, here) to read:
-
-\begin{quote}
-\pnum
-An explicit instantiation declaration (\ref{temp.explicit}) does not cause the 
-instantiation of an entity declared using 
-\removed{a placeholder type}
-\added{placeholders},
-but it also does not prevent that entity from being instantiated as needed to
-determine its type. 
-\end{quote}
-
 
 %%%
 %%% Placeholder type deduction
@@ -428,11 +269,13 @@ determine its type.
 \begin{quote}
 \pnum
 \defn{Placeholder type deduction} is the process by which a type containing
-\removed{a placeholder type} \added{placeholders} is replaced by
-\removed{a deduced type} \added{deduced values (type, non-type, template)}.
+\removed{a placeholder type} \added{placeholder types} is replaced by
+\removed{a deduced type} \added{deduced types)}.
 
 \pnum
-A type \tcode{T} containing a \removed{placeholder type}\added{placeholders},
+A type \tcode{T} containing a
+\removed{placeholder type}
+\added{placeholder types},
 and a corresponding initializer \tcode{e},
 are determined as follows:
 
@@ -440,7 +283,9 @@ are determined as follows:
 \item
 for a non-discarded \tcode{return} statement that occurs
 in a function declared with a return type
-that contains \removed{a placeholder type}\added{placeholders},
+that contains 
+\removed{a placeholder type}
+\added{placeholder types},
 \tcode{T} is the declared return type
 and \tcode{e} is the operand of the \tcode{return} statement.
 If the \tcode{return} statement
@@ -448,7 +293,9 @@ has no operand,
 then \tcode{e} is \tcode{void()};
 \item
 for a variable declared with a type
-that contains \removed{a placeholder type}\added{placeholders},
+that contains 
+\removed{a placeholder type}
+\added{placeholder types},
 \tcode{T} is the declared type of the variable
 and \tcode{e} is the initializer.
 If the initialization is direct-list-initialization,
@@ -457,7 +304,9 @@ containing only a single \grammarterm{assignment-expression}
 and \tcode{e} is the \grammarterm{assignment-expression};
 \item
 for a non-type template parameter declared with a type
-that contains \removed{a placeholder type}\added{placeholders},
+that contains 
+\removed{a placeholder type}
+\added{placeholder types},
 \tcode{T} is the declared type of the non-type template parameter
 and \tcode{e} is the corresponding template argument.
 \end{itemize}
@@ -465,17 +314,11 @@ and \tcode{e} is the corresponding template argument.
 In the case of a \tcode{return} statement with no operand
 or with an operand of type \tcode{void},
 \tcode{T} shall be either
-\tcode{decltype(auto)} \removed{or}\added{,} \cv{}~\tcode{auto}% 
-\added{, or a \grammarterm{constrained-type-specifier}}.
-
-% FIXME: This is a normative change.
-% \added{Otherwise, if the initialization is copy-list-initialization, 
-% \tcode{T} shall be either \tcode{decltype(auto)}, \tcode{auto}, or a
-% \grammarterm{constrained-type-specifier}.}
+\tcode{decltype(auto)} or \cv{}~\tcode{auto}.
 
 \pnum
-If the placeholder is the \tcode{auto} \grammarterm{type-specifier}
-\added{or a \grammarterm{constrained-type-specifier}}, the deduced type
+If the placeholder is the \tcode{auto} \grammarterm{type-specifier}, 
+the deduced type
 $\mathtt{T}'$ replacing \tcode{T} is determined using the rules for template 
 argument deduction.
 % 
@@ -490,19 +333,19 @@ Otherwise, obtain a type \tcode{P} from \tcode{T} as follows:
 \begin{itemize}
 % FIXME: This doesn't do the right thing at all.
 \item if the initialization is a copy-list-initialization
-and a placeholder is a \grammarterm{decl-specifier} of the 
+and a placeholder type is a \grammarterm{decl-specifier} of the 
 \grammarterm{decl-specifier-seq} of the variable declaration, replace that 
-occurrence of the placeholder with \tcode{std::initializer_list<U>}
+occurrence of the placeholder type with \tcode{std::initializer_list<U>}
 where \tcode{U} is an invented type template parameter;
 
-\item otherwise, replace each occurrence of a placeholder in the
+\item otherwise, replace each occurrence of a placeholder type in the
 variable or return type with a new invented type template parameter
 according to the rules for inventing template parameters
 for placeholders in \ref{dcl.fct}. 
 \end{itemize}
 \end{addedblock}
 %
-Deduce a value for \added{each} \removed{\tcode{U}}
+Deduce a type for \added{each} \removed{\tcode{U}}
 \added{invented type template parameter} using the rules
 of template argument deduction from a function 
 call~(\cxxref{temp.deduct.call}),
@@ -511,30 +354,10 @@ function template parameter type and
 the corresponding argument is \tcode{e}.
 % 
 If the deduction fails, the declaration is ill-formed.
-% 
-\added{If any placeholders in the declared type were introduced by a
-\grammarterm{constrained-type-specifier}, then define \tcode{C} to be a
-\grammarterm{constraint-expression} as follows:}
-\begin{addedblock}
-\begin{itemize}
-\item if there is single \grammarterm{constrained-type-specifier},
-then \tcode{C} is the \grammarterm{constraint-expression} introduced
-by the invented template \grammarterm{constrained-parameter} (\ref{temp.param})
-corresponding to that \grammarterm{constrained-type-specifier};
-\item otherwise, \tcode{C} is the \grammarterm{logical-and-expression}
-(\cxxref{expr.log.and}) whose operands are the 
-\grammarterm{constraint-expression}{s} introduced by the invented
-template \grammarterm{constrained-parameter}{s} corresponding to
-each \grammarterm{constrained-type-specifier}, in order of appearance.
-\end{itemize}
-\end{addedblock}
-% 
-\added{If the normalized constraint for \tcode{C} (\ref{temp.constr.decl}) 
-is not satisfied by the deduced values, the declaration is ill-formed.}
 %
 Otherwise, $\mathtt{T}'$ is obtained by
 substituting the deduced \removed{\tcode{U}}
-\added{values for the invented type template parameters}
+\added{types for the invented type template parameters}
 into \tcode{P}.
 
 \enterexample
@@ -604,117 +427,3 @@ template<class T1, class T2, class T3, class T4, class T5, class T6>
 void g(Pair< T1(*)(T2, T3), T4 (T5::*)(T6)> x);
 \end{codeblock}
 \exitexample
-
-\enterexample
-\begin{codeblock}
-template<typename T> concept bool C = true;
-
-const C* cv = expr;
-\end{codeblock}
-The type of \tcode{cv} is deduced from the parameter \tcode{p1} in the
-call \tcode{f1(expr)} of the following invented function:
-\begin{codeblock}
-template<C T> void f1(const T* p1);
-\end{codeblock}
-\exitexample
-
-\enterexample
-\begin{codeblock}
-auto cf(int) -> Pair<C, C> { return expr; }
-\end{codeblock}
-The return type of \tcode{cf} is deduced from the parameter \tcode{p2} in the
-call \tcode{f2(expr)} of the following invented function:
-\begin{codeblock}
-template<C T> void f2(Pair<T, T>);
-\end{codeblock}
-Both \grammarterm{constrained-type-specifier}{}s in the return type of 
-\tcode{cf} correspond to the same invented template parameter.
-\exitexample
-\end{addedblock}
-\end{quote}
-
-
-%%
-%% Constrained type specifiers
-%%
-\rSec4[dcl.spec.auto.constr]{Constrained type specifiers}
-
-Add this section to \ref{dcl.spec.auto}.
-
-\begin{quote}
-\begin{addedblock}
-\pnum
-A \grammarterm{constrained-type-specifier} designates a placeholder
-(type, non-type, or template) and introduces an associated constraint
-(\ref{temp.constr.decl}).
-
-\begin{bnf}
-\nontermdef{constrained-type-specifier}\br
-	qualified-concept-name
-
-\nontermdef{qualified-concept-name}\br
-	nested-name-specifier\opt constrained-type-name
-
-\nontermdef{constrained-type-name}\br
-  concept-name\br
-  partial-concept-id
-
-\nontermdef{partial-concept-id}\br
-		concept-name \terminal{<} template-argument-list\opt \terminal{>}
-\end{bnf}
-
-\enterexample
-\begin{codeblock}
-template<typename T> concept C1 = false;
-template<int N> concept C2 = false;
-template<template<typename> class X> concept C3 = false;
-
-template<typename T, int N> class Array { };
-template<typename T, template<typename> class A> class Stack { };
-template<typename T> class Alloc { };
-
-void f1(C1);              // \tcode{C1} designates a placeholder type
-void f2(Array<auto, C2>); // \tcode{C2} designates a placeholder for an integer value
-void f3(Stack<auto, C3>); // \tcode{C3} designates a placeholder for a class template
-\end{codeblock}
-\exitexample
-
-
-\pnum
-A \grammarterm{partial-concept-id} is a \grammarterm{concept-name} followed 
-by a sequence of \grammarterm{template-argument}{}s.
-
-\enterexample
-\begin{codeblock}
-template<typename T, int N = 0> concept bool Seq = true;
-
-void f1(Seq<3>); // OK
-void f2(Seq<>);  // OK
-\end{codeblock}
-\exitexample
-
-\pnum
-\enternote
-The \grammarterm{constraint-expression} introduced by a 
-\grammarterm{constrained-type-name} is the one introduced by the invention of a
-\grammarterm{constrained-parameter} (\ref{temp.param}).
-%
-The rules for inventing template parameters corresponding to placeholders
-in the type of a variable or the declared return type of a function are
-described in \ref{dcl.spec.auto.deduct}.
-% 
-The rules for inventing template parameters corresponding to placeholders
-in the \grammarterm{parameter-declaration-clause} of a
-\grammarterm{lambda-expression} (\ref{expr.prim.lambda})
-or function declaration (\ref{dcl.fct}) are described in
-\ref{dcl.fct}.
-% 
-The rules for inventing a template parameter corresponding to placeholders
-in the \grammarterm{trailing-return-type} of a 
-\grammarterm{compound-requirement} are described in 
-\ref{temp.constr.deduct}.
-\exitnote
-
-\end{addedblock}
-\end{quote}
-
