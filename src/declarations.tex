@@ -129,39 +129,6 @@ void f(const auto&, int); // OK: an abbreviated function template
 \end{addedblock}
 \end{quote}
 
-%%%
-%%% FIXME: We've lost argument deduction constraints!
-%%% 
-Add the following after paragraph 4 to allow the use of \tcode{auto} in the
-\grammarterm{trailing-return-type} of a \grammarterm{compound-requirement}.
-Also, disallow the use of \tcode{decltype(auto)} with function parameters
-and deduction constraints.
-
-\begin{quote}
-\begin{addedblock}
-\pnum
-If a placeholder appears in the \grammarterm{trailing-return-type}
-of a \grammarterm{compound-requirement} in a \grammarterm{requires-expression} 
-(\ref{expr.prim.req.compound}), that return type introduces an argument 
-deduction constraint (\ref{temp.constr.deduct}).
-% 
-\enterexample
-\begin{codeblock}
-template<typename T> concept C =
-  requires (T i) { 
-    {*i} -> const auto&; // OK: introduces an argument deduction constraint
-  };
-}
-\end{codeblock}
-\exitexample
-
-\pnum
-The \tcode{decltype(auto)} \grammarterm{type-specifier} shall not appear
-in the declared type of a \grammarterm{parameter-declaration} or the
-\grammarterm{trailing-return-type} of a \grammarterm{compound-requirement}.
-\end{addedblock}
-\end{quote}
-
 
 Modify paragraph 4 in the \Cpp Standard (paragraph 7, here) to allow multiple 
 placeholders within a variable declaration.
