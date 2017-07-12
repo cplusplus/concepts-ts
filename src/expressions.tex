@@ -93,10 +93,14 @@ though \tcode{f} is an unevaluated operand (Clause~\ref{expr}).
 \setcounter{subsubsection}{1}
 \rSec3[expr.prim.id.qual]{Qualified names}
 
+Remove this section.
+\begin{quote}
+\begin{xremovedblock}
+
 Add \tcode{auto} and \grammarterm{constrained-type-name} to the
 \grammarterm{nested-name-specifier} grammar.
 
-\begin{quote}
+% \begin{quote}
 \begin{bnf}
 \nontermdef{nested-name-specifier}\br
     \terminal{::}\br
@@ -108,12 +112,12 @@ Add \tcode{auto} and \grammarterm{constrained-type-name} to the
     nested-name-specifier identifier \terminal{::}\br
     nested-name-specifier \terminal{template}\opt \terminal{::}
 \end{bnf}
-\end{quote}
+% \end{quote}
 
 Add a new paragraph at the end of this section.
 
-\begin{quote}
-\begin{addedblock}
+% \begin{quote}
+% \begin{addedblock}
 \setcounter{Paras}{5}
 \pnum
 In a \grammarterm{nested-name-specifier} of the form \tcode{auto::} or
@@ -155,9 +159,11 @@ In the declaration of \tcode{f}, the placeholder appears in a non-deduced
 context (\cxxref{temp.deduct.type}). It may be replaced later through the
 explicit specification of template arguments.
 \exitexample
-\end{addedblock}
-\end{quote}
+% \end{addedblock}
+% \end{quote}
 
+\end{xremovedblock}
+\end{quote}
 
 %%
 %% Lambda expressions
@@ -165,25 +171,30 @@ explicit specification of template arguments.
 \setcounter{subsection}{4}
 \rSec2[expr.prim.lambda]{Lambda expressions}
 
+Remove the changes to this section.
+
+\begin{quote}
+\begin{xremovedblock}
+
 Insert the following paragraph after paragraph 4 to define the
 term ``generic lambda''. 
 
-\begin{quote}
-\begin{addedblock}
+% \begin{quote}
+% \begin{addedblock}
 \setcounter{Paras}{4}
 \pnum
 A \defn{generic lambda} is a \grammarterm{lambda-expression} where one
 or more placeholders (\ref{dcl.spec.auto}) appear in the parameter-type-list
 of the \grammarterm{lambda-declarator}.
-\end{addedblock}
-\end{quote}
+% \end{addedblock}
+% \end{quote}
 
 \rSec3[expr.prim.lambda.closure]{Closure types}
 
 Modify paragraph 3 so that the meaning of a generic lambda is defined 
 in terms of its abbreviated member function template call operator.
 
-\begin{quote}
+% \begin{quote}
 The closure type for a non-generic
 \grammarterm{lambda-expression} has a public inline 
 function call operator (\cxxref{over.call})
@@ -226,13 +237,13 @@ parameters and return type are derived from the
 \grammarterm{trailing-return-type} according to the
 rules in (\ref{dcl.fct}).
 }
-\end{quote}
+% \end{quote}
 
 Add the following example after those in paragraph 3 in the 
 \Cpp Standard.
 
-\begin{quote}
-\begin{addedblock}
+% \begin{quote}
+% \begin{addedblock}
 \enterexample
 \begin{codeblock}
 template<typename T> concept bool C = true;
@@ -249,7 +260,10 @@ signifying that the lambda is generic. The generic lambda \tcode{gl}
 and the function object \tcode{fun} have equivalent behavior when 
 called with the same arguments.
 \exitexample
-\end{addedblock}
+% \end{addedblock}
+% \end{quote}
+
+\end{xremovedblock}
 \end{quote}
 
 %%
