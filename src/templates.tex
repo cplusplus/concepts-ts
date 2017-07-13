@@ -949,9 +949,9 @@ template<class T> class X;
 X<char> ch;         // error: incomplete type \tcode{X<char>}
 \end{codeblock}
 \exitexample
-\begin{note}
+\enternote
 Within a template declaration,
-a local class~(\ref{class.local}) or enumeration and the members of
+a local class~(\cxxref{class.local}) or enumeration and the members of
 a local class are never considered to be entities that can be separately
 instantiated (this includes their default arguments, 
 \added{associated constraints (\ref{temp.constr.decl}),}
@@ -960,7 +960,7 @@ initializers, if any). As a result, the dependent names are looked up, the
 semantic constraints are checked, and any templates used are instantiated as
 part of the instantiation of the entity within which the local class or
 enumeration is declared.
-\end{note}
+\exitnote
 \end{quote}
 
 
