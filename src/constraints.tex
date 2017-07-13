@@ -121,23 +121,21 @@ the second operand is not checked for satisfaction.
 \rSec3[temp.constr.atomic]{Atomic constraints}
 
 \pnum
-An \defn{atomic constraint} is a constraint that evaluates a constant 
-expression \tcode{E} (\cxxref{expr.const}) that is neither a logical
-AND expression (\cxxref{expr.log.and}) nor a logical OR expression
-(\cxxref{expr.log.or}), under a mapping from the template parameters
+An \defn{atomic constraint} is formed from a
+an expression \tcode{E}
+and a mapping from the template parameters
 that appear within \tcode{E} to template arguments involving the
-template parameters of the constrained entity (the \defn{parameter
-mapping} of the atomic constraint).
+template parameters of the constrained entity, called the \defn{parameter
+mapping} of the atomic constraint (\ref{temp.constr.decl}).
+\enternote
 Two atomic constraints are equivalent if they are formed from the same
 \grammarterm{expression} and the parameter mappings are equivalent
-according to the rules for expressions described in \ref{temp.over.link},
-except that any \grammarterm{identifier}{s} referring to 
-local parameters of \grammarterm{requires-expression}{s}
-are equivalent if and only if the types of their corresponding
-declarations are equivalent (\cxxref{temp.type}).
+according to the rules for expressions described in \ref{temp.over.link}.
 % 
 \enternote
 Atomic constraints are formed by constraint normalization (\ref{temp.constr.decl}).
+\tcode{E} is never a logical AND expression (\cxxref{expr.log.and})
+nor a logical OR expression (\cxxref{expr.log.or}).
 \exitnote
 % 
 Determining if a constraint is satisfied entails the substitution 
@@ -145,26 +143,29 @@ of the parameter mapping and template arguments into that constraint.
 % 
 After substitution, \tcode{E} shall have type \tcode{bool}.
 % 
-The constraint is satisfied if and only if \tcode{E} evaluates to 
-\tcode{true}.
+The constraint is satisfied if and only if evaluation of \tcode{E}
+as a constant expression (\cxxref{expr.const}) succeeds and \tcode{E}
+evaluates to \tcode{true}.
 % 
 \enterexample
 \begin{codeblock}
 template<typename T> 
-  concept C = sizeof(T) == 4 && !true; // requires predicate constraints
+  concept C = sizeof(T) == 4 && !true; // requires atomic constraints
                                        // \tcode{sizeof(T) == 4} and \tcode{!true}
 
 template<typename T>
   struct S {
-    constexpr explicit operator bool() const { return true; }
+    constexpr operator bool() const { return true; }
   };
 
 template<typename T>
   requires (S<T>{})
     void f(T);
 
-f(0); // error: constraints cannot be satisfied because the
-      // expression \tcode{S<int>\{\}} does not have type \tcode{bool}
+void g() {
+  f(0); // error: constraints cannot be satisfied because the
+        // expression \tcode{S<int>\{\}} does not have type \tcode{bool}
+}
 \end{codeblock}
 No conversions are applied to atomic constraints.
 \exitexample
@@ -287,8 +288,8 @@ If that substitution fails, the program is ill-formed.
 % 
 Second, transform the expression \tcode{E} into a constraint as follows:
 \begin{itemize}
-\item the normal form of an expression \tcode{(E)} is the normal form
-of \tcode{E};
+\item The normal form of an expression \tcode{(E)} is the normal form
+of \tcode{E}.
 
 \item The normal form of an expression \tcode{E1 || E2} is the  
 disjunction (\ref{temp.constr.op}) of the normal forms of \tcode{E1} 
@@ -307,15 +308,8 @@ after substituting \tcode{A$1$, A$2$, ..., A$N$} for
 parameter mappings in each atomic constraint.
 If any such substitution fails, the program is ill-formed.
 
-\item The normal form of a \grammarterm{requires-expression} \tcode{E} is
-the conjunction of:
-\begin{itemize}
-\item the atomic constraint whose expression is \tcode{E}, and
-\item for each \grammarterm{nested-requirement} in \tcode{E}, the
-normal form of the \grammarterm{constraint-expression}.
-\end{itemize}
-
-\item otherwise, the normal form of \tcode{E} is the atomic constraint
+\item The normal form of any other expression \tcode{E}
+is the atomic constraint
 whose expression is \tcode{E} and whose parameter mapping is the
 identity mapping.
 \end{itemize}
@@ -345,7 +339,7 @@ those of \#3 are
 $\tcode{requires (T x) \{ ++x; \}}$ (with mapping \tcode{T}$\mapsto$\tcode{U}).
 % 
 In \#4, the \grammarterm{constraint-expression} \tcode{(bool)3 + 4}
-is not a valid predicate constraint because it does not have type \tcode{bool}.
+is not a valid atomic constraint because it does not have type \tcode{bool}.
 \exitexample
 
 
