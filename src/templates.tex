@@ -699,11 +699,40 @@ The partial specialization \#2 is more specialized than
 %%
 \rSec3[temp.over.link]{Function template overloading}
 
-Modify paragraph 6 to expand the scope of rules governing the existing term
-"equivalent".
+Add a new paragraph prior to paragraph 6:
+
+\begin{addedblock}
+\setcounter{Paras}{5}
+\pnum
+Two \grammarterm{template-head}{s} are \defn{equivalent} if they
+declare sequences of equivalent \grammarterm{template-parameters}
+and have \grammarterm{requires-clause}{s} with equivalent
+\grammarterm{constraint-expression}{s}.
+Two \grammarterm{template-parameter}{s} are \defn{equivalent} if
+\begin{itemize}
+\item they declare template parameters of the same kind,
+\item if either declares a template parameter pack then both do,
+\item if they declare non-type template parameters, they have
+equivalent types,
+\item if they declare template template parameters, their template
+parameters are equivalent, and
+\item if either is declared with a \grammarterm{qualified-concept-name},
+then both are, and the \grammarterm{qualified-concept-name}{s} are
+equivalent.
+\end{itemize}
+When determining whether types or \grammarterm{qualified-concept-name}{s}
+are equivalent, the rules above are used to compare expressions
+involving template parameters.
+Two \grammarterm{template-head}{s} are \defn{functionally equivalent}
+if they accept and are satisfied by the same set of template argument
+lists.
+\end{addedblock}
+
+Modify paragraph 6 (now paragraph 7) to expand the scope of rules
+governing the existing term "equivalent".
 
 \begin{quote}
-\setcounter{Paras}{5}
+\setcounter{Paras}{7}
 \pnum
 Two function templates are \defn{equivalent} if they are 
 declared in the same scope, have the same name,
@@ -727,6 +756,7 @@ are
 functionally equivalent but not equivalent, the program is ill-formed; 
 no diagnostic is required.
 \end{quote}
+
 
 
 %%
