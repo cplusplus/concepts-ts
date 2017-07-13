@@ -99,24 +99,6 @@ The syntax for \grammarterm{template-parameter}{s} is:
 \end{bnf}
 \end{quote}
 
-Insert a new paragraph after paragraph 1.
-
-\begin{quote}
-\begin{addedblock}
-\pnum
-There is an ambiguity in the syntax of a template parameter between the
-declaration of a \grammarterm{constrained-parameter} and a
-\grammarterm{parameter-declaration}.
-% 
-If the \grammarterm{type-specifier-seq} of a 
-\grammarterm{parameter-declaration}
-is a template specialization that refers to a 
-concept (\ref{temp.concept}), 
-then the \grammarterm{template-parameter} is a 
-\grammarterm{constrained-parameter}.
-\end{addedblock}
-\end{quote}
-
 Insert the following paragraphs after paragraph 8 in the \Cpp Standard. These 
 paragraphs define the meaning of a constrained template parameter.
 
@@ -131,8 +113,8 @@ are used to form a \grammarterm{constraint-expression} as described below.
 \pnum
 A \grammarterm{constrained-parameter} declares a template parameter whose 
 kind (type, non-type, template) and type match that of the prototype parameter 
-of the concept designated by the \grammarterm{qualified-concept-name} 
-in the \grammarterm{constrained-parameter}.
+(\ref{temp.concept}) of the concept designated by the 
+\grammarterm{qualified-concept-name} in the \grammarterm{constrained-parameter}.
 %
 Let \tcode{X} be the prototype parameter of the designated concept.
 % 
@@ -265,12 +247,12 @@ a constrained non-function template or a constrained template
 \grammarterm{template-parameter}, but not a member template that is a member 
 of an unknown specialization (\ref{temp.res}), and all 
 \grammarterm{template-argument}{s} in the \grammarterm{simple-template-id} 
-are non-dependent \cxxref{temp.dep.temp}, the associated constraints of the 
+are non-dependent (\cxxref{temp.dep.temp}), the associated constraints of the 
 constrained template shall be satisfied. (\ref{temp.constr.decl}).
 % 
 \enterexample
 \begin{codeblock}
-template<typename T> concept C1 = false;
+template<typename T> concept C1 = sizeof(T) != sizeof(int);
 
 template<C1 T> struct S1 { };
 template<C1 T> using Ptr = T*;
@@ -279,7 +261,7 @@ S1<int>* p; // error: constraints not satisfied
 Ptr<int> p; // error: constraints not satisfied
 
 template<typename T>
-  struct S2 { Ptr<int> x; }; // error: constraints not satisfied
+  struct S2 { Ptr<int> x; }; // error, no diagnostic required
 
 template<typename T>
   struct S3 { Ptr<T> x; };   // OK: satisfaction is not required
@@ -288,12 +270,7 @@ S3<int> x;                   // error: constraints not satisfied
 
 template<template<C1 T> class X>
   struct S4 {
-    X<int> x; // error: constraints not satisfied (\#1)
-  };
-
-template<typename T>
-  struct S5 {
-    using Type = typename T::template MT<char>; // \#2
+    X<int> x; // error, no diagnostic required
   };
 
 template<typename T> concept C2 = sizeof(T) == 1;
@@ -303,12 +280,6 @@ template<C2 T> struct S { };
 template struct S<char[2]>;       // error: constraints not satisfied
 template<> struct S<char[2]> { }; // error: constraints not satisfied
 \end{codeblock}
-In \#1, the error is caused by the substitution of \tcode{int} into 
-the associated constraints of the template parameter \tcode{X}.
-% 
-In \#2, no constraints can be checked for \tcode{typename T::template MT<char>} 
-because \tcode{MT} is a member of an unknown specialization.
-\exitexample
 \end{addedblock}
 \end{quote}
 
@@ -323,36 +294,6 @@ because \tcode{MT} is a member of an unknown specialization.
 \setcounter{subsection}{2}
 \rSec2[temp.arg.template]{Template template arguments}
 
-Modify paragraph 3 to include rules for matching constrained template 
-\grammarterm{template-parameter}{s}. Note that the examples following this 
-paragraph in the \Cpp Standard are omitted.
-
-\begin{quote}
-\setcounter{Paras}{2}
-\pnum
-A \grammarterm{template-argument} matches  a template 
-\grammarterm{template-parameter}  (call it \tcode{P}) when each of the 
-template parameters in the \grammarterm{template-parameter-list} of the 
-\grammarterm{template-argument}'s corresponding class template or alias 
-template (call it  \tcode{A}) matches the corresponding template parameter in 
-the \grammarterm{template-parameter-list} of \tcode{P}\added{, and \tcode{P} is 
-at least as constrained as \tcode{A} according to the rules in 
-\ref{temp.constr.order}}.
-% 
-Two template parameters match if they are of the same kind (type, non-type, 
-template), for non-type \grammarterm{template-parameter}{}s, their types are 
-equivalent (\ref{temp.over.link}), and for template 
-\grammarterm{template-parameter}{}s, each of their corresponding
-\grammarterm{template-parameter}{}s matches, recursively. 
-% 
-When \tcode{P}'s \grammarterm{template-parameter-list} 
-contains a template parameter pack (\cxxref{temp.variadic}), the template 
-parameter pack will match zero or more template parameters or template 
-parameter packs in the \grammarterm{template-parameter-list} of
-\tcode{A} with the same kind (type, non-type, template) and type as the template 
-parameter pack in \tcode{P} (ignoring whether those template parameters are
-template parameter packs).
-\end{quote}
 
 Add the following example to the end of paragraph 3, after the
 examples given in the \Cpp Standard.
@@ -372,8 +313,8 @@ template<D> struct Y { };
 template<typename T> struct Z { };
 
 S<X> s1; // OK: \tcode{X} and \tcode{P} have equivalent constraints
-S<Y> s2; // error: \tcode{P} is not at least as constrained \tcode{Y} (\tcode{Y} is more constrained than \tcode{P})
-S<Z> s3; // OK: \tcode{P} is at least as constrained as \tcode{Z}
+S<Y> s2; // error: \tcode{P} is not at least as specialized as \tcode{Y}
+S<Z> s3; // OK: \tcode{P} is at least as specialized as \tcode{Z}
 \end{codeblock}
 \exitexample
 \end{addedblock}
@@ -393,12 +334,12 @@ instantiated separately from the template they are associated with.
 \setcounter{Paras}{1}
 \pnum
 For purposes of name lookup and instantiation,
-default arguments\added{, associated constraints (\ref{temp.constr.decl}),} and 
-\grammarterm{noexcept-specifier}{s} of function templates and 
-default arguments\added{, associated constraints,} and 
+default arguments\added{, \grammarterm{requires-clause}{s} (Clause~\ref{temp}),} 
+and \grammarterm{noexcept-specifier}{s} of function templates and 
+default arguments\added{, \grammarterm{requires-clause}{s},} and 
 \grammarterm{noexcept-specifier}{s} of member functions of class templates 
 are considered definitions;
-each default argument\added{, associated constraint,} or 
+each default argument\added{, \grammarterm{requires-clause},} or 
 \grammarterm{noexcept-specifier} is a separate definition which is unrelated to
 the function template definition or to any other default arguments or
 \grammarterm{noexcept-specifier}{s}.
@@ -446,11 +387,11 @@ template<typename T> concept C = true;
 template<typename T> concept D = true;
 
 template<C T> struct S {
-    void f();
-    void g();
-    void h();
-    template<D U> struct Inner;
-  }
+  void f();
+  void g();
+  void h();
+  template<D U> struct Inner;
+};
 
 template<C A> void S<A>::f() { }        // OK: \grammarterm{template-head}{s} match
 template<typename T> void S<T>::g() { } // error: no matching declaration for \tcode{S<T>}
@@ -476,13 +417,17 @@ Add the following example to the end of paragraph 1.
 \begin{addedblock}
 \enterexample
 \begin{codeblock}
+template<typename T> concept C = requires {
+  typename T::type;
+};
+
 template<typename T> struct S {
-  void f() requires true;
-  void g() requires true;
+  void f() requires C<T>;
+  void g() requires C<T>;
 };
 
 template<typename T> 
-  void S<T>::f() requires true { } // OK
+  void S<T>::f() requires C<T> { } // OK
 template<typename T> 
   void S<T>::g() { }               // error: no matching function in \tcode{S<T>}
 \end{codeblock}
@@ -537,7 +482,7 @@ template<C1 T>
 template<C1 T> template<C2 U> 
   void S<T>::f(U) { } // OK
 template<C1 T> template<typename U> 
-  void S<T>::g(U) { }                // error: no matching function in \tcode{S<T>}
+  void S<T>::g(U) { } // error: no matching function in \tcode{S<T>}
 \end{codeblock}
 \exitexample
 \end{addedblock}

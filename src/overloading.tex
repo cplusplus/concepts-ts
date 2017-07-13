@@ -79,7 +79,7 @@ constraints when determining if that candidate is viable.
 From the set of candidate functions constructed for a given context 
 (\cxxref{over.match.funcs}), a set of viable functions is chosen, from which 
 the best function will be selected by comparing argument conversion 
-sequences and associated constraints for the best fit 
+sequences and \added{associated constraints} for the best fit 
 (\ref{over.match.best}).
 %
 The selection of viable functions considers \added{associated constraints, 
@@ -270,22 +270,4 @@ rules of \ref{temp.func.order}.
 %
 After such eliminations, if any, there shall remain exactly one 
 selected function.
-\end{quote}
-
-Add the following example at the end of paragraph 5.
-
-\begin{quote}
-\begin{addedblock}
-\enterexample
-\begin{codeblock}
-void f();                // \#1
-void f() requires true ; // \#2
-void g() requires false;
-void g() requires false and true;
-
-void (*pf)() = &f;         // selects \#2
-void (*pg)() = &g;         // error: no matching function
-\end{codeblock}
-\exitexample
-\end{addedblock}
 \end{quote}
