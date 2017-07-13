@@ -321,7 +321,6 @@ template<typename T> concept C4 = requires (T x) { ++x; }
 template<C2 U> void f1(U);                            // \#1
 template<C3 U> void f2(U);                            // \#2
 template<C4 U> void f3(U);                            // \#3
-template<typename T> requires (bool)3 + 4 void f4(T); // error: invalid constraints (\#4)
 \end{codeblock}
 The associated constraints of \#1 are 
 $\tcode{sizeof(T) == 1}$ (with mapping \tcode{T}$\mapsto$\tcode{U}) $\land \tcode{1 == 2}$,
@@ -331,9 +330,6 @@ $\tcode{requires \{ typename T::type; \}}$ (with mapping \tcode{T}$\mapsto$\tcod
 %
 those of \#3 are
 $\tcode{requires (T x) \{ ++x; \}}$ (with mapping \tcode{T}$\mapsto$\tcode{U}).
-% 
-In \#4, the \grammarterm{constraint-expression} \tcode{(bool)3 + 4}
-is not a valid atomic constraint because it does not have type \tcode{bool}.
 \exitexample
 
 
@@ -390,7 +386,7 @@ in the conjuctive normal form of \tcode{Q}, where
 
 \item a disjunctive clause $P_i$ subsumes a conjunctive clause
 $Q_j$ if and only if each atomic constraint in $P_i$ subsumes 
-any atomic constraint $Q_j$, where
+any atomic constraint in $Q_j$, where
 
 \item an atomic constraint $A$ subsumes another atomic constraint
 $B$ if and only if the $A$ and $B$ are equivalent using the
