@@ -135,7 +135,7 @@ an expression \tcode{E}
 and a mapping from the template parameters
 that appear within \tcode{E} to template arguments involving the
 template parameters of the constrained entity, called the \defn{parameter
-mapping} of the atomic constraint (\ref{temp.constr.decl}).
+mapping} (\ref{temp.constr.decl}).
 \enternote
 Two atomic constraints are equivalent if they are formed from the same
 \grammarterm{expression} and the parameter mappings are equivalent
@@ -213,13 +213,16 @@ following rules.
 
 \begin{itemize}
 \item If there are no introduced \grammarterm{constraint-expression}{s},
-the declaration is unconstrained.
+the declaration has no associated constraints.
 
 \item If there is a single introduced \grammarterm{constraint-expression},
-that is the associated constraint.
+the associated constraint is the normal form of that expression,
+as described below.
 
-\item Otherwise, the associated constraints are formed as a logical 
-AND expression (\cxxref{expr.log.and}) whose operands are in the following order:
+\item Otherwise, the associated constraints are
+the normal form of
+a logical AND expression (\cxxref{expr.log.and})
+whose operands are in the following order:
 % 
 \begin{itemize}
 \item the \grammarterm{constraint-expression} introduced by each
@@ -277,25 +280,18 @@ The associated constraints of \tcode{f8} are
 \exitexample
 
 \pnum
-Determining the satisfaction of a declaration's associated constraints,
+Forming a declaration's associated constraints,
 and the partial ordering of declarations by those constraints,
-requires that they are first \defn{normalized}.
+requires that their \grammarterm{constraint-expression}{s}
+are first \defn{normalized}.
 % 
-Normalization transforms a \grammarterm{expression} into a sequence of 
+Normalization transforms a \grammarterm{constraint-expression} into a sequence of 
 conjunctions and disjunctions (\ref{temp.constr.op})
 of atomic constraints (\ref{temp.constr.atomic}).
 % 
 The \defn{normal form} of an \grammarterm{expression} \tcode{X} is 
 defined as follows:
 % 
-First, replace all \grammarterm{id-expression}{s} of the form 
-\tcode{C<A$1$, A$2$, ..., A$N$>}, where \tcode{C} is a concept with the 
-result of substituting the template arguments \tcode{A$1$, A$2$, ..., A$N$} 
-into the \grammarterm{constraint-expression} of \tcode{C}.
-% 
-If that substitution fails, the program is ill-formed.
-% 
-Second, transform the expression \tcode{E} into a constraint as follows:
 \begin{itemize}
 \item The normal form of an expression \tcode{(E)} is the normal form
 of \tcode{E}.
@@ -323,9 +319,6 @@ whose expression is \tcode{E} and whose parameter mapping is the
 identity mapping.
 \end{itemize}
 % 
-A declaration's \defn{normalized constraints} are those
-yielded by normalizing its associated constraints.
-% 
 \enterexample
 \begin{codeblock}
 template<typename T> concept C1 = sizeof(T) == 1;
@@ -338,7 +331,7 @@ template<C3 U> void f2(U);                            // \#2
 template<C4 U> void f3(U);                            // \#3
 template<typename T> requires (bool)3 + 4 void f4(T); // error: invalid constraints (\#4)
 \end{codeblock}
-The normalized associated constraints of \#1 are 
+The associated constraints of \#1 are 
 $\tcode{sizeof(T) == 1}$ (with mapping \tcode{T}$\mapsto$\tcode{U}) $\land \tcode{1 == 2}$,
 % 
 those of \#2 are
@@ -350,12 +343,6 @@ $\tcode{requires (T x) \{ ++x; \}}$ (with mapping \tcode{T}$\mapsto$\tcode{U}).
 In \#4, the \grammarterm{constraint-expression} \tcode{(bool)3 + 4}
 is not a valid atomic constraint because it does not have type \tcode{bool}.
 \exitexample
-
-
-\pnum
-A declaration's associated constraints are satisfied by a set of template
-arguments if and only if its normalized associated constraints are satisfied
-by those arguments.
 
 
 %%
@@ -451,12 +438,12 @@ This partial ordering is used to determine
 %%% referring to unrelated template parameters.
 \pnum
 When two declarations \tcode{D1} and \tcode{D2} are
-partially ordered by their normalized constraints (\ref{temp.constr.decl}), 
+partially ordered by their associated constraints (\ref{temp.constr.decl}), 
 \tcode{D1} is \defn{at least as constrained} as \tcode{D2} if
 % 
 \begin{itemize}
 \item \tcode{D1} and \tcode{D2} are both constrained declarations and 
-\tcode{D1}'s normalized constraints subsume those of \tcode{D2}; or
+\tcode{D1}'s associated constraints subsume those of \tcode{D2}; or
 
 \item \tcode{D2} is unconstrained.
 \end{itemize}
