@@ -1039,9 +1039,8 @@ Add the following note after paragraph 7.
 \enternote
 An explicit instantiation of a constrained template shall satisfy that
 template's associated constraints (\ref{temp.constr.decl}). The satisfaction
-of constraints is determined when forming the name of a template specialization
-(\ref{temp.names})
-of an explicit instantiation
+of constraints is determined when forming the template name of an
+explicit instantiation
 in which all template arguments are specified (\ref{temp.names}), or for
 explicit instantiations of function templates, during template argument 
 deduction (\ref{temp.deduct.decl}) when one or more trailing template 
@@ -1082,8 +1081,9 @@ Add the following note after paragraph 10.
 \enternote
 An explicit specialization of a constrained template shall satisfy that
 template's associated constraints (\ref{temp.constr.decl}). The satisfaction
-of constraints is determined during name lookup for explicit specializations
-in which all template arguments are specified (\ref{temp.names}), or for
+of constraints is determined 
+when forming the template name of an explicit specialization in which all 
+template arguments are specified (\ref{temp.names}), or for
 explicit specializations of function templates, during template argument 
 deduction (\ref{temp.deduct.decl}) when one or more trailing template 
 arguments are left unspecified.
@@ -1120,64 +1120,6 @@ If the substitution results in an invalid type, as described above, type
 deduction fails.
 % 
 \added{If the function template has associated constraints (\ref{temp.constr.decl}),
-the template arguments are substituted into the associated constraints
-without evaluating the resulting expression. If this substitution
-results in an invalid type or expression, type deduction fails.
-% 
-\enternote
-The satisfaction of constraints (\ref{temp.constr})
-associated with the function template specialization is determined during 
-overload resolution (\ref{over.match}), and not at 
-the point of substitution.
-\exitnote}
-\end{quote}
-
-
-\setcounter{subsubsection}{5}
-\rSec3[temp.deduct.decl]{Deducing template arguments from a function declaration}
-
-Add a new paragraph after paragraph 1 in order to require the
-satisfaction of constraints when matching a specialization to a
-template.
-
-\begin{quote}
-\begin{addedblock}
-\setcounter{Paras}{1}
-\pnum
-Remove from the set of function templates considered all those
-whose associated constraints (if any) are not satisfied by the deduced
-template arguments (\ref{temp.constr.decl}).
-\end{addedblock}
-\end{quote}
-
-Update paragraph 2 in the \Cpp Standard (paragraph 3, here) to accommodate 
-the new wording.
-
-\begin{quote}
-\pnum
-If, 
-\removed{for the set of function templates so considered}
-\added{for the remaining function templates},
-there is either no match or more than one match after partial ordering 
-has been considered (\ref{temp.func.order}), deduction fails 
-and, in the declaration cases, the program is ill-formed.
-\end{quote}
-
-Add the following example to paragraph 3.
-
-\begin{quote}
-\enterexample
-\begin{codeblock}
-template<typename T> concept C = requires (T t) { -t; };
-
-template<C T>        void f(T) { } // \#1
-template<typename T> void g(T) { } // \#2
-template<C T>        void g(T) { } // \#3
-
-template void f(int);   // OK: refers to \#1
-template void f(void*); // error: no matching template
-template void g(int);   // OK: refers to \#3
-template void g(void*); // OK: refers to \#2
-\end{codeblock}
-\exitexample
+those constraints are checked for satisfaction (\ref{temp.constr}).
+If the constraints are not satisfied type deduction fail.}
 \end{quote}
