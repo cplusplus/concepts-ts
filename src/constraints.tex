@@ -75,8 +75,6 @@ symbol $\lor$.
 The operands of these operations are called the left 
 and right operands. In the constraint $A \land B$,
 $A$ is the left operand, and $B$ is the right operand.
-% 
-Grouping of constraints is shown using parentheses.
 \exitnote
 
 \pnum
@@ -162,7 +160,7 @@ template<typename T>
   };
 
 template<typename T>
-  requires S<T>{}
+  requires (S<T>{})
     void f(T);
 
 f(0); // error: constraints cannot be satisfied because the
