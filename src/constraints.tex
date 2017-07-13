@@ -139,11 +139,7 @@ template parameters of the constrained entity (the \defn{parameter
 mapping} of the atomic constraint).
 Two atomic constraints are equivalent if they are formed from the same
 \grammarterm{expression} and the parameter mappings are equivalent
-according to the rules for expressions described in \ref{temp.over.link},
-except that any \grammarterm{identifier}{s} referring to 
-local parameters of \grammarterm{requires-expression}{s}
-are equivalent if and only if the types of their corresponding
-declarations are equivalent (\cxxref{temp.type}).
+according to the rules for expressions described in \ref{temp.over.link}.
 % 
 \enternote
 Atomic constraints are formed by constraint normalization (\ref{temp.constr.decl}).
@@ -296,8 +292,8 @@ If that substitution fails, the program is ill-formed.
 % 
 Second, transform the expression \tcode{E} into a constraint as follows:
 \begin{itemize}
-\item the normal form of an expression \tcode{(E)} is the normal form
-of \tcode{E};
+\item The normal form of an expression \tcode{(E)} is the normal form
+of \tcode{E}.
 
 \item The normal form of an expression \tcode{E1 || E2} is the  
 disjunction (\ref{temp.constr.op}) of the normal forms of \tcode{E1} 
@@ -316,15 +312,8 @@ after substituting \tcode{A$1$, A$2$, ..., A$N$} for
 parameter mappings in each atomic constraint.
 If any such substitution fails, the program is ill-formed.
 
-\item The normal form of a \grammarterm{requires-expression} \tcode{E} is
-the conjunction of:
-\begin{itemize}
-\item the atomic constraint whose expression is \tcode{E}, and
-\item for each \grammarterm{nested-requirement} in \tcode{E}, the
-normal form of the \grammarterm{constraint-expression}.
-\end{itemize}
-
-\item otherwise, the normal form of \tcode{E} is the atomic constraint
+\item The normal form of any other expression \tcode{E}
+is the atomic constraint
 whose expression is \tcode{E} and whose parameter mapping is the
 identity mapping.
 \end{itemize}
