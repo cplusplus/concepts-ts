@@ -128,11 +128,10 @@ that appear within \tcode{E} to
 template arguments involving the
 template parameters of the constrained entity,
 called the \defn{parameter mapping} (\ref{temp.constr.decl}).
-\enternote
-Two atomic constraints are equivalent if they are formed from the same
+%
+Two atomic constraints are \defn{identical} if they are formed from the same
 \grammarterm{expression} and the parameter mappings are equivalent
 according to the rules for expressions described in \ref{temp.over.link}.
-\exitnote
 % 
 \enternote
 Atomic constraints are formed by constraint normalization (\ref{temp.constr.decl}).
@@ -360,10 +359,10 @@ is not a valid atomic constraint because it does not have type \tcode{bool}.
 \rSec2[temp.constr.order]{Partial ordering by constraints}
 
 \pnum
-A constraint $P$ is said to \defn{subsume} another constraint $Q$ 
-if, informally, it can be determined that $P$ implies $Q$, up to 
-the equivalence of atomic constraints in $P$ and $Q$
-(\ref{temp.constr.atomic}).
+A constraint $P$ is said to subsume another constraint $Q$ 
+if it can be determined that $P$ implies $Q$, up to 
+the identity of atomic constraints in $P$ and $Q$
+(\ref{temp.constr.atomic}), as described below.
 % 
 \enterexample
 Subsumption does not determine if the atomic constraint 
@@ -372,9 +371,9 @@ integral template argument \tcode{N}.
 \exitexample
 
 \pnum
-In order to determine if a constraint $P$ subsumes a constraint
-$Q$, transform $P$ into disjunctive normal form, 
-and transform $Q$ into conjunctive normal form\footnote{
+In order to determine if a constraint $P$ \defn{subsumes} a constraint
+$Q$, $P$ is transformed into disjunctive normal form, 
+and $Q$ is transformed into conjunctive normal form\footnote{
 A constraint is in disjunctive normal form when it is a disjunction of
 clauses where each clause is a conjunction of atomic constraints. 
 % 
@@ -410,7 +409,7 @@ $Q_j$ if and only if each atomic constraint in $P_i$ subsumes
 any atomic constraint $Q_j$, where
 
 \item an atomic constraint $A$ subsumes another atomic constraint
-$B$ if and only if the $A$ and $B$ are equivalent using the
+$B$ if and only if the $A$ and $B$ are identical using the
 rules described in \ref{temp.constr.atomic}.
 \end{itemize}
 % 
