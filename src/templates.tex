@@ -15,18 +15,24 @@ family of types.
 \begin{bnf}
 \nontermdef{template-declaration}\br
   \added{template-head} \removed{\terminal{template} \terminal{<} template-parameter-list \terminal{>}} declaration\br
+  \added{template-head concept-definition}
 
 \begin{addedblock}
 \nontermdef{template-head}\br
-  \terminal{template} \terminal{<} template-parameter-list \terminal{>} requires-clause\opt\br
+  \terminal{template} \terminal{<} template-parameter-list \terminal{>} requires-clause\opt
 \end{addedblock}
 
 \begin{addedblock}
 \nontermdef{requires-clause}\br
   \terminal{requires} constraint-expression
+
+\nontermdef{concept-definition}\br
+  \terminal{concept} concept-name \terminal{=} constraint-expression
+
+\nontermdef{concept-name}\br
+  identifier
 \end{addedblock}
 \end{bnf}
-
 \end{quote}
   
 Add the following paragraphs after paragraph 6.
@@ -817,14 +823,6 @@ Add the following paragraph.
 \begin{addedblock}
 \pnum A \defn{concept} defines constraints on its template arguments.
 
-\begin{bnf}
-\nontermdef{concept-definition}\br
-  \terminal{concept} concept-name \terminal{=} constraint-expression\br
-\end{bnf}
-\begin{bnf}
-\nontermdef{concept-name}\br
-  identifier
-\end{bnf}
 
 \pnum A \grammarterm{concept-definition} declares its \grammarterm{identifier}
 to be a concept. The name of the concept is a \grammarterm{concept-name}.
