@@ -596,6 +596,20 @@ template<C T1, C T2, N I> class A<T1, T2, I>;  // \#6
 template<C T, N I>        class A<int, T*, I>; // \#7
 \end{codeblock}
 \exitexample
+
+\enterexample
+\begin{codeblock}
+template<typename T> concept C = true;
+
+template<typename T> struct X { };
+template<typename T> struct X<T*> { }; // OK
+template<C T> struct X<T> { }; // OK
+\end{codeblock}
+Both partial specializations are more specialized than the primary. In the
+first case, \tcode{T*} is more specialized than \tcode{T}. In the second
+case, the template arguments are equivalent, but the partial specialization 
+is more constrained than the primary.
+\exitexample
 \end{addedblock}
 \end{quote}
 
@@ -673,7 +687,6 @@ Add the following example to the end of paragraph 1.
 \begin{codeblock}
 template<typename T> concept C = requires (T t) { t.f(); };
 template<typename T> concept D = C<T> && requires (T t) { t.f(); };
-
 
 template<typename T> class S { };
 template<C T> class S<T> { }; // \#1
