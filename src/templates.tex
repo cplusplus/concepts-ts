@@ -917,14 +917,14 @@ the class template specialization is implicitly instantiated when the
 specialization is referenced in a context that requires a completely-defined
 object type or when the completeness of the class type affects the semantics
 of the program.
-\begin{note}
+\enternote
 In particular, if the semantics of an expression depend on the member or
 base class lists of a class template specialization, the class template
 specialization is implicitly generated. For instance, deleting a pointer
 to class type depends on whether or not the class declares a destructor,
 and a conversion between pointers to class type depends on the
 inheritance relationship between the two classes involved.
-\end{note}
+\exitnote
 \enterexample
 \begin{codeblock}
 template<class T> class B { @. . .@ };
@@ -941,8 +941,8 @@ void g(D<int>* p, D<char>* pp, D<double>* ppp) {
 \end{codeblock}
 \exitexample
 If a class template has been declared, but not defined,
-at the point of instantiation~(\ref{temp.point}),
-the instantiation yields an incomplete class type~(\ref{basic.types}).
+at the point of instantiation~(\cxxref{temp.point}),
+the instantiation yields an incomplete class type~(\cxxref{basic.types}).
 \enterexample
 \begin{codeblock}
 template<class T> class X;
@@ -995,9 +995,8 @@ S<char> s1;    // error: no matching constructor
 S<char[8]> s2; // OK: calls \#2
 \end{codeblock}
 
-Even though neither constructor for \tcode{S<char>} will be selected by
-overload resolution, both constructors remain a part of the class template 
-specialization. 
+When \tcode{S<char>} is instantiated, both constructors are part of the
+specialization. However, their constraints will never be satisfied.
 % 
 This also has the effect of suppressing the implicit generation of a default
 constructor (\cxxref{class.ctor}).
@@ -1015,13 +1014,13 @@ template<typename T> struct S2 {
       struct Inner2;
 };
 \end{codeblock}
-\exitexample
 Every instantiation of \tcode{S1} results in a valid type, although any use 
 of its nested \tcode{Inner1} template is invalid.
 % 
 \tcode{S2} is ill-formed, no diagnostic required, since no substitution into 
 the constraints of its \tcode{Inner2} template would result in a valid 
 expression.
+\exitexample
 \end{addedblock}
 \end{quote}
 
@@ -1040,7 +1039,9 @@ Add the following note after paragraph 7.
 \enternote
 An explicit instantiation of a constrained template shall satisfy that
 template's associated constraints (\ref{temp.constr.decl}). The satisfaction
-of constraints is determined during name lookup for explicit instantiations
+of constraints is determined when forming the name of a template specialization
+(\ref{temp.names})
+of an explicit instantiation
 in which all template arguments are specified (\ref{temp.names}), or for
 explicit instantiations of function templates, during template argument 
 deduction (\ref{temp.deduct.decl}) when one or more trailing template 
