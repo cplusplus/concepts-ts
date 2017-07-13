@@ -704,20 +704,23 @@ Add a new paragraph prior to paragraph 6:
 \begin{addedblock}
 \setcounter{Paras}{5}
 \pnum
-Two \grammarterm{template-head}{s} are \defn{equivalent} if they
-declare sequences of equivalent \grammarterm{template-parameters}
-and have \grammarterm{requires-clause}{s} with equivalent
-\grammarterm{constraint-expression}{s}.
-Two \grammarterm{template-parameter}{s} are \defn{equivalent} if
+Two \grammarterm{template-head}{s} are \defn{equivalent} if
+their \grammarterm{template-parameter-list}{s} have the same length,
+corresponding \grammarterm{template-parameter}{s} are equivalent,
+and if either has a \grammarterm{requires-clause}, they both have
+\grammarterm{requires-clause}{s} and the corresponding
+\grammarterm{constraint-expression}{s} are equivalent.
+Two \grammarterm{template-parameter}{s} are \defn{equivalent}
+under the following conditions:
 \begin{itemize}
 \item they declare template parameters of the same kind,
-\item if either declares a template parameter pack then both do,
+\item if either declares a template parameter pack, they both do,
 \item if they declare non-type template parameters, they have
 equivalent types,
 \item if they declare template template parameters, their template
 parameters are equivalent, and
 \item if either is declared with a \grammarterm{qualified-concept-name},
-then both are, and the \grammarterm{qualified-concept-name}{s} are
+they both are, and the \grammarterm{qualified-concept-name}{s} are
 equivalent.
 \end{itemize}
 When determining whether types or \grammarterm{qualified-concept-name}{s}
@@ -732,20 +735,23 @@ Modify paragraph 6 (now paragraph 7) to expand the scope of rules
 governing the existing term "equivalent".
 
 \begin{quote}
-\setcounter{Paras}{7}
+\setcounter{Paras}{6}
 \pnum
 Two function templates are \defn{equivalent} if they are 
 declared in the same scope, have the same name,
-\removed{have identical template parameter lists}
-and have \added{\grammarterm{template-head}{s},}
-return types\added{,} and parameter lists that are 
-equivalent using the rules described above to compare expressions 
+have \removed{identical template parameter lists}
+\added{equivalent \grammarterm{template-head}{s}},
+and have return types\added{,} \removed{and}
+parameter lists\added{, and trailing \grammarterm{requires-clause}{s} (if any)}
+that are equivalent using the rules described above to compare expressions 
 involving template parameters.
-% 
-Two function templates are \defn{functionally equivalent} if they 
-are equivalent except that one or more expressions that involve 
-template parameters in the \added{\grammarterm{template-head}{s},}
-return types\added{,} and parameter lists
+%
+Two function templates are \defn{functionally equivalent} if they
+\added{are declared in the same scope, have the same name,
+accept and are satisfied by the same set of template argument
+lists, and have return types and parameter lists that}
+\removed{are equivalent except that one or more expressions that involve 
+template parameters in the return types and parameter lists}
 are functionally equivalent using the rules described above to compare 
 expressions involving template parameters.
 % 
