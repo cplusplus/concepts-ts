@@ -159,7 +159,7 @@ evaluates to \tcode{true}.
 \enterexample
 \begin{codeblock}
 template<typename T> 
-  concept C = sizeof(T) == 4 && !true; // requires predicate constraints
+  concept C = sizeof(T) == 4 && !true; // requires atomic constraints
                                        // \tcode{sizeof(T) == 4} and \tcode{!true}
 
 template<typename T>
@@ -348,7 +348,7 @@ those of \#3 are
 $\tcode{requires (T x) \{ ++x; \}}$ (with mapping \tcode{T}$\mapsto$\tcode{U}).
 % 
 In \#4, the \grammarterm{constraint-expression} \tcode{(bool)3 + 4}
-is not a valid predicate constraint because it does not have type \tcode{bool}.
+is not a valid atomic constraint because it does not have type \tcode{bool}.
 \exitexample
 
 
