@@ -319,18 +319,23 @@ does not require that type to be complete
 
 \pnum
 A \grammarterm{compound-requirement} asserts properties
-of the \grammarterm{expression} \tcode{E}. After any template argument
-substitution into the \grammarterm{compound-requirement},
-the following properties are verified in this order:
+of the \grammarterm{expression} \tcode{E}. Substitution
+of template arguments (if any) and verification of
+semantic properties proceed in the following order:
 %
 \begin{itemize}
-\item if the \tcode{noexcept} specifier is present,
-\tcode{E} shall not be a potentially-throwing expression~(\cxxref{except.spec});
+\item Substitution of template arguments (if any)
+into the \grammarterm{expression} is performed.
 
-\item if the \grammarterm{return-type-requirement} is present, additional
-requirements apply.
+\item If the \tcode{noexcept} specifier is present,
+\tcode{E} shall not be a potentially-throwing expression~(\cxxref{except.spec}).
+
+\item If the \grammarterm{return-type-requirement} is present, then:
 
 \begin{itemize}
+\item Substitution of template arguments (if any)
+into the \grammarterm{return-type-requirement} is performed.
+
 \item If the \grammarterm{return-type-requirement} is a 
 \grammarterm{trailing-return-type}, \tcode{E} shall be implicitly 
 convertible to the type named by the
