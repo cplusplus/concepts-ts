@@ -173,10 +173,10 @@ template<typename T>
 
 void g() {
   f(0); // error: constraints cannot be satisfied because the
-        // expression \tcode{S<int>\{\}} does not have type \tcode{bool}
+        // expression \tcode{S<int>\{\}} does not have type \tcode{bool};
+        // no conversions are applied to atomic constraints.
 }
 \end{codeblock}
-No conversions are applied to atomic constraints.
 \exitexample
 
 
