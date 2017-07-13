@@ -980,9 +980,9 @@ Within a template declaration,
 a local class~(\ref{class.local}) or enumeration and the members of
 a local class are never considered to be entities that can be separately
 instantiated (this includes their default arguments, 
-\added{associated constraints (\ref{temp.constr.decl}),}
 \grammarterm{noexcept-specifier}{s}, and non-static data member
-initializers, if any). As a result, the dependent names are looked up, the
+initializers, if any\added{, but not their \grammarterm{requires-clause}{s}}).
+As a result, the dependent names are looked up, the
 semantic constraints are checked, and any templates used are instantiated as
 part of the instantiation of the entity within which the local class or
 enumeration is declared.
@@ -997,10 +997,12 @@ constraints are instantiated.
 \begin{addedblock}
 \setcounter{Paras}{15}
 \pnum
-The associated constraints of a template specialization are not
-instantiated along with the specialization itself; they are
-instantiated only to determine if they are satisfied
-(\ref{temp.constr.decl}).
+The \grammarterm{requires-clause} of a template specialization or member function is not
+instantiated along with the specialization or function itself, even for a member
+function of a local class;
+substitution into the the atomic constraints within it is instead performed
+as specified in \ref{temp.constr.decl} and \ref{temp.constr.atomic}
+when determining whether the constraints are satisfied.
 % 
 \enternote
 The satisfaction of constraints is determined during name lookup or overload
