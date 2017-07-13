@@ -124,9 +124,10 @@ the second operand is not checked for satisfaction.
 An \defn{atomic constraint} is formed from a
 an expression \tcode{E}
 and a mapping from the template parameters
-that appear within \tcode{E} to template arguments involving the
-template parameters of the constrained entity, called the \defn{parameter
-mapping} (\ref{temp.constr.decl}).
+that appear within \tcode{E} to
+template arguments involving the
+template parameters of the constrained entity,
+called the \defn{parameter mapping} (\ref{temp.constr.decl}).
 \enternote
 Two atomic constraints are equivalent if they are formed from the same
 \grammarterm{expression} and the parameter mappings are equivalent
@@ -297,13 +298,29 @@ conjunction of the normal forms of \tcode{E1}
 and \tcode{E2}.
 
 \item The normal form of an \grammarterm{id-expression} of the form
-\tcode{C<A$1$, A$2$, ..., A$N$>}, where \tcode{C} names the concept
-\tcode{D} (\ref{temp.concept}),
-is the normal form of the initializer of \tcode{D},
+\tcode{C<A$1$, A$2$, ..., A$N$>}, where \tcode{C} names a concept,
+is the normal form of the \grammarterm{constraint-expression} of \tcode{C},
 after substituting \tcode{A$1$, A$2$, ..., A$N$} for
-\tcode{D}{'s} respective template parameters in the
+\tcode{C}{'s} respective template parameters in the
 parameter mappings in each atomic constraint.
-If any such substitution fails, the program is ill-formed.
+If any such substitution results in an invalid type or expression,
+the program is ill-formed; no diagnostic is required.
+\enterexample
+\begin{codeblock}
+template<typename T> concept A = T::value;
+template<typename U> concept B = A<U*>;
+template<typename V> concept C = B<V&>;
+\end{codeblock}
+Normalization of \tcode{B}'s \grammarterm{constraint-expression}
+is valid and results in \tcode{T::value} with the mapping
+\tcode{T}$\mapsto$\tcode{U*},
+despite the expression \tcode{T::value} being ill-formed
+for a pointer type \tcode{T}.
+Normalization of \tcode{C}'s \grammarterm{constraint-expression}
+results in the program being ill-formed,
+because it would form the invalid type \tcode{T*\&}
+in the parameter mapping.
+\exitexample
 
 \item The normal form of any other expression \tcode{E}
 is the atomic constraint
