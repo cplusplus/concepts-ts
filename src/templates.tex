@@ -324,7 +324,7 @@ S<Z> s3; // OK: \tcode{P} is at least as specialized as \tcode{Z}
 %%
 %% Template declarations
 %%
-\setcounter{section}{5}
+\setcounter{section}{4}
 \rSec1[temp.decls]{Template declarations}
 
 Modify paragraph 2 to indicate that associated constraints are
@@ -494,78 +494,83 @@ template<C1 T> template<typename U>
 %%
 \rSec2[temp.friend]{Friends}
 
-Modify paragraph 8 to restrict constrained friend declarations.
-
-\begin{quote}
-\setcounter{Paras}{7}
-\pnum
-When a friend declaration refers to a specialization of a function
-template, the function parameter declarations shall not include
-default arguments, \added{the declaration shall not have associated constraints
-(\ref{temp.constr.decl}),} nor shall the inline specifier be used in such a
-declaration.
-\end{quote}
-
-Add examples following that paragraph.
+Add a new paragraph to make non-template friends ill-formed.
 
 \begin{quote}
 \begin{addedblock}
+\setcounter{Paras}{8}
 \pnum
-\enternote
-Other friend declarations can be constrained. In a constrained friend 
-declaration that is not a definition, the constraints are used for declaration.
-\exitnote
-\enterexample
-\begin{codeblock}
-template<typename T> concept C1 = true;
-template<typename T> concept C2 = false;
-
-template<C1 T> void g0(T);
-template<C1 T> void g1(T);
-template<C2 T> void g2(T);
-
-template<typename T>
-  struct S {
-    friend void f1() requires C1<void>;  // OK
-    friend void f2() requires C1<T>;     // OK
-    friend void g0<T>(T) requires C1<T>; // error: constrained friend specialization
-    friend void g1<T>(T);                // OK
-    friend void g2<T>(T);                // error: constraint can never be satisfied, 
-                                         // no diagnostic required
-  };
-
-void f1() requires C1<void>;   // friend of all \tcode{S<T>}
-void f2() requires C1<int>;    // friend of only \tcode{S<int>}
-\end{codeblock}
-The friend declaration of \tcode{g2} is ill-formed, no
-diagnostic required, because no valid specialization of \tcode{S}
-can be generated: the constraint on \tcode{g2} can never
-be satisfied, so template argument deduction
-(\ref{temp.deduct.decl}) will always fail.
-\exitexample
-
-\pnum
-\enternote
-Within a class template, a friend may define a non-template function
-whose constraints specify requirements on template arguments.
-\enterexample
-\begin{codeblock}
-template<typename T> concept Eq = requires (T t) { t == t; };
-
-template<typename T>
-  struct S {
-    friend bool operator==(S a, S b) requires Eq<T> { return a == b; } // OK
-  };
-\end{codeblock}
-\exitexample
-In the instantiation of such a class template (\ref{temp.spec}), the 
-template arguments are substituted into the constraints but not evaluated.
-Constraints are checked (\ref{temp.constr}) only when
-that function is considered as a viable candidate for overload resolution
-(\ref{over.match.viable}). If substitution fails, the program is ill-formed.
-\exitnote
+A non-template friend declaration shall not have a \grammarterm{requires-clause}.
 \end{addedblock}
 \end{quote}
+
+% When a friend declaration refers to a specialization of a function
+% template, the function parameter declarations shall not include
+% default arguments, \added{the declaration shall not have associated constraints
+% (\ref{temp.constr.decl}),} nor shall the inline specifier be used in such a
+% declaration.
+% \end{quote}
+
+% Add examples following that paragraph.
+
+% \begin{quote}
+% \begin{addedblock}
+% \pnum
+% \enternote
+% Other friend declarations can be constrained. 
+% \exitnote
+% \enterexample
+% \begin{codeblock}
+% template<typename T> concept C1 = true;
+% template<typename T> concept C2 = false;
+
+% template<C1 U> void g0(U);
+% template<C1 U> void g1(U);
+% template<C2 U> void g2(U);
+
+% template<typename T>
+%   struct S {
+%     friend void f1() requires C1<void>;  // OK
+%     friend void f2() requires C1<T>;     // OK
+%     friend void g0<T>(T) requires C1<T>; // error: constrained friend specialization
+%     friend void g1<T>(T);                // OK
+%     friend void g2<T>(T);                // error: constraint can never be satisfied, 
+%                                          // no diagnostic required
+%   };
+
+% void f1() requires C1<void>;   // friend of any \tcode{S<T>}
+% void f2() requires C1<int>;    // friend of only \tcode{S<int>}
+% \end{codeblock}
+% The friend declaration of \tcode{g2} is ill-formed, no
+% diagnostic required, because no valid specialization of \tcode{S}
+% can be generated: the constraint on \tcode{g2} can never
+% be satisfied, so template argument deduction
+% (\ref{temp.deduct.decl}) will always fail.
+% % 
+% If there are overloads of e.g., \tcode{g1}, the most specialized
+% is selected as the friend declaration when \tcode{S} is instantiated.
+% \exitexample
+
+% \pnum
+% \enternote
+% Within a class template, a friend may define a non-template function
+% whose constraints specify requirements on template arguments.
+% \enterexample
+% \begin{codeblock}
+% template<typename T> concept Eq = requires (T t) { t.equal(t); };
+
+% template<typename T>
+%   struct S {
+%     friend bool operator==(S a, S b) requires Eq<T> { return a.equal(b); } // OK
+%   };
+% \end{codeblock}
+% \exitexample
+% Constraints are checked (\ref{temp.constr}) only when
+% that function is considered as a viable candidate for overload resolution
+% (\ref{over.match.viable}). If substitution fails, the program is ill-formed.
+% \exitnote
+% \end{addedblock}
+% \end{quote}
 
 
 %%
@@ -780,9 +785,9 @@ concept C = requires(T x) {
 };
 template<typename T> 
   requires C<T> // \tcode{C} constrains \tcode{f1(T)} in \grammarterm{constraint-expression}
-T f1(T x) { return f(x); }
+T f1(T x) { return x; }
 template<C T> // \tcode{C} constrains \tcode{f2(T)} as a \grammarterm{constrained-parameter}
-T f1(T x) { return f(x); }
+T f2(T x) { return x; }
 \end{codeblock}
 \exitexample
 
