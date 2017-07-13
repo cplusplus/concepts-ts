@@ -601,14 +601,16 @@ template<C T, N I>        class A<int, T*, I>; // \#7
 \begin{codeblock}
 template<typename T> concept C = true;
 
-template<typename T> struct X { };
-template<typename T> struct X<T*> { }; // OK
-template<C T> struct X<T> { }; // OK
+template<typename T> struct X { }; 
+template<typename T> struct X<T*> { }; // \#1
+template<C T> struct X<T> { };         // \#2
 \end{codeblock}
-Both partial specializations are more specialized than the primary. In the
-first case, \tcode{T*} is more specialized than \tcode{T}. In the second
-case, the template arguments are equivalent, but the partial specialization 
-is more constrained than the primary.
+Both partial specializations are more specialized than the primary. \#1
+is more specialized because the deduction of its template arguments
+from the template argument list of the class template specialization succeeds,
+while the reverse does not. \#2 is more specialized because
+the template arguments are equivalent, but the specialization is more
+constrained.
 \exitexample
 \end{addedblock}
 \end{quote}
