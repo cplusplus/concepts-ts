@@ -130,19 +130,21 @@ the second operand is not checked for satisfaction.
 \rSec3[temp.constr.atomic]{Atomic constraints}
 
 \pnum
-An \defn{atomic constraint} is a constraint that evaluates a constant 
-expression \tcode{E} (\cxxref{expr.const}) that is neither a logical
-AND expression (\cxxref{expr.log.and}) nor a logical OR expression
-(\cxxref{expr.log.or}), under a mapping from the template parameters
+An \defn{atomic constraint} is formed from a
+an expression \tcode{E}
+and a mapping from the template parameters
 that appear within \tcode{E} to template arguments involving the
-template parameters of the constrained entity (the \defn{parameter
-mapping} of the atomic constraint).
+template parameters of the constrained entity, called the \defn{parameter
+mapping} of the atomic constraint.
+\enternote
 Two atomic constraints are equivalent if they are formed from the same
 \grammarterm{expression} and the parameter mappings are equivalent
 according to the rules for expressions described in \ref{temp.over.link}.
 % 
 \enternote
 Atomic constraints are formed by constraint normalization (\ref{temp.constr.decl}).
+\tcode{E} is never a logical AND expression (\cxxref{expr.log.and})
+nor a logical OR expression (\cxxref{expr.log.or}).
 \exitnote
 % 
 Determining if a constraint is satisfied entails the substitution 
@@ -150,8 +152,9 @@ of the parameter mapping and template arguments into that constraint.
 % 
 After substitution, \tcode{E} shall have type \tcode{bool}.
 % 
-The constraint is satisfied if and only if \tcode{E} evaluates to 
-\tcode{true}.
+The constraint is satisfied if and only if evaluation of \tcode{E}
+as a constant expression (\cxxref{expr.const}) succeeds and \tcode{E}
+evaluates to \tcode{true}.
 % 
 \enterexample
 \begin{codeblock}
@@ -161,15 +164,17 @@ template<typename T>
 
 template<typename T>
   struct S {
-    constexpr explicit operator bool() const { return true; }
+    constexpr operator bool() const { return true; }
   };
 
 template<typename T>
   requires S<T>{}
     void f(T);
 
-f(0); // error: constraints cannot be satisfied because the
-      // expression \tcode{S<int>\{\}} does not have type \tcode{bool}
+void g() {
+  f(0); // error: constraints cannot be satisfied because the
+        // expression \tcode{S<int>\{\}} does not have type \tcode{bool}
+}
 \end{codeblock}
 No conversions are applied to atomic constraints.
 \exitexample
