@@ -81,13 +81,30 @@ Grouping of constraints is shown using parentheses.
 
 \pnum
 A \defn{conjunction} is a constraint taking two 
-operands. A conjunction of constraints is satisfied if and only 
-if both operands are satisfied. 
+operands. 
 % 
-The satisfaction of a conjunction's operands are evaluated left-to-right; 
-if the left operand is not satisfied, template arguments are not 
-substituted into the right operand, and the constraint is not satisfied.
+To determine if a conjunction is satisfied, check the satisfaction of
+of the first operand. If that is not satisfied, the conjunction is not
+satisfied. Otherwise, the conjunction is satisfied if and only if the second
+operand is satisfied.
+
+% A conjunction of constraints is satisfied if and only 
+% if both operands are satisfied. 
+% % 
+% The satisfaction of a conjunction's operands are evaluated left-to-right; 
+% if the left operand is not satisfied, template arguments are not 
+% substituted into the right operand, and the constraint is not satisfied.
+
+\pnum
+A \defn{disjunction} is a constraint taking two 
+operands. 
 % 
+To determine if a disjunction is satisfied, check the satisfaction of
+of the first operand. If that is satisfied, the disjunction is
+satisfied. Otherwise, the disjunction is satisfied if and only if the second
+operand is satisfied.
+
+\pnum
 \enterexample
 \begin{codeblock}
 template<typename T>
@@ -103,21 +120,8 @@ f('a'); // OK: calls \tcode{f(int)}
 \end{codeblock}
 In the satisfaction of the associated constraints (\ref{temp.constr.decl}) 
 of \tcode{f}, the constraint \tcode{sizeof(char) > 1} is not satisfied; 
-arguments are not substituted into the right operand of the conjunction.
-% 
-Such a substitution would cause this program to be ill-formed since 
-\tcode{get_value<char>()} produces an invalid expression that is not in
-the immediate context (\ref{temp.deduct}.
+the second operand is not checked for satisfaction.
 \exitexample
-
-\pnum
-A \defn{disjunction} is a constraint taking two 
-operands. A disjunction of constraints is satisfied if and only 
-if either operand is satisfied or both operands are satisfied.
-% 
-The satisfaction of a disjunction's operands are evaluated left-to-right; 
-if the left operand is satisfied, template arguments are not 
-substituted into the right operand, and the constraint is satisfied.
 
 
 %%
