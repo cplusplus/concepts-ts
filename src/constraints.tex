@@ -161,12 +161,13 @@ template<typename T>
 
 template<typename T>
   requires (S<T>{})
-    void f(T);
+    void f(T); // \#1
+void f(int);   // \#2
 
 void g() {
-  f(0); // error: constraints cannot be satisfied because the
-        // expression \tcode{S<int>\{\}} does not have type \tcode{bool};
-        // no conversions are applied to atomic constraints.
+  f(0); // error: expression \tcode{S<int>\{\}} does not have type \tcode{bool}
+        // while checking satisfaction of deduced arguments of \#1,
+        // even though \#2 is a better match
 }
 \end{codeblock}
 \exitexample
