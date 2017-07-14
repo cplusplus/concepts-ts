@@ -301,18 +301,20 @@ If any such substitution results in an invalid type or expression,
 the program is ill-formed; no diagnostic is required.
 \enterexample
 \begin{codeblock}
-template<typename T> concept A = T::value;
+template<typename T> concept A = T::value || true;
 template<typename U> concept B = A<U*>;
 template<typename V> concept C = B<V&>;
 \end{codeblock}
 Normalization of \tcode{B}'s \grammarterm{constraint-expression}
-is valid and results in \tcode{T::value} with the mapping
-\tcode{T}$\mapsto$\tcode{U*},
+is valid and results in
+\tcode{T::value} (with the mapping \tcode{T}$\mapsto$\tcode{U*})
+$\land$
+\tcode{true} (with an empty mapping),
 despite the expression \tcode{T::value} being ill-formed
 for a pointer type \tcode{T}.
 Normalization of \tcode{C}'s \grammarterm{constraint-expression}
 results in the program being ill-formed,
-because it would form the invalid type \tcode{T*\&}
+because it would form the invalid type \tcode{T\&*}
 in the parameter mapping.
 \exitexample
 
