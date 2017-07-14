@@ -9,8 +9,8 @@ Modify the \grammarterm{template-declaration} grammar in paragraph 1.
 
 \begin{quote}
 \pnum
-A \defn{template} defines a family of classes, functions, or variables, or an alias for a
-family of types.
+A \defn{template} defines a family of classes, functions, or variables\added{, or a concept},
+or an alias for a family of types.
 
 \begin{bnf}
 \nontermdef{template-declaration}\br
@@ -41,6 +41,39 @@ family of types.
   constraint-logical-or-expression \terminal{||} constraint-logical-and-expression
 \end{addedblock}
 \end{bnf}
+\end{quote}
+
+Allow concepts as templates, and make concept definitions also a definition in paragraph 1.
+
+\begin{quote}
+The
+\grammarterm{declaration}
+in a
+\grammarterm{template-declaration}
+shall
+
+\begin{itemize}
+\item declare or define a function, a class, or a variable, or
+
+\item define a member function, a member class, a member enumeration, or a static data member of a
+class template or of a class nested within a class template, or
+
+\item define a member template of a class or class template, or
+
+\item be a \grammarterm{deduction-guide}, or
+
+\item be an \grammarterm{alias-declaration}{}\added{, or}
+
+\item \added{be a \grammarterm{concept-definition}{}}.
+\end{itemize}
+
+A \grammarterm{template-declaration} is a \grammarterm{declaration}.
+A \grammarterm{template-declaration} is also a definition
+if its \grammarterm{declaration}{}\added{ either is a \grammarterm{concept-definition} or}
+defines a function, a class, a variable, or a
+static data member. A declaration introduced by a template declaration of a
+variable is a \term{variable template}. A variable template at class scope is a
+\term{static data member template}.
 \end{quote}
   
 Add the following paragraphs after paragraph 6.
