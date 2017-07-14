@@ -141,10 +141,13 @@ nor a logical OR expression (\cxxref{expr.log.or}).
 % 
 Determining if a constraint is satisfied entails the substitution 
 of the parameter mapping and template arguments into that constraint.
+%
+If substitution results in an invalid type or expression,
+the constraint is not satisfied.
 % 
-After substitution and the application of the lvalue-to-rvalue conversion
-(\cxxref{conv.lval}) if necessary,
-\tcode{E} shall be a constant expression of type \tcode{bool}.
+Otherwise, the lvalue-to-rvalue conversion
+(\cxxref{conv.lval}) is performed if necessary,
+and \tcode{E} shall be a constant expression of type \tcode{bool}.
 % 
 The constraint is satisfied if and only if evaluation of \tcode{E}
 results in \tcode{true}.
@@ -270,7 +273,7 @@ and those of
 
 \pnum
 Determining a declaration's
-associated constraints (\ref{temp.constr.constr}), 
+associated constraints (\ref{temp.constr.constr})
 requires that their \grammarterm{constraint-expression}{s}
 are \defn{normalized}.
 % 
