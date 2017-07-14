@@ -1068,7 +1068,7 @@ template<typename T> struct S1 {
 
 template<typename T> struct S2 {
   template<typename U> 
-    requires sizeof(T[-(int)sizeof(T)]) > 1 // error: ill-formed, no diagnostic required
+    requires (sizeof(T[-(int)sizeof(T)]) > 1) // error: ill-formed, no diagnostic required
       struct Inner2;
 };
 \end{codeblock}
