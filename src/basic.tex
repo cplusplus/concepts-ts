@@ -5,9 +5,42 @@
 
 Add concepts to the list of entities.
 
-\setcounter{Paras}{2}
 \begin{quote}
+\setcounter{Paras}{2}
+\pnum
 An \defn{entity} is a value, object, reference, function, enumerator, type,
 class member, bit-field, template, \added{concept,} template specialization, 
 namespace, or parameter pack.
+\end{quote}
+
+\rSec1[basic.def.odr]{One-definition rule}
+
+Modify paragraph 1.
+
+\begin{quote}
+\pnum
+No translation unit shall contain more than one definition of any
+variable, function, class type, enumeration type, 
+\removed{or} template\added{, or concept}.
+\end{quote}
+
+Modify paragraph 6. The full requirements allowing multiple definitions
+in different translation units are unchanged and therefore omitted in this
+text.
+
+\begin{quote}
+\setcounter{Paras}{5}
+\pnum
+There can be more than one definition of a class type
+(Clause~\cxxref{class}), enumeration type~(\cxxref{dcl.enum}), inline function
+with external linkage~(\cxxref{dcl.inline}), inline variable with external
+linkage~(\cxxref{dcl.inline}), class template
+(Clause~\ref{temp}), non-static function template~(\ref{temp.fct}),
+static data member of a class template~(\cxxref{temp.static}), member
+function of a class template~(\ref{temp.mem.func}), \removed{or} template
+specialization for which some template parameters are not
+specified~(\ref{temp.spec}, \ref{temp.class.spec})\added{,}
+\added{or concept} in a program provided
+that each definition appears in a different translation unit, and
+provided the definitions satisfy the following requirements.
 \end{quote}
