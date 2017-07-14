@@ -95,6 +95,12 @@ the \grammarterm{constraint-logical-or-expression} as a
 The \grammarterm{constraint-logical-or-expression} of a
 \grammarterm{requires-clause} is an unevaluated operand (Clause \ref{expr}).
 \end{addedblock}
+\enterexample
+\begin{codeblock}
+template<int N> requires N == sizeof unsigned short
+int f();     // error: parentheses required around \tcode{==} expression
+\end{codeblock}
+\exitexample
 \end{quote}
 
 
