@@ -395,9 +395,14 @@ Then, $P$ subsumes $Q$ if and only if
 form of $P$, $P_i$ subsumes every conjunctive clause $Q_j$ 
 in the conjuctive normal form of $Q$, where
 
-\item a disjunctive clause $P_i$ subsumes a conjunctive clause
-$Q_j$ if and only if each atomic constraint in $P_i$ subsumes 
-any atomic constraint in $Q_j$, where
+% \item a disjunctive clause $P_i$ subsumes a conjunctive clause
+% $Q_j$ if and only if each atomic constraint in $P_i$ subsumes 
+% any atomic constraint in $Q_j$, where
+
+\item
+a disjunctive clause $P_i$ subsumes a conjunctive clause $Q_j$ if and only 
+if there exists an atomic constraint $P_{ia}$ in $P_i$ for which there exists 
+an atomic constraint, $Q_{jb}$, in $Q_j$ such that $P_{ia}$ subsumes $Q_{jb}$.
 
 \item an atomic constraint $A$ subsumes another atomic constraint
 $B$ if and only if the $A$ and $B$ are identical using the
