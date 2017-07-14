@@ -419,13 +419,13 @@ that \tcode{g(x)} is non-throwing.
 
 \begin{bnf}
 \nontermdef{nested-requirement}\br
-    requires-clause \terminal{;}
+    \terminal{requires} constraint-expression \terminal{;}
   \end{bnf}
 
 \pnum
 A \grammarterm{nested-requirement} can be used
 to specify additional constraints in terms of local parameters.
-The \grammarterm{constraint-expression} of the \grammarterm{requires-clause} 
+The \grammarterm{constraint-expression}
 shall be satisfied (\ref{temp.constr.decl}) by the substituted template
 arguments, if any.
 Substitution of template arguments into a \grammarterm{nested-requirement}

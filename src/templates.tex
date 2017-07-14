@@ -23,14 +23,22 @@ family of types.
 \end{addedblock}
 
 \begin{addedblock}
-\nontermdef{requires-clause}\br
-  \terminal{requires} constraint-expression
-
 \nontermdef{concept-definition}\br
   \terminal{concept} concept-name \terminal{=} constraint-expression
 
 \nontermdef{concept-name}\br
   identifier
+
+\nontermdef{requires-clause}\br
+  \terminal{requires} constraint-logical-or-expression
+
+\nontermdef{constraint-logical-and-expression}\br
+  primary-expression\br
+  constraint-logical-and-expression \terminal{\&\&} primary-expression
+
+\nontermdef{constraint-logical-or-expression}\br
+  constraint-logical-and-expression\br
+  constraint-logical-or-expression \terminal{||} constraint-logical-and-expression
 \end{addedblock}
 \end{bnf}
 \end{quote}
@@ -47,6 +55,10 @@ parameters.
 The optional \grammarterm{requires-clause} following a
 \grammarterm{template-parameter-list} allows the specification of
 constraints (\ref{temp.constr.decl}) on template arguments (\ref{temp.arg}).
+The \grammarterm{requires-clause} introduces the
+\grammarterm{constraint-expression} that results from interpreting
+the \grammarterm{constraint-logical-or-expression} as a
+\grammarterm{constraint-expression}.
 \end{addedblock}
 \end{quote}
 

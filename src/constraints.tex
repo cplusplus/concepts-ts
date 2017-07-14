@@ -124,14 +124,14 @@ the second operand is not checked for satisfaction.
 An \defn{atomic constraint} is formed from a
 an expression \tcode{E}
 and a mapping from the template parameters
-that appear within \tcode{E} to template arguments involving the
-template parameters of the constrained entity, called the \defn{parameter
-mapping} (\ref{temp.constr.decl}).
-\enternote
-Two atomic constraints are equivalent if they are formed from the same
+that appear within \tcode{E} to
+template arguments involving the
+template parameters of the constrained entity,
+called the \defn{parameter mapping} (\ref{temp.constr.decl}).
+%
+Two atomic constraints are \defn{identical} if they are formed from the same
 \grammarterm{expression} and the parameter mappings are equivalent
 according to the rules for expressions described in \ref{temp.over.link}.
-\exitnote
 % 
 \enternote
 Atomic constraints are formed by constraint normalization (\ref{temp.constr.decl}).
@@ -226,7 +226,7 @@ whose operands are in the following order:
       by a \grammarterm{requires-clause} following a 
       \grammarterm{template-parameter-list} (Clause~\ref{temp}), and
 
-\item the \grammarterm{constraint-expression} of a trailing 
+\item the \grammarterm{constraint-expression} introduced by a trailing 
       \grammarterm{requires-clause} (Clause~\ref{dcl.decl}) 
       of a function declaration (\ref{dcl.fct}).
 \end{itemize}
@@ -297,13 +297,29 @@ conjunction of the normal forms of \tcode{E1}
 and \tcode{E2}.
 
 \item The normal form of an \grammarterm{id-expression} of the form
-\tcode{C<A$1$, A$2$, ..., A$N$>}, where \tcode{C} names the concept
-\tcode{D} (\ref{temp.concept}),
-is the normal form of the initializer of \tcode{D},
+\tcode{C<A$1$, A$2$, ..., A$N$>}, where \tcode{C} names a concept,
+is the normal form of the \grammarterm{constraint-expression} of \tcode{C},
 after substituting \tcode{A$1$, A$2$, ..., A$N$} for
-\tcode{D}{'s} respective template parameters in the
+\tcode{C}{'s} respective template parameters in the
 parameter mappings in each atomic constraint.
-If any such substitution fails, the program is ill-formed.
+If any such substitution results in an invalid type or expression,
+the program is ill-formed; no diagnostic is required.
+\enterexample
+\begin{codeblock}
+template<typename T> concept A = T::value;
+template<typename U> concept B = A<U*>;
+template<typename V> concept C = B<V&>;
+\end{codeblock}
+Normalization of \tcode{B}'s \grammarterm{constraint-expression}
+is valid and results in \tcode{T::value} with the mapping
+\tcode{T}$\mapsto$\tcode{U*},
+despite the expression \tcode{T::value} being ill-formed
+for a pointer type \tcode{T}.
+Normalization of \tcode{C}'s \grammarterm{constraint-expression}
+results in the program being ill-formed,
+because it would form the invalid type \tcode{T*\&}
+in the parameter mapping.
+\exitexample
 
 \item The normal form of any other expression \tcode{E}
 is the atomic constraint
@@ -339,10 +355,10 @@ $\tcode{requires (T x) \{ ++x; \}}$ (with mapping \tcode{T}$\mapsto$\tcode{U}).
 \rSec2[temp.constr.order]{Partial ordering by constraints}
 
 \pnum
-A constraint $P$ is said to \defn{subsume} another constraint $Q$ 
-if, informally, it can be determined that $P$ implies $Q$, up to 
-the equivalence of atomic constraints in $P$ and $Q$
-(\ref{temp.constr.atomic}).
+A constraint $P$ is said to subsume another constraint $Q$ 
+if it can be determined that $P$ implies $Q$, up to 
+the identity of atomic constraints in $P$ and $Q$
+(\ref{temp.constr.atomic}), as described below.
 % 
 \enterexample
 Subsumption does not determine if the atomic constraint 
@@ -351,9 +367,9 @@ integral template argument \tcode{N}.
 \exitexample
 
 \pnum
-In order to determine if a constraint $P$ subsumes a constraint
-$Q$, transform $P$ into disjunctive normal form, 
-and transform $Q$ into conjunctive normal form\footnote{
+In order to determine if a constraint $P$ \defn{subsumes} a constraint
+$Q$, $P$ is transformed into disjunctive normal form, 
+and $Q$ is transformed into conjunctive normal form\footnote{
 A constraint is in disjunctive normal form when it is a disjunction of
 clauses where each clause is a conjunction of atomic constraints. 
 % 
@@ -389,7 +405,7 @@ $Q_j$ if and only if each atomic constraint in $P_i$ subsumes
 any atomic constraint in $Q_j$, where
 
 \item an atomic constraint $A$ subsumes another atomic constraint
-$B$ if and only if the $A$ and $B$ are equivalent using the
+$B$ if and only if the $A$ and $B$ are identical using the
 rules described in \ref{temp.constr.atomic}.
 \end{itemize}
 % 
@@ -435,7 +451,7 @@ partially ordered by their associated constraints (\ref{temp.constr.decl}),
 \item \tcode{D1} and \tcode{D2} are both constrained declarations and 
 \tcode{D1}'s associated constraints subsume those of \tcode{D2}; or
 
-\item \tcode{D2} is unconstrained.
+\item \tcode{D2} has no associated constraints.
 \end{itemize}
 
 \pnum
