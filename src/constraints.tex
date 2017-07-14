@@ -32,7 +32,7 @@ Declarations are partially ordered by their associated constraints
 \pnum
 A \defn{constraint} is a sequence of logical operations and 
 operands that specifies requirements on template arguments.
-\enternote The operands of a logical operation are constraints. \exitnote
+The operands of a logical operation are constraints.
 % 
 There are several different kinds of constraints:
 \begin{itemize}
@@ -46,11 +46,11 @@ In order for a constrained template to be instantiated (\ref{temp.spec}), its
 associated constraints shall be \defn{satisfied} (\ref{temp.constr.decl}).
 % 
 \enternote
-The satisfaction of constraints on class templates, alias templates, 
-and variable templates is required when referring to a template specialization 
-(\ref{temp.names}). The satisfaction of constraints on functions and
-function templates is required during overload resolution 
-(\ref{over.match.viable}).
+Forming a template specialization name (\ref{temp.names}) of a class template, 
+variable template, or an alias template requires the satisfaction of its 
+constraints.
+Overload resolution (\ref{over.match.viable}) requires the satisfaction of
+constraints on functions and function templates.
 \exitnote
 % 
 The rules for determining the satisfaction of different kinds of 
@@ -121,7 +121,7 @@ the second operand is not checked for satisfaction.
 \rSec3[temp.constr.atomic]{Atomic constraints}
 
 \pnum
-An \defn{atomic constraint} is formed from a
+An \defn{atomic constraint} is formed from
 an expression \tcode{E}
 and a mapping from the template parameters
 that appear within \tcode{E} to
@@ -272,8 +272,10 @@ The associated constraints of \tcode{f8} are
 \exitexample
 
 \pnum
-Forming a declaration's associated constraints,
-and the partial ordering of declarations by those constraints,
+Determining the satisfaction of a declaration's 
+constraints (\ref{temp.constr.constr}), 
+and the partial ordering of declarations by those 
+constraints (\ref{temp.constr.ordre}),
 requires that their \grammarterm{constraint-expression}{s}
 are first \defn{normalized}.
 % 
