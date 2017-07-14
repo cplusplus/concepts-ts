@@ -134,7 +134,7 @@ Two atomic constraints are \defn{identical} if they are formed from the same
 according to the rules for expressions described in \ref{temp.over.link}.
 % 
 \enternote
-Atomic constraints are formed by constraint normalization (\ref{temp.constr.decl}).
+Atomic constraints are formed by constraint normalization (\ref{temp.constr.normal}).
 \tcode{E} is never a logical AND expression (\cxxref{expr.log.and})
 nor a logical OR expression (\cxxref{expr.log.or}).
 \exitnote
@@ -206,7 +206,8 @@ A template's \defn{associated constraints} are defined as follows:
 the declaration has no associated constraints.
 
 \item If there is a single introduced \grammarterm{constraint-expression},
-the associated constraints are the normal form of that expression.
+the associated constraints are the normal form (\ref{temp.constr.normal})
+of that expression.
 
 \item Otherwise, the associated constraints are the normal form of a logical 
 AND expression (\cxxref{expr.log.and}) whose operands are in the 
@@ -263,13 +264,13 @@ and those of
 \tcode{f7} are \tcode{C2<T> $\land$ C1<T>}.
 \exitexample
 
+\rSec2[temp.constr.normal]{Constraint normalization}
+
 \pnum
-Determining the satisfaction of a declaration's 
-constraints (\ref{temp.constr.constr}), 
-and the partial ordering of declarations by those 
-constraints (\ref{temp.constr.order}),
+Determining a declaration's
+associated constraints (\ref{temp.constr.constr}), 
 requires that their \grammarterm{constraint-expression}{s}
-are first \defn{normalized}.
+are \defn{normalized}.
 % 
 Normalization transforms a \grammarterm{constraint-expression} into a 
 sequence of conjunctions and disjunctions (\ref{temp.constr.op})
