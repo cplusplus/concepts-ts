@@ -70,8 +70,9 @@ compared during the the partial ordering of constraints
 \begin{quote}
 \begin{addedblock}
 \pnum
-A program that refers explicitly or implicitly to a function with associated 
-constraints that are not satisfied (\ref{temp.constr.decl}), other than to 
+A program that refers explicitly or implicitly to a function with a
+\grammarterm{requires-clause} whose \grammarterm{constraint-expression} is
+not satisfied (\ref{temp.constr.decl}), other than to 
 declare it, is ill-formed.
 % 
 \enterexample
@@ -82,7 +83,7 @@ f(0);                      // error: cannot call \tcode{f}
 void (*p1)(int) = f;       // error: cannot take the address of \tcode{f}
 decltype(f)* p2 = nullptr; // error: the type \tcode{decltype(f)} is invalid
 \end{codeblock}
-In each case the associated constraints of \tcode{f} are not satisfied. In the 
+In each case the constraints of \tcode{f} are not satisfied. In the 
 declaration of \tcode{p2}, those constraints are required to be satisfied even 
 though \tcode{f} is an unevaluated operand (Clause~\ref{expr}).
 \exitexample
@@ -314,7 +315,7 @@ does not require that type to be complete
 
 \nontermdef{return-type-requirement}\br
     trailing-return-type\br
-    \terminal{->} constrained-parameter cv-qualifier-seq\opt~abstract-declarator\opt
+    \terminal{->} cv-qualifier-seq\opt constrained-parameter cv-qualifier-seq\opt~abstract-declarator\opt
 \end{bnf}
 
 \pnum
@@ -337,9 +338,10 @@ into the \grammarterm{expression} is performed.
 into the \grammarterm{return-type-requirement} is performed.
 
 \item If the \grammarterm{return-type-requirement} is a 
-\grammarterm{trailing-return-type}, \tcode{E} shall be implicitly 
-convertible to the type named by the
-\grammarterm{trailing-return-type}.
+\grammarterm{trailing-return-type}, \tcode{E} is implicitly 
+convertible to the type named by the \grammarterm{trailing-return-type}.
+If conversion fails, the enclosing \grammarterm{requires-expression}
+is \tcode{false}.
 
 \item If the \grammarterm{return-type-requirement} starts with a 
 \grammarterm{constrained-parameter} (\ref{temp.param}), the 
@@ -347,9 +349,13 @@ convertible to the type named by the
 \tcode{F} using the rules in \cxxref{temp.deduct.call}. \tcode{F} is a
 \tcode{void} function template with a single type template parameter
 \tcode{T} declared with the \grammarterm{constrained-parameter}. 
-It has a single \grammarterm{parameter} whose \grammarterm{type-specifier} is
-\grammarterm{cv-qualifier-seq}-\tcode{T} followed by the 
-\grammarterm{abstract-declarator}. 
+Form a new \grammarterm{cv-qualifier-seq} \tcode{cv} by taking the union
+of \tcode{const} and \tcode{volatile} specifiers around the 
+\grammarterm{constrained-parameter}.
+\tcode{F} has a single \grammarterm{parameter} whose \grammarterm{type-specifier} is
+\tcode{cv T} followed by the \grammarterm{abstract-declarator}.
+If deduction fails, the enclosing \grammarterm{requires-expression} is
+\tcode{false}.
 \end{itemize}
 \end{itemize}
 
@@ -446,7 +452,7 @@ for the purpose of determining partial ordering (\ref{temp.constr.order}).
 \exitnote
 
 \pnum
-A local parameter shall only appear as an evaluated operand 
+A local parameter shall only appear as an unevaluated operand 
 (Clause~\ref{expr}) within the \grammarterm{constraint-expression}.
 \enterexample
 \begin{codeblock}
@@ -457,83 +463,6 @@ template<typename T>
   }
 \end{codeblock}
 \exitexample
-
-
-
-
-
-
-\begin{comment}
-
-%%
-%% Argument deduction constraints
-%%
-\rSec3[temp.constr.deduct]{Argument deduction constraints}
-
-\pnum
-An \defn{argument deduction constraint} is a constraint that specifies 
-a requirement that the type of an \grammarterm{expression} \tcode{E}
-can be deduced from a type \tcode{T}, when \tcode{T} includes one or more 
-placeholders (\ref{dcl.spec.auto}).
-% 
-\enternote
-An argument deduction constraint is introduced by a
-\grammarterm{compound-requirement} (\ref{expr.prim.req.compound}) having a
-\grammarterm{trailing-return-type} that contains one or more placeholders.
-% 
-In such a constraint, \tcode{E} is the \grammarterm{expression} of the 
-\grammarterm{compound-requirement}, and \tcode{T} is the type specified
-by the \grammarterm{trailing-return-type}.
-\exitnote
-
-\pnum
-To determine if an argument deduction constraint is satisfied, invent
-an abbreviated function template \tcode{f} with one parameter whose
-type is \tcode{T} (\ref{dcl.fct}). 
-% 
-The constraint is satisfied if the resolution of the function call 
-\tcode{f(E)} succeeds (\ref{over.match}).
-% 
-\enternote
-Overload resolution succeeds when values are deduced for all invented
-template parameters in \tcode{f} that correspond to the placeholders in 
-\tcode{T}, and the constraints associated by any 
-\grammarterm{constrained-type-specifier}{s} are satisfied.
-\exitnote
-% 
-\enterexample
-\begin{codeblock}
-template<typename T, typename U> struct Pair;
-
-template<typename T> concept C1 = true;
-
-template<typename T> concept C2 = requires(T t) { {*t} -> Pair<C1&, auto>; }; }
-
-template<C2 T> void g(T);
-
-g((int*)nullptr); // error: constraints not satisfied.
-\end{codeblock}
-The invented abbreviated function template \tcode{f} for the 
-\grammarterm{compound-requirement} in \tcode{C2} is:
-\begin{codeblock}
-void f(Pair<C1&, auto>);
-\end{codeblock}
-In the call \tcode{g((int*)nullptr)}, the constraints are not satisfied 
-because no values can be deduced for the placeholders \tcode{C1} and 
-\tcode{auto} from the expression \tcode{*t} when \tcode{t} has type
-``pointer-to-\tcode{int}''.
-\exitexample
-
-\pnum
-An argument deduction constraint $A$ is equivalent to another 
-argument deduction constraint $B$ if and only if the 
-\grammarterm{expression}{s} of $A$ and $B$ are equivalent
-using the rules in \ref{temp.over.link} to compare expressions, and the types
-of $A$ and $B$ are equivalent (\cxxref{temp.type}).
-
-
-
-\end{comment}
 
 \end{addedblock}
 \end{quote}
