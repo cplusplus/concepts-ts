@@ -3,87 +3,30 @@
 %%
 \rSec0[dcl.decl]{Declarators}
 
-In paragraph 4, Modify the grammar of \grammarterm{declarator}{}s to
+In paragraph 1, modify the grammar of \grammarterm{init-declarator}{} to
 allow the specification of constraints on function declarations.
 
 \begin{quote}
-\setcounter{Paras}{3}
 \pnum
-Declarators have the syntax
-
 \begin{bnf}
-\nontermdef{declarator}\br
-    ptr-declarator\br
-    noptr-declarator parameters-and-qualifiers trailing-return-type \added{requires-clause\opt}
-\end{bnf}
-
-\begin{bnf}
-\nontermdef{ptr-declarator}\br
-    noptr-declarator\br
-    ptr-operator ptr-declarator
-\end{bnf}
-
-\begin{bnf}
-\nontermdef{noptr-declarator}\br
-    declarator-id attribute-specifier-seq\opt\br
-    noptr-declarator parameters-and-qualifiers\br
-    noptr-declarator \terminal{[} constant-expression\opt{} \terminal{]} attribute-specifier-seq\opt\br
-    \terminal{(} ptr-declarator \terminal{)}
-\end{bnf}
-
-\begin{bnf}
-\nontermdef{parameters-and-qualifiers}\br
-  \terminal{(} parameter-declaration-clause \terminal{)} cv-qualifier-seq\opt\br
-    \hspace*{\bnfindentinc}ref-qualifier\opt exception-specification\opt attribute-specifier-seq\opt \added{requires-clause\opt}
-\end{bnf}
-
-\begin{bnf}
-\nontermdef{trailing-return-type}\br
-    \terminal{->} type-id
-\end{bnf}
-
-\begin{bnf}
-\nontermdef{ptr-operator}\br
-    \terminal{*} attribute-specifier-seq\opt cv-qualifier-seq\opt\br
-    \terminal{\&} attribute-specifier-seq\opt\br
-    \terminal{\&\&} attribute-specifier-seq\opt\br
-    nested-name-specifier \terminal{*} attribute-specifier-seq\opt cv-qualifier-seq\opt
-\end{bnf}
-
-\begin{bnf}
-\nontermdef{cv-qualifier-seq}\br
-    cv-qualifier cv-qualifier-seq\opt
-\end{bnf}
-
-\begin{bnf}
-\nontermdef{cv-qualifier}\br
-    \terminal{const}\br
-    \terminal{volatile}
-\end{bnf}
-
-\begin{bnf}
-\nontermdef{ref-qualifier}\br
-    \terminal{\&}\br
-    \terminal{\&\&}
-\end{bnf}
-
-\begin{bnf}
-\nontermdef{declarator-id}\br
-    \terminal{...}\opt id-expression
+\nontermdef{init-declarator}\br
+    declarator initializer\opt\br
+    \added{declarator requires-clause}
 \end{bnf}
 \end{quote}
 
-Add the following paragraph at the end of this section.
+Add the following paragraph after paragraph 3.
 
+\setcounter{Paras}{2}
 \begin{quote}
 \begin{addedblock}
 \pnum
-The optional \grammarterm{requires-clause} (Clause~\ref{temp}) in a 
-\grammarterm{declarator} shall be present only when the declarator declares a 
-function (\ref{dcl.fct}), and that \grammarterm{requires-clause} shall not 
-precede a \grammarterm{trailing-return-type}. 
+The optional \grammarterm{requires-clause} (Clause~\ref{temp}) in an
+\grammarterm{init-declarator} or \grammarterm{member-declarator}
+shall be present only when the declarator declares a 
+function (\ref{dcl.fct}).
 % 
-When present in a \grammarterm{declarator}, the \grammarterm{requires-clause} 
+When present after a declarator, the \grammarterm{requires-clause} 
 is called the \defn{trailing \grammarterm{requires-clause}{}}.
 The trailing \grammarterm{requires-clause} introduces the
 \grammarterm{constraint-expression} that results from interpreting
@@ -117,32 +60,6 @@ auto* p = new void(*)(char) requires true; // error: not a function declaration
 %%
 \setcounter{subsection}{4}
 \rSec2[dcl.fct]{Functions}
-
-Modify the matching condition in paragraph 1 to accept a 
-\grammarterm{requires-clause}.
-      
-\begin{quote}
-\pnum\vspace{-\the\baselineskip} % Adjust to hide the blank line.
-
-\begin{bnf}
-\terminal{D1} \terminal{(} parameter-declaration-clause \terminal{)} cv-qualifier-seq\opt\br
-  \hspace*{\bnfindentinc}ref-qualifier\opt exception-specification\opt attribute-specifier-seq\opt \added{requires-clause\opt}
-\end{bnf}
-\end{quote}
-
-Modify the matching condition in paragraph 2 to accept a 
-\grammarterm{requires-clause}.
-
-\begin{quote}
-\pnum\vspace{-\the\baselineskip} % Adjust to hide the blank line.
-
-\begin{bnf}
-\terminal{D1} \terminal{(} parameter-declaration-clause \terminal{)} cv-qualifier-seq\opt\br 
-  \hspace*{\bnfindentinc}ref-qualifier\opt exception-specification\opt attribute-specifier-seq\opt\br
-  \hspace*{\bnfindentinc}trailing-return-type \added{requires-clause\opt}
-\end{bnf}
-\end{quote}
-
 
 Modify the first part of paragraph 5. The unchanged remainder of the paragraph
 is omitted.

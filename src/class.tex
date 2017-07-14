@@ -1,0 +1,17 @@
+\setcounter{chapter}{12}
+\setcounter{section}{1}
+
+\rSec1[class.mem]{Class members}
+
+Change grammar in paragraph 1:
+
+\begin{quote}
+\pnum
+\begin{bnf}
+\nontermdef{member-declarator}\br
+    declarator virt-specifier-seq\opt pure-specifier\opt
+    \added{declarator requires-clause}
+    declarator brace-or-equal-initializer\opt
+    identifier\opt attribute-specifier-seq\opt \tcode{:} constant-expression
+\end{bnf}
+\end{quote}
