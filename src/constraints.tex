@@ -199,22 +199,24 @@ Each of these forms introduces additional \grammarterm{constraint-expression}{s}
 that are used to constrain the declaration.
 % 
 A template's \defn{associated constraints} are defined as a 
-single \grammarterm{constraint-expression} derived from the
-introduced \grammarterm{constraint-expression}{s} using the
-following rules.
+single \grammarterm{constraint-expression} constraint derived 
+by first forming the \defn{cumulative constraint expression} from 
+the introduced \grammarterm{constraint-expression}{s}, and then
+normalizing that expression as described below.
+
+\pnum
+The cumulative constraint expression is formed as follows:
 
 \begin{itemize}
 \item If there are no introduced \grammarterm{constraint-expression}{s},
-the declaration has no associated constraints.
+the cumulative constraint expression is \tcode{true}.
 
 \item If there is a single introduced \grammarterm{constraint-expression},
-the associated constraint is the normal form of that expression,
-as described below.
+that is the cumulative constraint expression.
 
-\item Otherwise, the associated constraints are
-the normal form of
-a logical AND expression (\cxxref{expr.log.and})
-whose operands are in the following order:
+\item Otherwise, the cumulative constraint expression is a logical 
+AND expression (\cxxref{expr.log.and}) whose operands are in the 
+following order:
 % 
 \begin{itemize}
 \item the \grammarterm{constraint-expression} introduced by each
@@ -232,13 +234,9 @@ whose operands are in the following order:
 \end{itemize}
 \end{itemize}
 % 
-The formation of the associated constraints for a template declaration
+The formation of the cumulative constraint expression 
 establishes the order in which constraints are instantiated when checking 
 for satisfaction (\ref{temp.constr.constr}).
-% 
-\enternote
-These constraints are checked during the instantiation of the declaration.
-\exitnote
 % 
 \enterexample
 \begin{codeblock}
@@ -248,39 +246,38 @@ template<C T> void f1(T);
 template<typename T> requires C<T> void f2(T);
 template<typename T> void f3(T) requires C<T>;
 \end{codeblock}
-The associated constraints of \tcode{f1}, \tcode{f2}, and \tcode{f3}
-are \tcode{C<T>}.
+The functions \tcode{f1}, \tcode{f2}, and \tcode{f3} have the cumulative
+constraint expression \tcode{C<T>}.
 % 
 \begin{codeblock}
 template<typename T> concept C1 = true;
 template<typename T> concept C2 = sizeof(T) > 0;
 
-template<C1 T> void f6(T) requires C2<T>;
-template<typename T> requires C1<T> && C2<T> void f7(T);
+template<C1 T> void f4(T) requires C2<T>;
+template<typename T> requires C1<T> && C2<T> void f5(T);
 \end{codeblock}
-The associated constraints of \tcode{f6} and \tcode{f7} are both
-\tcode{C1<T> \&\& C2<T>}.
+The cumulative constraint expressions of \tcode{f4} and \tcode{f5}
+are \tcode{C1<T> \&\& C2<T>}.
 % 
 \begin{codeblock}
-template<C1 T> requires C2<T> void f8();
-template<C2 T> requires C1<T> void f9();
+template<C1 T> requires C2<T> void f6();
+template<C2 T> requires C1<T> void f7();
 \end{codeblock}
-% 
-The associated constraints of \tcode{f8} are
-\tcode{C1<T> \&\& C2<T>}, and those \tcode{f9} are
-\tcode{C2<T> \&\& C1<T>}.
+The cumulative constraint expression of 
+\tcode{f6} is \tcode{C1<T> \&\& C2<T>}, and that of 
+\tcode{f7} is \tcode{C2<T> \&\& C1<T>}.
 \exitexample
 
 \pnum
 Determining the satisfaction of a declaration's 
 constraints (\ref{temp.constr.constr}), 
 and the partial ordering of declarations by those 
-constraints (\ref{temp.constr.ordre}),
+constraints (\ref{temp.constr.order}),
 requires that their \grammarterm{constraint-expression}{s}
 are first \defn{normalized}.
 % 
-Normalization transforms a \grammarterm{constraint-expression} into a sequence of 
-conjunctions and disjunctions (\ref{temp.constr.op})
+Normalization transforms a \grammarterm{constraint-expression} into a 
+sequence of conjunctions and disjunctions (\ref{temp.constr.op})
 of atomic constraints (\ref{temp.constr.atomic}).
 % 
 The \defn{normal form} of an \grammarterm{expression} \tcode{E} is 
@@ -328,6 +325,9 @@ is the atomic constraint
 whose expression is \tcode{E} and whose parameter mapping is the
 identity mapping.
 \end{itemize}
+
+\pnum A declaration's \defn{associated constraints} are the constraints
+derived by normalizing its cumulative constraint expression.
 % 
 \enterexample
 \begin{codeblock}
