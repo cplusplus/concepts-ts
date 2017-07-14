@@ -142,11 +142,12 @@ nor a logical OR expression (\cxxref{expr.log.or}).
 Determining if a constraint is satisfied entails the substitution 
 of the parameter mapping and template arguments into that constraint.
 % 
-After substitution, \tcode{E} shall have type \tcode{bool}.
+After substitution and the application of the lvalue-to-rvalue conversion
+(\cxxref{conv.lval}) if necessary,
+\tcode{E} shall be a constant expression of type \tcode{bool}.
 % 
 The constraint is satisfied if and only if evaluation of \tcode{E}
-as a constant expression (\cxxref{expr.const}) succeeds and \tcode{E}
-evaluates to \tcode{true}.
+results in \tcode{true}.
 % 
 \enterexample
 \begin{codeblock}
