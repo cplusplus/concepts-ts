@@ -197,24 +197,18 @@ Constraints can also be associated with a declaration through the use of
 % 
 Each of these forms introduces additional \grammarterm{constraint-expression}{s} 
 that are used to constrain the declaration.
-% 
-A template's \defn{associated constraints} are defined as a 
-single \grammarterm{constraint-expression} constraint derived 
-by first forming the \defn{cumulative constraint expression} from 
-the introduced \grammarterm{constraint-expression}{s}, and then
-normalizing that expression as described below.
 
 \pnum
-The cumulative constraint expression is formed as follows:
-
+A template's \defn{associated constraints} are defined as follows:
+%
 \begin{itemize}
 \item If there are no introduced \grammarterm{constraint-expression}{s},
-the cumulative constraint expression is \tcode{true}.
+the declaration has no associated constraints.
 
 \item If there is a single introduced \grammarterm{constraint-expression},
-that is the cumulative constraint expression.
+the associated constraints are the normal form of that expression.
 
-\item Otherwise, the cumulative constraint expression is a logical 
+\item Otherwise, the associated constraints are the normal form of a logical 
 AND expression (\cxxref{expr.log.and}) whose operands are in the 
 following order:
 % 
@@ -234,7 +228,7 @@ following order:
 \end{itemize}
 \end{itemize}
 % 
-The formation of the cumulative constraint expression 
+The formation of the associated constraints
 establishes the order in which constraints are instantiated when checking 
 for satisfaction (\ref{temp.constr.constr}).
 % 
@@ -246,8 +240,8 @@ template<C T> void f1(T);
 template<typename T> requires C<T> void f2(T);
 template<typename T> void f3(T) requires C<T>;
 \end{codeblock}
-The functions \tcode{f1}, \tcode{f2}, and \tcode{f3} have the cumulative
-constraint expression \tcode{C<T>}.
+The functions \tcode{f1}, \tcode{f2}, and \tcode{f3} have the associated
+constraint \tcode{C<T>}.
 % 
 \begin{codeblock}
 template<typename T> concept C1 = true;
@@ -256,16 +250,17 @@ template<typename T> concept C2 = sizeof(T) > 0;
 template<C1 T> void f4(T) requires C2<T>;
 template<typename T> requires C1<T> && C2<T> void f5(T);
 \end{codeblock}
-The cumulative constraint expressions of \tcode{f4} and \tcode{f5}
-are \tcode{C1<T> \&\& C2<T>}.
+The associated constraints of \tcode{f4} and \tcode{f5}
+are \tcode{C1<T> $\land$ C2<T>}.
 % 
 \begin{codeblock}
 template<C1 T> requires C2<T> void f6();
 template<C2 T> requires C1<T> void f7();
 \end{codeblock}
-The cumulative constraint expression of 
-\tcode{f6} is \tcode{C1<T> \&\& C2<T>}, and that of 
-\tcode{f7} is \tcode{C2<T> \&\& C1<T>}.
+The associated constraints of 
+\tcode{f6} are \tcode{C1<T> $\land$ C2<T>},
+and those of 
+\tcode{f7} are \tcode{C2<T> $\land$ C1<T>}.
 \exitexample
 
 \pnum
@@ -326,9 +321,6 @@ whose expression is \tcode{E} and whose parameter mapping is the
 identity mapping.
 \end{itemize}
 
-\pnum A declaration's \defn{associated constraints} are the constraints
-derived by normalizing its cumulative constraint expression.
-% 
 \enterexample
 \begin{codeblock}
 template<typename T> concept C1 = sizeof(T) == 1;
