@@ -613,16 +613,6 @@ A class template partial specialization may be constrained
 (Clause~\ref{temp}).
 \enterexample
 \begin{codeblock}
-template<typename T> concept C = requires (T t) { t.f(); };
-template<int I> concept N = I > 0;
-
-template<C T1, C T2, N I> class A<T1, T2, I>;  // \#6
-template<C T, N I>        class A<int, T*, I>; // \#7
-\end{codeblock}
-\exitexample
-
-\enterexample
-\begin{codeblock}
 template<typename T> concept C = true;
 
 template<typename T> struct X { }; 
@@ -633,8 +623,8 @@ Both partial specializations are more specialized than the primary. \#1
 is more specialized because the deduction of its template arguments
 from the template argument list of the class template specialization succeeds,
 while the reverse does not. \#2 is more specialized because
-the template arguments are equivalent, but the specialization is more
-constrained.
+the template arguments are equivalent, but the partial specialization is more
+constrained (\ref{temp.constr.order}).
 \exitexample
 \end{addedblock}
 \end{quote}
@@ -653,8 +643,8 @@ to match a partial specialization.
 A partial specialization matches a given actual template argument list if 
 the template arguments of the partial specialization can be deduced from the 
 actual template argument list (\ref{temp.deduct})\added{, and the deduced 
-template arguments satisfy the constraints of the partial specialization, if 
-any (\ref{temp.constr.decl})}.
+template arguments satisfy the associated constraints of the partial 
+specialization, if any (\ref{temp.constr.decl})}.
 \end{quote}
 
 Add the following example to the end of paragraph 2.
@@ -663,10 +653,15 @@ Add the following example to the end of paragraph 2.
 \begin{addedblock}
 \enterexample
 \begin{codeblock}
-struct S { void f(); };
+template<typename T> concept C = requires (T t) { t.f(); };
 
-A<S, S, 1>    a6; // uses \#6
-A<int, S*, 3> a8; // uses \#7
+template<typename T> struct S { }; // \#1
+template<C T> struct S<T> { }; // \#2
+
+struct Arg { void f(); };
+
+S<int> s1; // uses \#1; the constraints of \#2 are not satisfied
+S<Arg> s2; // uses \#2; both constraints are satisfied but \#2 is more specialized
 \end{codeblock}
 \exitexample
 \end{addedblock}
