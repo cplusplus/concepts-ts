@@ -90,3 +90,35 @@ the default arguments (\cxxref{dcl.fct.default})
 are part of the function type.
 \end{quote}
 
+\setcounter{section}{4}
+\rSec1[dcl.fct.def]{Function definitions}
+
+\rSec2[dcl.fct.def.general]{In general}
+
+Change in paragraph 1:
+
+\begin{quote}
+\begin{bnf}
+\nontermdef{function-definition}\br
+  attribute-specifier-seq\opt decl-specifier-seq\opt declarator virt-specifier-seq\opt function-body\br
+  \added{attribute-specifier-seq\opt decl-specifier-seq\opt declarator requires-clause function-body}
+\end{bnf}
+\end{quote}
+
+\rSec2[dcl.fct.def.default]{Explicitly-defaulted functions}
+
+Change in paragraph 1:
+
+\begin{quote}
+A function definition \removed{of the form [...]} \added{with the \grammarterm{function-body} \tcode{= default ;}}
+is called an \defn{explicitly-defaulted} definition.
+\end{quote}
+
+\rSec2[dcl.fct.def.delete]{In general}
+
+Change in paragraph 1:
+
+\begin{quote}
+A function definition \removed{of the form [...]} \added{with the \grammarterm{function-body} \tcode{= delete ;}}
+is called a \defn{deleted} function.
+\end{quote}
